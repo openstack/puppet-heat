@@ -10,27 +10,27 @@ class heat::params {
   case $::osfamily {
     'RedHat': {
       # package names
-      $heat_api_package_name = 'openstack-heat-api'
-      $heat_api_cloudwatch_package_name = 'openstack-heat-api-cloudwatch'
-      $heat_api_cfn_package_name = 'openstack-heat-api-cfn'
-      $heat_engine_package_name = 'openstack-heat-engine'
+      $api_package_name = 'openstack-heat-api'
+      $api_cloudwatch_package_name = 'openstack-heat-api-cloudwatch'
+      $api_cfn_package_name = 'openstack-heat-api-cfn'
+      $engine_package_name = 'openstack-heat-engine'
       # service names
-      $heat_api_service_name = 'openstack-heat-api'
-      $heat_api_cloudwatch_service_name = 'openstack-heat-api-cloudwatch'
-      $heat_api_cfn_service_name = 'openstack-heat-api-cfn'
-      $heat_engine_service_name = 'openstack-heat-engine'
+      $api_service_name = 'openstack-heat-api'
+      $api_cloudwatch_service_name = 'openstack-heat-api-cloudwatch'
+      $api_cfn_service_name = 'openstack-heat-api-cfn'
+      $engine_service_name = 'openstack-heat-engine'
     }
     'Debian': {
       # package names
-      $heat_api_package_name = 'heat-api'
-      $heat_api_cloudwatch_package_name = 'heat-api-cloudwatch'
-      $heat_api_cfn_package_name = 'heat-api-cfn'
-      $heat_engine_package_name = 'heat-engine'
+      $api_package_name = 'heat-api'
+      $api_cloudwatch_package_name = 'heat-api-cloudwatch'
+      $api_cfn_package_name = 'heat-api-cfn'
+      $engine_package_name = 'heat-engine'
       # service names
-      $heat_api_service_name = 'heat-api'
-      $heat_api_cloudwatch_service_name = 'heat-api-cloudwatch'
-      $heat_api_cfn_service_name = 'heat-api-cfn'
-      $heat_engine_service_name = 'heat-engine'
+      $api_service_name = 'heat-api'
+      $api_cloudwatch_service_name = 'heat-api-cloudwatch'
+      $api_cfn_service_name = 'heat-api-cfn'
+      $engine_service_name = 'heat-engine'
       # Operating system specific
       case $::operatingsystem {
         'Ubuntu': {

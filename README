@@ -6,10 +6,11 @@ WORK IN PROGRESS :
 ✓ Basic structure
 ✓ DB
 ✓ Client
-✗ Heat-API
-✗ Heat-API-CFN
-✗ Heat-API-CW
-✗ Heat-Engine
+✗ Heat-API (in progress)
+✗ Heat-API-CFN (in progress)
+✗ Heat-API-CW (in progress)
+✗ Heat-Engine (in progress)
+✗ Tests
 
 
 License

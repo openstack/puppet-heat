@@ -36,9 +36,9 @@ class heat::api (
 
   validate_string($keystone_password)
 
-  heat_config<||> ~> Service['heat-api']
+  heat_api_config<||> ~> Service['heat-api']
 
-  Package['heat-api'] -> heat_config<||>
+  Package['heat-api'] -> heat_api_config<||>
   Package['heat-api'] -> Service['heat-api']
   package { 'heat-api':
     ensure => installed,
@@ -68,7 +68,7 @@ class heat::api (
     subscribe  => Exec['heat-dbsync']
   }
 
-  heat_config {
+  heat_api_config {
     'keystone_authtoken/auth_host'         : value => $keystone_host;
     'keystone_authtoken/auth_port'         : value => $keystone_port;
     'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;

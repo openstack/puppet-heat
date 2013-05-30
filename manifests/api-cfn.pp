@@ -22,7 +22,7 @@
 #  [*keystone_password*] password to authenticate with
 #    Mandatory.
 #
-class heat::api (
+class heat::api-cfn (
   $enabled           = true,
   $keystone_host     = '127.0.0.1',
   $keystone_port     = '35357',
@@ -36,11 +36,11 @@ class heat::api (
 
   validate_string($keystone_password)
 
-  heat_config<||> ~> Service['heat-api-cnf']
+  heat_api_cfn_config<||> ~> Service['heat-api-cfn']
 
-  Package['heat-api-cnf'] -> heat_config<||>
-  Package['heat-api-cnf'] -> Service['heat-api-cnf']
-  package { 'heat-api-cnf':
+  Package['heat-api-cfn'] -> heat_api_cfn_config<||>
+  Package['heat-api-cfn'] -> Service['heat-api-cfn']
+  package { 'heat-api-cfn':
     ensure => installed,
     name   => $::heat::params::api_package_name,
   }
@@ -51,8 +51,8 @@ class heat::api (
     $service_ensure = 'stopped'
   }
 
-  Package['heat-common'] -> Service['heat-api-cnf']
-  service { 'heat-api-cnf':
+  Package['heat-common'] -> Service['heat-api-cfn']
+  service { 'heat-api-cfn':
     ensure     => $service_ensure,
     name       => $::heat::params::api_service_name,
     enable     => $enabled,
@@ -62,7 +62,7 @@ class heat::api (
     subscribe  => Exec['heat-dbsync']
   }
 
-  heat_config {
+  heat_api_cfn_config {
     'keystone_authtoken/auth_host'         : value => $keystone_host;
     'keystone_authtoken/auth_port'         : value => $keystone_port;
     'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;

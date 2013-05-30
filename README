@@ -1,6 +1,8 @@
-puppet-ceilometer
+puppet-heat
 
-This is the ceilometer module.
+WORK IN PROGRESS
+
+This is the Heat module.
 
 License
 -------

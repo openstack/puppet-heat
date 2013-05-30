@@ -40,11 +40,11 @@ class heat::db (
     }
   }
 
-  heat_config {
+  heat_engine_config {
     'DEFAULT/database_connection': value => $database_connection;
   }
 
-  heat_config['DEFAULT/database_connection'] ~> Exec['heat-dbsync']
+  heat_engine_config['DEFAULT/database_connection'] ~> Exec['heat-dbsync']
 
   exec { 'heat-dbsync':
     command     => $::heat::params::dbsync_command,
@@ -52,7 +52,7 @@ class heat::db (
     user        => $::heat::params::username,
     refreshonly => true,
     logoutput   => on_failure,
-    subscribe   => heat_config['DEFAULT/database_connection']
+    subscribe   => heat_engine_config['DEFAULT/database_connection']
   }
 
 }

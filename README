@@ -1,8 +1,16 @@
 puppet-heat
-
-WORK IN PROGRESS
-
 This is the Heat module.
+
+WORK IN PROGRESS :
+
+✓ Basic structure
+✓ DB
+✓ Client
+✗ Heat-API
+✗ Heat-API-CFN
+✗ Heat-API-CW
+✗Heat-Engine
+
 
 License
 -------

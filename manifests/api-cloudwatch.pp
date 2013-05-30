@@ -1,4 +1,4 @@
-# Installs & configure the heat CloudFormation api service
+# Installs & configure the heat CloudWatch api service
 #
 # == Parameters
 #  [*enabled*]

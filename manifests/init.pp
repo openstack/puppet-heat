@@ -3,8 +3,6 @@
 #  heat base package & configuration
 #
 # == parameters
-#  [*metering_secret*]
-#    secret key for signing messages. Mandatory.
 #  [*package_ensure*]
 #    ensure state for package. Optional. Defaults to 'present'
 #  [*verbose*]

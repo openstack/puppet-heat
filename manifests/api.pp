@@ -45,6 +45,12 @@ class heat::api (
     name   => $::heat::params::api_package_name,
   }
 
+  file { '/etc/heat/heat-api.conf':
+    owner   => 'heat',
+    group   => 'heat',
+    mode    => '0640',
+  }
+
   if $enabled {
     $service_ensure = 'running'
   } else {

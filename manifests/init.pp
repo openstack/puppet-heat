@@ -61,30 +61,6 @@ class heat(
     mode    => '0750',
   }
 
-  file { '/etc/heat/heat-api.conf':
-    owner   => 'heat',
-    group   => 'heat',
-    mode    => '0640',
-  }
-
-  file { '/etc/heat/heat-api-cloudwatch.conf':
-    owner   => 'heat',
-    group   => 'heat',
-    mode    => '0640',
-  }
-
-  file { '/etc/heat/heat-api-cfn.conf':
-    owner   => 'heat',
-    group   => 'heat',
-    mode    => '0640',
-  }
-
-  file { '/etc/heat/heat-engine.conf':
-    owner   => 'heat',
-    group   => 'heat',
-    mode    => '0640',
-  }
-
   package { 'heat-common':
     ensure => $package_ensure,
     name   => $::heat::params::common_package_name,

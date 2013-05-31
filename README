@@ -4,12 +4,13 @@ This is the Heat module.
 WORK IN PROGRESS :
 
 ✓ Basic structure
-✓ DB
+✗ DB (Todo : fix db-sync feature)
 ✓ Client
 ✓ Heat-API
 ✗ Heat-API-CFN (in progress)
 ✗ Heat-API-CW (in progress)
 ✓ Heat-Engine
+✗ An example of site.pp
 ✗ Tests
 
 

@@ -32,6 +32,10 @@ class heat::api (
   $keystone_password = false,
   $keystone_ec2_uri  = 'http://127.0.0.1:5000/v2.0/ec2tokens',
   $auth_uri          = 'http://127.0.0.1:5000/v2.0',
+  $bind_host         = '0.0.0.0',
+  $bind_port         = '8004',
+  $verbose           = 'False',
+  $debug             = 'False',
 ) {
 
   include heat::params
@@ -92,6 +96,8 @@ class heat::api (
     'DEFAULT/debug'                  : value => $debug;
     'DEFAULT/verbose'                : value => $verbose;
     'DEFAULT/log_dir'                : value => $::heat::params::log_dir;
+    'DEFAULT/bind_host'              : value => $bind_host;
+    'DEFAULT/bind_port'              : value => $bind_port;
     'ec2authtoken/keystone_ec2_uri'  : value => $keystone_ec2_uri;
     'ec2authtoken/auth_uri'          : value => $auth_uri;
     'keystone_authtoken/auth_host'         : value => $keystone_host;

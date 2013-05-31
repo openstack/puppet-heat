@@ -9,7 +9,7 @@ WORK IN PROGRESS :
 ✓ Heat-API
 ✗ Heat-API-CFN (in progress)
 ✗ Heat-API-CW (in progress)
-✗ Heat-Engine (in progress)
+✓ Heat-Engine
 ✗ Tests
 
 

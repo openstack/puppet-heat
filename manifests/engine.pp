@@ -30,6 +30,14 @@ class heat::engine (
   $keystone_user     = 'heat',
   $keystone_tenant   = 'services',
   $keystone_password = false,
+  $bind_host         = '0.0.0.0',
+  $bind_port         = '8001',
+  $verbose           = 'False',
+  $debug             = 'False',
+  $heat_stack_user_role          = 'heat_stack_user',
+  $heat_metadata_server_url      = 'http://127.0.0.1:8000'
+  $heat_waitcondition_server_url = 'http://127.0.0.1:8000/v1/waitcondition'
+  $heat_watch_server_url         = 'http://127.0.0.1:8003'
 ) {
 
   include heat::params
@@ -59,6 +67,26 @@ class heat::engine (
 
   Package['heat-common'] -> Service['heat-engine']
 
+  if $rabbit_hosts {
+    heat_api_config { 'DEFAULT/rabbit_host': ensure => absent }
+    heat_api_config { 'DEFAULT/rabbit_port': ensure => absent }
+    heat_api_config { 'DEFAULT/rabbit_hosts':
+      value => join($rabbit_hosts, ',')
+    }
+  } else {
+    heat_api_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
+    heat_api_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
+    heat_api_config { 'DEFAULT/rabbit_hosts':
+      value => "${rabbit_host}:${rabbit_port}"
+    }
+  }
+
+  if size($rabbit_hosts) > 1 {
+    heat_api_config { 'DEFAULT/rabbit_ha_queues': value => true }
+  } else {
+    heat_api_config { 'DEFAULT/rabbit_ha_queues': value => false }
+  }
+
   service { 'heat-engine':
     ensure     => $service_ensure,
     name       => $::heat::params::engine_service_name,
@@ -70,6 +98,14 @@ class heat::engine (
   }
 
   heat_engine_config {
+    'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
+    'DEFAULT/rabbit_password'        : value => $rabbit_password;
+    'DEFAULT/rabbit_virtualhost'     : value => $rabbit_virtualhost;
+    'DEFAULT/debug'                  : value => $debug;
+    'DEFAULT/verbose'                : value => $verbose;
+    'DEFAULT/log_dir'                : value => $::heat::params::log_dir;
+    'DEFAULT/bind_host'              : value => $bind_host;
+    'DEFAULT/bind_port'              : value => $bind_port;
     'keystone_authtoken/auth_host'         : value => $keystone_host;
     'keystone_authtoken/auth_port'         : value => $keystone_port;
     'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;

@@ -5,10 +5,11 @@ WORK IN PROGRESS :
 
 ✓ Basic structure
 ✗ DB (Todo : fix db-sync feature)
+✓ Keystone (Users, Services, Endpoints=
 ✓ Client
 ✓ Heat-API
-✗ Heat-API-CFN (in progress)
-✗ Heat-API-CW (in progress)
+✓ Heat-API-CFN
+✓ Heat-API-CW
 ✓ Heat-Engine
 ✗ An example of site.pp
 ✗ Tests

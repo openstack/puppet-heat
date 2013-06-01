@@ -1,27 +1,5 @@
 # Installs & configure the heat engine service
-#
-# == Parameters
-#  [*enabled*]
-#    should the service be enabled. Optional. Defaults to true
-#
-#  [*keystone_host*]
-#    keystone's admin endpoint IP/Host. Optional. Defaults to 127.0.0.1
-#
-#  [*keystone_port*]
-#    keystone's admin endpoint port. Optional. Defaults to 35357
-#
-#  [*keystone_protocol*] http/https
-#    Optional. Defaults to https
-#
-#  [*keytone_user*] user to authenticate with
-#    Optional. Defaults to heat
-#
-#  [*keystone_tenant*] tenant to authenticate with
-#    Optional. Defaults to services
-#
-#  [*keystone_password*] password to authenticate with
-#    Mandatory.
-#
+
 class heat::engine (
   $enabled           = true,
   $keystone_host     = '127.0.0.1',

@@ -46,7 +46,7 @@ class heat::db (
 
   heat_engine_config['DEFAULT/database_connection'] ~> Exec['heat-dbsync']
 
-  exec { 'heat-dbsync':
+  exec { 'heat-db-setup':
     command     => $::heat::params::dbsync_command,
     path        => '/usr/bin',
     user        => $::heat::params::username,

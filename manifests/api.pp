@@ -20,9 +20,9 @@ class heat::api (
 
   validate_string($keystone_password)
 
-  heat_api_config<||> ~> Service['heat-api']
+  Heat_api_config<||> ~> Service['heat-api']
 
-  Package['heat-api'] -> heat_api_config<||>
+  Package['heat-api'] -> Heat_api_config<||>
   Package['heat-api'] -> Service['heat-api']
   package { 'heat-api':
     ensure => installed,

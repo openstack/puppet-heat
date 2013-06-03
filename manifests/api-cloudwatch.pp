@@ -20,9 +20,9 @@ class heat::api-cloudwatch (
 
   validate_string($keystone_password)
 
-  heat_api_cloudwatch_config<||> ~> Service['heat-api-cloudwatch']
+  Heat_api_cloudwatch_config<||> ~> Service['heat-api-cloudwatch']
 
-  Package['heat-api-cloudwatch'] -> heat_api_cloudwatch_config<||>
+  Package['heat-api-cloudwatch'] -> Heat_api_cloudwatch_config<||>
   Package['heat-api-cloudwatch'] -> Service['heat-api-cloudwatch']
   package { 'heat-api-cloudwatch':
     ensure => installed,

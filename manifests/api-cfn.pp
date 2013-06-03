@@ -20,9 +20,9 @@ class heat::api-cfn (
 
   validate_string($keystone_password)
 
-  heat_api_cfn_config<||> ~> Service['heat-api-cfn']
+  Heat_api_cfn_config<||> ~> Service['heat-api-cfn']
 
-  Package['heat-api-cfn'] -> heat_api_cfn_config<||>
+  Package['heat-api-cfn'] -> Heat_api_cfn_config<||>
   Package['heat-api-cfn'] -> Service['heat-api-cfn']
   package { 'heat-api-cfn':
     ensure => installed,

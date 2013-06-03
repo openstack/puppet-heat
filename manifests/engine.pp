@@ -13,9 +13,9 @@ class heat::engine (
   $verbose           = 'False',
   $debug             = 'False',
   $heat_stack_user_role          = 'heat_stack_user',
-  $heat_metadata_server_url      = 'http://127.0.0.1:8000'
-  $heat_waitcondition_server_url = 'http://127.0.0.1:8000/v1/waitcondition'
-  $heat_watch_server_url         = 'http://127.0.0.1:8003'
+  $heat_metadata_server_url      = 'http://127.0.0.1:8000',
+  $heat_waitcondition_server_url = 'http://127.0.0.1:8000/v1/waitcondition',
+  $heat_watch_server_url         = 'http://127.0.0.1:8003',
 ) {
 
   include heat::params

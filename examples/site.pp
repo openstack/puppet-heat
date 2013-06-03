@@ -17,7 +17,7 @@ node default {
 
   # Install the heat-api service
   # The keystone_password parameter is mandatory
-  class { 'ceilometer::api':
+  class { 'heat::api':
     keystone_password => 'password'
   }
 

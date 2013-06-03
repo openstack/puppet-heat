@@ -7,7 +7,7 @@ class heat::engine (
   $keystone_protocol = 'http',
   $keystone_user     = 'heat',
   $keystone_tenant   = 'services',
-  $keystone_password = false,
+  $keystone_password = 'password',
   $bind_host         = '0.0.0.0',
   $bind_port         = '8001',
   $verbose           = 'False',

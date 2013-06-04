@@ -44,17 +44,17 @@ class heat::api-cloudwatch (
       value => join($rabbit_hosts, ',')
     }
   } else {
-    heat_api_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
-    heat_api_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
-    heat_api_config { 'DEFAULT/rabbit_hosts':
+    heat_api_cloudwatch_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
+    heat_api_cloudwatch_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
+    heat_api_cloudwatch_config { 'DEFAULT/rabbit_hosts':
       value => "${rabbit_host}:${rabbit_port}"
     }
   }
 
   if size($rabbit_hosts) > 1 {
-    heat_api_config { 'DEFAULT/rabbit_ha_queues': value => true }
+    heat_api_cloudwatch_config { 'DEFAULT/rabbit_ha_queues': value => true }
   } else {
-    heat_api_config { 'DEFAULT/rabbit_ha_queues': value => false }
+    heat_api_cloudwatch-config { 'DEFAULT/rabbit_ha_queues': value => false }
   }
 
   service { 'heat-api-cloudwatch':

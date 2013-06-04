@@ -46,23 +46,23 @@ class heat::engine (
   Package['heat-common'] -> Service['heat-engine']
 
   if $rabbit_hosts {
-    heat_api_config { 'DEFAULT/rabbit_host': ensure => absent }
-    heat_api_config { 'DEFAULT/rabbit_port': ensure => absent }
-    heat_api_config { 'DEFAULT/rabbit_hosts':
+    heat_engine_config { 'DEFAULT/rabbit_host': ensure => absent }
+    heat_engine_config { 'DEFAULT/rabbit_port': ensure => absent }
+    heat_engine_config { 'DEFAULT/rabbit_hosts':
       value => join($rabbit_hosts, ',')
     }
   } else {
-    heat_api_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
-    heat_api_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
-    heat_api_config { 'DEFAULT/rabbit_hosts':
+    heat_engine_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
+    heat_engine_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
+    heat_engine_config { 'DEFAULT/rabbit_hosts':
       value => "${rabbit_host}:${rabbit_port}"
     }
   }
 
   if size($rabbit_hosts) > 1 {
-    heat_api_config { 'DEFAULT/rabbit_ha_queues': value => true }
+    heat_engine_config { 'DEFAULT/rabbit_ha_queues': value => true }
   } else {
-    heat_api_config { 'DEFAULT/rabbit_ha_queues': value => false }
+    heat_engine_config { 'DEFAULT/rabbit_ha_queues': value => false }
   }
 
   service { 'heat-engine':

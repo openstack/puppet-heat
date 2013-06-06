@@ -49,7 +49,7 @@ class heat(
   user { 'heat':
     name    => 'heat',
     gid     => 'heat',
-    groups  => ['nova'],
+    groups  => ['heat'],
     system  => true,
     require => Package['heat-common'],
   }

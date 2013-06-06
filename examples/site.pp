@@ -14,6 +14,9 @@ node default {
   # Only needed if heat::engine is declared
   class { 'heat::db':
   }
+  # Common class
+  class { 'heat': }
+  class { 'heat::params': }
 
   # Install the heat-api service
   # The keystone_password parameter is mandatory

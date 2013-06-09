@@ -7,7 +7,7 @@ class heat::api-cloudwatch (
   $keystone_protocol = 'http',
   $keystone_user     = 'heat',
   $keystone_tenant   = 'services',
-  $keystone_password = false,
+  $keystone_password = 'false',
   $keystone_ec2_uri  = 'http://127.0.0.1:5000/v2.0/ec2tokens',
   $auth_uri          = 'http://127.0.0.1:5000/v2.0',
   $bind_host         = '0.0.0.0',
@@ -26,7 +26,7 @@ class heat::api-cloudwatch (
   Package['heat-api-cloudwatch'] -> Service['heat-api-cloudwatch']
   package { 'heat-api-cloudwatch':
     ensure => installed,
-    name   => $::heat::params::api_package_name,
+    name   => $::heat::params::api_cloudwatch_package_name,
   }
 
   if $enabled {

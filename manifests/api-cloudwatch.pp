@@ -54,7 +54,7 @@ class heat::api-cloudwatch (
   if size($rabbit_hosts) > 1 {
     heat_api_cloudwatch_config { 'DEFAULT/rabbit_ha_queues': value => true }
   } else {
-    heat_api_cloudwatch-config { 'DEFAULT/rabbit_ha_queues': value => false }
+    heat_api_cloudwatch_config { 'DEFAULT/rabbit_ha_queues': value => false }
   }
 
   service { 'heat-api-cloudwatch':

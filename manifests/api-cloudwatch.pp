@@ -59,7 +59,7 @@ class heat::api-cloudwatch (
 
   service { 'heat-api-cloudwatch':
     ensure     => $service_ensure,
-    name       => $::heat::params::api_service_name,
+    name       => $::heat::params::api_cloudwatch_service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,

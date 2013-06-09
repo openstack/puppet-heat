@@ -59,7 +59,7 @@ class heat::api-cfn (
 
   service { 'heat-api-cfn':
     ensure     => $service_ensure,
-    name       => $::heat::params::api_service_name,
+    name       => $::heat::params::api_cfn_service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,

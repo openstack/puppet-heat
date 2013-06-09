@@ -14,10 +14,10 @@ class heat::db (
 
   Package<| title == 'heat-common' |> -> Class['heat::db']
 
-  validate_re($database_connection,
+  validate_re($sql_connection,
     '(sqlite|mysql|posgres):\/\/(\S+:\S+@\S+\/\S+)?')
 
-  case $database_connection {
+  case $sql_connection {
     /^mysql:\/\//: {
       $backend_package = false
       include mysql::python
@@ -41,6 +41,6 @@ class heat::db (
   }
 
   heat_engine_config {
-    'DEFAULT/sql_connection': value => $database_connection;
+    'DEFAULT/sql_connection': value => $sql_connection;
   }
 }

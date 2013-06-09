@@ -87,11 +87,5 @@ class heat::engine (
     'DEFAULT/heat_metadata_server_url'     : value => $heat_metadata_server_url;
     'DEFAULT/heat_waitcondition_server_url': value => $heat_waitcondition_server_url;
     'DEFAULT/heat_watch_server_url'        : value => $heat_watch_server_url;
-    'keystone_authtoken/auth_host'         : value => $keystone_host;
-    'keystone_authtoken/auth_port'         : value => $keystone_port;
-    'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;
-    'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
-    'keystone_authtoken/admin_user'        : value => $keystone_user;
-    'keystone_authtoken/admin_password'    : value => $keystone_password;
   }
 }

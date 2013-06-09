@@ -64,7 +64,6 @@ class heat::api-cfn (
     hasstatus  => true,
     hasrestart => true,
     require    => Class['heat::db'],
-    subscribe  => Exec['heat-dbsync']
   }
 
   heat_api_cfn_config {

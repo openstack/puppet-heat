@@ -2,10 +2,6 @@
 #
 class heat::params {
 
-#TODO(EmilienM) fix db-setup command
-  $dbsync_command = 'heat-db-setup -p heat'
-  $log_dir = '/var/log/heat'
-
   case $::osfamily {
     'RedHat': {
       # package names

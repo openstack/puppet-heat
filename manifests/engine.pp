@@ -72,7 +72,6 @@ class heat::engine (
     hasstatus  => true,
     hasrestart => true,
     require    => Class['heat::db'],
-    subscribe  => Exec['heat-dbsync']
   }
 
   heat_engine_config {

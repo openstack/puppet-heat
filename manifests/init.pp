@@ -66,6 +66,6 @@ class heat(
     name   => $::heat::params::common_package_name,
   }
 
-  Package['heat-common'] -> Heat_config<||>
+#  Package['heat-common'] -> Heat_config<||>
 
 }

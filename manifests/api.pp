@@ -14,6 +14,7 @@ class heat::api (
   $bind_port         = '8004',
   $verbose           = 'False',
   $debug             = 'False',
+  $rabbit_hosts      = '127.0.0.1',
 ) {
 
   include heat::params
@@ -75,6 +76,7 @@ class heat::api (
     'DEFAULT/log_dir'                : value => $::heat::params::log_dir;
     'DEFAULT/bind_host'              : value => $bind_host;
     'DEFAULT/bind_port'              : value => $bind_port;
+    'DEFAULT/rabbit_hosts'           : value => $rabbit_hosts;
     'ec2authtoken/keystone_ec2_uri'  : value => $keystone_ec2_uri;
     'ec2authtoken/auth_uri'          : value => $auth_uri;
     'keystone_authtoken/auth_host'         : value => $keystone_host;

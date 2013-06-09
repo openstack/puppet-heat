@@ -4,7 +4,7 @@ This is the Heat module.
 WORK IN PROGRESS :
 
 ✓ Basic structure
-✗ DB (Todo : fix db-sync feature)
+✗ DB
 ✓ Keystone (Users, Services, Endpoints=
 ✓ Client
 ✓ Heat-API

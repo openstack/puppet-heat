@@ -7,7 +7,7 @@
 #    the connection string. format: [driver]://[user]:[password]@[host]/[database]
 #
 class heat::db (
-  $database_connection = 'mysql://heat:heat@localhost/heat'
+  $sql_connection = 'mysql://heat:heat@localhost/heat'
 ) {
 
   include heat::params
@@ -41,6 +41,6 @@ class heat::db (
   }
 
   heat_engine_config {
-    'DEFAULT/database_connection': value => $database_connection;
+    'DEFAULT/sql_connection': value => $database_connection;
   }
 }

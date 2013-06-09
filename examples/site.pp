@@ -16,7 +16,7 @@ node default {
   }
   # Common class
   class { 'heat': }
-  class { 'heat::params': }
+#  class { 'heat::params': }
 
   # Install the heat-api service
   # The keystone_password parameter is mandatory

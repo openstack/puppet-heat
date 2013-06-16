@@ -5,14 +5,14 @@ WORK IN PROGRESS :
 
 ✓ Basic structure
 ✗ DB
-✓ Keystone (Users, Services, Endpoints=
+✓ Keystone (Users, Services, Endpoints)
 ✓ Client
 ✓ Heat-API
 ✓ Heat-API-CFN
 ✓ Heat-API-CW
 ✓ Heat-Engine
 ✓ An example of site.pp
-✗ Write Tests
+✗ Write Tests (in progress)
 
 
 License

@@ -3,85 +3,77 @@ require 'spec_helper'
 describe 'heat::keystone::auth' do
 
   let :params do
-    {:password => 'heat_password'}
+    {
+      :password           => 'heat-passw0rd',
+      :email              => 'heat@localhost',
+      :auth_name          => 'heat',
+      :configure_endpoint => true,
+      :public_address     => '127.0.0.1',
+      :admin_address      => '127.0.0.1',
+      :internal_address   => '127.0.0.1',
+      :service_type       => 'orchestration',
+      :port               => '8004',
+      :region             => 'RegionOne',
+      :tenant             => 'services',
+      :public_protocol    => 'http'
+    }
   end
 
-  context 'with default parameters' do
+  shared_examples_for 'heat keystone auth' do
 
-    it { should contain_keystone_user('heat').with(
-      :ensure   => 'present',
-      :password => 'heat_password'
-    ) }
-
-    it { should contain_keystone_user_role('heat@services').with(
-      :ensure => 'present',
-      :roles  => 'admin'
-    )}
-
-    it { should contain_keystone_service('heat').with(
-      :ensure => 'present',
-      :type        => 'orchestration',
-      :description => 'Heat Service'
-    )}
-
-    it { should contain_keystone_service('heat_cfn').with(
-      :ensure => 'present',
-      :type        => 'cloudformation',
-      :description => 'Heat CloudFormation Service'
-    )}
-
-    it { should contain_keystone_endpoint('RegionOne/heat').with(
-      :ensure       => 'present',
-      :public_url   => 'http://127.0.0.1:8004/v1',
-      :admin_url    => 'http://127.0.0.1:8004/v1',
-      :internal_url => 'http://127.0.0.1:8004/v1',
-    )}
-
-    it { should contain_keystone_endpoint('RegionOne/heat-cfn').with(
-      :ensure       => 'present',
-      :public_url   => 'http://127.0.0.1:8000/v1/$(tenant_id)s',
-      :admin_url    => 'http://127.0.0.1:8000/v1/$(tenant_id)s',
-      :internal_url => 'http://127.0.0.1:8000/v1/$(tenant_id)s',
-    )}
-
-  end
-
-  context 'when setting auth name' do
-    before do
-      params.merge!( :auth_name => 'foo' )
+    context 'without the required password parameter' do
+      before { params.delete(:password) }
+      it { expect { should raise_error(Puppet::Error) } }
     end
 
-    it { should contain_keystone_user('foo').with(
-      :ensure   => 'present',
-      :password => 'heat_password'
-    ) }
-
-    it { should contain_keystone_user_role('foo@services').with(
-      :ensure => 'present',
-      :roles  => 'admin'
-    )}
-
-    it { should contain_keystone_service('foo').with(
-      :ensure      => 'present',
-      :type        => 'orchestration',
-      :description => 'Heat Service'
-    )}
-
-    it { should contain_keystone_service('foo_cfn').with(
-      :ensure      => 'present',
-      :type        => 'cloudformation',
-      :description => 'Heat CloudFormation Service'
-    )}
-
-  end
-
-  describe 'when disabling CFN endpoint' do
-    before do
-      params.merge!( :configure_cfn_endpoint => false )
+    it 'configures heat user' do
+      should contain_keystone_user( params[:auth_name] ).with(
+        :ensure   => 'present',
+        :password => params[:password],
+        :email    => params[:email],
+        :tenant   => params[:tenant]
+      )
     end
 
-    it { should_not contain_keystone_service('heat_cfn') }
-    it { should_not contain_keystone_endpoint('RegionOne/heat_cfn') }
+    it 'configures heat user roles' do
+      should contain_keystone_user_role("#{params[:auth_name]}@#{params[:tenant]}").with(
+        :ensure  => 'present',
+        :roles   => ['admin']
+      )
+    end
+
+    it 'configures heat service' do
+      should contain_keystone_service( params[:auth_name] ).with(
+        :ensure      => 'present',
+        :type        => params[:service_type],
+        :description => 'Heat Service'
+      )
+    end
+
+    it 'configure heat endpoints' do
+      should contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
+        :ensure       => 'present',
+        :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}",
+        :admin_url    => "http://#{params[:admin_address]}:#{params[:port]}",
+        :internal_url => "http://#{params[:internal_address]}:#{params[:port]}"
+      )
+    end
   end
 
+
+  context 'on Debian platforms' do
+    let :facts do
+      { :osfamily => 'Debian' }
+    end
+
+    it 'configures heat keystone auth'
+  end
+
+  context 'on RedHat platforms' do
+    let :facts do
+      { :osfamily => 'RedHat' }
+    end
+
+    it 'configures heat keystone auth'
+  end
 end

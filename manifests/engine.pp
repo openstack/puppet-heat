@@ -43,8 +43,6 @@ class heat::engine (
     $service_ensure = 'stopped'
   }
 
-  Package['heat-common'] -> Service['heat-engine']
-
   if $rabbit_hosts {
     heat_engine_config { 'DEFAULT/rabbit_host': ensure => absent }
     heat_engine_config { 'DEFAULT/rabbit_port': ensure => absent }
@@ -71,7 +69,10 @@ class heat::engine (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Class['heat::db'],
+    require    => [ File['/etc/heat/heat-engine.conf'],
+                    Package['heat-common'],
+		    Package['heat-engine'],
+		    Class['heat::db']],
   }
 
   heat_engine_config {

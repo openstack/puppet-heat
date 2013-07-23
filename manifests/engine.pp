@@ -70,10 +70,17 @@ class heat::engine (
     hasstatus  => true,
     hasrestart => true,
     require    => [ File['/etc/heat/heat-engine.conf'],
+                    Exec['heat-encryption-key-replacement'],
                     Package['heat-common'],
 		    Package['heat-engine'],
 		    Class['heat::db']],
   }
+
+  exec {'heat-encryption-key-replacement':
+    command => 'sed -i "s/%ENCRYPTION_KEY%/`hexdump -n 16 -v -e \'/1 "%02x"\' /dev/random`/" /etc/heat/heat-engine.conf',
+    path => [ '/usr/bin', '/bin'],
+    onlyif => 'grep -c ENCRYPTION_KEY /etc/heat/heat-engine.conf',
+    }
 
   heat_engine_config {
     'DEFAULT/rabbit_userid'          : value => $rabbit_userid;

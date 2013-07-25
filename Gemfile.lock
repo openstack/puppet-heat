@@ -13,6 +13,7 @@ GEM
       facter (~> 1.6)
       hiera (~> 1.0)
       rgen (~> 0.6)
+    puppet-lint (0.3.2)
     puppetlabs_spec_helper (0.4.1)
       mocha (>= 0.10.5)
       rake
@@ -36,4 +37,5 @@ PLATFORMS
 
 DEPENDENCIES
   puppet
+  puppet-lint (~> 0.3.2)
   puppetlabs_spec_helper

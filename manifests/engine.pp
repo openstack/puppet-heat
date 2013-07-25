@@ -43,8 +43,6 @@ class heat::engine (
     $service_ensure = 'stopped'
   }
 
-  Package['heat-common'] -> Service['heat-engine']
-
   if $rabbit_hosts {
     heat_engine_config { 'DEFAULT/rabbit_host': ensure => absent }
     heat_engine_config { 'DEFAULT/rabbit_port': ensure => absent }
@@ -71,8 +69,18 @@ class heat::engine (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Class['heat::db'],
+    require    => [ File['/etc/heat/heat-engine.conf'],
+                    Exec['heat-encryption-key-replacement'],
+                    Package['heat-common'],
+		    Package['heat-engine'],
+		    Class['heat::db']],
   }
+
+  exec {'heat-encryption-key-replacement':
+    command => 'sed -i "s/%ENCRYPTION_KEY%/`hexdump -n 16 -v -e \'/1 "%02x"\' /dev/random`/" /etc/heat/heat-engine.conf',
+    path => [ '/usr/bin', '/bin'],
+    onlyif => 'grep -c ENCRYPTION_KEY /etc/heat/heat-engine.conf',
+    }
 
   heat_engine_config {
     'DEFAULT/rabbit_userid'          : value => $rabbit_userid;

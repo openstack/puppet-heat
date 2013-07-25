@@ -25,6 +25,7 @@ class heat::api (
 
   Package['heat-api'] -> Heat_api_config<||>
   Package['heat-api'] -> Service['heat-api']
+
   package { 'heat-api':
     ensure => installed,
     name   => $::heat::params::api_package_name,
@@ -35,8 +36,6 @@ class heat::api (
   } else {
     $service_ensure = 'stopped'
   }
-
-  Package['heat-common'] -> Service['heat-api']
 
   if $rabbit_hosts {
     heat_api_config { 'DEFAULT/rabbit_host': ensure => absent }
@@ -64,7 +63,9 @@ class heat::api (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Class['heat::db'],
+    require    => [Package['heat-common'],
+		  Package['heat-api'],
+		  Class['heat::db']],
   }
 
   heat_api_config {

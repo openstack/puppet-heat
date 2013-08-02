@@ -1,9 +1,9 @@
-Puppet::Type.newtype(:heat_engine_config) do
+Puppet::Type.newtype(:heat_config) do
 
   ensurable
 
   newparam(:name, :namevar => true) do
-    desc 'Section/setting name to manage from heat-engine.conf'
+    desc 'Section/setting name to manage from heat.conf'
     newvalues(/\S+\/\S+/)
   end
 

@@ -43,26 +43,6 @@ class heat::engine (
     $service_ensure = 'stopped'
   }
 
-  if $rabbit_hosts {
-    heat_engine_config { 'DEFAULT/rabbit_host': ensure => absent }
-    heat_engine_config { 'DEFAULT/rabbit_port': ensure => absent }
-    heat_engine_config { 'DEFAULT/rabbit_hosts':
-      value => join($rabbit_hosts, ',')
-    }
-  } else {
-    heat_engine_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
-    heat_engine_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
-    heat_engine_config { 'DEFAULT/rabbit_hosts':
-      value => "${rabbit_host}:${rabbit_port}"
-    }
-  }
-
-  if size($rabbit_hosts) > 1 {
-    heat_engine_config { 'DEFAULT/rabbit_ha_queues': value => true }
-  } else {
-    heat_engine_config { 'DEFAULT/rabbit_ha_queues': value => false }
-  }
-
   service { 'heat-engine':
     ensure     => $service_ensure,
     name       => $::heat::params::engine_service_name,
@@ -72,8 +52,8 @@ class heat::engine (
     require    => [ File['/etc/heat/heat-engine.conf'],
                     Exec['heat-encryption-key-replacement'],
                     Package['heat-common'],
-		    Package['heat-engine'],
-		    Class['heat::db']],
+        Package['heat-engine'],
+        Class['heat::db']],
   }
 
   exec {'heat-encryption-key-replacement':
@@ -82,10 +62,7 @@ class heat::engine (
     onlyif => 'grep -c ENCRYPTION_KEY /etc/heat/heat-engine.conf',
     }
 
-  heat_engine_config {
-    'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
-    'DEFAULT/rabbit_password'        : value => $rabbit_password;
-    'DEFAULT/rabbit_virtualhost'     : value => $rabbit_virtualhost;
+  heat_config {
     'DEFAULT/debug'                  : value => $debug;
     'DEFAULT/verbose'                : value => $verbose;
     'DEFAULT/log_dir'                : value => $::heat::params::log_dir;

@@ -1,4 +1,4 @@
-Puppet::Type.type(:heat_api_cloudwatch_config).provide(
+Puppet::Type.type(:heat_config).provide(
   :ini_setting,
   :parent => Puppet::Type.type(:ini_setting).provider(:ruby)
 ) do
@@ -16,7 +16,7 @@ Puppet::Type.type(:heat_api_cloudwatch_config).provide(
   end
 
   def file_path
-    '/etc/heat/heat-api-cloudwatch.conf'
+    '/etc/heat/heat.conf'
   end
 
 end

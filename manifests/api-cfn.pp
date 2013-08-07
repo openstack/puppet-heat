@@ -20,9 +20,9 @@ class heat::api-cfn (
 
   validate_string($keystone_password)
 
-  Heat_api_cfn_config<||> ~> Service['heat-api-cfn']
+  Heat_config<||> ~> Service['heat-api-cfn']
 
-  Package['heat-api-cfn'] -> Heat_api_cfn_config<||>
+  Package['heat-api-cfn'] -> Heat_config<||>
   Package['heat-api-cfn'] -> Service['heat-api-cfn']
   package { 'heat-api-cfn':
     ensure => installed,
@@ -37,26 +37,6 @@ class heat::api-cfn (
 
   Package['heat-common'] -> Service['heat-api-cfn']
 
-  if $rabbit_hosts {
-    heat_api_cfn_config { 'DEFAULT/rabbit_host': ensure => absent }
-    heat_api_cfn_config { 'DEFAULT/rabbit_port': ensure => absent }
-    heat_api_cfn_config { 'DEFAULT/rabbit_hosts':
-      value => join($rabbit_hosts, ',')
-    }
-  } else {
-    heat_api_cfn_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
-    heat_api_cfn_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
-    heat_api_cfn_config { 'DEFAULT/rabbit_hosts':
-      value => "${rabbit_host}:${rabbit_port}"
-    }
-  }
-
-  if size($rabbit_hosts) > 1 {
-    heat_api_cfn_config { 'DEFAULT/rabbit_ha_queues': value => true }
-  } else {
-    heat_api_cfn_config { 'DEFAULT/rabbit_ha_queues': value => false }
-  }
-
   service { 'heat-api-cfn':
     ensure     => $service_ensure,
     name       => $::heat::params::api_cfn_service_name,
@@ -66,10 +46,7 @@ class heat::api-cfn (
     require    => Class['heat::db'],
   }
 
-  heat_api_cfn_config {
-    'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
-    'DEFAULT/rabbit_password'        : value => $rabbit_password;
-    'DEFAULT/rabbit_virtualhost'     : value => $rabbit_virtualhost;
+  heat_config {
     'DEFAULT/debug'                  : value => $debug;
     'DEFAULT/verbose'                : value => $verbose;
     'DEFAULT/log_dir'                : value => $::heat::params::log_dir;

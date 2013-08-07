@@ -61,11 +61,45 @@ class heat(
     mode    => '0750',
   }
 
+  file { '/etc/heat/heat.conf':
+    owner   => 'heat',
+    group   => 'heat',
+    mode    => '0640',
+  }
+
   package { 'heat-common':
     ensure => $package_ensure,
     name   => $::heat::params::common_package_name,
   }
 
-#  Package['heat-common'] -> Heat_config<||>
+  Package['heat-common'] -> Heat_config<||>
+
+  if $rabbit_hosts {
+    heat_config { 'DEFAULT/rabbit_host': ensure => absent }
+    heat_config { 'DEFAULT/rabbit_port': ensure => absent }
+    heat_config { 'DEFAULT/rabbit_hosts':
+      value => join($rabbit_hosts, ',')
+    }
+  } else {
+    heat_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
+    heat_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
+    heat_config { 'DEFAULT/rabbit_hosts':
+      value => "${rabbit_host}:${rabbit_port}"
+    }
+  }
+
+  if size($rabbit_hosts) > 1 {
+    heat_config { 'DEFAULT/rabbit_ha_queues': value => true }
+  } else {
+    heat_config { 'DEFAULT/rabbit_ha_queues': value => false }
+  }
+
+  heat_config {
+    'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
+    'DEFAULT/rabbit_password'        : value => $rabbit_password;
+    'DEFAULT/rabbit_virtualhost'     : value => $rabbit_virtualhost;
+    'DEFAULT/debug'                  : value => $debug;
+    'DEFAULT/verbose'                : value => $verbose;
+  }
 
 }

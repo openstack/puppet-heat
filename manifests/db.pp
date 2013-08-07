@@ -40,7 +40,7 @@ class heat::db (
     }
   }
 
-  heat_engine_config {
+  heat_config {
     'DEFAULT/sql_connection': value => $sql_connection;
   }
 }

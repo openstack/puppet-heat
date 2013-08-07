@@ -36,7 +36,7 @@ class heat::db::mysql(
 
   Class['mysql::server'] -> Class['heat::db::mysql']
   Class['heat::db::mysql'] -> Exec<| title == 'heat-manage db_sync' |>
-  Database[$dbname] ~> Exec<| title == 'heat-manage db_sync' |>
+  Mysql::Db[$dbname] ~> Exec<| title == 'heat-manage db_sync' |>
 
   mysql::db { $dbname:
     user         => $user,
@@ -46,8 +46,15 @@ class heat::db::mysql(
     require      => Class['mysql::config'],
   }
 
-  if $allowed_hosts {
-    heat::db::mysql::host_access { $allowed_hosts:
+  # Check allowed_hosts to avoid duplicate resource declarations
+  if is_array($allowed_hosts) and delete($allowed_hosts,$host) != [] {
+    $real_allowed_hosts = delete($allowed_hosts,$host)
+  } elsif is_string($allowed_hosts) and ($allowed_hosts != $host) {
+    $real_allowed_hosts = $allowed_hosts
+  }
+
+  if $real_allowed_hosts {
+    heat::db::mysql::host_access { $real_allowed_hosts:
       user      => $user,
       password  => $password,
       database  => $dbname,

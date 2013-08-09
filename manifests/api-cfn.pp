@@ -7,13 +7,13 @@ class heat::api-cfn (
   $keystone_protocol = 'http',
   $keystone_user     = 'heat',
   $keystone_tenant   = 'services',
-  $keystone_password = 'false',
+  $keystone_password = false,
   $keystone_ec2_uri  = 'http://127.0.0.1:5000/v2.0/ec2tokens',
   $auth_uri          = 'http://127.0.0.1:5000/v2.0',
   $bind_host         = '0.0.0.0',
   $bind_port         = '8000',
-  $verbose           = 'False',
-  $debug             = 'False',
+  $verbose           = false,
+  $debug             = false,
 ) {
 
   include heat::params

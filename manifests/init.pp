@@ -40,8 +40,8 @@
 
 class heat(
   $package_ensure     = 'present',
-  $verbose            = 'False',
-  $debug              = 'False',
+  $verbose            = false,
+  $debug              = false,
   $rpc_backend        = 'heat.openstack.common.rpc.impl_kombu',
   $rabbit_host        = '127.0.0.1',
   $rabbit_port        = 5672,

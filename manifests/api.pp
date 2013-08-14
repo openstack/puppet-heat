@@ -12,8 +12,8 @@ class heat::api (
   $auth_uri          = 'http://127.0.0.1:5000/v2.0',
   $bind_host         = '0.0.0.0',
   $bind_port         = '8004',
-  $verbose           = 'False',
-  $debug             = 'False',
+  $verbose           = false,
+  $debug             = false,
 ) {
 
   include heat::params

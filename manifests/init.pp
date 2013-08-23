@@ -9,6 +9,8 @@
 #    should the daemons log verbose messages. Optional. Defaults to 'False'
 #  [*debug*]
 #    should the daemons log debug messages. Optional. Defaults to 'False'
+#  [*log_dir*]
+#    Directory where logs should be stored. Optional. Defaults to '/var/log/heat'.
 #  [*rabbit_host*]
 #    ip or hostname of the rabbit server. Optional. Defaults to '127.0.0.1'
 #  [*rabbit_port*]
@@ -22,6 +24,17 @@
 #    password to connect to the rabbit_server. Optional. Defaults to empty.
 #  [*rabbit_virtualhost*]
 #    virtualhost to use. Optional. Defaults to '/'
+#
+#  (keystone authentication options)
+#  [*keystone_host*]
+#  [*keystone_port*]
+#  [*keystone_protocol*]
+#  [*keystone_user*]
+#  [*keystone_tenant*]
+#  [*keystone_password*]
+#  [*keystone_ec2_uri*]
+#
+#  (optional) various QPID options
 #  [*qpid_hostname*]
 #  [*qpid_port*]
 #  [*qpid_username*]
@@ -35,13 +48,21 @@
 #  [*qpid_reconnect_interval*]
 #  [*qpid_reconnect_interval_min*]
 #  [*qpid_reconnect_interval_max*]
-#  (optional) various QPID options
 #
 
 class heat(
+  $auth_uri           = 'http://127.0.0.1:5000/v2.0',
   $package_ensure     = 'present',
   $verbose            = false,
   $debug              = false,
+  $log_dir            = '/var/log/heat',
+  $keystone_host      = '127.0.0.1',
+  $keystone_port      = '35357',
+  $keystone_protocol  = 'http',
+  $keystone_user      = 'heat',
+  $keystone_tenant    = 'services',
+  $keystone_password  = false,
+  $keystone_ec2_uri   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
   $rpc_backend        = 'heat.openstack.common.rpc.impl_kombu',
   $rabbit_host        = '127.0.0.1',
   $rabbit_port        = 5672,
@@ -153,9 +174,19 @@ class heat(
   }
 
   heat_config {
-    'DEFAULT/rpc_backend'            : value => $rpc_backend;
-    'DEFAULT/debug'                  : value => $debug;
-    'DEFAULT/verbose'                : value => $verbose;
+    'DEFAULT/rpc_backend'                  : value => $rpc_backend;
+    'DEFAULT/debug'                        : value => $debug;
+    'DEFAULT/verbose'                      : value => $verbose;
+    'DEFAULT/log_dir'                      : value => $log_dir;
+    'ec2authtoken/keystone_ec2_uri'        : value => $keystone_ec2_uri;
+    'ec2authtoken/auth_uri'                : value => $auth_uri;
+    'keystone_authtoken/auth_uri'          : value => $auth_uri;
+    'keystone_authtoken/auth_host'         : value => $keystone_host;
+    'keystone_authtoken/auth_port'         : value => $keystone_port;
+    'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;
+    'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
+    'keystone_authtoken/admin_user'        : value => $keystone_user;
+    'keystone_authtoken/admin_password'    : value => $keystone_password;
   }
 
 }

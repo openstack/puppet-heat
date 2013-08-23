@@ -15,14 +15,14 @@ node default {
   class { 'heat::db':
   }
   # Common class
-  class { 'heat': }
+  class { 'heat':
+    # The keystone_password parameter is mandatory
+    keystone_password => 'password'
+  }
 #  class { 'heat::params': }
 
   # Install the heat-api service
-  # The keystone_password parameter is mandatory
-  class { 'heat::api':
-    keystone_password => 'password'
-  }
+  class { 'heat::api': }
 
   # Install heat-engine
   class { 'heat::engine':

@@ -1,24 +1,13 @@
 # Installs & configure the heat CloudWatch API service
-#
+
 class heat::api_cloudwatch (
   $enabled           = true,
-  $keystone_host     = '127.0.0.1',
-  $keystone_port     = '35357',
-  $keystone_protocol = 'http',
-  $keystone_user     = 'heat',
-  $keystone_tenant   = 'services',
-  $keystone_password = false,
-  $keystone_ec2_uri  = 'http://127.0.0.1:5000/v2.0/ec2tokens',
-  $auth_uri          = 'http://127.0.0.1:5000/v2.0',
   $bind_host         = '0.0.0.0',
   $bind_port         = '8003',
-  $verbose           = false,
-  $debug             = false,
 ) {
 
+  include heat
   include heat::params
-
-  validate_string($keystone_password)
 
   Heat_config<||> ~> Service['heat-api-cloudwatch']
 
@@ -47,18 +36,7 @@ class heat::api_cloudwatch (
   }
 
   heat_config {
-    'DEFAULT/debug'                  : value => $debug;
-    'DEFAULT/verbose'                : value => $verbose;
-    'DEFAULT/log_dir'                : value => $::heat::params::log_dir;
-    'DEFAULT/bind_host'              : value => $bind_host;
-    'DEFAULT/bind_port'              : value => $bind_port;
-    'ec2authtoken/keystone_ec2_uri'  : value => $keystone_ec2_uri;
-    'ec2authtoken/auth_uri'          : value => $auth_uri;
-    'keystone_authtoken/auth_host'         : value => $keystone_host;
-    'keystone_authtoken/auth_port'         : value => $keystone_port;
-    'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;
-    'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
-    'keystone_authtoken/admin_user'        : value => $keystone_user;
-    'keystone_authtoken/admin_password'    : value => $keystone_password;
+    'heat_api_cloudwatch/bind_host'  : value => $bind_host;
+    'heat_api_cloudwatch/bind_port'  : value => $bind_port;
   }
 }

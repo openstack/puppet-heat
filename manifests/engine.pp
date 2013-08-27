@@ -22,9 +22,9 @@ class heat::engine (
 
   validate_string($keystone_password)
 
-  Heat_engine_config<||> ~> Service['heat-engine']
+  Heat_config<||> ~> Service['heat-engine']
 
-  Package['heat-engine'] -> Heat_engine_config<||>
+  Package['heat-engine'] -> Heat_config<||>
   Package['heat-engine'] -> Service['heat-engine']
   package { 'heat-engine':
     ensure => installed,

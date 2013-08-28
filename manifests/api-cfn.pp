@@ -1,5 +1,5 @@
 # Installs & configure the heat CloudFormation API service
-
+#
 class heat::api-cfn (
   $enabled           = true,
   $keystone_host     = '127.0.0.1',
@@ -16,49 +16,21 @@ class heat::api-cfn (
   $debug             = false,
 ) {
 
-  include heat::params
+  warning('heat::api-cfn is deprecated. Use heat::api_cfn instead.')
 
-  validate_string($keystone_password)
-
-  Heat_config<||> ~> Service['heat-api-cfn']
-
-  Package['heat-api-cfn'] -> Heat_config<||>
-  Package['heat-api-cfn'] -> Service['heat-api-cfn']
-  package { 'heat-api-cfn':
-    ensure => installed,
-    name   => $::heat::params::api_cfn_package_name,
-  }
-
-  if $enabled {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
-  }
-
-  Package['heat-common'] -> Service['heat-api-cfn']
-
-  service { 'heat-api-cfn':
-    ensure     => $service_ensure,
-    name       => $::heat::params::api_cfn_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    require    => Class['heat::db'],
-  }
-
-  heat_config {
-    'DEFAULT/debug'                  : value => $debug;
-    'DEFAULT/verbose'                : value => $verbose;
-    'DEFAULT/log_dir'                : value => $::heat::params::log_dir;
-    'DEFAULT/bind_host'              : value => $bind_host;
-    'DEFAULT/bind_port'              : value => $bind_port;
-    'ec2authtoken/keystone_ec2_uri'  : value => $keystone_ec2_uri;
-    'ec2authtoken/auth_uri'          : value => $auth_uri;
-    'keystone_authtoken/auth_host'         : value => $keystone_host;
-    'keystone_authtoken/auth_port'         : value => $keystone_port;
-    'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;
-    'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
-    'keystone_authtoken/admin_user'        : value => $keystone_user;
-    'keystone_authtoken/admin_password'    : value => $keystone_password;
+  class { 'heat::api_cfn':
+    enabled           => $enabled,
+    keystone_host     => $keystone_host,
+    keystone_port     => $keystone_port,
+    keystone_protocol => $keystone_protocol,
+    keystone_user     => $keystone_user,
+    keystone_tenant   => $keystone_tenant,
+    keystone_password => $keystone_password,
+    keystone_ec2_uri  => $keystone_ec2_uri,
+    auth_uri          => $auth_uri,
+    bind_host         => $bind_host,
+    bind_port         => $bind_port,
+    verbose           => $verbose,
+    debug             => $debug,
   }
 }

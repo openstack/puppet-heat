@@ -58,8 +58,8 @@ class heat::engine (
 
   exec {'heat-encryption-key-replacement':
     command => 'sed -i "s/%ENCRYPTION_KEY%/`hexdump -n 16 -v -e \'/1 "%02x"\' /dev/random`/" /etc/heat/heat-engine.conf',
-    path => [ '/usr/bin', '/bin'],
-    onlyif => 'grep -c ENCRYPTION_KEY /etc/heat/heat-engine.conf',
+    path    => [ '/usr/bin', '/bin'],
+    onlyif  => 'grep -c ENCRYPTION_KEY /etc/heat/heat-engine.conf',
     }
 
   heat_config {

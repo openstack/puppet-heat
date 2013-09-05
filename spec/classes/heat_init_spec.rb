@@ -12,6 +12,7 @@ describe 'heat' do
       :rabbit_userid      => 'guest',
       :rabbit_password    => '',
       :rabbit_virtualhost => '/',
+      :sql_connection     => 'mysql://user@host/database'
     }
   end
 
@@ -105,6 +106,15 @@ describe 'heat' do
     it 'configures debug and verbose' do
       should contain_heat_config('DEFAULT/debug').with_value( params[:debug] )
       should contain_heat_config('DEFAULT/verbose').with_value( params[:verbose] )
+    end
+
+    it 'configures sql_connection' do
+      should contain_heat_config('DEFAULT/sql_connection').with_value( params[:sql_connection] )
+    end
+
+    context("failing if sql_connection is invalid") do
+      before { params[:sql_connection] = 'foo://foo:bar@baz/moo' }
+      it { expect { should raise_error(Puppet::Error) } }
     end
 
   end

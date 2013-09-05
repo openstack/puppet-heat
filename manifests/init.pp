@@ -83,6 +83,7 @@ class heat(
   $qpid_reconnect_interval_min = 0,
   $qpid_reconnect_interval_max = 0,
   $qpid_reconnect_interval = 0,
+  $sql_connection = false,
 ) {
 
   include heat::params
@@ -187,6 +188,39 @@ class heat(
     'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
     'keystone_authtoken/admin_user'        : value => $keystone_user;
     'keystone_authtoken/admin_password'    : value => $keystone_password;
+  }
+
+  if $sql_connection {
+
+    validate_re($sql_connection,
+      '(sqlite|mysql|posgres):\/\/(\S+:\S+@\S+\/\S+)?')
+
+    case $sql_connection {
+      /^mysql:\/\//: {
+        $backend_package = false
+        include mysql::python
+      }
+      /^postgres:\/\//: {
+        $backend_package = 'python-psycopg2'
+      }
+      /^sqlite:\/\//: {
+        $backend_package = 'python-pysqlite2'
+      }
+      default: {
+        fail('Unsupported backend configured')
+      }
+    }
+
+    if $backend_package and !defined(Package[$backend_package]) {
+      package {'heat-backend-package':
+        ensure => present,
+        name   => $backend_package,
+      }
+    }
+
+    heat_config {
+      'DEFAULT/sql_connection': value => $sql_connection;
+    }
   }
 
 }

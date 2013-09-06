@@ -1,21 +1,24 @@
 require 'spec_helper'
 
-describe 'heat::keystone::auth' do
+describe 'heat::keystone::auth_cfn' do
 
   let :params do
     {
       :password           => 'heat-passw0rd',
-      :email              => 'heat@localhost',
-      :auth_name          => 'heat',
+      :email              => 'heat-cfn@localhost',
+      :auth_name          => 'heat-cfn',
       :configure_endpoint => true,
+      :service_type       => 'cloudformation',
       :public_address     => '127.0.0.1',
       :admin_address      => '127.0.0.1',
       :internal_address   => '127.0.0.1',
-      :service_type       => 'orchestration',
-      :port               => '8004',
+      :port               => '8000',
+      :version            => 'v1',
       :region             => 'RegionOne',
       :tenant             => 'services',
-      :public_protocol    => 'http'
+      :public_protocol    => 'http',
+      :admin_protocol     => 'http',
+      :internal_protocol  => 'http',
     }
   end
 
@@ -46,27 +49,26 @@ describe 'heat::keystone::auth' do
       should contain_keystone_service( params[:auth_name] ).with(
         :ensure      => 'present',
         :type        => params[:service_type],
-        :description => 'Heat Service'
+        :description => 'Openstack Cloudformation Service'
       )
     end
 
     it 'configure heat endpoints' do
       should contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
         :ensure       => 'present',
-        :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}",
-        :admin_url    => "http://#{params[:admin_address]}:#{params[:port]}",
-        :internal_url => "http://#{params[:internal_address]}:#{params[:port]}"
+        :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}/#{params[:version]}/",
+        :admin_url    => "#{params[:admin_protocol]}://#{params[:admin_address]}:#{params[:port]}/#{params[:version]}/",
+        :internal_url => "#{params[:internal_protocol]}://#{params[:internal_address]}:#{params[:port]}/#{params[:version]}/"
       )
     end
   end
-
 
   context 'on Debian platforms' do
     let :facts do
       { :osfamily => 'Debian' }
     end
 
-    it 'configures heat keystone auth'
+    it_configures 'heat keystone auth'
   end
 
   context 'on RedHat platforms' do
@@ -74,6 +76,6 @@ describe 'heat::keystone::auth' do
       { :osfamily => 'RedHat' }
     end
 
-    it 'configures heat keystone auth'
+    it_configures 'heat keystone auth'
   end
 end

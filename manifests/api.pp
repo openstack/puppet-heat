@@ -32,8 +32,7 @@ class heat::api (
     hasstatus  => true,
     hasrestart => true,
     require    => [Package['heat-common'],
-    Package['heat-api'],
-    Class['heat::db']],
+                  Package['heat-api']],
   }
 
   heat_config {

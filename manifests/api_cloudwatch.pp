@@ -32,7 +32,6 @@ class heat::api_cloudwatch (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => Class['heat::db'],
   }
 
   heat_config {

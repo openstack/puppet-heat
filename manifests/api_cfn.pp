@@ -32,6 +32,7 @@ class heat::api_cfn (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
+    subscribe  => Exec['heat-dbsync'],
   }
 
   heat_config {

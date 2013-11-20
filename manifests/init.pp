@@ -193,14 +193,14 @@ class heat(
   if $sql_connection {
 
     validate_re($sql_connection,
-      '(sqlite|mysql|posgres):\/\/(\S+:\S+@\S+\/\S+)?')
+      '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
     case $sql_connection {
       /^mysql:\/\//: {
         $backend_package = false
         include mysql::python
       }
-      /^postgres:\/\//: {
+      /^postgresql:\/\//: {
         $backend_package = 'python-psycopg2'
       }
       /^sqlite:\/\//: {

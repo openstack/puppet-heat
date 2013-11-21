@@ -11,7 +11,7 @@ describe 'heat' do
       :rabbit_port           => 5672,
       :rabbit_userid         => 'guest',
       :rabbit_password       => '',
-      :rabbit_virtualhost    => '/',
+      :rabbit_virtual_host   => '/',
       :log_dir               => '/var/log/heat',
       :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',
       :database_idle_timeout => 3600,
@@ -152,7 +152,7 @@ describe 'heat' do
     it 'configures rabbit' do
       should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_heat_config('DEFAULT/rabbit_virtualhost').with_value( params[:rabbit_virtualhost] )
+      should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
     end
     it { should contain_heat_config('DEFAULT/rabbit_host').with_value( params[:rabbit_host] ) }
     it { should contain_heat_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] ) }
@@ -164,7 +164,7 @@ describe 'heat' do
     it 'configures rabbit' do
       should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_heat_config('DEFAULT/rabbit_virtualhost').with_value( params[:rabbit_virtualhost] )
+      should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
     end
     it { should contain_heat_config('DEFAULT/rabbit_host').with_ensure('absent') }
     it { should contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
@@ -176,7 +176,7 @@ describe 'heat' do
     it 'configures rabbit' do
       should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_heat_config('DEFAULT/rabbit_virtualhost').with_value( params[:rabbit_virtualhost] )
+      should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
     end
     it { should contain_heat_config('DEFAULT/rabbit_host').with_ensure('absent') }
     it { should contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }

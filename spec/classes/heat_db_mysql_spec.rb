@@ -5,10 +5,6 @@ describe 'heat::db::mysql' do
     { :osfamily => 'RedHat' }
   end
 
-  let :pre_condition do
-    'include mysql::server'
-  end
-
   let :params do
     { :password  => 's3cr3t',
       :dbname    => 'heat',

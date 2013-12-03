@@ -34,7 +34,6 @@ class heat::db::mysql(
 
   validate_string($password)
 
-  Class['mysql::server'] -> Class['heat::db::mysql']
   Class['heat::db::mysql'] -> Exec<| title == 'heat-manage db_sync' |>
   Mysql::Db[$dbname] ~> Exec<| title == 'heat-manage db_sync' |>
 

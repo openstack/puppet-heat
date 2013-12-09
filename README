@@ -1,20 +1,6 @@
 puppet-heat
 This is the Heat module.
 
-WORK IN PROGRESS :
-
-✓ Basic structure
-✗ DB
-✓ Keystone (Users, Services, Endpoints)
-✓ Client
-✓ Heat-API
-✓ Heat-API-CFN
-✓ Heat-API-CW
-✓ Heat-Engine
-✓ An example of site.pp
-✗ Write Tests (in progress)
-
-
 License
 -------
 
@@ -33,8 +19,3 @@ Apache License 2.0
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-Contact
--------
-
-techs@enovance.com

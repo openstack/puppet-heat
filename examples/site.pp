@@ -20,6 +20,7 @@ node default {
 
   # Install heat-engine
   class { 'heat::engine':
+    auth_encryption_key => 'whatever-key-you-like',
   }
 
   # Install the heat-api service

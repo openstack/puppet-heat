@@ -15,8 +15,8 @@ describe 'heat::api' do
 
   context 'config params' do
 
-    it { should include_class('heat') }
-    it { should include_class('heat::params') }
+    it { should contain_class('heat') }
+    it { should contain_class('heat::params') }
 
     it { should contain_heat_config('heat_api/bind_host').with_value( params[:bind_host] ) }
     it { should contain_heat_config('heat_api/bind_port').with_value( params[:bind_port] ) }

@@ -57,7 +57,7 @@ describe 'heat' do
 
   shared_examples_for 'a heat base installation' do
 
-    it { should include_class('heat::params') }
+    it { should contain_class('heat::params') }
 
     it 'configures heat group' do
       should contain_group('heat').with(

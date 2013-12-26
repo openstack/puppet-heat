@@ -26,6 +26,11 @@
 #  [*auth_encryption_key*]
 #    (required) Encryption key used for authentication info in database
 #
+#  [*engine_life_check_timeout*]
+#    (optional) RPC timeout (in seconds) for the engine liveness check that is
+#    used for stack locking
+#    Defaults to '2'
+#
 
 class heat::engine (
   $auth_encryption_key,
@@ -34,6 +39,7 @@ class heat::engine (
   $heat_metadata_server_url      = 'http://127.0.0.1:8000',
   $heat_waitcondition_server_url = 'http://127.0.0.1:8000/v1/waitcondition',
   $heat_watch_server_url         = 'http://127.0.0.1:8003',
+  $engine_life_check_timeout     = '2'
 ) {
 
   include heat::params
@@ -71,5 +77,6 @@ class heat::engine (
     'DEFAULT/heat_metadata_server_url'     : value => $heat_metadata_server_url;
     'DEFAULT/heat_waitcondition_server_url': value => $heat_waitcondition_server_url;
     'DEFAULT/heat_watch_server_url'        : value => $heat_watch_server_url;
+    'DEFAULT/engine_life_check_timeout'    : value => $engine_life_check_timeout;
   }
 }

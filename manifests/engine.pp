@@ -1,6 +1,34 @@
-# Installs & configure the heat engine service
+# Class heat::engine
+#
+#  Installs & configure the heat engine service
+#
+# == parameters
+#  [*enabled*]
+#    (optional) The state of the service
+#    Defaults to true
+#
+#  [*heat_stack_user_role*]
+#    (optional) Keystone role for heat template-defined users
+#    Defaults to 'heat_stack_user'
+#
+#  [*heat_metadata_server_url*]
+#    (optional) URL of the Heat metadata server
+#    Defaults to 'http://127.0.0.1:8000'
+#
+#  [*heat_waitcondition_server_url*]
+#    (optional) URL of the Heat waitcondition server
+#    Defaults to 'http://127.0.0.1:8000/v1/waitcondition'
+#
+#  [*heat_watch_server_url*]
+#    (optional) URL of the Heat cloudwatch server
+#    Defaults to 'http://127.0.0.1:8003'
+#
+#  [*auth_encryption_key*]
+#    (required) Encryption key used for authentication info in database
+#
 
 class heat::engine (
+  $auth_encryption_key,
   $enabled                       = true,
   $heat_stack_user_role          = 'heat_stack_user',
   $heat_metadata_server_url      = 'http://127.0.0.1:8000',
@@ -32,21 +60,13 @@ class heat::engine (
     hasstatus  => true,
     hasrestart => true,
     require    => [ File['/etc/heat/heat.conf'],
-                    Exec['heat-encryption-key-replacement'],
                     Package['heat-common'],
                     Package['heat-engine']],
     subscribe  => Exec['heat-dbsync'],
   }
 
-  exec {'heat-encryption-key-replacement':
-    command => 'sed -i".bak" "s/%ENCRYPTION_KEY%/`hexdump -n 16 -v -e \'/1 "%02x"\' /dev/random`/" /etc/heat/heat.conf',
-    path    => [ '/usr/bin', '/bin'],
-    onlyif  => 'grep -c %ENCRYPTION_KEY% /etc/heat/heat.conf',
-    require => File['/etc/heat/heat.conf'],
-  }
-
   heat_config {
-    'DEFAULT/auth_encryption_key'          : value => '%ENCRYPTION_KEY%'; # replaced above
+    'DEFAULT/auth_encryption_key'          : value => $auth_encryption_key;
     'DEFAULT/heat_stack_user_role'         : value => $heat_stack_user_role;
     'DEFAULT/heat_metadata_server_url'     : value => $heat_metadata_server_url;
     'DEFAULT/heat_waitcondition_server_url': value => $heat_waitcondition_server_url;

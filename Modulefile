@@ -10,4 +10,4 @@ project_page 'https://launchpad.net/Heat'
 # Dependencies
 dependency 'puppetlabs/stdlib', '>= 3.2.0'
 dependency 'cprice404/inifile', '>= 0.9.0'
-dependency 'puppetlabs/mysql', '>= 0.5.0'
+dependency 'puppetlabs/mysql', '>=0.6.1 <1.0.0'

@@ -1,5 +1,5 @@
 name    'puppetlabs-heat'
-version '3.0.0-rc3'
+version '3.0.0'
 source 'https://github.com/stackforge/puppet-heat'
 author 'enovance'
 license 'Apache License, Version 2.0'

@@ -49,7 +49,14 @@
 #  [*qpid_reconnect_interval_min*]
 #  [*qpid_reconnect_interval_max*]
 #
-
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults to false
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults to LOG_USER
+#
 class heat(
   $auth_uri                    = 'http://127.0.0.1:5000/v2.0',
   $package_ensure              = 'present',
@@ -84,6 +91,8 @@ class heat(
   $qpid_reconnect_interval_max = 0,
   $qpid_reconnect_interval     = 0,
   $sql_connection              = false,
+  $use_syslog                  = false,
+  $log_facility                = 'LOG_USER',
 ) {
 
   include heat::params
@@ -230,6 +239,18 @@ class heat(
       user        => 'heat',
       refreshonly => true,
       logoutput   => on_failure,
+    }
+  }
+
+  # Syslog configuration
+  if $use_syslog {
+    heat_config {
+      'DEFAULT/use_syslog':           value => true;
+      'DEFAULT/syslog_log_facility':  value => $log_facility;
+    }
+  } else {
+    heat_config {
+      'DEFAULT/use_syslog':           value => false;
     }
   }
 

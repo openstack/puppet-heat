@@ -49,41 +49,50 @@
 #  [*qpid_reconnect_interval_min*]
 #  [*qpid_reconnect_interval_max*]
 #
-
+# [*use_syslog*]
+#   (optional) Use syslog for logging
+#   Defaults to false
+#
+# [*log_facility*]
+#   (optional) Syslog facility to receive log lines
+#   Defaults to LOG_USER
+#
 class heat(
-  $auth_uri           = 'http://127.0.0.1:5000/v2.0',
-  $package_ensure     = 'present',
-  $verbose            = false,
-  $debug              = false,
-  $log_dir            = '/var/log/heat',
-  $keystone_host      = '127.0.0.1',
-  $keystone_port      = '35357',
-  $keystone_protocol  = 'http',
-  $keystone_user      = 'heat',
-  $keystone_tenant    = 'services',
-  $keystone_password  = false,
-  $keystone_ec2_uri   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
-  $rpc_backend        = 'heat.openstack.common.rpc.impl_kombu',
-  $rabbit_host        = '127.0.0.1',
-  $rabbit_port        = 5672,
-  $rabbit_hosts       = undef,
-  $rabbit_userid      = 'guest',
-  $rabbit_password    = '',
-  $rabbit_virtualhost = '/',
-  $qpid_hostname = 'localhost',
-  $qpid_port = 5672,
-  $qpid_username = 'guest',
-  $qpid_password = 'guest',
-  $qpid_heartbeat = 60,
-  $qpid_protocol = 'tcp',
-  $qpid_tcp_nodelay = true,
-  $qpid_reconnect = true,
-  $qpid_reconnect_timeout = 0,
-  $qpid_reconnect_limit = 0,
+  $auth_uri                    = 'http://127.0.0.1:5000/v2.0',
+  $package_ensure              = 'present',
+  $verbose                     = false,
+  $debug                       = false,
+  $log_dir                     = '/var/log/heat',
+  $keystone_host               = '127.0.0.1',
+  $keystone_port               = '35357',
+  $keystone_protocol           = 'http',
+  $keystone_user               = 'heat',
+  $keystone_tenant             = 'services',
+  $keystone_password           = false,
+  $keystone_ec2_uri            = 'http://127.0.0.1:5000/v2.0/ec2tokens',
+  $rpc_backend                 = 'heat.openstack.common.rpc.impl_kombu',
+  $rabbit_host                 = '127.0.0.1',
+  $rabbit_port                 = 5672,
+  $rabbit_hosts                = undef,
+  $rabbit_userid               = 'guest',
+  $rabbit_password             = '',
+  $rabbit_virtualhost          = '/',
+  $qpid_hostname               = 'localhost',
+  $qpid_port                   = 5672,
+  $qpid_username               = 'guest',
+  $qpid_password               = 'guest',
+  $qpid_heartbeat              = 60,
+  $qpid_protocol               = 'tcp',
+  $qpid_tcp_nodelay            = true,
+  $qpid_reconnect              = true,
+  $qpid_reconnect_timeout      = 0,
+  $qpid_reconnect_limit        = 0,
   $qpid_reconnect_interval_min = 0,
   $qpid_reconnect_interval_max = 0,
-  $qpid_reconnect_interval = 0,
-  $sql_connection = false,
+  $qpid_reconnect_interval     = 0,
+  $sql_connection              = false,
+  $use_syslog                  = false,
+  $log_facility                = 'LOG_USER',
 ) {
 
   include heat::params
@@ -230,6 +239,18 @@ class heat(
       user        => 'heat',
       refreshonly => true,
       logoutput   => on_failure,
+    }
+  }
+
+  # Syslog configuration
+  if $use_syslog {
+    heat_config {
+      'DEFAULT/use_syslog':           value => true;
+      'DEFAULT/syslog_log_facility':  value => $log_facility;
+    }
+  } else {
+    heat_config {
+      'DEFAULT/use_syslog':           value => false;
     }
   }
 

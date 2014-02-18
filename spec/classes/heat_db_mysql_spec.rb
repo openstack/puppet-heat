@@ -6,11 +6,12 @@ describe 'heat::db::mysql' do
   end
 
   let :params do
-    { :password  => 's3cr3t',
-      :dbname    => 'heat',
-      :user      => 'heat',
-      :host      => 'localhost',
-      :charset   => 'latin1'
+    { :password     => 's3cr3t',
+      :dbname       => 'heat',
+      :user         => 'heat',
+      :host         => 'localhost',
+      :charset      => 'latin1',
+      :mysql_module => '0.9'
     }
   end
 

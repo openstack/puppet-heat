@@ -69,6 +69,11 @@
 #   (optional) Syslog facility to receive log lines
 #   Defaults to LOG_USER
 #
+# [*mysql_module*]
+#   (optional) The mysql puppet module version.
+#   Tested versions include 0.9 and 2.2
+#   Defaults to '0.9'
+#
 class heat(
   $auth_uri                    = false,
   $package_ensure              = 'present',
@@ -106,6 +111,7 @@ class heat(
   $database_idle_timeout       = 3600,
   $use_syslog                  = false,
   $log_facility                = 'LOG_USER',
+  $mysql_module                = '0.9',
 ) {
 
   include heat::params
@@ -234,7 +240,12 @@ class heat(
     case $sql_connection {
       /^mysql:\/\//: {
         $backend_package = false
-        include mysql::python
+        if ($mysql_module >= 2.2) {
+          require mysql::bindings
+          require mysql::bindings::python
+        } else {
+          include mysql::python
+        }
       }
       /^postgresql:\/\//: {
         $backend_package = 'python-psycopg2'

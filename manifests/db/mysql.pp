@@ -23,6 +23,16 @@
 #  [*charset*]
 #    the database charset. Optional. Defaults to 'latin1'
 #
+#  [*collate*]
+#    the database collate. Optional. Only used with mysql modules
+#    >=  2.2
+#    Defaults to 'latin1_swedish_ci'
+#
+#  [*mysql_module*]
+#    The version of the mysql puppet module to use.
+#    Tested versions include 0.9 and 2.2
+#    Defaults to '0.9'.
+#
 class heat::db::mysql(
   $password      = false,
   $dbname        = 'heat',
@@ -30,6 +40,8 @@ class heat::db::mysql(
   $host          = 'localhost',
   $allowed_hosts = undef,
   $charset       = 'latin1',
+  $collate       = 'latin1_swedish_ci',
+  $mysql_module  = '0.9'
 ) {
 
   validate_string($password)
@@ -37,12 +49,23 @@ class heat::db::mysql(
   Class['heat::db::mysql'] -> Exec<| title == 'heat-manage db_sync' |>
   Mysql::Db[$dbname] ~> Exec<| title == 'heat-manage db_sync' |>
 
-  mysql::db { $dbname:
-    user         => $user,
-    password     => $password,
-    host         => $host,
-    charset      => $charset,
-    require      => Class['mysql::config'],
+  if ($mysql_module >= 2.2) {
+    mysql::db { $dbname:
+      user         => $user,
+      password     => $password,
+      host         => $host,
+      charset      => $charset,
+      collate      => $collate,
+      require      => Service['mysql'],
+    }
+  } else {
+    mysql::db { $dbname:
+      user         => $user,
+      password     => $password,
+      host         => $host,
+      charset      => $charset,
+      require      => Class['mysql::config'],
+    }
   }
 
   # Check allowed_hosts to avoid duplicate resource declarations
@@ -54,9 +77,10 @@ class heat::db::mysql(
 
   if $real_allowed_hosts {
     heat::db::mysql::host_access { $real_allowed_hosts:
-      user      => $user,
-      password  => $password,
-      database  => $dbname,
+      user          => $user,
+      password      => $password,
+      database      => $dbname,
+      mysql_module  => $mysql_module,
     }
   }
 }

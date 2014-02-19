@@ -9,8 +9,12 @@
 #    should the daemons log verbose messages. Optional. Defaults to 'False'
 #  [*debug*]
 #    should the daemons log debug messages. Optional. Defaults to 'False'
+#
 #  [*log_dir*]
-#    Directory where logs should be stored. Optional. Defaults to '/var/log/heat'.
+#   (optional) Directory where logs should be stored.
+#   If set to boolean false, it will not log to any directory.
+#   Defaults to '/var/log/heat'.
+#
 #  [*rabbit_host*]
 #    ip or hostname of the rabbit server. Optional. Defaults to '127.0.0.1'
 #  [*rabbit_port*]
@@ -187,7 +191,6 @@ class heat(
     'DEFAULT/rpc_backend'                  : value => $rpc_backend;
     'DEFAULT/debug'                        : value => $debug;
     'DEFAULT/verbose'                      : value => $verbose;
-    'DEFAULT/log_dir'                      : value => $log_dir;
     'ec2authtoken/keystone_ec2_uri'        : value => $keystone_ec2_uri;
     'ec2authtoken/auth_uri'                : value => $auth_uri;
     'keystone_authtoken/auth_uri'          : value => $auth_uri;
@@ -197,6 +200,17 @@ class heat(
     'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
     'keystone_authtoken/admin_user'        : value => $keystone_user;
     'keystone_authtoken/admin_password'    : value => $keystone_password;
+  }
+
+  # Log configuration
+  if $log_dir {
+    heat_config {
+      'DEFAULT/log_dir' : value  => $log_dir;
+    }
+  } else {
+    heat_config {
+      'DEFAULT/log_dir' : ensure => absent;
+    }
   }
 
   if $sql_connection {

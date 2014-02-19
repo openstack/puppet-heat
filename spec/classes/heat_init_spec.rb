@@ -12,6 +12,7 @@ describe 'heat' do
       :rabbit_userid      => 'guest',
       :rabbit_password    => '',
       :rabbit_virtualhost => '/',
+      :log_dir            => '/var/log/heat',
       :sql_connection     => 'mysql://user@host/database'
     }
   end
@@ -110,6 +111,16 @@ describe 'heat' do
     it 'configures debug and verbose' do
       should contain_heat_config('DEFAULT/debug').with_value( params[:debug] )
       should contain_heat_config('DEFAULT/verbose').with_value( params[:verbose] )
+    end
+
+    it 'configures logging directory by default' do
+      should contain_heat_config('DEFAULT/log_dir').with_value( params[:log_dir] )
+    end
+
+    context 'with logging directory disabled' do
+      before { params.merge!( :log_dir => false) }
+
+      it { should contain_heat_config('DEFAULT/log_dir').with_ensure('absent') }
     end
 
     it 'configures sql_connection' do

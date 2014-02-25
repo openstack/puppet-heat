@@ -30,6 +30,10 @@
 #    virtualhost to use. Optional. Defaults to '/'
 #
 #  (keystone authentication options)
+#  [*auth_uri*]
+#    Specifies the Authentication URI for Heat to use. Located in heat.conf
+#    Optional. Defaults to false, which uses:
+#    "${keystone_protocol}://${keystone_host}:5000/v2.0"
 #  [*keystone_host*]
 #  [*keystone_port*]
 #  [*keystone_protocol*]
@@ -66,7 +70,7 @@
 #   Defaults to LOG_USER
 #
 class heat(
-  $auth_uri                    = 'http://127.0.0.1:5000/v2.0',
+  $auth_uri                    = false,
   $package_ensure              = 'present',
   $verbose                     = false,
   $debug                       = false,
@@ -192,13 +196,18 @@ class heat(
 
   }
 
+  if $auth_uri {
+    heat_config { 'keystone_authtoken/auth_uri': value => $auth_uri; }
+  } else {
+    heat_config { 'keystone_authtoken/auth_uri': value => "${keystone_protocol}://${keystone_host}:5000/v2.0"; }
+  }
+
   heat_config {
     'DEFAULT/rpc_backend'                  : value => $rpc_backend;
     'DEFAULT/debug'                        : value => $debug;
     'DEFAULT/verbose'                      : value => $verbose;
     'ec2authtoken/keystone_ec2_uri'        : value => $keystone_ec2_uri;
     'ec2authtoken/auth_uri'                : value => $auth_uri;
-    'keystone_authtoken/auth_uri'          : value => $auth_uri;
     'keystone_authtoken/auth_host'         : value => $keystone_host;
     'keystone_authtoken/auth_port'         : value => $keystone_port;
     'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;

@@ -14,7 +14,8 @@ describe 'heat' do
       :rabbit_virtualhost    => '/',
       :log_dir               => '/var/log/heat',
       :database_idle_timeout => 3600,
-      :sql_connection        => 'mysql://user@host/database'
+      :sql_connection        => 'mysql://user@host/database',
+      :auth_uri              => 'http://127.0.0.1:5000/v2.0'
     }
   end
 
@@ -112,6 +113,10 @@ describe 'heat' do
     it 'configures debug and verbose' do
       should contain_heat_config('DEFAULT/debug').with_value( params[:debug] )
       should contain_heat_config('DEFAULT/verbose').with_value( params[:verbose] )
+    end
+
+    it 'configures auth_uri' do
+      should contain_heat_config('keystone_authtoken/auth_uri').with_value( params[:auth_uri] )
     end
 
     it 'configures logging directory by default' do
@@ -243,6 +248,18 @@ describe 'heat' do
 
     it do
       should contain_heat_config('database/idle_timeout').with_value(69)
+    end
+  end
+
+  shared_examples_for 'with auth uri set' do
+    before do
+      params.merge!(
+        :auth_uri => 'http://1.2.3.4:35357/v2.0'
+      )
+    end
+
+    it do
+      should contain_heat_config('keystone_authtoken/auth_uri').with_value('http://1.2.3.4:35357/v2.0')
     end
   end
 

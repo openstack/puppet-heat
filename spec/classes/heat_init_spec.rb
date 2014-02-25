@@ -13,6 +13,7 @@ describe 'heat' do
       :rabbit_password       => '',
       :rabbit_virtualhost    => '/',
       :log_dir               => '/var/log/heat',
+      :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',
       :database_idle_timeout => 3600,
       :sql_connection        => 'mysql://user@host/database',
       :auth_uri              => 'http://127.0.0.1:5000/v2.0'
@@ -142,6 +143,9 @@ describe 'heat' do
       it { expect { should raise_error(Puppet::Error) } }
     end
 
+    it 'configures keystone_ec2_uri' do
+      should contain_heat_config('ec2authtoken/auth_uri').with_value( params[:keystone_ec2_uri] )
+    end
   end
 
   shared_examples_for 'rabbit without HA support (with backward compatibility)' do
@@ -236,6 +240,18 @@ describe 'heat' do
     it do
       should contain_heat_config('DEFAULT/use_syslog').with_value(true)
       should contain_heat_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
+    end
+  end
+
+  shared_examples_for 'with ec2authtoken auth uri set' do
+    before do
+      params.merge!(
+        :keystone_ec2_uri => 'http://1.2.3.4:35357/v2.0/ec2tokens'
+      )
+    end
+
+    it do
+      should contain_heat_config('ec2authtoken/auth_uri').with_value('http://1.2.3.4:35357/v2.0/ec2tokens')
     end
   end
 

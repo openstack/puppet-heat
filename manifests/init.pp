@@ -206,8 +206,7 @@ class heat(
     'DEFAULT/rpc_backend'                  : value => $rpc_backend;
     'DEFAULT/debug'                        : value => $debug;
     'DEFAULT/verbose'                      : value => $verbose;
-    'ec2authtoken/keystone_ec2_uri'        : value => $keystone_ec2_uri;
-    'ec2authtoken/auth_uri'                : value => $auth_uri;
+    'ec2authtoken/auth_uri'                : value => $keystone_ec2_uri;
     'keystone_authtoken/auth_host'         : value => $keystone_host;
     'keystone_authtoken/auth_port'         : value => $keystone_port;
     'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;

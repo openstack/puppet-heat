@@ -4,16 +4,17 @@ describe 'heat' do
 
   let :params do
     {
-      :package_ensure     => 'present',
-      :verbose            => 'False',
-      :debug              => 'False',
-      :rabbit_host        => '127.0.0.1',
-      :rabbit_port        => 5672,
-      :rabbit_userid      => 'guest',
-      :rabbit_password    => '',
-      :rabbit_virtualhost => '/',
-      :log_dir            => '/var/log/heat',
-      :sql_connection     => 'mysql://user@host/database'
+      :package_ensure        => 'present',
+      :verbose               => 'False',
+      :debug                 => 'False',
+      :rabbit_host           => '127.0.0.1',
+      :rabbit_port           => 5672,
+      :rabbit_userid         => 'guest',
+      :rabbit_password       => '',
+      :rabbit_virtualhost    => '/',
+      :log_dir               => '/var/log/heat',
+      :database_idle_timeout => 3600,
+      :sql_connection        => 'mysql://user@host/database'
     }
   end
 
@@ -127,6 +128,10 @@ describe 'heat' do
       should contain_heat_config('DEFAULT/sql_connection').with_value( params[:sql_connection] )
     end
 
+    it 'configures database_idle_timeout' do
+      should contain_heat_config('database/idle_timeout').with_value( params[:database_idle_timeout] )
+    end
+
     context("failing if sql_connection is invalid") do
       before { params[:sql_connection] = 'foo://foo:bar@baz/moo' }
       it { expect { should raise_error(Puppet::Error) } }
@@ -226,6 +231,18 @@ describe 'heat' do
     it do
       should contain_heat_config('DEFAULT/use_syslog').with_value(true)
       should contain_heat_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
+    end
+  end
+
+  shared_examples_for 'with database_idle_timeout modified' do
+    before do
+      params.merge!(
+        :database_idle_timeout => 69
+      )
+    end
+
+    it do
+      should contain_heat_config('database/idle_timeout').with_value(69)
     end
   end
 

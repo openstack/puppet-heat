@@ -53,6 +53,10 @@
 #  [*qpid_reconnect_interval_min*]
 #  [*qpid_reconnect_interval_max*]
 #
+# [*database_idle_timeout*]
+#   (optional) Timeout before idle db connections are reaped.
+#   Defaults to 3600
+#
 # [*use_syslog*]
 #   (optional) Use syslog for logging
 #   Defaults to false
@@ -95,6 +99,7 @@ class heat(
   $qpid_reconnect_interval_max = 0,
   $qpid_reconnect_interval     = 0,
   $sql_connection              = false,
+  $database_idle_timeout       = 3600,
   $use_syslog                  = false,
   $log_facility                = 'LOG_USER',
 ) {
@@ -243,6 +248,7 @@ class heat(
 
     heat_config {
       'DEFAULT/sql_connection': value => $sql_connection;
+      'database/idle_timeout':  value => $database_idle_timeout;
     }
 
     Heat_config['DEFAULT/sql_connection'] ~> Exec['heat-dbsync']

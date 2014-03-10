@@ -4,6 +4,7 @@ class heat::api (
   $enabled           = true,
   $bind_host         = '0.0.0.0',
   $bind_port         = '8004',
+  $workers           = '0'
 ) {
 
   include heat
@@ -39,5 +40,6 @@ class heat::api (
   heat_config {
     'heat_api/bind_host'  : value => $bind_host;
     'heat_api/bind_port'  : value => $bind_port;
+    'heat_api/workers'    : value => $workers;
   }
 }

@@ -4,6 +4,7 @@ class heat::api_cloudwatch (
   $enabled           = true,
   $bind_host         = '0.0.0.0',
   $bind_port         = '8003',
+  $workers           = '0'
 ) {
 
   include heat
@@ -38,5 +39,6 @@ class heat::api_cloudwatch (
   heat_config {
     'heat_api_cloudwatch/bind_host'  : value => $bind_host;
     'heat_api_cloudwatch/bind_port'  : value => $bind_port;
+    'heat_api_cloudwatch/workers'    : value => $workers;
   }
 }

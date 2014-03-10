@@ -4,6 +4,7 @@ class heat::api_cfn (
   $enabled           = true,
   $bind_host         = '0.0.0.0',
   $bind_port         = '8000',
+  $workers           = '0'
 ) {
 
   include heat
@@ -38,5 +39,6 @@ class heat::api_cfn (
   heat_config {
     'heat_api_cfn/bind_host'              : value => $bind_host;
     'heat_api_cfn/bind_port'              : value => $bind_port;
+    'heat_api_cfn/workers'                : value => $workers;
   }
 }

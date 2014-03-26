@@ -17,7 +17,7 @@ describe 'heat' do
       :database_idle_timeout => 3600,
       :auth_uri              => 'http://127.0.0.1:5000/v2.0',
       :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',
-      :mysql_module           => '0.9'
+      :mysql_module          => '0.9'
     }
   end
 
@@ -46,7 +46,9 @@ describe 'heat' do
       end
 
       context 'with multiple servers' do
-        before { params.merge!( :rabbit_hosts => ['rabbit1:5672', 'rabbit2:5672'] ) }
+        before { params.merge!(
+          :rabbit_hosts => ['rabbit1:5672', 'rabbit2:5672'],
+          :amqp_durable_queues => true) }
         it_configures 'a heat base installation'
         it_configures 'rabbit with HA support'
       end
@@ -160,6 +162,7 @@ describe 'heat' do
     it { should contain_heat_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] ) }
     it { should contain_heat_config('DEFAULT/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" ) }
     it { should contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('false') }
+    it { should contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
   end
 
   shared_examples_for 'rabbit without HA support (without backward compatibility)' do
@@ -172,6 +175,7 @@ describe 'heat' do
     it { should contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
     it { should contain_heat_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { should contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('false') }
+    it { should contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
   end
 
   shared_examples_for 'rabbit with HA support' do
@@ -184,6 +188,7 @@ describe 'heat' do
     it { should contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
     it { should contain_heat_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { should contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('true') }
+    it { should contain_heat_config('DEFAULT/amqp_durable_queues').with_value(true) }
   end
 
 
@@ -198,7 +203,8 @@ describe 'heat' do
       it { should contain_heat_config('DEFAULT/qpid_heartbeat').with_value('60') }
       it { should contain_heat_config('DEFAULT/qpid_protocol').with_value('tcp') }
       it { should contain_heat_config('DEFAULT/qpid_tcp_nodelay').with_value(true) }
-      end
+      it { should contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
+    end
 
     context("with mandatory parameters set") do
       it { should contain_heat_config('DEFAULT/rpc_backend').with_value('heat.openstack.common.rpc.impl_qpid') }

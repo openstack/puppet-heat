@@ -28,6 +28,8 @@
 #    password to connect to the rabbit_server. Optional. Defaults to empty.
 #  [*rabbit_virtual_host*]
 #    virtual_host to use. Optional. Defaults to '/'
+#  [*amqp_durable_queues*]
+#    Use durable queues in amqp. Defaults to false
 #
 #  (keystone authentication options)
 #  [*auth_uri*]
@@ -94,6 +96,7 @@ class heat(
   $rabbit_userid               = 'guest',
   $rabbit_password             = '',
   $rabbit_virtual_host         = '/',
+  $amqp_durable_queues         = false,
   $qpid_hostname               = 'localhost',
   $qpid_port                   = 5672,
   $qpid_username               = 'guest',
@@ -161,7 +164,7 @@ class heat(
       heat_config { 'DEFAULT/rabbit_hosts':
         value => join($rabbit_hosts, ',')
       }
-      } else {
+    } else {
       heat_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
       heat_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
       heat_config { 'DEFAULT/rabbit_hosts':
@@ -169,17 +172,18 @@ class heat(
       }
     }
 
-      if size($rabbit_hosts) > 1 {
-        heat_config { 'DEFAULT/rabbit_ha_queues': value => true }
-      } else {
-        heat_config { 'DEFAULT/rabbit_ha_queues': value => false }
-      }
+    if size($rabbit_hosts) > 1 {
+      heat_config { 'DEFAULT/rabbit_ha_queues': value => true }
+    } else {
+      heat_config { 'DEFAULT/rabbit_ha_queues': value => false }
+    }
 
-      heat_config {
-        'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
-        'DEFAULT/rabbit_password'        : value => $rabbit_password;
-        'DEFAULT/rabbit_virtual_host'    : value => $rabbit_virtual_host;
-      }
+    heat_config {
+      'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
+      'DEFAULT/rabbit_password'        : value => $rabbit_password;
+      'DEFAULT/rabbit_virtual_host'    : value => $rabbit_virtual_host;
+      'DEFAULT/amqp_durable_queues'    : value => $amqp_durable_queues;
+    }
   }
 
   if $rpc_backend == 'heat.openstack.common.rpc.impl_qpid' {
@@ -198,6 +202,7 @@ class heat(
       'DEFAULT/qpid_reconnect_interval_min' : value => $qpid_reconnect_interval_min;
       'DEFAULT/qpid_reconnect_interval_max' : value => $qpid_reconnect_interval_max;
       'DEFAULT/qpid_reconnect_interval'     : value => $qpid_reconnect_interval;
+      'DEFAULT/amqp_durable_queues'         : value => $amqp_durable_queues;
     }
 
   }

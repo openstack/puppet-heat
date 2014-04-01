@@ -10,7 +10,7 @@ describe 'heat::db::mysql' do
       :dbname       => 'heat',
       :user         => 'heat',
       :host         => 'localhost',
-      :charset      => 'latin1',
+      :charset      => 'utf8',
       :mysql_module => '0.9'
     }
   end

@@ -21,12 +21,12 @@
 #    Optional. Defaults to undef.
 #
 #  [*charset*]
-#    the database charset. Optional. Defaults to 'latin1'
+#    the database charset. Optional. Defaults to 'utf8'
 #
 #  [*collate*]
 #    the database collate. Optional. Only used with mysql modules
 #    >=  2.2
-#    Defaults to 'latin1_swedish_ci'
+#    Defaults to 'utf8_unicode_ci'
 #
 #  [*mysql_module*]
 #    The version of the mysql puppet module to use.
@@ -39,8 +39,8 @@ class heat::db::mysql(
   $user          = 'heat',
   $host          = 'localhost',
   $allowed_hosts = undef,
-  $charset       = 'latin1',
-  $collate       = 'latin1_swedish_ci',
+  $charset       = 'utf8',
+  $collate       = 'utf8_unicode_ci',
   $mysql_module  = '0.9'
 ) {
 

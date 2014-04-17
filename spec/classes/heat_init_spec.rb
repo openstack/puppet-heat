@@ -157,6 +157,11 @@ describe 'heat' do
       should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
       should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
+      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
     end
     it { should contain_heat_config('DEFAULT/rabbit_host').with_value( params[:rabbit_host] ) }
     it { should contain_heat_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] ) }
@@ -170,6 +175,11 @@ describe 'heat' do
       should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
       should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
+      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
     end
     it { should contain_heat_config('DEFAULT/rabbit_host').with_ensure('absent') }
     it { should contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
@@ -183,6 +193,11 @@ describe 'heat' do
       should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
       should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
+      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
     end
     it { should contain_heat_config('DEFAULT/rabbit_host').with_ensure('absent') }
     it { should contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
@@ -284,6 +299,45 @@ describe 'heat' do
 
     it do
       should contain_heat_config('keystone_authtoken/auth_uri').with_value('http://1.2.3.4:35357/v2.0')
+    end
+  end
+
+  context 'with rabbit_use_ssl parameter' do
+    let :facts do
+      { :osfamily => 'Debian' }
+    end
+    let :params do
+      { :rabbit_use_ssl => 'true' }
+    end
+
+    it 'configures rabbit' do
+      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(true)
+      should contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false)
+      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      should contain_heat_config('DEFAULT/kombu_ssl_version').with_value('SSLv3')
+    end
+  end
+
+  context 'with amqp ssl parameters' do
+    let :facts do
+      { :osfamily => 'Debian' }
+    end
+    let :params do
+      { :rabbit_use_ssl     => 'true',
+        :kombu_ssl_ca_certs => '/etc/ca.cert',
+        :kombu_ssl_certfile => '/etc/certfile',
+        :kombu_ssl_keyfile  => '/etc/key',
+        :kombu_ssl_version  => 'TLSv1', }
+    end
+
+    it 'configures rabbit' do
+      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(true)
+      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_value('/etc/ca.cert')
+      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_value('/etc/certfile')
+      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_value('/etc/key')
+      should contain_heat_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
     end
   end
 

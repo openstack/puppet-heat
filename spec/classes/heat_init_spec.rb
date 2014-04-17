@@ -134,7 +134,7 @@ describe 'heat' do
     end
 
     it 'configures sql_connection' do
-      should contain_heat_config('DEFAULT/sql_connection').with_value( params[:sql_connection] )
+      should contain_heat_config('database/connection').with_value( params[:sql_connection] )
     end
 
     it 'configures database_idle_timeout' do

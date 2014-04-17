@@ -271,11 +271,11 @@ class heat(
     }
 
     heat_config {
-      'DEFAULT/sql_connection': value => $sql_connection;
+      'database/connection': value => $sql_connection;
       'database/idle_timeout':  value => $database_idle_timeout;
     }
 
-    Heat_config['DEFAULT/sql_connection'] ~> Exec['heat-dbsync']
+    Heat_config['database/connection'] ~> Exec['heat-dbsync']
 
     exec { 'heat-dbsync':
       command     => $::heat::params::dbsync_command,

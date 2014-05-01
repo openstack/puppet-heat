@@ -1,6 +1,8 @@
 puppet-heat
 =============
 
+4.0.0 - 2014.1.0 - Icehouse
+
 #### Table of Contents
 
 1. [Overview - What is the heat module?](#overview)
@@ -66,7 +68,16 @@ Contributors
 Release Notes
 -------------
 
-** 3.1.0 **
+**4.0.0**
+
+* Stable Icehouse release.
+* Added SSL parameter for RabbitMQ.
+* Added support for puppetlabs-mysql 2.2 and greater.
+* Added option to define RabbitMQ queues as durable.
+* Fixed outdated DB connection parameter.
+* Fixed Keystone auth_uri parameter.
+
+**3.1.0**
 
 * Fixed postgresql connection string.
 * Allow log_dir to be set to false to disable file logging.
@@ -75,7 +86,7 @@ Release Notes
 * Fixed the EC2 auth token settings.
 * Fixed rabbit_virtual_host configuration.
 
-** 3.0.0 **
+**3.0.0**
 
 * Initial release of the puppet-heat module.
 

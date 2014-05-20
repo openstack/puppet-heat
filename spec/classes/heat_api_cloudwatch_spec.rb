@@ -25,4 +25,41 @@ describe 'heat::api_cloudwatch' do
 
   end
 
+  context 'with SSL socket options set' do
+    let :params do
+      {
+        :use_ssl   => true,
+        :cert_file => '/path/to/cert',
+        :key_file  => '/path/to/key'
+      }
+    end
+
+    it { should contain_heat_config('heat_api_cloudwatch/cert_file').with_value('/path/to/cert') }
+    it { should contain_heat_config('heat_api_cloudwatch/key_file').with_value('/path/to/key') }
+  end
+
+  context 'with SSL socket options set with wrong parameters' do
+    let :params do
+      {
+        :use_ssl   => true,
+        :key_file  => '/path/to/key'
+      }
+    end
+
+    it_raises 'a Puppet::Error', /The cert_file parameter is required when use_ssl is set to true/
+  end
+
+  context 'with SSL socket options set to false' do
+    let :params do
+      {
+        :use_ssl   => false,
+        :cert_file => false,
+        :key_file  => false
+      }
+    end
+
+    it { should contain_heat_config('heat_api_cloudwatch/cert_file').with_ensure('absent') }
+    it { should contain_heat_config('heat_api_cloudwatch/key_file').with_ensure('absent') }
+  end
+
 end

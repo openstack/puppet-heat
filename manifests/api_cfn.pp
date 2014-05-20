@@ -4,7 +4,10 @@ class heat::api_cfn (
   $enabled           = true,
   $bind_host         = '0.0.0.0',
   $bind_port         = '8000',
-  $workers           = '0'
+  $workers           = '0',
+  $use_ssl           = false,
+  $cert_file         = false,
+  $key_file          = false,
 ) {
 
   include heat
@@ -14,6 +17,16 @@ class heat::api_cfn (
 
   Package['heat-api-cfn'] -> Heat_config<||>
   Package['heat-api-cfn'] -> Service['heat-api-cfn']
+
+  if $use_ssl {
+    if !$cert_file {
+      fail('The cert_file parameter is required when use_ssl is set to true')
+    }
+    if !$key_file {
+      fail('The key_file parameter is required when use_ssl is set to true')
+    }
+  }
+
   package { 'heat-api-cfn':
     ensure => installed,
     name   => $::heat::params::api_cfn_package_name,
@@ -41,4 +54,18 @@ class heat::api_cfn (
     'heat_api_cfn/bind_port'              : value => $bind_port;
     'heat_api_cfn/workers'                : value => $workers;
   }
+
+  # SSL Options
+  if $use_ssl {
+    heat_config {
+      'heat_api_cfn/cert_file' : value => $cert_file;
+      'heat_api_cfn/key_file' :  value => $key_file;
+    }
+  } else {
+    heat_config {
+      'heat_api_cfn/cert_file' : ensure => absent;
+      'heat_api_cfn/key_file' :  ensure => absent;
+    }
+  }
+
 }

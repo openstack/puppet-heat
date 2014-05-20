@@ -4,7 +4,10 @@ class heat::api (
   $enabled           = true,
   $bind_host         = '0.0.0.0',
   $bind_port         = '8004',
-  $workers           = '0'
+  $workers           = '0',
+  $use_ssl           = false,
+  $cert_file         = false,
+  $key_file          = false,
 ) {
 
   include heat
@@ -14,6 +17,15 @@ class heat::api (
 
   Package['heat-api'] -> Heat_config<||>
   Package['heat-api'] -> Service['heat-api']
+
+  if $use_ssl {
+    if !$cert_file {
+      fail('The cert_file parameter is required when use_ssl is set to true')
+    }
+    if !$key_file {
+      fail('The key_file parameter is required when use_ssl is set to true')
+    }
+  }
 
   package { 'heat-api':
     ensure => installed,
@@ -42,4 +54,18 @@ class heat::api (
     'heat_api/bind_port'  : value => $bind_port;
     'heat_api/workers'    : value => $workers;
   }
+
+  # SSL Options
+  if $use_ssl {
+    heat_config {
+      'heat_api/cert_file' : value => $cert_file;
+      'heat_api/key_file' :  value => $key_file;
+    }
+  } else {
+    heat_config {
+      'heat_api/cert_file' : ensure => absent;
+      'heat_api/key_file' :  ensure => absent;
+    }
+  }
+
 }

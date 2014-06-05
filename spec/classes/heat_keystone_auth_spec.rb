@@ -4,21 +4,23 @@ describe 'heat::keystone::auth' do
 
   let :params do
     {
-      :password           => 'heat-passw0rd',
-      :email              => 'heat@localhost',
-      :auth_name          => 'heat',
-      :configure_endpoint => true,
-      :service_type       => 'orchestration',
-      :public_address     => '127.0.0.1',
-      :admin_address      => '127.0.0.1',
-      :internal_address   => '127.0.0.1',
-      :port               => '8004',
-      :version            => 'v1',
-      :region             => 'RegionOne',
-      :tenant             => 'services',
-      :public_protocol    => 'http',
-      :admin_protocol     => 'http',
-      :internal_protocol  => 'http',
+      :password                  => 'heat-passw0rd',
+      :email                     => 'heat@localhost',
+      :auth_name                 => 'heat',
+      :configure_endpoint        => true,
+      :service_type              => 'orchestration',
+      :public_address            => '127.0.0.1',
+      :admin_address             => '127.0.0.1',
+      :internal_address          => '127.0.0.1',
+      :port                      => '8004',
+      :version                   => 'v1',
+      :region                    => 'RegionOne',
+      :tenant                    => 'services',
+      :public_protocol           => 'http',
+      :admin_protocol            => 'http',
+      :internal_protocol         => 'http',
+      :trusts_delegated_roles    => ['heat_stack_owner'],
+      :configure_delegated_roles => false,
     }
   end
 
@@ -138,6 +140,23 @@ describe 'heat::keystone::auth' do
       :type         => 'orchestration',
       :description  => 'Openstack Orchestration Service'
     )}
+  end
+
+  context 'when configuring delegated roles' do
+    before do
+      params.merge!({
+        :configure_delegated_roles => true,
+        :trusts_delegated_roles    => ['role1','role2']
+      })
+    end
+    it 'configures delegated roles' do
+      should contain_keystone_role("role1").with(
+        :ensure  => 'present'
+      )
+      should contain_keystone_role("role2").with(
+        :ensure  => 'present'
+      )
+    end
   end
 
 end

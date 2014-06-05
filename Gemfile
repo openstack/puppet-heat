@@ -6,6 +6,9 @@ group :development, :test do
   gem 'rspec-puppet', '~> 1.0.1'
   gem 'puppet-lint-param-docs', '1.1.0'
   gem 'rake', '10.1.1'
+  gem 'rspec', '< 2.99'
+  gem 'json'
+  gem 'webmock'
 end
 
 if puppetversion = ENV['PUPPET_GEM_VERSION']

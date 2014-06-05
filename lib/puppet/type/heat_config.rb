@@ -40,4 +40,8 @@ Puppet::Type.newtype(:heat_config) do
     defaultto false
   end
 
+  def create
+    provider.create
+  end
+
 end

@@ -68,6 +68,10 @@ Contributors
 Release Notes
 -------------
 
+**4.1.0**
+
+* Added SSL endpoint support.
+
 **4.0.0**
 
 * Stable Icehouse release.

@@ -142,6 +142,12 @@
 #   (Optional) Syslog facility to receive log lines.
 #   Defaults to LOG_USER.
 #
+# [*flavor*]
+#   (optional) Specifies the Authentication method.
+#   Set to 'standalone' to get Heat to work with a remote OpenStack
+#   Tested versions include 0.9 and 2.2
+#   Defaults to undef
+#
 # === Deprecated ParameterS
 #
 # [*mysql_module*]
@@ -193,6 +199,7 @@ class heat(
   $database_idle_timeout       = 3600,
   $use_syslog                  = false,
   $log_facility                = 'LOG_USER',
+  $flavor                      = undef,
   #Deprecated parameters
   $mysql_module                = undef,
   $sql_connection              = undef,
@@ -437,4 +444,9 @@ class heat(
     }
   }
 
+  if $flavor {
+    heat_config { 'paste_deploy/flavor': value => $flavor; }
+  } else {
+    heat_config { 'paste_deploy/flavor': ensure => absent; }
+  }
 }

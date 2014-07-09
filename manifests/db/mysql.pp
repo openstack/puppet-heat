@@ -46,8 +46,8 @@ class heat::db::mysql(
 
   validate_string($password)
 
-  Class['heat::db::mysql'] -> Exec<| title == 'heat-manage db_sync' |>
-  Mysql::Db[$dbname] ~> Exec<| title == 'heat-manage db_sync' |>
+  Class['heat::db::mysql'] -> Exec<| title == 'heat-dbsync' |>
+  Mysql::Db[$dbname] ~> Exec<| title == 'heat-dbsync' |>
 
   if ($mysql_module >= 2.2) {
     mysql::db { $dbname:

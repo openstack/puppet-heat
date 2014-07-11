@@ -89,9 +89,7 @@
 #   Defaults to LOG_USER
 #
 # [*mysql_module*]
-#   (optional) The mysql puppet module version.
-#   Tested versions include 0.9 and 2.2
-#   Defaults to '2.2'
+#   (optional) Deprecated. Does nothing.
 #
 class heat(
   $auth_uri                    = false,
@@ -136,7 +134,8 @@ class heat(
   $database_idle_timeout       = 3600,
   $use_syslog                  = false,
   $log_facility                = 'LOG_USER',
-  $mysql_module                = '2.2',
+  #Deprecated parameters
+  $mysql_module                = undef,
 ) {
 
   include heat::params
@@ -152,6 +151,9 @@ class heat(
   }
   if ($kombu_ssl_certfile and !$kombu_ssl_keyfile) or ($kombu_ssl_keyfile and !$kombu_ssl_certfile) {
     fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
+  }
+  if $mysql_module {
+    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
   }
 
   File {
@@ -317,12 +319,8 @@ class heat(
     case $sql_connection {
       /^mysql:\/\//: {
         $backend_package = false
-        if ($mysql_module >= 2.2) {
-          require mysql::bindings
-          require mysql::bindings::python
-        } else {
-          include mysql::python
-        }
+        require mysql::bindings
+        require mysql::bindings::python
       }
       /^postgresql:\/\//: {
         $backend_package = 'python-psycopg2'

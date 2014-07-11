@@ -29,58 +29,34 @@
 #    Defaults to 'utf8_unicode_ci'
 #
 #  [*mysql_module*]
-#    The version of the mysql puppet module to use.
-#    Tested versions include 0.9 and 2.2
-#    Defaults to '2.2'.
+#   (optional) Deprecated. Does nothing.
 #
 class heat::db::mysql(
   $password      = false,
   $dbname        = 'heat',
   $user          = 'heat',
-  $host          = 'localhost',
+  $host          = '127.0.0.1',
   $allowed_hosts = undef,
   $charset       = 'utf8',
   $collate       = 'utf8_unicode_ci',
-  $mysql_module  = '2.2'
+  $mysql_module  = undef
 ) {
+
+  if $mysql_module {
+    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
+  }
 
   validate_string($password)
 
-  Class['heat::db::mysql'] -> Exec<| title == 'heat-dbsync' |>
-  Mysql::Db[$dbname] ~> Exec<| title == 'heat-dbsync' |>
-
-  if ($mysql_module >= 2.2) {
-    mysql::db { $dbname:
-      user         => $user,
-      password     => $password,
-      host         => $host,
-      charset      => $charset,
-      collate      => $collate,
-      require      => Class['mysql::server'],
-    }
-  } else {
-    mysql::db { $dbname:
-      user         => $user,
-      password     => $password,
-      host         => $host,
-      charset      => $charset,
-      require      => Class['mysql::config'],
-    }
+  ::openstacklib::db::mysql { 'heat':
+    user          => $user,
+    password_hash => mysql_password($password),
+    dbname        => $dbname,
+    host          => $host,
+    charset       => $charset,
+    collate       => $collate,
+    allowed_hosts => $allowed_hosts,
   }
 
-  # Check allowed_hosts to avoid duplicate resource declarations
-  if is_array($allowed_hosts) and delete($allowed_hosts,$host) != [] {
-    $real_allowed_hosts = delete($allowed_hosts,$host)
-  } elsif is_string($allowed_hosts) and ($allowed_hosts != $host) {
-    $real_allowed_hosts = $allowed_hosts
-  }
-
-  if $real_allowed_hosts {
-    heat::db::mysql::host_access { $real_allowed_hosts:
-      user          => $user,
-      password      => $password,
-      database      => $dbname,
-      mysql_module  => $mysql_module,
-    }
-  }
+  ::Openstacklib::Db::Mysql['heat'] ~> Exec<| title == 'heat-dbsync' |>
 }

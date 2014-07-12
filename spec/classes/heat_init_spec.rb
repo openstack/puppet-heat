@@ -159,6 +159,7 @@ describe 'heat' do
     it 'configures rabbit' do
       should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      should contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
       should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
       should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
       should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
@@ -176,6 +177,7 @@ describe 'heat' do
   shared_examples_for 'rabbit without HA support (without backward compatibility)' do
     it 'configures rabbit' do
       should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
+      should contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
       should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
       should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
       should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
@@ -195,6 +197,7 @@ describe 'heat' do
     it 'configures rabbit' do
       should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
       should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      should contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
       should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
       should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
       should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
@@ -230,6 +233,7 @@ describe 'heat' do
       it { should contain_heat_config('DEFAULT/qpid_port').with_value( params[:qpid_port] ) }
       it { should contain_heat_config('DEFAULT/qpid_username').with_value( params[:qpid_username]) }
       it { should contain_heat_config('DEFAULT/qpid_password').with_value(params[:qpid_password]) }
+      it { should contain_heat_config('DEFAULT/qpid_password').with_secret( true ) }
     end
 
     context("failing if the rpc_backend is not present") do

@@ -31,7 +31,7 @@
 #  [*mysql_module*]
 #    The version of the mysql puppet module to use.
 #    Tested versions include 0.9 and 2.2
-#    Defaults to '0.9'.
+#    Defaults to '2.2'.
 #
 class heat::db::mysql(
   $password      = false,
@@ -41,7 +41,7 @@ class heat::db::mysql(
   $allowed_hosts = undef,
   $charset       = 'utf8',
   $collate       = 'utf8_unicode_ci',
-  $mysql_module  = '0.9'
+  $mysql_module  = '2.2'
 ) {
 
   validate_string($password)

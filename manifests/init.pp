@@ -91,7 +91,7 @@
 # [*mysql_module*]
 #   (optional) The mysql puppet module version.
 #   Tested versions include 0.9 and 2.2
-#   Defaults to '0.9'
+#   Defaults to '2.2'
 #
 class heat(
   $auth_uri                    = false,
@@ -136,7 +136,7 @@ class heat(
   $database_idle_timeout       = 3600,
   $use_syslog                  = false,
   $log_facility                = 'LOG_USER',
-  $mysql_module                = '0.9',
+  $mysql_module                = '2.2',
 ) {
 
   include heat::params

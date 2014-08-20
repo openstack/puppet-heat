@@ -4,8 +4,12 @@
 #
 # == parameters
 #  [*enabled*]
-#    (optional) The state of the service
+#    (optional) Should the service be enabled.
 #    Defaults to true
+#
+#  [*manage_service*]
+#    (optional) Whether the service should be managed by Puppet.
+#    Defaults to true.
 #
 #  [*heat_stack_user_role*]
 #    (optional) Keystone role for heat template-defined users
@@ -34,6 +38,7 @@
 
 class heat::engine (
   $auth_encryption_key,
+  $manage_service                = true,
   $enabled                       = true,
   $heat_stack_user_role          = 'heat_stack_user',
   $heat_metadata_server_url      = 'http://127.0.0.1:8000',
@@ -53,10 +58,12 @@ class heat::engine (
     name   => $::heat::params::engine_package_name,
   }
 
-  if $enabled {
-    $service_ensure = 'running'
-  } else {
-    $service_ensure = 'stopped'
+  if $manage_service {
+    if $enabled {
+      $service_ensure = 'running'
+    } else {
+      $service_ensure = 'stopped'
+    }
   }
 
   service { 'heat-engine':

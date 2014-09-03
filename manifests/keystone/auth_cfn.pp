@@ -16,6 +16,9 @@
 # [*configure_endpoint*]
 #   Should heat-cfn endpoint be configured? Optional. Defaults to 'true'.
 #
+# [*service_name*]
+#   Name of the service. Optional. Defaults to the value of auth_name.
+#
 # [*service_type*]
 #    Type of service. Optional. Defaults to 'cloudformation'.
 #
@@ -47,6 +50,7 @@ class heat::keystone::auth_cfn (
   $password           = false,
   $email              = 'heat-cfn@localhost',
   $auth_name          = 'heat-cfn',
+  $service_name       = undef,
   $service_type       = 'cloudformation',
   $public_address     = '127.0.0.1',
   $admin_address      = '127.0.0.1',
@@ -63,6 +67,12 @@ class heat::keystone::auth_cfn (
 
   validate_string($password)
 
+  if $service_name == undef {
+    $real_service_name = $auth_name
+  } else {
+    $real_service_name = $service_name
+  }
+
   Keystone_user_role["${auth_name}@${tenant}"] ~>
     Service <| name == 'heat-api-cfn' |>
 
@@ -78,13 +88,13 @@ class heat::keystone::auth_cfn (
     roles   => ['admin'],
   }
 
-  keystone_service { $auth_name:
+  keystone_service { $real_service_name:
     ensure      => present,
     type        => $service_type,
     description => 'Openstack Cloudformation Service',
   }
   if $configure_endpoint {
-    keystone_endpoint { "${region}/${auth_name}":
+    keystone_endpoint { "${region}/${real_service_name}":
       ensure       => present,
       public_url   => "${public_protocol}://${public_address}:${port}/${version}/",
       admin_url    => "${admin_protocol}://${admin_address}:${port}/${version}/",

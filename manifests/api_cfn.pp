@@ -22,10 +22,13 @@ class heat::api_cfn (
 
   include heat
   include heat::params
+  include heat::policy
 
   Heat_config<||> ~> Service['heat-api-cfn']
+  Class['heat::policy'] -> Service['heat-api-cfn']
 
   Package['heat-api-cfn'] -> Heat_config<||>
+  Package['heat-api-cfn'] -> Class['heat::policy']
   Package['heat-api-cfn'] -> Service['heat-api-cfn']
 
   if $use_ssl {

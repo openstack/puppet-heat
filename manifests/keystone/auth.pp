@@ -16,6 +16,12 @@
 # [*configure_endpoint*]
 #   Should heat endpoint be configured? Optional. Defaults to 'true'.
 #
+# [*configure_user*]
+#   Whether to create the service user. Defaults to 'true'.
+#
+# [*configure_user_role*]
+#   Whether to configure the admin role for teh service user. Defaults to 'true'.
+#
 # [*service_name*]
 #   Name of the service. Options. Defaults to the value of auth_name.
 #
@@ -47,22 +53,24 @@
 #    Protocol for public endpoint. Optional. Defaults to 'http'.
 #
 class heat::keystone::auth (
-  $password           = false,
-  $email              = 'heat@localhost',
-  $auth_name          = 'heat',
-  $service_name       = undef,
-  $service_type       = 'orchestration',
-  $public_address     = '127.0.0.1',
-  $admin_address      = '127.0.0.1',
-  $internal_address   = '127.0.0.1',
-  $port               = '8004',
-  $version            = 'v1',
-  $region             = 'RegionOne',
-  $tenant             = 'services',
-  $public_protocol    = 'http',
-  $admin_protocol     = 'http',
-  $internal_protocol  = 'http',
-  $configure_endpoint = true,
+  $password             = false,
+  $email                = 'heat@localhost',
+  $auth_name            = 'heat',
+  $service_name         = undef,
+  $service_type         = 'orchestration',
+  $public_address       = '127.0.0.1',
+  $admin_address        = '127.0.0.1',
+  $internal_address     = '127.0.0.1',
+  $port                 = '8004',
+  $version              = 'v1',
+  $region               = 'RegionOne',
+  $tenant               = 'services',
+  $public_protocol      = 'http',
+  $admin_protocol       = 'http',
+  $internal_protocol    = 'http',
+  $configure_endpoint   = true,
+  $configure_user       = true,
+  $configure_user_role  = true,
 ) {
 
   validate_string($password)
@@ -73,19 +81,23 @@ class heat::keystone::auth (
     $real_service_name = $service_name
   }
 
-  Keystone_user_role["${auth_name}@${tenant}"] ~>
-    Service <| name == 'heat-api' |>
-
-  keystone_user { $auth_name:
-    ensure   => present,
-    password => $password,
-    email    => $email,
-    tenant   => $tenant,
+  if $configure_user {
+    keystone_user { $auth_name:
+      ensure   => present,
+      password => $password,
+      email    => $email,
+      tenant   => $tenant,
+    }
   }
 
-  keystone_user_role { "${auth_name}@${tenant}":
-    ensure  => present,
-    roles   => ['admin'],
+  if $configure_user_role {
+    Keystone_user_role["${auth_name}@${tenant}"] ~>
+      Service <| name == 'heat-api' |>
+
+    keystone_user_role { "${auth_name}@${tenant}":
+      ensure  => present,
+      roles   => ['admin'],
+    }
   }
 
   keystone_role { 'heat_stack_user':
@@ -106,4 +118,3 @@ class heat::keystone::auth (
     }
   }
 }
-

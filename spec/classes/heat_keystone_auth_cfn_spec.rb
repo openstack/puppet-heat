@@ -99,4 +99,37 @@ describe 'heat::keystone::auth_cfn' do
     end
   end
 
+  context 'when disabling user configuration' do
+    before do
+      params.merge!( :configure_user => false )
+    end
+
+    it { should_not contain_keystone_user('heat_cfn') }
+    it { should contain_keystone_user_role('heat-cfn@services') }
+
+    it { should contain_keystone_service('heat-cfn').with(
+      :ensure       => 'present',
+      :type         => 'cloudformation',
+      :description  => 'Openstack Cloudformation Service'
+    )}
+  end
+
+  context 'when disabling user and role configuration' do
+    before do
+      params.merge!(
+        :configure_user       => false,
+        :configure_user_role  => false
+      )
+    end
+
+    it { should_not contain_keystone_user('heat_cfn') }
+    it { should_not contain_keystone_user_role('heat-cfn@services') }
+
+    it { should contain_keystone_service('heat-cfn').with(
+      :ensure       => 'present',
+      :type         => 'cloudformation',
+      :description  => 'Openstack Cloudformation Service'
+    )}
+  end
+
 end

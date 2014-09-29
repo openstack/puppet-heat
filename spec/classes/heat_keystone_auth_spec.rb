@@ -107,4 +107,37 @@ describe 'heat::keystone::auth' do
     end
   end
 
+  context 'when disabling user configuration' do
+    before do
+      params.merge!( :configure_user => false )
+    end
+
+    it { should_not contain_keystone_user('heat') }
+    it { should contain_keystone_user_role('heat@services') }
+
+    it { should contain_keystone_service('heat').with(
+      :ensure       => 'present',
+      :type         => 'orchestration',
+      :description  => 'Openstack Orchestration Service'
+    )}
+  end
+
+  context 'when disabling user and role configuration' do
+    before do
+      params.merge!(
+        :configure_user       => false,
+        :configure_user_role  => false
+      )
+    end
+
+    it { should_not contain_keystone_user('heat') }
+    it { should_not contain_keystone_user_role('heat@services') }
+
+    it { should contain_keystone_service('heat').with(
+      :ensure       => 'present',
+      :type         => 'orchestration',
+      :description  => 'Openstack Orchestration Service'
+    )}
+  end
+
 end

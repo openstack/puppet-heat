@@ -141,16 +141,17 @@ class heat(
 
   include heat::params
 
-  if $rabbit_use_ssl {
-    if !$kombu_ssl_ca_certs {
-      fail('The kombu_ssl_ca_certs parameter is required when rabbit_use_ssl is set to true')
-    }
-    if !$kombu_ssl_certfile {
-      fail('The kombu_ssl_certfile parameter is required when rabbit_use_ssl is set to true')
-    }
-    if !$kombu_ssl_keyfile {
-      fail('The kombu_ssl_keyfile parameter is required when rabbit_use_ssl is set to true')
-    }
+  if $kombu_ssl_ca_certs and !$rabbit_use_ssl {
+    fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')
+  }
+  if $kombu_ssl_certfile and !$rabbit_use_ssl {
+    fail('The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true')
+  }
+  if $kombu_ssl_keyfile and !$rabbit_use_ssl {
+    fail('The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true')
+  }
+  if ($kombu_ssl_certfile and !$kombu_ssl_keyfile) or ($kombu_ssl_keyfile and !$kombu_ssl_certfile) {
+    fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
   }
 
   File {
@@ -221,12 +222,31 @@ class heat(
     }
 
     if $rabbit_use_ssl {
-      heat_config {
-        'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs;
-        'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile;
-        'DEFAULT/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
-        'DEFAULT/kombu_ssl_version':  value => $kombu_ssl_version;
+
+      if $kombu_ssl_ca_certs {
+        heat_config { 'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs; }
+      } else {
+        heat_config { 'DEFAULT/kombu_ssl_ca_certs': ensure => absent; }
       }
+
+      if $kombu_ssl_certfile or $kombu_ssl_keyfile {
+        heat_config {
+          'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile;
+          'DEFAULT/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
+        }
+      } else {
+        heat_config {
+          'DEFAULT/kombu_ssl_certfile': ensure => absent;
+          'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
+        }
+      }
+
+      if $kombu_ssl_version {
+        heat_config { 'DEFAULT/kombu_ssl_version':  value => $kombu_ssl_version; }
+      } else {
+        heat_config { 'DEFAULT/kombu_ssl_version':  ensure => absent; }
+      }
+
     } else {
       heat_config {
         'DEFAULT/kombu_ssl_version':  ensure => absent;

@@ -1,7 +1,7 @@
 puppet-heat
 =============
 
-4.0.0 - 2014.1.0 - Icehouse
+4.2.0 - 2014.1.0 - Icehouse
 
 #### Table of Contents
 
@@ -67,6 +67,13 @@ Contributors
 
 Release Notes
 -------------
+
+**4.2.0**
+
+* Added ability to hide secret type parameters from logs
+* Fixed database resource relationships
+* Added class for extended logging options
+* Fixed ssl parameter requirements when using kombu and rabbit
 
 **4.1.0**
 

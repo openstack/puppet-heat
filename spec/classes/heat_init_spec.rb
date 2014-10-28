@@ -13,7 +13,7 @@ describe 'heat' do
       :rabbit_userid         => 'guest',
       :rabbit_password       => '',
       :rabbit_virtual_host   => '/',
-      :sql_connection        => 'mysql://user@host/database',
+      :database_connection   => 'mysql://user@host/database',
       :database_idle_timeout => 3600,
       :auth_uri              => 'http://127.0.0.1:5000/v2.0',
       :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',
@@ -136,17 +136,22 @@ describe 'heat' do
       it { should contain_heat_config('DEFAULT/log_dir').with_ensure('absent') }
     end
 
-    it 'configures sql_connection' do
-      should contain_heat_config('database/connection').with_value( params[:sql_connection] )
+    it 'configures database_connection' do
+      should contain_heat_config('database/connection').with_value( params[:database_connection] )
     end
 
     it 'configures database_idle_timeout' do
       should contain_heat_config('database/idle_timeout').with_value( params[:database_idle_timeout] )
     end
 
-    context("failing if sql_connection is invalid") do
-      before { params[:sql_connection] = 'foo://foo:bar@baz/moo' }
+    context("failing if database_connection is invalid") do
+      before { params[:database_connection] = 'foo://foo:bar@baz/moo' }
       it { expect { should raise_error(Puppet::Error) } }
+    end
+
+    context("with deprecated sql_connection parameter") do
+      before { params[:sql_connection] = 'mysql://a:b@c/d' }
+      it { should contain_heat_config('database/connection').with_value( params[:sql_connection] )}
     end
 
     it 'configures keystone_ec2_uri' do

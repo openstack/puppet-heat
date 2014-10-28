@@ -76,6 +76,11 @@
 #  [*qpid_reconnect_interval_min*]
 #  [*qpid_reconnect_interval_max*]
 #
+#  [*database_connection*]
+#    Url used to connect to database.
+#    (Optional) Defaults to
+#    'sqlite:////var/lib/heat/heat.sqlite'
+#
 # [*database_idle_timeout*]
 #   (optional) Timeout before idle db connections are reaped.
 #   Defaults to 3600
@@ -90,6 +95,9 @@
 #
 # [*mysql_module*]
 #   (optional) Deprecated. Does nothing.
+#
+# [*sql_connection*]
+#   (optional) Deprecated. Use database_connection instead.
 #
 class heat(
   $auth_uri                    = false,
@@ -130,12 +138,13 @@ class heat(
   $qpid_reconnect_interval_min = 0,
   $qpid_reconnect_interval_max = 0,
   $qpid_reconnect_interval     = 0,
-  $sql_connection              = false,
+  $database_connection         = 'sqlite:////var/lib/heat/heat.sqlite',
   $database_idle_timeout       = 3600,
   $use_syslog                  = false,
   $log_facility                = 'LOG_USER',
   #Deprecated parameters
   $mysql_module                = undef,
+  $sql_connection              = undef,
 ) {
 
   include heat::params
@@ -312,11 +321,17 @@ class heat(
   }
 
   if $sql_connection {
+    warning('The sql_connection parameter is deprecated, use database_connection instead.')
+    $database_connection_real = $sql_connection
+  } else {
+    $database_connection_real = $database_connection
+  }
 
-    validate_re($sql_connection,
+  if $database_connection_real {
+    validate_re($database_connection_real,
       '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
-    case $sql_connection {
+    case $database_connection_real {
       /^mysql:\/\//: {
         $backend_package = false
         require mysql::bindings
@@ -341,8 +356,11 @@ class heat(
     }
 
     heat_config {
-      'database/connection': value => $sql_connection, secret => true;
-      'database/idle_timeout':  value => $database_idle_timeout;
+      'database/connection':
+        value  => $database_connection_real,
+        secret => true;
+      'database/idle_timeout':
+        value => $database_idle_timeout;
     }
 
     Heat_config['database/connection'] ~> Exec['heat-dbsync']

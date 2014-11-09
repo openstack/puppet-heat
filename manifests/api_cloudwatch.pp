@@ -22,10 +22,13 @@ class heat::api_cloudwatch (
 
   include heat
   include heat::params
+  include heat::policy
 
   Heat_config<||> ~> Service['heat-api-cloudwatch']
+  Class['heat::policy'] -> Service['heat-api-cloudwatch']
 
   Package['heat-api-cloudwatch'] -> Heat_config<||>
+  Package['heat-api-cloudwatch'] -> Class['heat::policy']
   Package['heat-api-cloudwatch'] -> Service['heat-api-cloudwatch']
 
   if $use_ssl {

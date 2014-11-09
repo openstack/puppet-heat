@@ -16,6 +16,7 @@ describe 'heat::api_cfn' do
 
       it { should contain_class('heat') }
       it { should contain_class('heat::params') }
+      it { should contain_class('heat::policy') }
 
       it { should contain_heat_config('heat_api_cfn/bind_host').with_value( params[:bind_host] ) }
       it { should contain_heat_config('heat_api_cfn/bind_port').with_value( params[:bind_port] ) }

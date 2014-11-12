@@ -1,103 +1,154 @@
-# Class heat
+# == Class: heat
 #
-#  heat base package & configuration
+#  Heat base package & configuration
 #
-# == parameters
-#  [*package_ensure*]
-#    ensure state for package. Optional. Defaults to 'present'
-#  [*verbose*]
-#    should the daemons log verbose messages. Optional. Defaults to 'False'
-#  [*debug*]
-#    should the daemons log debug messages. Optional. Defaults to 'False'
+# === Parameters
 #
-#  [*log_dir*]
-#   (optional) Directory where logs should be stored.
-#   If set to boolean false, it will not log to any directory.
-#   Defaults to '/var/log/heat'.
+# [*package_ensure*]
+#    (Optional) Ensure state for package.
+#    Defaults to 'present'
 #
-#  [*rabbit_host*]
-#    ip or hostname of the rabbit server. Optional. Defaults to '127.0.0.1'
-#  [*rabbit_port*]
-#    port of the rabbit server. Optional. Defaults to 5672.
-#  [*rabbit_hosts*]
-#    array of host:port (used with HA queues). Optional. Defaults to undef.
-#    If defined, will remove rabbit_host & rabbit_port parameters from config
-#  [*rabbit_userid*]
-#    user to connect to the rabbit server. Optional. Defaults to 'guest'
-#  [*rabbit_password*]
-#    password to connect to the rabbit_server. Optional. Defaults to empty.
-#  [*rabbit_virtual_host*]
-#    virtual_host to use. Optional. Defaults to '/'
-#  [*rabbit_use_ssl*]
-#    (optional) Connect over SSL for RabbitMQ
-#    Defaults to false
-#  [*kombu_ssl_ca_certs*]
-#    (optional) SSL certification authority file (valid only if SSL enabled).
-#    Defaults to undef
-#  [*kombu_ssl_certfile*]
-#    (optional) SSL cert file (valid only if SSL enabled).
-#    Defaults to undef
-#  [*kombu_ssl_keyfile*]
-#    (optional) SSL key file (valid only if SSL enabled).
-#    Defaults to undef
-#  [*kombu_ssl_version*]
-#    (optional) SSL version to use (valid only if SSL enabled).
-#    Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
-#    available on some distributions.
-#    Defaults to 'SSLv3'
-#  [*amqp_durable_queues*]
-#    Use durable queues in amqp. Defaults to false
+# [*verbose*]
+#   (Optional) Should the daemons log verbose messages
+#   Defaults to 'false'
 #
-#  (keystone authentication options)
-#  [*auth_uri*]
-#    Specifies the Authentication URI for Heat to use. Located in heat.conf
-#    Optional. Defaults to false, which uses:
-#    "${keystone_protocol}://${keystone_host}:5000/v2.0"
-#  [*keystone_host*]
-#  [*keystone_port*]
-#  [*keystone_protocol*]
-#  [*keystone_user*]
-#  [*keystone_tenant*]
-#  [*keystone_password*]
-#  [*keystone_ec2_uri*]
+# [*debug*]
+#   (Optional) Should the daemons log debug messages
+#   Defaults to 'false'
 #
-#  (optional) various QPID options
-#  [*qpid_hostname*]
-#  [*qpid_port*]
-#  [*qpid_username*]
-#  [*qpid_password*]
-#  [*qpid_heartbeat*]
-#  [*qpid_protocol*]
-#  [*qpid_tcp_nodelay*]
-#  [*qpid_reconnect*]
-#  [*qpid_reconnect_timeout*]
-#  [*qpid_reconnect_limit*]
-#  [*qpid_reconnect_interval*]
-#  [*qpid_reconnect_interval_min*]
-#  [*qpid_reconnect_interval_max*]
+# [*log_dir*]
+#   (Optional) Directory where logs should be stored
+#   If set to boolean 'false', it will not log to any directory
+#   Defaults to '/var/log/heat'
 #
-#  [*database_connection*]
-#    Url used to connect to database.
-#    (Optional) Defaults to
-#    'sqlite:////var/lib/heat/heat.sqlite'
+# [*rpc_backend*]
+#   (Optional) Use these options to configure the RabbitMQ message system.
+#   Defaults to 'heat.openstack.common.rpc.impl_kombu'
 #
-# [*database_idle_timeout*]
-#   (optional) Timeout before idle db connections are reaped.
-#   Defaults to 3600
+# [*rabbit_host*]
+#   (Optional) IP or hostname of the rabbit server.
+#   Defaults to '127.0.0.1'
 #
-# [*use_syslog*]
-#   (optional) Use syslog for logging
+# [*rabbit_port*]
+#   (Optional) Port of the rabbit server.
+#   Defaults to 5672.
+#
+# [*rabbit_hosts*]
+#   (Optional) Array of host:port (used with HA queues).
+#   If defined, will remove rabbit_host & rabbit_port parameters from config
+#   Defaults to undef.
+#
+# [*rabbit_userid*]
+#   (Optional) User to connect to the rabbit server.
+#   Defaults to 'guest'
+#
+# [*rabbit_password*]
+#   (Optional) Password to connect to the rabbit_server.
+#   Defaults to empty.
+#
+# [*rabbit_virtual_host*]
+#   (Optional) Virtual_host to use.
+#   Defaults to '/'
+#
+# [*rabbit_use_ssl*]
+#   (Optional) Connect over SSL for RabbitMQ.
 #   Defaults to false
 #
+# [*kombu_ssl_ca_certs*]
+#   (Optional) SSL certification authority file (valid only if SSL enabled).
+#   Defaults to undef
+#
+# [*kombu_ssl_certfile*]
+#   (Optional) SSL cert file (valid only if SSL enabled).
+#   Defaults to undef
+#
+# [*kombu_ssl_keyfile*]
+#   (Optional) SSL key file (valid only if SSL enabled).
+#   Defaults to undef
+#
+# [*kombu_ssl_version*]
+#   (Optional) SSL version to use (valid only if SSL enabled).
+#   Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
+#   available on some distributions.
+#   Defaults to 'SSLv3'
+#
+# [*amqp_durable_queues*]
+#   (Optional) Use durable queues in amqp.
+#   Defaults to false
+#
+# == keystone authentication options
+#
+# [*auth_uri*]
+#   (Optional) Specifies the Authentication URI for Heat to use.
+#   Located in heat.conf.
+#   Defaults to false,
+#   which uses: "${keystone_protocol}://${keystone_host}:5000/v2.0"
+
+# [*keystone_host*]
+#
+# [*keystone_port*]
+#
+# [*keystone_protocol*]
+#
+# [*keystone_user*]
+#
+# [*keystone_tenant*]
+#
+# [*keystone_password*]
+#
+# [*keystone_ec2_uri*]
+#
+# ==== Various QPID options (Optional)
+#
+# [*qpid_hostname*]
+#
+# [*qpid_port*]
+#
+# [*qpid_username*]
+#
+# [*qpid_password*]
+#
+# [*qpid_heartbeat*]
+#
+# [*qpid_protocol*]
+#
+# [*qpid_tcp_nodelay*]
+#
+# [*qpid_reconnect*]
+#
+# [*qpid_reconnect_timeout*]
+#
+# [*qpid_reconnect_limit*]
+#
+# [*qpid_reconnect_interval*]
+#
+# [*qpid_reconnect_interval_min*]
+#
+# [*qpid_reconnect_interval_max*]
+#
+# [*database_connection*]
+#   (Optional) Url used to connect to database.
+#   Defaults to 'sqlite:////var/lib/heat/heat.sqlite'.
+#
+# [*database_idle_timeout*]
+#   (Optional) Timeout before idle db connections are reaped.
+#   Defaults to 3600.
+#
+# [*use_syslog*]
+#   (Optional) Use syslog for logging.
+#   Defaults to false.
+#
 # [*log_facility*]
-#   (optional) Syslog facility to receive log lines
-#   Defaults to LOG_USER
+#   (Optional) Syslog facility to receive log lines.
+#   Defaults to LOG_USER.
+#
+# === Deprecated ParameterS
 #
 # [*mysql_module*]
-#   (optional) Deprecated. Does nothing.
+#   Deprecated. Does nothing.
 #
 # [*sql_connection*]
-#   (optional) Deprecated. Use database_connection instead.
+#   Deprecated. Use database_connection instead.
 #
 class heat(
   $auth_uri                    = false,
@@ -183,16 +234,16 @@ class heat(
   }
 
   file { '/etc/heat/':
-    ensure  => directory,
-    owner   => 'heat',
-    group   => 'heat',
-    mode    => '0750',
+    ensure => directory,
+    owner  => 'heat',
+    group  => 'heat',
+    mode   => '0750',
   }
 
   file { '/etc/heat/heat.conf':
-    owner   => 'heat',
-    group   => 'heat',
-    mode    => '0640',
+    owner => 'heat',
+    group => 'heat',
+    mode  => '0640',
   }
 
   package { 'heat-common':

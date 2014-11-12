@@ -1,52 +1,52 @@
-# Class heat::engine
+# == Class: heat::engine
 #
 #  Installs & configure the heat engine service
 #
-# == parameters
-#  [*enabled*]
-#    (optional) Should the service be enabled.
-#    Defaults to true
+# === Parameters
+# [*auth_encryption_key*]
+#   (required) Encryption key used for authentication info in database
 #
-#  [*manage_service*]
-#    (optional) Whether the service should be managed by Puppet.
-#    Defaults to true.
+# [*enabled*]
+#   (optional) Should the service be enabled.
+#   Defaults to 'true'
 #
-#  [*heat_stack_user_role*]
-#    (optional) Keystone role for heat template-defined users
-#    Defaults to 'heat_stack_user'
+# [*manage_service*]
+#   (optional) Whether the service should be managed by Puppet.
+#   Defaults to true.
 #
-#  [*heat_metadata_server_url*]
-#    (optional) URL of the Heat metadata server
-#    Defaults to 'http://127.0.0.1:8000'
+# [*heat_stack_user_role*]
+#   (optional) Keystone role for heat template-defined users
+#   Defaults to 'heat_stack_user'
 #
-#  [*heat_waitcondition_server_url*]
-#    (optional) URL of the Heat waitcondition server
-#    Defaults to 'http://127.0.0.1:8000/v1/waitcondition'
+# [*heat_metadata_server_url*]
+#   (optional) URL of the Heat metadata server
+#   Defaults to 'http://127.0.0.1:8000'
 #
-#  [*heat_watch_server_url*]
-#    (optional) URL of the Heat cloudwatch server
-#    Defaults to 'http://127.0.0.1:8003'
+# [*heat_waitcondition_server_url*]
+#   (optional) URL of the Heat waitcondition server
+#   Defaults to 'http://127.0.0.1:8000/v1/waitcondition'
 #
-#  [*auth_encryption_key*]
-#    (required) Encryption key used for authentication info in database
+# [*heat_watch_server_url*]
+#   (optional) URL of the Heat cloudwatch server
+#   Defaults to 'http://127.0.0.1:8003'
 #
-#  [*engine_life_check_timeout*]
-#    (optional) RPC timeout (in seconds) for the engine liveness check that is
-#    used for stack locking
-#    Defaults to '2'
+# [*engine_life_check_timeout*]
+#   (optional) RPC timeout (in seconds) for the engine liveness check that is
+#   used for stack locking
+#   Defaults to '2'
 #
-#  [*trusts_delegated_roles*]
-#    (optional) Array of trustor roles to be delegated to heat.
-#    Defaults to ['heat_stack_owner']
+# [*trusts_delegated_roles*]
+#   (optional) Array of trustor roles to be delegated to heat.
+#   Defaults to ['heat_stack_owner']
 #
-#  [*deferred_auth_method*]
-#    (optional) Select deferred auth method.
-#    Can be "password" or "trusts".
-#    Defaults to 'trusts'
+# [*deferred_auth_method*]
+#   (optional) Select deferred auth method.
+#   Can be "password" or "trusts".
+#   Defaults to 'trusts'
 #
-#  [*configure_delegated_roles*]
-#    (optional) Whether to configure the delegated roles.
-#    Defaults to true
+# [*configure_delegated_roles*]
+#   (optional) Whether to configure the delegated roles.
+#   Defaults to true
 #
 class heat::engine (
   $auth_encryption_key,

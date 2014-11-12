@@ -1,56 +1,78 @@
-# == Class: heat::heat::auth_cfn
+# == Class: heat::keystone::auth_cfn
 #
 # Configures heat-api-cfn user, service and endpoint in Keystone.
 #
 # === Parameters
-#
 # [*password*]
-#   Password for heat-cfn user. Required.
+#   (Mandatory) Password for heat-cfn user.
 #
 # [*email*]
-#   Email for heat-cfn user. Optional. Defaults to 'heat@localhost'.
+#   (Optional) Email for heat-cfn user.
+#   Defaults to 'heat@localhost'.
 #
 # [*auth_name*]
-#   Username for heat-cfn service. Optional. Defaults to 'heat'.
+#   (Optional) Username for heat-cfn service.
+#   Defaults to 'heat'.
 #
 # [*configure_endpoint*]
-#   Should heat-cfn endpoint be configured? Optional. Defaults to 'true'.
+#   (Optional) Should heat-cfn endpoint be configured?
+#   Defaults to 'true'.
 #
 # [*configure_user*]
-#   Whether to create the service user. Defaults to 'true'.
+#   (Optional) Whether to create the service user.
+#   Defaults to 'true'.
 #
 # [*configure_user_role*]
-#   Whether to configure the admin role for the service user. Defaults to 'true'.
+#   (Optional) Whether to configure the admin role for the service user.
+#   Defaults to 'true'.
 #
 # [*service_name*]
-#   Name of the service. Optional. Defaults to the value of auth_name.
+#   (Optional) Name of the service.
+#   Defaults to the value of auth_name.
 #
 # [*service_type*]
-#    Type of service. Optional. Defaults to 'cloudformation'.
+#   (Optional) Type of service.
+#   Defaults to 'cloudformation'.
 #
 # [*public_address*]
-#    Public address for endpoint. Optional. Defaults to '127.0.0.1'.
+#   (Optional) Public address for endpoint.
+#   Defaults to '127.0.0.1'.
 #
 # [*admin_address*]
-#    Admin address for endpoint. Optional. Defaults to '127.0.0.1'.
+#   (Optional) Admin address for endpoint.
+#   Defaults to '127.0.0.1'.
 #
 # [*internal_address*]
-#    Internal address for endpoint. Optional. Defaults to '127.0.0.1'.
+#   (Optional) Internal address for endpoint.
+#   Defaults to '127.0.0.1'.
 #
 # [*port*]
-#    Port for endpoint. Optional. Defaults to '8000'.
+#   (Optional) Port for endpoint.
+#   Defaults to '8000'.
 #
 # [*version*]
-#    Version for API.  Optional.  Defaults to 'v1'
+#   (Optional) Version for API.
+#   Defaults to 'v1'
 
 # [*region*]
-#    Region for endpoint. Optional. Defaults to 'RegionOne'.
+#   (Optional) Region for endpoint.
+#   Defaults to 'RegionOne'.
 #
 # [*tenant*]
-#    Tenant for heat-cfn user. Optional. Defaults to 'services'.
+#   (Optional) Tenant for heat-cfn user.
+#   Defaults to 'services'.
 #
-# [*protocol*]
-#    Protocol for public endpoint. Optional. Defaults to 'http'.
+# [*public_protocol*]
+#   (Optional) Protocol for public endpoint.
+#   Defaults to 'http'.
+#
+# [*admin_protocol*]
+#   (Optional) Protocol for admin endpoint.
+#   Defaults to 'http'.
+#
+# [*internal_protocol*]
+#   (Optional) Protocol for internal endpoint.
+#   Defaults to 'http'.
 #
 class heat::keystone::auth_cfn (
   $password             = false,
@@ -95,8 +117,8 @@ class heat::keystone::auth_cfn (
       Service <| name == 'heat-api-cfn' |>
 
     keystone_user_role { "${auth_name}@${tenant}":
-      ensure  => present,
-      roles   => ['admin'],
+      ensure => present,
+      roles  => ['admin'],
     }
   }
 

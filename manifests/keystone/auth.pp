@@ -1,56 +1,82 @@
-# == Class: heat::heat::auth
+# == Class: heat::keystone::auth
 #
 # Configures heat user, service and endpoint in Keystone.
 #
 # === Parameters
-#
 # [*password*]
-#   Password for heat user. Required.
+#   (Required) Password for heat user.
 #
 # [*email*]
-#   Email for heat user. Optional. Defaults to 'heat@localhost'.
+#   (Optional) Email for heat user.
+#   Defaults to 'heat@localhost'.
 #
 # [*auth_name*]
-#   Username for heat service. Optional. Defaults to 'heat'.
+#   (Optional) Username for heat service.
+#   Defaults to 'heat'.
 #
 # [*configure_endpoint*]
-#   Should heat endpoint be configured? Optional. Defaults to 'true'.
+#   (Optional) Should heat endpoint be configured?
+#   Defaults to 'true'.
 #
 # [*configure_user*]
-#   Whether to create the service user. Defaults to 'true'.
+#   (Optional) Whether to create the service user.
+#   Defaults to 'true'.
 #
 # [*configure_user_role*]
-#   Whether to configure the admin role for teh service user. Defaults to 'true'.
+#   (Optional) Whether to configure the admin role for the service user.
+#   Defaults to 'true'.
 #
 # [*service_name*]
-#   Name of the service. Options. Defaults to the value of auth_name.
+#   (Optional) Name of the service.
+#   Defaults to the value of auth_name.
 #
 # [*service_type*]
-#    Type of service. Optional. Defaults to 'orchestration'.
+#   (Optional) Type of service.
+#   Defaults to 'orchestration'.
 #
 # [*public_address*]
-#    Public address for endpoint. Optional. Defaults to '127.0.0.1'.
+#   (Optional) Public address for endpoint.
+#   Defaults to '127.0.0.1'.
 #
 # [*admin_address*]
-#    Admin address for endpoint. Optional. Defaults to '127.0.0.1'.
+#   (Optional) Admin address for endpoint.
+#   Defaults to '127.0.0.1'.
 #
 # [*internal_address*]
-#    Internal address for endpoint. Optional. Defaults to '127.0.0.1'.
+#   (Optional) Internal address for endpoint.
+#   Defaults to '127.0.0.1'.
 #
 # [*version*]
-#   Version of API to use.  Optional.  Defaults to 'v1'
+#   (Optional) Version of API to use.
+#   Defaults to 'v1'
 #
 # [*port*]
-#    Port for endpoint. Optional. Defaults to '8004'.
+#   (Optional) Port for endpoint.
+#   Defaults to '8004'.
 #
 # [*region*]
-#    Region for endpoint. Optional. Defaults to 'RegionOne'.
+#   (Optional) Region for endpoint.
+#   Defaults to 'RegionOne'.
 #
 # [*tenant*]
-#    Tenant for heat user. Optional. Defaults to 'services'.
+#   (Optional) Tenant for heat user.
+#   Defaults to 'services'.
 #
 # [*protocol*]
-#    Protocol for public endpoint. Optional. Defaults to 'http'.
+#   (Optional) Protocol for public endpoint.
+#   Defaults to 'http'.
+#
+# [*public_protocol*]
+#   (Optional) Protocol for public endpoint.
+#   Defaults to 'http'.
+#
+# [*admin_protocol*]
+#   (Optional) Protocol for admin endpoint
+#   Defaults to 'http'.
+#
+# [*internal_protocol*]
+#   (Optional) Protocol for internal endpoint
+#   Defaults to 'http'
 #
 class heat::keystone::auth (
   $password             = false,
@@ -95,8 +121,8 @@ class heat::keystone::auth (
       Service <| name == 'heat-api' |>
 
     keystone_user_role { "${auth_name}@${tenant}":
-      ensure  => present,
-      roles   => ['admin'],
+      ensure => present,
+      roles  => ['admin'],
     }
   }
 

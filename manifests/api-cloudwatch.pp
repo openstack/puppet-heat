@@ -1,4 +1,37 @@
+# == Class: heat::api-cloudwatch
+#
+# WARNING: Deprecated class. Use heat::api_cloudwatch instead !
 # Installs & configure the heat CloudWatch API service
+#
+# === Parameters
+# [*enabled*]
+#   (Optional) Should the service be enabled.
+#   Defaults to 'true'.
+#
+# [*keystone_host*]
+#
+# [*keystone_port*]
+#
+# [*keystone_protocol*]
+#
+# [*keystone_user*]
+#
+# [*keystone_tenant*]
+#
+# [*keystone_password*]
+#
+# [*keystone_ec2_uri*]
+#
+# [*auth_uri*]
+#
+# [*bind_host*]
+#
+# [*bind_port*]
+#
+# [*verbose*]
+#
+# [*debug*]
+#
 #
 class heat::api-cloudwatch (
   $enabled           = true,

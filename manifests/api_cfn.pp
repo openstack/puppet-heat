@@ -1,13 +1,49 @@
+# == Class: heat::api_cfn
+#
+# This class deprecates heat::api-cfn.
+#
 # Installs & configure the heat CloudFormation API service
 #
-# == Parameters
-#  [*enabled*]
-#    (optional) Should the service be enabled.
-#    Defaults to true
+# === Parameters
 #
-#  [*manage_service*]
-#    (optional) Whether the service should be managed by Puppet.
-#    Defaults to true.
+# [*enabled*]
+#   (optional) Should the service be enabled.
+#   Defaults to 'true'.
+#
+# [*manage_service*]
+#   (optional) Whether the service should be managed by Puppet.
+#   Defaults to 'true'.
+#
+# [*bind_host*]
+#   (Optional) Address to bind the server. Useful when
+#   selecting a particular network interface.
+#   Defaults to '0.0.0.0'.
+#
+# [*bind_port*]
+#   (Optional) The port on which the server will listen.
+#   Defaults to '8000'.
+#
+# [*workers*]
+#   (Optional) The port on which the server will listen.
+#   Defaults to '0'.
+#
+# [*use_ssl*]
+#   (Optional) Whether to use ssl or not.
+#   Defaults to 'false'.
+#
+# [*cert_file*]
+#   (Optional) Location of the SSL certificate file to use for SSL mode.
+#   Required when $use_ssl is set to 'true'.
+#   Defaults to 'false'.
+#
+# [*key_file*]
+#   (Optional) Location of the SSL key file to use for enabling SSL mode.
+#   Required when $use_ssl is set to 'true'.
+#   Defaults to 'false'.
+#
+# == Deprecated Parameters
+#
+# No Deprecated Parameters.
 #
 class heat::api_cfn (
   $manage_service    = true,

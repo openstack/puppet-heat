@@ -103,36 +103,25 @@ class heat::keystone::auth_cfn (
     $real_service_name = $service_name
   }
 
-  if $configure_user {
-    keystone_user { $auth_name:
-      ensure   => present,
-      password => $password,
-      email    => $email,
-      tenant   => $tenant,
-    }
+  keystone::resource::service_identity { $auth_name:
+    configure_user      => $configure_user,
+    configure_user_role => $configure_user_role,
+    configure_endpoint  => $configure_endpoint,
+    service_type        => $service_type,
+    service_description => 'Openstack Cloudformation Service',
+    service_name        => $real_service_name,
+    region              => $region,
+    password            => $password,
+    email               => $email,
+    tenant              => $tenant,
+    public_url          => "${public_protocol}://${public_address}:${port}/${version}/",
+    admin_url           => "${admin_protocol}://${admin_address}:${port}/${version}/",
+    internal_url        => "${internal_protocol}://${internal_address}:${port}/${version}/",
   }
 
   if $configure_user_role {
     Keystone_user_role["${auth_name}@${tenant}"] ~>
       Service <| name == 'heat-api-cfn' |>
-
-    keystone_user_role { "${auth_name}@${tenant}":
-      ensure => present,
-      roles  => ['admin'],
-    }
   }
 
-  keystone_service { $real_service_name:
-    ensure      => present,
-    type        => $service_type,
-    description => 'Openstack Cloudformation Service',
-  }
-  if $configure_endpoint {
-    keystone_endpoint { "${region}/${real_service_name}":
-      ensure       => present,
-      public_url   => "${public_protocol}://${public_address}:${port}/${version}/",
-      admin_url    => "${admin_protocol}://${admin_address}:${port}/${version}/",
-      internal_url => "${internal_protocol}://${internal_address}:${port}/${version}/",
-    }
-  }
 }

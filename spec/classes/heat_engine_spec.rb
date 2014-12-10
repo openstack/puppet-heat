@@ -12,6 +12,7 @@ describe 'heat::engine' do
       :engine_life_check_timeout     => '2',
       :trusts_delegated_roles        => ['heat_stack_owner'],
       :deferred_auth_method          => 'trusts',
+      :configure_delegated_roles     => true,
     }
   end
 

@@ -78,6 +78,15 @@
 #   (Optional) Protocol for internal endpoint
 #   Defaults to 'http'
 #
+# [*trusts_delegated_roles*]
+#    (optional) Array of trustor roles to be delegated to heat.
+#    Defaults to ['heat_stack_owner']
+#
+# [*configure_delegated_roles*]
+#    (optional) Whether to configure the delegated roles.
+#    Defaults to false until the deprecated parameters in heat::engine
+#    are removed after Kilo.
+#
 class heat::keystone::auth (
   $password             = false,
   $email                = 'heat@localhost',
@@ -97,6 +106,8 @@ class heat::keystone::auth (
   $configure_endpoint   = true,
   $configure_user       = true,
   $configure_user_role  = true,
+  $trusts_delegated_roles    = ['heat_stack_owner'],
+  $configure_delegated_roles = false,
 ) {
 
   validate_string($password)
@@ -132,4 +143,17 @@ class heat::keystone::auth (
         ensure => present,
   }
 
+  if $configure_delegated_roles {
+    # Sanity warning - remove after we remove the deprecated items
+    if $heat::engine::configure_delegated_roles {
+      warning('both heat::engine and heat::keystone::auth are trying to configure delegated roles')
+    }
+    keystone_role { $trusts_delegated_roles:
+      ensure => present,
+    }
+  }
+
+  heat_config {
+    'DEFAULT/trusts_delegated_roles': value => $trusts_delegated_roles;
+  }
 }

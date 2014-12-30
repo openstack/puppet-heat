@@ -1,14 +1,12 @@
 fixtures:
   repositories:
-    "inifile": "git://github.com/puppetlabs/puppetlabs-inifile"
+    'inifile': 'git://github.com/puppetlabs/puppetlabs-inifile'
     'concat': 'git://github.com/puppetlabs/puppetlabs-concat.git'
-    "keystone": "git://github.com/stackforge/puppet-keystone.git"
-    "mysql":
-      repo: 'git://github.com/puppetlabs/puppetlabs-mysql.git'
-      ref: 'origin/2.2.x'
-    "nova": "git://github.com/stackforge/puppet-nova.git"
+    'keystone': 'git://github.com/stackforge/puppet-keystone.git'
+    'mysql': 'git://github.com/puppetlabs/puppetlabs-mysql.git'
+    'nova': 'git://github.com/stackforge/puppet-nova.git'
     'openstacklib': 'git://github.com/stackforge/puppet-openstacklib.git'
     'postgresql': 'git://github.com/puppetlabs/puppet-postgresql.git'
-    "stdlib": "git://github.com/puppetlabs/puppetlabs-stdlib.git"
+    'stdlib': 'git://github.com/puppetlabs/puppetlabs-stdlib.git'
   symlinks:
     "heat": "#{source_dir}"

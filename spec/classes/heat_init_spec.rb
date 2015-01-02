@@ -250,7 +250,7 @@ describe 'heat' do
         :kombu_ssl_ca_certs => '/path/to/ssl/ca/certs',
         :kombu_ssl_certfile => '/path/to/ssl/cert/file',
         :kombu_ssl_keyfile  => '/path/to/ssl/keyfile',
-        :kombu_ssl_version  => 'SSLv3'
+        :kombu_ssl_version  => 'TLSv1'
       )
     end
 
@@ -259,7 +259,7 @@ describe 'heat' do
       should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
       should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
       should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
-      should contain_heat_config('DEFAULT/kombu_ssl_version').with_value('SSLv3')
+      should contain_heat_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
     end
   end
 
@@ -275,7 +275,7 @@ describe 'heat' do
       should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
       should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
       should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_version').with_value('SSLv3')
+      should contain_heat_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
     end
   end
 
@@ -283,7 +283,7 @@ describe 'heat' do
     before do
       params.merge!(
         :rabbit_use_ssl     => false,
-        :kombu_ssl_version  => 'SSLv3'
+        :kombu_ssl_version  => 'TLSv1'
       )
     end
 

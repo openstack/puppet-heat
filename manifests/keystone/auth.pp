@@ -144,16 +144,16 @@ class heat::keystone::auth (
   }
 
   if $configure_delegated_roles {
-    # Sanity warning - remove after we remove the deprecated items
+    # Sanity check - remove after we remove the deprecated item
     if $heat::engine::configure_delegated_roles {
-      warning('both heat::engine and heat::keystone::auth are trying to configure delegated roles')
+      fail('both heat::engine and heat::keystone::auth are both trying to configure delegated roles')
     }
+    # if this is a keystone only node, we configure the role here
+    # but let engine.pp set the config file. A keystone only node
+    # will not have a heat.conf file. We will use the value in
+    # engine.pp as the one source of truth for the delegated role list.
     keystone_role { $trusts_delegated_roles:
       ensure => present,
     }
-  }
-
-  heat_config {
-    'DEFAULT/trusts_delegated_roles': value => $trusts_delegated_roles;
   }
 }

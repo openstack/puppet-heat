@@ -43,7 +43,7 @@ describe 'heat::engine' do
       end
 
       it { is_expected.to contain_package('heat-engine').with(
-        :ensure => 'installed',
+        :ensure => 'present',
         :name   => os_params[:package_name],
         :tag    => 'openstack',
         :notify => 'Exec[heat-dbsync]'

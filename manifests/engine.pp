@@ -75,6 +75,7 @@ class heat::engine (
   package { 'heat-engine':
     ensure => installed,
     name   => $::heat::params::engine_package_name,
+    notify => Exec['heat-dbsync'],
   }
 
   if $manage_service {

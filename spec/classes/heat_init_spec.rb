@@ -397,6 +397,25 @@ describe 'heat' do
     end
   end
 
+  shared_examples_for 'with region_name set' do
+    before do
+      params.merge!(
+        :region_name => "East",
+      )
+    end
+
+    it 'has region_name set when specified' do
+      should contain_heat_config('DEFAULT/region_name_for_services').with_value('East')
+    end
+  end
+
+  shared_examples_for 'without region_name set' do
+    it 'doesnt have region_name set by default' do
+      should contain_heat_config('DEFAULT/region_name_for_services').with_enure('absent')
+    end
+  end
+
+
   context 'on Debian platforms' do
     let :facts do
       { :osfamily => 'Debian' }

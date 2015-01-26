@@ -148,7 +148,12 @@
 #   Tested versions include 0.9 and 2.2
 #   Defaults to undef
 #
-# === Deprecated ParameterS
+# [*region_name*]
+#   (Optional) Region name for services. This is the
+#   default region name that heat talks to service endpoints on.
+#   Defaults to undef
+#
+# === Deprecated Parameters
 #
 # [*mysql_module*]
 #   Deprecated. Does nothing.
@@ -200,6 +205,7 @@ class heat(
   $use_syslog                  = false,
   $log_facility                = 'LOG_USER',
   $flavor                      = undef,
+  $region_name                 = undef,
   #Deprecated parameters
   $mysql_module                = undef,
   $sql_connection              = undef,
@@ -448,5 +454,12 @@ class heat(
     heat_config { 'paste_deploy/flavor': value => $flavor; }
   } else {
     heat_config { 'paste_deploy/flavor': ensure => absent; }
+  }
+
+  # region name
+  if $region_name {
+    heat_config { 'DEFAULT/region_name_for_services': value => $region_name; }
+  } else {
+    heat_config { 'DEFAULT/region_name_for_services': ensure => absent; }
   }
 }

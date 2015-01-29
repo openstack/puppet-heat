@@ -75,6 +75,27 @@ describe 'heat::engine' do
       end
     end
 
+    context 'stack-abandon enabled' do
+      before do
+        params.merge!(
+          :enable_stack_abandon => true,
+        )
+      end
+
+      it { is_expected.to contain_heat_config('DEFAULT/enable_stack_abandon').with_value(true) }
+    end
+
+    context 'stack-abandon disabled' do
+      before do
+        params.merge!(
+          :enable_stack_abandon => false,
+        )
+      end
+
+      it { is_expected.to contain_heat_config('DEFAULT/enable_stack_abandon').with_value(false) }
+    end
+
+
     context 'with disabled service managing' do
       before do
         params.merge!({

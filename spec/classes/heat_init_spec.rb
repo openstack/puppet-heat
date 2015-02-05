@@ -17,6 +17,7 @@ describe 'heat' do
       :database_idle_timeout => 3600,
       :auth_uri              => 'http://127.0.0.1:5000/v2.0',
       :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',
+      :flavor                => 'keystone',
     }
   end
 
@@ -157,6 +158,8 @@ describe 'heat' do
     it 'configures keystone_ec2_uri' do
       should contain_heat_config('ec2authtoken/auth_uri').with_value( params[:keystone_ec2_uri] )
     end
+
+    it { should contain_heat_config('paste_deploy/flavor').with_value('keystone') }
 
   end
 

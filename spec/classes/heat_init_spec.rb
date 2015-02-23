@@ -18,6 +18,7 @@ describe 'heat' do
       :auth_uri              => 'http://127.0.0.1:5000/v2.0',
       :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',
       :flavor                => 'keystone',
+      :keystone_password     => 'secretpassword',
     }
   end
 
@@ -160,6 +161,11 @@ describe 'heat' do
     end
 
     it { should contain_heat_config('paste_deploy/flavor').with_value('keystone') }
+
+    it 'keeps keystone secrets secret' do
+      should contain_heat_config('keystone_authtoken/admin_password').with_secret(true)
+    end
+
 
   end
 

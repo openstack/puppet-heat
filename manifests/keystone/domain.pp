@@ -67,7 +67,7 @@ class heat::keystone::domain (
 
   heat_config {
     'DEFAULT/stack_domain_admin': value => $domain_admin;
-    'DEFAULT/stack_domain_admin_password': value => $domain_password;
+    'DEFAULT/stack_domain_admin_password': value => $domain_password, secret => true;
   }
 
 }

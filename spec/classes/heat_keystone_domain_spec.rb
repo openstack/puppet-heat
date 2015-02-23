@@ -17,6 +17,7 @@ describe 'heat::keystone::domain' do
     it 'configure heat.conf' do
       should contain_heat_config('DEFAULT/stack_domain_admin').with_value(params[:domain_admin])
       should contain_heat_config('DEFAULT/stack_domain_admin_password').with_value(params[:domain_password])
+      should contain_heat_config('DEFAULT/stack_domain_admin_password').with_secret(true)
     end
 
     it 'should configure heat domain id' do

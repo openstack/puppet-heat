@@ -27,11 +27,11 @@ describe 'heat::keystone::auth' do
 
     context 'without the required password parameter' do
       before { params.delete(:password) }
-      it { expect { should raise_error(Puppet::Error) } }
+      it { expect { is_expected.to raise_error(Puppet::Error) } }
     end
 
     it 'configures heat user' do
-      should contain_keystone_user( params[:auth_name] ).with(
+      is_expected.to contain_keystone_user( params[:auth_name] ).with(
         :ensure   => 'present',
         :password => params[:password],
         :email    => params[:email],
@@ -40,21 +40,21 @@ describe 'heat::keystone::auth' do
     end
 
     it 'configures heat user roles' do
-      should contain_keystone_user_role("#{params[:auth_name]}@#{params[:tenant]}").with(
+      is_expected.to contain_keystone_user_role("#{params[:auth_name]}@#{params[:tenant]}").with(
         :ensure  => 'present',
         :roles   => ['admin']
       )
     end
 
     it 'configures heat stack_user role' do
-      should contain_keystone_role("heat_stack_user").with(
+      is_expected.to contain_keystone_role("heat_stack_user").with(
         :ensure  => 'present'
       )
     end
 
 
     it 'configures heat service' do
-      should contain_keystone_service( params[:auth_name] ).with(
+      is_expected.to contain_keystone_service( params[:auth_name] ).with(
         :ensure      => 'present',
         :type        => params[:service_type],
         :description => 'Openstack Orchestration Service'
@@ -62,7 +62,7 @@ describe 'heat::keystone::auth' do
     end
 
     it 'configure heat endpoints' do
-      should contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
+      is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
         :ensure       => 'present',
         :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}/#{params[:version]}/%(tenant_id)s",
         :admin_url    => "#{params[:admin_protocol]}://#{params[:admin_address]}:#{params[:port]}/#{params[:version]}/%(tenant_id)s",
@@ -95,16 +95,16 @@ describe 'heat::keystone::auth' do
       })
     end
     it 'configures correct user name' do
-      should contain_keystone_user('heat')
+      is_expected.to contain_keystone_user('heat')
     end
     it 'configures correct user role' do
-      should contain_keystone_user_role('heat@services')
+      is_expected.to contain_keystone_user_role('heat@services')
     end
     it 'configures correct service name' do
-      should contain_keystone_service('heat_service')
+      is_expected.to contain_keystone_service('heat_service')
     end
     it 'configures correct endpoint name' do
-      should contain_keystone_endpoint('RegionOne/heat_service')
+      is_expected.to contain_keystone_endpoint('RegionOne/heat_service')
     end
   end
 
@@ -113,10 +113,10 @@ describe 'heat::keystone::auth' do
       params.merge!( :configure_user => false )
     end
 
-    it { should_not contain_keystone_user('heat') }
-    it { should contain_keystone_user_role('heat@services') }
+    it { is_expected.to_not contain_keystone_user('heat') }
+    it { is_expected.to contain_keystone_user_role('heat@services') }
 
-    it { should contain_keystone_service('heat').with(
+    it { is_expected.to contain_keystone_service('heat').with(
       :ensure       => 'present',
       :type         => 'orchestration',
       :description  => 'Openstack Orchestration Service'
@@ -131,10 +131,10 @@ describe 'heat::keystone::auth' do
       )
     end
 
-    it { should_not contain_keystone_user('heat') }
-    it { should_not contain_keystone_user_role('heat@services') }
+    it { is_expected.to_not contain_keystone_user('heat') }
+    it { is_expected.to_not contain_keystone_user_role('heat@services') }
 
-    it { should contain_keystone_service('heat').with(
+    it { is_expected.to contain_keystone_service('heat').with(
       :ensure       => 'present',
       :type         => 'orchestration',
       :description  => 'Openstack Orchestration Service'
@@ -160,7 +160,7 @@ describe 'heat::keystone::auth' do
       })
     end
     it 'configures delegated roles' do
-      should contain_keystone_role("heat_stack_owner").with(
+      is_expected.to contain_keystone_role("heat_stack_owner").with(
         :ensure  => 'present'
       )
     end
@@ -184,10 +184,7 @@ describe 'heat::keystone::auth' do
         :password                  => 'something',
       }
     end
-    it 'should fail with deprecated and new params both set' do
-        expect {
-            should compile
-        }.to raise_error Puppet::Error, /both heat::engine and heat::keystone::auth are both trying to configure delegated roles/
-    end
+    it_raises 'a Puppet::Error', /both heat::engine and heat::keystone::auth are both trying to configure delegated roles/
+
   end
 end

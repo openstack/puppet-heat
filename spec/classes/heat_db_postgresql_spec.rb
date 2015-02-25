@@ -24,7 +24,7 @@ describe 'heat::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('heat').with(
+      it { is_expected.to contain_postgresql__server__db('heat').with(
         :user     => 'heat',
         :password => 'md5fd5c4fca491370aab732f903e2fb7c99'
       )}
@@ -47,7 +47,7 @@ describe 'heat::db::postgresql' do
         req_params
       end
 
-      it { should contain_postgresql__server__db('heat').with(
+      it { is_expected.to contain_postgresql__server__db('heat').with(
         :user     => 'heat',
         :password => 'md5fd5c4fca491370aab732f903e2fb7c99'
       )}

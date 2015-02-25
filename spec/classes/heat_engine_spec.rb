@@ -42,9 +42,9 @@ describe 'heat::engine' do
         default_params.merge(params)
       end
 
-      it { should contain_package('heat-engine').with_name(os_params[:package_name]) }
+      it { is_expected.to contain_package('heat-engine').with_name(os_params[:package_name]) }
 
-      it { should contain_service('heat-engine').with(
+      it { is_expected.to contain_service('heat-engine').with(
         :ensure     => (expected_params[:manage_service] && expected_params[:enabled]) ? 'running' : 'stopped',
         :name       => os_params[:service_name],
         :enable     => expected_params[:enabled],
@@ -56,20 +56,20 @@ describe 'heat::engine' do
         :subscribe  => 'Exec[heat-dbsync]'
       ) }
 
-      it { should contain_heat_config('DEFAULT/auth_encryption_key').with_value( expected_params[:auth_encryption_key] ) }
-      it { should contain_heat_config('DEFAULT/heat_stack_user_role').with_value( expected_params[:heat_stack_user_role] ) }
-      it { should contain_heat_config('DEFAULT/heat_metadata_server_url').with_value( expected_params[:heat_metadata_server_url] ) }
-      it { should contain_heat_config('DEFAULT/heat_waitcondition_server_url').with_value( expected_params[:heat_waitcondition_server_url] ) }
-      it { should contain_heat_config('DEFAULT/heat_watch_server_url').with_value( expected_params[:heat_watch_server_url] ) }
-      it { should contain_heat_config('DEFAULT/engine_life_check_timeout').with_value( expected_params[:engine_life_check_timeout] ) }
-      it { should contain_heat_config('DEFAULT/trusts_delegated_roles').with_value( expected_params[:trusts_delegated_roles] ) }
-      it { should contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/auth_encryption_key').with_value( expected_params[:auth_encryption_key] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/heat_stack_user_role').with_value( expected_params[:heat_stack_user_role] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/heat_metadata_server_url').with_value( expected_params[:heat_metadata_server_url] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/heat_waitcondition_server_url').with_value( expected_params[:heat_waitcondition_server_url] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/heat_watch_server_url').with_value( expected_params[:heat_watch_server_url] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/engine_life_check_timeout').with_value( expected_params[:engine_life_check_timeout] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/trusts_delegated_roles').with_value( expected_params[:trusts_delegated_roles] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
 
       it 'configures delegated roles' do
-        should contain_keystone_role("role1").with(
+	is_expected.to contain_keystone_role("role1").with(
           :ensure  => 'present'
         )
-        should contain_keystone_role("role2").with(
+	is_expected.to contain_keystone_role("role2").with(
           :ensure  => 'present'
         )
       end
@@ -82,7 +82,7 @@ describe 'heat::engine' do
           :enabled        => false })
       end
 
-      it { should contain_service('heat-engine').with(
+      it { is_expected.to contain_service('heat-engine').with(
         :ensure     => nil,
         :name       => os_params[:service_name],
         :enable     => false,

@@ -75,17 +75,17 @@ describe 'heat' do
 
   shared_examples_for 'a heat base installation' do
 
-    it { should contain_class('heat::params') }
+    it { is_expected.to contain_class('heat::params') }
 
     it 'configures heat group' do
-      should contain_group('heat').with(
+      is_expected.to contain_group('heat').with(
         :name    => 'heat',
         :require => 'Package[heat-common]'
       )
     end
 
     it 'configures heat user' do
-      should contain_user('heat').with(
+      is_expected.to contain_user('heat').with(
         :name    => 'heat',
         :gid     => 'heat',
         :groups  => ['heat'],
@@ -95,7 +95,7 @@ describe 'heat' do
     end
 
     it 'configures heat configuration folder' do
-      should contain_file('/etc/heat/').with(
+      is_expected.to contain_file('/etc/heat/').with(
         :ensure  => 'directory',
         :owner   => 'heat',
         :group   => 'heat',
@@ -105,7 +105,7 @@ describe 'heat' do
     end
 
     it 'configures heat configuration file' do
-      should contain_file('/etc/heat/heat.conf').with(
+      is_expected.to contain_file('/etc/heat/heat.conf').with(
         :owner   => 'heat',
         :group   => 'heat',
         :mode    => '0640',
@@ -114,7 +114,7 @@ describe 'heat' do
     end
 
     it 'installs heat common package' do
-      should contain_package('heat-common').with(
+      is_expected.to contain_package('heat-common').with(
         :ensure => 'present',
         :name   => platform_params[:common_package_name]
       )
@@ -122,47 +122,47 @@ describe 'heat' do
 
 
     it 'configures debug and verbose' do
-      should contain_heat_config('DEFAULT/debug').with_value( params[:debug] )
-      should contain_heat_config('DEFAULT/verbose').with_value( params[:verbose] )
+      is_expected.to contain_heat_config('DEFAULT/debug').with_value( params[:debug] )
+      is_expected.to contain_heat_config('DEFAULT/verbose').with_value( params[:verbose] )
     end
 
     it 'configures auth_uri' do
-      should contain_heat_config('keystone_authtoken/auth_uri').with_value( params[:auth_uri] )
+      is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value( params[:auth_uri] )
     end
 
     it 'configures logging directory by default' do
-      should contain_heat_config('DEFAULT/log_dir').with_value( params[:log_dir] )
+      is_expected.to contain_heat_config('DEFAULT/log_dir').with_value( params[:log_dir] )
     end
 
     context 'with logging directory disabled' do
       before { params.merge!( :log_dir => false) }
 
-      it { should contain_heat_config('DEFAULT/log_dir').with_ensure('absent') }
+      it { is_expected.to contain_heat_config('DEFAULT/log_dir').with_ensure('absent') }
     end
 
     it 'configures database_connection' do
-      should contain_heat_config('database/connection').with_value( params[:database_connection] )
+      is_expected.to contain_heat_config('database/connection').with_value( params[:database_connection] )
     end
 
     it 'configures database_idle_timeout' do
-      should contain_heat_config('database/idle_timeout').with_value( params[:database_idle_timeout] )
+      is_expected.to contain_heat_config('database/idle_timeout').with_value( params[:database_idle_timeout] )
     end
 
     context("failing if database_connection is invalid") do
       before { params[:database_connection] = 'foo://foo:bar@baz/moo' }
-      it { expect { should raise_error(Puppet::Error) } }
+      it { expect { is_expected.to raise_error(Puppet::Error) } }
     end
 
     context("with deprecated sql_connection parameter") do
       before { params[:sql_connection] = 'mysql://a:b@c/d' }
-      it { should contain_heat_config('database/connection').with_value( params[:sql_connection] )}
+      it { is_expected.to contain_heat_config('database/connection').with_value( params[:sql_connection] )}
     end
 
     it 'configures keystone_ec2_uri' do
-      should contain_heat_config('ec2authtoken/auth_uri').with_value( params[:keystone_ec2_uri] )
+      is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value( params[:keystone_ec2_uri] )
     end
 
-    it { should contain_heat_config('paste_deploy/flavor').with_value('keystone') }
+    it { is_expected.to contain_heat_config('paste_deploy/flavor').with_value('keystone') }
 
     it 'keeps keystone secrets secret' do
       should contain_heat_config('keystone_authtoken/admin_password').with_secret(true)
@@ -173,88 +173,88 @@ describe 'heat' do
 
   shared_examples_for 'rabbit without HA support (with backward compatibility)' do
     it 'configures rabbit' do
-      should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
-      should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
-      should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
-      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
     end
-    it { should contain_heat_config('DEFAULT/rabbit_host').with_value( params[:rabbit_host] ) }
-    it { should contain_heat_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] ) }
-    it { should contain_heat_config('DEFAULT/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" ) }
-    it { should contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('false') }
-    it { should contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_host').with_value( params[:rabbit_host] ) }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] ) }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" ) }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('false') }
+    it { is_expected.to contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
   end
 
   shared_examples_for 'rabbit without HA support (without backward compatibility)' do
     it 'configures rabbit' do
-      should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
-      should contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
-      should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
-      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
     end
-    it { should contain_heat_config('DEFAULT/rabbit_host').with_ensure('absent') }
-    it { should contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
-    it { should contain_heat_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
-    it { should contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('false') }
-    it { should contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_host').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('false') }
+    it { is_expected.to contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
   end
 
   shared_examples_for 'rabbit with HA support' do
     it 'configures rabbit' do
-      should contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
-      should contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      should contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
-      should contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
-      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
     end
-    it { should contain_heat_config('DEFAULT/rabbit_host').with_ensure('absent') }
-    it { should contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
-    it { should contain_heat_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
-    it { should contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('true') }
-    it { should contain_heat_config('DEFAULT/amqp_durable_queues').with_value(true) }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_host').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
+    it { is_expected.to contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('true') }
+    it { is_expected.to contain_heat_config('DEFAULT/amqp_durable_queues').with_value(true) }
   end
 
 
   shared_examples_for 'qpid as rpc backend' do
     context("with default parameters") do
-      it { should contain_heat_config('DEFAULT/qpid_reconnect').with_value(true) }
-      it { should contain_heat_config('DEFAULT/qpid_reconnect_timeout').with_value('0') }
-      it { should contain_heat_config('DEFAULT/qpid_reconnect_limit').with_value('0') }
-      it { should contain_heat_config('DEFAULT/qpid_reconnect_interval_min').with_value('0') }
-      it { should contain_heat_config('DEFAULT/qpid_reconnect_interval_max').with_value('0') }
-      it { should contain_heat_config('DEFAULT/qpid_reconnect_interval').with_value('0') }
-      it { should contain_heat_config('DEFAULT/qpid_heartbeat').with_value('60') }
-      it { should contain_heat_config('DEFAULT/qpid_protocol').with_value('tcp') }
-      it { should contain_heat_config('DEFAULT/qpid_tcp_nodelay').with_value(true) }
-      it { should contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_reconnect').with_value(true) }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_reconnect_timeout').with_value('0') }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_reconnect_limit').with_value('0') }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_reconnect_interval_min').with_value('0') }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_reconnect_interval_max').with_value('0') }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_reconnect_interval').with_value('0') }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_heartbeat').with_value('60') }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_protocol').with_value('tcp') }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_tcp_nodelay').with_value(true) }
+      it { is_expected.to contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
     end
 
     context("with mandatory parameters set") do
-      it { should contain_heat_config('DEFAULT/rpc_backend').with_value('heat.openstack.common.rpc.impl_qpid') }
-      it { should contain_heat_config('DEFAULT/qpid_hostname').with_value( params[:qpid_hostname] ) }
-      it { should contain_heat_config('DEFAULT/qpid_port').with_value( params[:qpid_port] ) }
-      it { should contain_heat_config('DEFAULT/qpid_username').with_value( params[:qpid_username]) }
-      it { should contain_heat_config('DEFAULT/qpid_password').with_value(params[:qpid_password]) }
-      it { should contain_heat_config('DEFAULT/qpid_password').with_secret( true ) }
+      it { is_expected.to contain_heat_config('DEFAULT/rpc_backend').with_value('heat.openstack.common.rpc.impl_qpid') }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_hostname').with_value( params[:qpid_hostname] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_port').with_value( params[:qpid_port] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_username').with_value( params[:qpid_username]) }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_password').with_value(params[:qpid_password]) }
+      it { is_expected.to contain_heat_config('DEFAULT/qpid_password').with_secret( true ) }
     end
 
     context("failing if the rpc_backend is not present") do
       before { params.delete( :rpc_backend) }
-      it { expect { should raise_error(Puppet::Error) } }
+      it { expect { is_expected.to raise_error(Puppet::Error) } }
     end
   end
 
@@ -270,11 +270,11 @@ describe 'heat' do
     end
 
     it do
-      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value('true')
-      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
-      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
-      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
-      should contain_heat_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
+      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value('true')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
     end
   end
 
@@ -286,11 +286,11 @@ describe 'heat' do
     end
 
     it do
-      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value('true')
-      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
+      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value('true')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
     end
   end
 
@@ -303,11 +303,11 @@ describe 'heat' do
     end
 
     it do
-      should contain_heat_config('DEFAULT/rabbit_use_ssl').with_value('false')
-      should contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      should contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value('false')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
     end
   end
 
@@ -339,7 +339,7 @@ describe 'heat' do
   end
 
   shared_examples_for 'with syslog disabled' do
-    it { should contain_heat_config('DEFAULT/use_syslog').with_value(false) }
+    it { is_expected.to contain_heat_config('DEFAULT/use_syslog').with_value(false) }
   end
 
   shared_examples_for 'with syslog enabled' do
@@ -350,8 +350,8 @@ describe 'heat' do
     end
 
     it do
-      should contain_heat_config('DEFAULT/use_syslog').with_value(true)
-      should contain_heat_config('DEFAULT/syslog_log_facility').with_value('LOG_USER')
+      is_expected.to contain_heat_config('DEFAULT/use_syslog').with_value(true)
+      is_expected.to contain_heat_config('DEFAULT/syslog_log_facility').with_value('LOG_USER')
     end
   end
 
@@ -364,8 +364,8 @@ describe 'heat' do
     end
 
     it do
-      should contain_heat_config('DEFAULT/use_syslog').with_value(true)
-      should contain_heat_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
+      is_expected.to contain_heat_config('DEFAULT/use_syslog').with_value(true)
+      is_expected.to contain_heat_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
     end
   end
 
@@ -377,7 +377,7 @@ describe 'heat' do
     end
 
     it do
-      should contain_heat_config('database/idle_timeout').with_value(69)
+      is_expected.to contain_heat_config('database/idle_timeout').with_value(69)
     end
   end
 
@@ -389,7 +389,7 @@ describe 'heat' do
     end
 
     it do
-      should contain_heat_config('ec2authtoken/auth_uri').with_value('http://1.2.3.4:35357/v2.0/ec2tokens')
+      is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value('http://1.2.3.4:35357/v2.0/ec2tokens')
     end
   end
 
@@ -401,7 +401,7 @@ describe 'heat' do
     end
 
     it do
-      should contain_heat_config('keystone_authtoken/auth_uri').with_value('http://1.2.3.4:35357/v2.0')
+      is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value('http://1.2.3.4:35357/v2.0')
     end
   end
 
@@ -413,13 +413,13 @@ describe 'heat' do
     end
 
     it 'has region_name set when specified' do
-      should contain_heat_config('DEFAULT/region_name_for_services').with_value('East')
+      is_expected.to contain_heat_config('DEFAULT/region_name_for_services').with_value('East')
     end
   end
 
   shared_examples_for 'without region_name set' do
     it 'doesnt have region_name set by default' do
-      should contain_heat_config('DEFAULT/region_name_for_services').with_enure('absent')
+      is_expected.to contain_heat_config('DEFAULT/region_name_for_services').with_enure('absent')
     end
   end
 

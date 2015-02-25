@@ -14,13 +14,13 @@ describe 'heat::api_cfn' do
 
     context 'config params' do
 
-      it { should contain_class('heat') }
-      it { should contain_class('heat::params') }
-      it { should contain_class('heat::policy') }
+      it { is_expected.to contain_class('heat') }
+      it { is_expected.to contain_class('heat::params') }
+      it { is_expected.to contain_class('heat::policy') }
 
-      it { should contain_heat_config('heat_api_cfn/bind_host').with_value( params[:bind_host] ) }
-      it { should contain_heat_config('heat_api_cfn/bind_port').with_value( params[:bind_port] ) }
-      it { should contain_heat_config('heat_api_cfn/workers').with_value( params[:workers] ) }
+      it { is_expected.to contain_heat_config('heat_api_cfn/bind_host').with_value( params[:bind_host] ) }
+      it { is_expected.to contain_heat_config('heat_api_cfn/bind_port').with_value( params[:bind_port] ) }
+      it { is_expected.to contain_heat_config('heat_api_cfn/workers').with_value( params[:workers] ) }
 
     end
 
@@ -33,8 +33,8 @@ describe 'heat::api_cfn' do
         }
       end
 
-      it { should contain_heat_config('heat_api_cfn/cert_file').with_value('/path/to/cert') }
-      it { should contain_heat_config('heat_api_cfn/key_file').with_value('/path/to/key') }
+      it { is_expected.to contain_heat_config('heat_api_cfn/cert_file').with_value('/path/to/cert') }
+      it { is_expected.to contain_heat_config('heat_api_cfn/key_file').with_value('/path/to/key') }
     end
 
     context 'with SSL socket options set with wrong parameters' do
@@ -57,8 +57,8 @@ describe 'heat::api_cfn' do
         }
       end
 
-      it { should contain_heat_config('heat_api_cfn/cert_file').with_ensure('absent') }
-      it { should contain_heat_config('heat_api_cfn/key_file').with_ensure('absent') }
+      it { is_expected.to contain_heat_config('heat_api_cfn/cert_file').with_ensure('absent') }
+      it { is_expected.to contain_heat_config('heat_api_cfn/key_file').with_ensure('absent') }
     end
 
     [{:enabled => true}, {:enabled => false}].each do |param_hash|
@@ -69,14 +69,14 @@ describe 'heat::api_cfn' do
 
         it 'configures heat-api-cfn service' do
 
-          should contain_service('heat-api-cfn').with(
+	  is_expected.to contain_service('heat-api-cfn').with(
             :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
             :name       => platform_params[:api_service_name],
             :enable     => params[:enabled],
             :hasstatus  => true,
-            :hasrestart => true,
-            :subscribe  => ['Exec[heat-dbsync]']
+	    :hasrestart => true
           )
+	  is_expected.to contain_service('heat-api-cfn').that_subscribes_to('Exec[heat-dbsync]')
         end
       end
     end
@@ -90,14 +90,14 @@ describe 'heat::api_cfn' do
 
       it 'configures heat-api-cfn service' do
 
-        should contain_service('heat-api-cfn').with(
+	is_expected.to contain_service('heat-api-cfn').with(
           :ensure     => nil,
           :name       => platform_params[:api_service_name],
           :enable     => false,
           :hasstatus  => true,
-          :hasrestart => true,
-          :subscribe  => ['Exec[heat-dbsync]']
+	  :hasrestart => true
         )
+	is_expected.to contain_service('heat-api-cfn').that_subscribes_to('Exec[heat-dbsync]')
       end
     end
   end

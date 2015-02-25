@@ -38,7 +38,7 @@ class heat::keystone::domain (
   $domain_password   = 'changeme',
 ) {
 
-  include heat::params
+  include ::heat::params
 
   $cmd_evn = [
     "OS_USERNAME=${keystone_admin}",

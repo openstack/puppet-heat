@@ -18,6 +18,10 @@
 #   (Optional) Should heat-cfn endpoint be configured?
 #   Defaults to 'true'.
 #
+# [*configure_service*]
+#   (Optional) Should heat-cfn service be configured?
+#   Defaults to 'true'.
+#
 # [*configure_user*]
 #   (Optional) Whether to create the service user.
 #   Defaults to 'true'.
@@ -91,6 +95,7 @@ class heat::keystone::auth_cfn (
   $admin_protocol       = 'http',
   $internal_protocol    = 'http',
   $configure_endpoint   = true,
+  $configure_service    = true,
   $configure_user       = true,
   $configure_user_role  = true,
 ) {
@@ -107,6 +112,7 @@ class heat::keystone::auth_cfn (
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
+    configure_service   => $configure_service,
     service_type        => $service_type,
     service_description => 'Openstack Cloudformation Service',
     service_name        => $real_service_name,

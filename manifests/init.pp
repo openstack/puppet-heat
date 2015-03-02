@@ -79,16 +79,14 @@
 # == keystone authentication options
 #
 # [*auth_uri*]
-#   (Optional) Specifies the Authentication URI for Heat to use.
+#   (Optional) Specifies the public Identity URI for Heat to use.
 #   Located in heat.conf.
-#   Defaults to false,
-#   which uses: "${keystone_protocol}://${keystone_host}:5000/v2.0"
-
-# [*keystone_host*]
+#   Defaults to: false
 #
-# [*keystone_port*]
-#
-# [*keystone_protocol*]
+# [*identity_uri*]
+#   (Optional) Specifies the admin Identity URI for Heat to use.
+#   Located in heat.conf.
+#   Defaults to: false
 #
 # [*keystone_user*]
 #
@@ -161,15 +159,25 @@
 # [*sql_connection*]
 #   Deprecated. Use database_connection instead.
 #
+# [*keystone_host*]
+#   (Optional) DEPRECATED The keystone host.
+#   Defaults to localhost.
+#
+# [*keystone_port*]
+#   (Optional) DEPRECATED The port used to access the keystone host.
+#   Defaults to 35357.
+#
+# [*keystone_protocol*]
+#   (Optional) DEPRECATED. The protocol used to access the keystone host
+#   Defaults to http.
+#
 class heat(
   $auth_uri                    = false,
+  $identity_uri                = false,
   $package_ensure              = 'present',
   $verbose                     = false,
   $debug                       = false,
   $log_dir                     = '/var/log/heat',
-  $keystone_host               = '127.0.0.1',
-  $keystone_port               = '35357',
-  $keystone_protocol           = 'http',
   $keystone_user               = 'heat',
   $keystone_tenant             = 'services',
   $keystone_password           = false,
@@ -206,9 +214,12 @@ class heat(
   $log_facility                = 'LOG_USER',
   $flavor                      = undef,
   $region_name                 = undef,
-  #Deprecated parameters
+  # Deprecated parameters
   $mysql_module                = undef,
   $sql_connection              = undef,
+  $keystone_host               = '127.0.0.1',
+  $keystone_port               = '35357',
+  $keystone_protocol           = 'http',
 ) {
 
   include heat::params
@@ -354,20 +365,70 @@ class heat(
 
   }
 
+  # if both auth_uri and identity_uri are set we skip these deprecated settings entirely
+  if !$auth_uri or !$identity_uri {
+    if $keystone_host {
+      warning('The keystone_host parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      heat_config {
+        'keystone_authtoken/auth_host': value => $keystone_host;
+      }
+    } else {
+      heat_config {
+        'keystone_authtoken/auth_host': ensure => absent;
+      }
+    }
+
+    if $keystone_port {
+      warning('The keystone_port parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      heat_config {
+        'keystone_authtoken/auth_port': value => $keystone_port;
+      }
+    } else {
+      heat_config {
+        'keystone_authtoken/auth_port': ensure => absent;
+      }
+    }
+
+    if $keystone_protocol {
+      warning('The keystone_protocol parameter is deprecated. Please use auth_uri and identity_uri instead.')
+      heat_config {
+        'keystone_authtoken/auth_protocol': value => $keystone_protocol;
+      }
+    } else {
+      heat_config {
+        'keystone_authtoken/auth_protocol': ensure => absent;
+      }
+    }
+  } else {
+    heat_config {
+      'keystone_authtoken/auth_host': ensure => absent;
+      'keystone_authtoken/auth_port': ensure => absent;
+      'keystone_authtoken/auth_protocol': ensure => absent;
+    }
+  }
+
   if $auth_uri {
     heat_config { 'keystone_authtoken/auth_uri': value => $auth_uri; }
   } else {
     heat_config { 'keystone_authtoken/auth_uri': value => "${keystone_protocol}://${keystone_host}:5000/v2.0"; }
   }
 
+  if $identity_uri {
+    heat_config {
+      'keystone_authtoken/identity_uri': value => $identity_uri;
+    }
+  } else {
+    heat_config {
+      'keystone_authtoken/identity_uri': ensure => absent;
+    }
+  }
+
+
   heat_config {
     'DEFAULT/rpc_backend'                  : value => $rpc_backend;
     'DEFAULT/debug'                        : value => $debug;
     'DEFAULT/verbose'                      : value => $verbose;
     'ec2authtoken/auth_uri'                : value => $keystone_ec2_uri;
-    'keystone_authtoken/auth_host'         : value => $keystone_host;
-    'keystone_authtoken/auth_port'         : value => $keystone_port;
-    'keystone_authtoken/auth_protocol'     : value => $keystone_protocol;
     'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
     'keystone_authtoken/admin_user'        : value => $keystone_user;
     'keystone_authtoken/admin_password'    : value => $keystone_password, secret => true;

@@ -69,6 +69,8 @@ describe 'heat' do
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
     it_configures 'with SSL wrongly configured'
+    it_configures "with custom keystone identity_uri"
+    it_configures "with custom keystone identity_uri and auth_uri"
   end
 
   shared_examples_for 'a heat base installation' do
@@ -421,6 +423,32 @@ describe 'heat' do
     end
   end
 
+  shared_examples_for "with custom keystone identity_uri" do
+    before do
+      params.merge!({
+        :identity_uri => 'https://foo.bar:1234/',
+      })
+    end
+    it 'configures identity_uri' do
+      should contain_heat_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
+    end
+  end
+
+  shared_examples_for "with custom keystone identity_uri and auth_uri" do
+    before do
+      params.merge!({
+        :identity_uri => 'https://foo.bar:35357/',
+        :auth_uri => 'https://foo.bar:5000/v2.0/',
+      })
+    end
+    it 'configures identity_uri and auth_uri but deprecates old auth settings' do
+      should contain_heat_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
+      should contain_heat_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
+      should contain_heat_config('keystone_authtoken/auth_port').with(:ensure => 'absent')
+      should contain_heat_config('keystone_authtoken/auth_protocol').with(:ensure => 'absent')
+      should contain_heat_config('keystone_authtoken/auth_host').with(:ensure => 'absent')
+    end
+  end
 
   context 'on Debian platforms' do
     let :facts do

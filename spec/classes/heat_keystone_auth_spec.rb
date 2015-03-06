@@ -69,6 +69,16 @@ describe 'heat::keystone::auth' do
         :internal_url => "#{params[:internal_protocol]}://#{params[:internal_address]}:#{params[:port]}/#{params[:version]}/%(tenant_id)s"
       )
     end
+
+    context 'with service disabled' do
+      before do
+        params.merge!({
+          :configure_service => false
+        })
+      end
+      it { should_not contain_keystone_service("#{params[:region]}/#{params[:auth_name]}") }
+    end
+
   end
 
 

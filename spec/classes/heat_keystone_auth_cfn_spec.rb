@@ -8,6 +8,7 @@ describe 'heat::keystone::auth_cfn' do
       :email              => 'heat-cfn@localhost',
       :auth_name          => 'heat-cfn',
       :configure_endpoint => true,
+      :configure_service  => true,
       :service_type       => 'cloudformation',
       :public_address     => '127.0.0.1',
       :admin_address      => '127.0.0.1',
@@ -61,6 +62,16 @@ describe 'heat::keystone::auth_cfn' do
         :internal_url => "#{params[:internal_protocol]}://#{params[:internal_address]}:#{params[:port]}/#{params[:version]}/"
       )
     end
+
+    context 'with service disabled' do
+      before do
+        params.merge!({
+          :configure_service => false
+        })
+      end
+      it { should_not contain_keystone_service("#{params[:region]}/#{params[:auth_name]}") }
+    end
+
   end
 
   context 'on Debian platforms' do

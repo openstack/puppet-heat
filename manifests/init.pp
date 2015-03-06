@@ -151,6 +151,11 @@
 #   default region name that heat talks to service endpoints on.
 #   Defaults to undef
 #
+# [*instance_user*]
+#   (Optional) The default user for new instances. Although heat claims that
+#   this feature is deprecated, it still sets the users to ec2-user if
+#   you leave this unset. This will likely be deprecated in K or L.
+#
 # === Deprecated Parameters
 #
 # [*mysql_module*]
@@ -220,6 +225,7 @@ class heat(
   $keystone_host               = '127.0.0.1',
   $keystone_port               = '35357',
   $keystone_protocol           = 'http',
+  $instance_user               = undef,
 ) {
 
   include heat::params
@@ -523,4 +529,13 @@ class heat(
   } else {
     heat_config { 'DEFAULT/region_name_for_services': ensure => absent; }
   }
+
+  # instance_user
+  if $instance_user {
+    heat_config { 'DEFAULT/instance_user': value => $instance_user; }
+  } else {
+    heat_config { 'DEFAULT/instance_user': ensure => absent; }
+  }
+
+
 }

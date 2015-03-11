@@ -67,7 +67,7 @@ class heat::engine (
   $configure_delegated_roles     = true,                  #DEPRECATED
 ) {
 
-  include heat::params
+  include ::heat::params
 
   Heat_config<||> ~> Service['heat-engine']
 

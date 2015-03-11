@@ -56,9 +56,9 @@ class heat::api_cfn (
   $key_file          = false,
 ) {
 
-  include heat
-  include heat::params
-  include heat::policy
+  include ::heat
+  include ::heat::params
+  include ::heat::policy
 
   Heat_config<||> ~> Service['heat-api-cfn']
   Class['heat::policy'] -> Service['heat-api-cfn']

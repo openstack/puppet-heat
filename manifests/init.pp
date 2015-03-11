@@ -228,7 +228,7 @@ class heat(
   $instance_user               = undef,
 ) {
 
-  include heat::params
+  include ::heat::params
 
   if $kombu_ssl_ca_certs and !$rabbit_use_ssl {
     fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')

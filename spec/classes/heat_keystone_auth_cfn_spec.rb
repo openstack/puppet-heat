@@ -27,11 +27,11 @@ describe 'heat::keystone::auth_cfn' do
 
     context 'without the required password parameter' do
       before { params.delete(:password) }
-      it { expect { should raise_error(Puppet::Error) } }
+      it { expect { is_expected.to raise_error(Puppet::Error) } }
     end
 
     it 'configures heat user' do
-      should contain_keystone_user( params[:auth_name] ).with(
+      is_expected.to contain_keystone_user( params[:auth_name] ).with(
         :ensure   => 'present',
         :password => params[:password],
         :email    => params[:email],
@@ -40,14 +40,14 @@ describe 'heat::keystone::auth_cfn' do
     end
 
     it 'configures heat user roles' do
-      should contain_keystone_user_role("#{params[:auth_name]}@#{params[:tenant]}").with(
+      is_expected.to contain_keystone_user_role("#{params[:auth_name]}@#{params[:tenant]}").with(
         :ensure  => 'present',
         :roles   => ['admin']
       )
     end
 
     it 'configures heat service' do
-      should contain_keystone_service( params[:auth_name] ).with(
+      is_expected.to contain_keystone_service( params[:auth_name] ).with(
         :ensure      => 'present',
         :type        => params[:service_type],
         :description => 'Openstack Cloudformation Service'
@@ -55,7 +55,7 @@ describe 'heat::keystone::auth_cfn' do
     end
 
     it 'configure heat endpoints' do
-      should contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
+      is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
         :ensure       => 'present',
         :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}/#{params[:version]}/",
         :admin_url    => "#{params[:admin_protocol]}://#{params[:admin_address]}:#{params[:port]}/#{params[:version]}/",
@@ -97,16 +97,16 @@ describe 'heat::keystone::auth_cfn' do
       })
     end
     it 'configures correct user name' do
-      should contain_keystone_user('heat-cfn')
+      is_expected.to contain_keystone_user('heat-cfn')
     end
     it 'configures correct user role' do
-      should contain_keystone_user_role('heat-cfn@services')
+      is_expected.to contain_keystone_user_role('heat-cfn@services')
     end
     it 'configures correct service name' do
-      should contain_keystone_service('heat-cfn_service')
+      is_expected.to contain_keystone_service('heat-cfn_service')
     end
     it 'configures correct endpoint name' do
-      should contain_keystone_endpoint('RegionOne/heat-cfn_service')
+      is_expected.to contain_keystone_endpoint('RegionOne/heat-cfn_service')
     end
   end
 
@@ -115,10 +115,10 @@ describe 'heat::keystone::auth_cfn' do
       params.merge!( :configure_user => false )
     end
 
-    it { should_not contain_keystone_user('heat_cfn') }
-    it { should contain_keystone_user_role('heat-cfn@services') }
+    it { is_expected.to_not contain_keystone_user('heat_cfn') }
+    it { is_expected.to contain_keystone_user_role('heat-cfn@services') }
 
-    it { should contain_keystone_service('heat-cfn').with(
+    it { is_expected.to contain_keystone_service('heat-cfn').with(
       :ensure       => 'present',
       :type         => 'cloudformation',
       :description  => 'Openstack Cloudformation Service'
@@ -133,10 +133,10 @@ describe 'heat::keystone::auth_cfn' do
       )
     end
 
-    it { should_not contain_keystone_user('heat_cfn') }
-    it { should_not contain_keystone_user_role('heat-cfn@services') }
+    it { is_expected.to_not contain_keystone_user('heat_cfn') }
+    it { is_expected.to_not contain_keystone_user_role('heat-cfn@services') }
 
-    it { should contain_keystone_service('heat-cfn').with(
+    it { is_expected.to contain_keystone_service('heat-cfn').with(
       :ensure       => 'present',
       :type         => 'cloudformation',
       :description  => 'Openstack Cloudformation Service'

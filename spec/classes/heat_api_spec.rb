@@ -14,13 +14,13 @@ describe 'heat::api' do
 
     context 'config params' do
 
-      it { should contain_class('heat') }
-      it { should contain_class('heat::params') }
-      it { should contain_class('heat::policy') }
+      it { is_expected.to contain_class('heat') }
+      it { is_expected.to contain_class('heat::params') }
+      it { is_expected.to contain_class('heat::policy') }
 
-      it { should contain_heat_config('heat_api/bind_host').with_value( params[:bind_host] ) }
-      it { should contain_heat_config('heat_api/bind_port').with_value( params[:bind_port] ) }
-      it { should contain_heat_config('heat_api/workers').with_value( params[:workers] ) }
+      it { is_expected.to contain_heat_config('heat_api/bind_host').with_value( params[:bind_host] ) }
+      it { is_expected.to contain_heat_config('heat_api/bind_port').with_value( params[:bind_port] ) }
+      it { is_expected.to contain_heat_config('heat_api/workers').with_value( params[:workers] ) }
 
     end
 
@@ -33,8 +33,8 @@ describe 'heat::api' do
         }
       end
 
-      it { should contain_heat_config('heat_api/cert_file').with_value('/path/to/cert') }
-      it { should contain_heat_config('heat_api/key_file').with_value('/path/to/key') }
+      it { is_expected.to contain_heat_config('heat_api/cert_file').with_value('/path/to/cert') }
+      it { is_expected.to contain_heat_config('heat_api/key_file').with_value('/path/to/key') }
     end
 
     context 'with SSL socket options set with wrong parameters' do
@@ -57,8 +57,8 @@ describe 'heat::api' do
         }
       end
 
-      it { should contain_heat_config('heat_api/cert_file').with_ensure('absent') }
-      it { should contain_heat_config('heat_api/key_file').with_ensure('absent') }
+      it { is_expected.to contain_heat_config('heat_api/cert_file').with_ensure('absent') }
+      it { is_expected.to contain_heat_config('heat_api/key_file').with_ensure('absent') }
     end
 
 
@@ -70,15 +70,15 @@ describe 'heat::api' do
 
         it 'configures heat-api service' do
 
-          should contain_service('heat-api').with(
+	  is_expected.to contain_service('heat-api').with(
             :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
             :name       => platform_params[:api_service_name],
             :enable     => params[:enabled],
             :hasstatus  => true,
             :hasrestart => true,
-            :require    => ['Package[heat-common]', 'Package[heat-api]'],
-            :subscribe  => ['Exec[heat-dbsync]']
+	    :require    => ['Package[heat-common]', 'Package[heat-api]']
           )
+	  is_expected.to contain_service('heat-api').that_subscribes_to('Exec[heat-dbsync]')
         end
       end
     end
@@ -92,15 +92,15 @@ describe 'heat::api' do
 
       it 'configures heat-api service' do
 
-        should contain_service('heat-api').with(
+	is_expected.to contain_service('heat-api').with(
           :ensure     => nil,
           :name       => platform_params[:api_service_name],
           :enable     => false,
           :hasstatus  => true,
           :hasrestart => true,
           :require    => ['Package[heat-common]', 'Package[heat-api]'],
-          :subscribe  => ['Exec[heat-dbsync]']
         )
+	is_expected.to contain_service('heat-api').that_subscribes_to('Exec[heat-dbsync]')
       end
     end
   end

@@ -66,10 +66,10 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
 
       it 'configures delegated roles' do
-	is_expected.to contain_keystone_role("role1").with(
+        is_expected.to contain_keystone_role("role1").with(
           :ensure  => 'present'
         )
-	is_expected.to contain_keystone_role("role2").with(
+        is_expected.to contain_keystone_role("role2").with(
           :ensure  => 'present'
         )
       end

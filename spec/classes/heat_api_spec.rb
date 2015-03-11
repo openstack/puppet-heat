@@ -70,15 +70,15 @@ describe 'heat::api' do
 
         it 'configures heat-api service' do
 
-	  is_expected.to contain_service('heat-api').with(
+          is_expected.to contain_service('heat-api').with(
             :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
             :name       => platform_params[:api_service_name],
             :enable     => params[:enabled],
             :hasstatus  => true,
             :hasrestart => true,
-	    :require    => ['Package[heat-common]', 'Package[heat-api]']
+            :require    => ['Package[heat-common]', 'Package[heat-api]']
           )
-	  is_expected.to contain_service('heat-api').that_subscribes_to('Exec[heat-dbsync]')
+          is_expected.to contain_service('heat-api').that_subscribes_to('Exec[heat-dbsync]')
         end
       end
     end
@@ -92,7 +92,7 @@ describe 'heat::api' do
 
       it 'configures heat-api service' do
 
-	is_expected.to contain_service('heat-api').with(
+        is_expected.to contain_service('heat-api').with(
           :ensure     => nil,
           :name       => platform_params[:api_service_name],
           :enable     => false,
@@ -100,7 +100,7 @@ describe 'heat::api' do
           :hasrestart => true,
           :require    => ['Package[heat-common]', 'Package[heat-api]'],
         )
-	is_expected.to contain_service('heat-api').that_subscribes_to('Exec[heat-dbsync]')
+        is_expected.to contain_service('heat-api').that_subscribes_to('Exec[heat-dbsync]')
       end
     end
   end

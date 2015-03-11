@@ -69,14 +69,14 @@ describe 'heat::api_cloudwatch' do
 
         it 'configures heat-api-cloudwatch service' do
 
-	  is_expected.to contain_service('heat-api-cloudwatch').with(
+          is_expected.to contain_service('heat-api-cloudwatch').with(
             :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
             :name       => platform_params[:api_service_name],
             :enable     => params[:enabled],
             :hasstatus  => true,
-	    :hasrestart => true
+          :hasrestart => true
           )
-	  is_expected.to contain_service('heat-api-cloudwatch').that_subscribes_to('Exec[heat-dbsync]')
+          is_expected.to contain_service('heat-api-cloudwatch').that_subscribes_to('Exec[heat-dbsync]')
         end
       end
     end
@@ -90,14 +90,14 @@ describe 'heat::api_cloudwatch' do
 
       it 'configures heat-api-cloudwatch service' do
 
-	is_expected.to contain_service('heat-api-cloudwatch').with(
+        is_expected.to contain_service('heat-api-cloudwatch').with(
           :ensure     => nil,
           :name       => platform_params[:api_service_name],
           :enable     => false,
           :hasstatus  => true,
-	  :hasrestart => true
+          :hasrestart => true
         )
-	is_expected.to contain_service('heat-api-cloudwatch').that_subscribes_to('Exec[heat-dbsync]')
+        is_expected.to contain_service('heat-api-cloudwatch').that_subscribes_to('Exec[heat-dbsync]')
       end
     end
   end

@@ -33,9 +33,10 @@ describe 'heat::keystone::domain' do
 
     it 'should exec helper script' do
       is_expected.to contain_exec('heat_domain_create').with(
-        :command     => 'heat-keystone-setup-domain &>/dev/null',
+        :command     => 'heat-keystone-setup-domain',
         :path        => '/usr/bin',
         :require     => 'Package[heat-common]',
+        :logoutput   => 'on_failure',
         :environment => [
             "OS_USERNAME=#{params[:keystone_admin]}",
             "OS_PASSWORD=#{params[:keystone_password]}",

@@ -156,6 +156,14 @@
 #   this feature is deprecated, it still sets the users to ec2-user if
 #   you leave this unset. This will likely be deprecated in K or L.
 #
+# [*enable_stack_adopt*]
+#   (Optional) Enable the stack-adopt feature.
+#   Defaults to undef
+#
+# [*enable_stack_abandon*]
+#   (Optional) Enable the stack-abandon feature.
+#   Defaults to undef
+#
 # === Deprecated Parameters
 #
 # [*mysql_module*]
@@ -219,6 +227,8 @@ class heat(
   $log_facility                = 'LOG_USER',
   $flavor                      = undef,
   $region_name                 = undef,
+  $enable_stack_adopt          = undef,
+  $enable_stack_abandon        = undef,
   # Deprecated parameters
   $mysql_module                = undef,
   $sql_connection              = undef,
@@ -537,5 +547,17 @@ class heat(
     heat_config { 'DEFAULT/instance_user': ensure => absent; }
   }
 
+  if $enable_stack_adopt != undef {
+    validate_bool($enable_stack_adopt)
+    heat_config { 'DEFAULT/enable_stack_adopt': value => $enable_stack_adopt; }
+  } else {
+    heat_config { 'DEFAULT/enable_stack_adopt': ensure => absent; }
+  }
 
+  if $enable_stack_abandon != undef {
+    validate_bool($enable_stack_abandon)
+    heat_config { 'DEFAULT/enable_stack_abandon': value => $enable_stack_abandon; }
+  } else {
+    heat_config { 'DEFAULT/enable_stack_abandon': ensure => absent; }
+  }
 }

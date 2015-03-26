@@ -30,10 +30,6 @@
 #   (optional) URL of the Heat cloudwatch server
 #   Defaults to 'http://127.0.0.1:8003'
 #
-# [*enable_stack_abandon*]
-#   (optional) Whether to allow the stack-abandon operation.
-#   Defaults to false
-#
 # [*engine_life_check_timeout*]
 #   (optional) RPC timeout (in seconds) for the engine liveness check that is
 #   used for stack locking
@@ -69,7 +65,6 @@ class heat::engine (
   $deferred_auth_method          = 'trusts',
   $trusts_delegated_roles        = ['heat_stack_owner'],  #DEPRECATED
   $configure_delegated_roles     = true,                  #DEPRECATED
-  $enable_stack_abandon          = false,
 ) {
 
   include ::heat::params
@@ -120,6 +115,5 @@ class heat::engine (
     'DEFAULT/engine_life_check_timeout'    : value => $engine_life_check_timeout;
     'DEFAULT/trusts_delegated_roles'       : value => $trusts_delegated_roles;
     'DEFAULT/deferred_auth_method'         : value => $deferred_auth_method;
-    'DEFAULT/enable_stack_abandon'         : value => $enable_stack_abandon;
   }
 }

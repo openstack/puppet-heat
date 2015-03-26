@@ -71,6 +71,7 @@ describe 'heat' do
     it_configures 'with SSL wrongly configured'
     it_configures "with custom keystone identity_uri"
     it_configures "with custom keystone identity_uri and auth_uri"
+    it_configures 'with enable_stack_adopt and enable_stack_abandon set'
   end
 
   shared_examples_for 'a heat base installation' do
@@ -465,6 +466,19 @@ describe 'heat' do
   shared_examples_for 'without instance_user set' do
     it 'doesnt have instance_user set by default' do
       should contain_heat_config('DEFAULT/instance_user').with_enure('absent')
+    end
+  end
+
+  shared_examples_for "with enable_stack_adopt and enable_stack_abandon set" do
+    before do
+      params.merge!({
+        :enable_stack_adopt   => true,
+        :enable_stack_abandon => true,
+      })
+    end
+    it 'sets enable_stack_adopt and enable_stack_abandon' do
+      is_expected.to contain_heat_config('DEFAULT/enable_stack_adopt').with_value(true);
+      is_expected.to contain_heat_config('DEFAULT/enable_stack_abandon').with_value(true);
     end
   end
 

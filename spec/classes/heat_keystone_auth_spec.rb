@@ -76,7 +76,7 @@ describe 'heat::keystone::auth' do
           :configure_service => false
         })
       end
-      it { should_not contain_keystone_service("#{params[:region]}/#{params[:auth_name]}") }
+      it { is_expected.to_not contain_keystone_service("#{params[:region]}/#{params[:auth_name]}") }
     end
 
   end

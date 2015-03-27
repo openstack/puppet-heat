@@ -166,7 +166,7 @@ describe 'heat' do
     it { is_expected.to contain_heat_config('paste_deploy/flavor').with_value('keystone') }
 
     it 'keeps keystone secrets secret' do
-      should contain_heat_config('keystone_authtoken/admin_password').with_secret(true)
+      is_expected.to contain_heat_config('keystone_authtoken/admin_password').with_secret(true)
     end
 
 
@@ -431,7 +431,7 @@ describe 'heat' do
       })
     end
     it 'configures identity_uri' do
-      should contain_heat_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
+      is_expected.to contain_heat_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
     end
   end
 
@@ -443,11 +443,11 @@ describe 'heat' do
       })
     end
     it 'configures identity_uri and auth_uri but deprecates old auth settings' do
-      should contain_heat_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
-      should contain_heat_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
-      should contain_heat_config('keystone_authtoken/auth_port').with(:ensure => 'absent')
-      should contain_heat_config('keystone_authtoken/auth_protocol').with(:ensure => 'absent')
-      should contain_heat_config('keystone_authtoken/auth_host').with(:ensure => 'absent')
+      is_expected.to contain_heat_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
+      is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
+      is_expected.to contain_heat_config('keystone_authtoken/auth_port').with(:ensure => 'absent')
+      is_expected.to contain_heat_config('keystone_authtoken/auth_protocol').with(:ensure => 'absent')
+      is_expected.to contain_heat_config('keystone_authtoken/auth_host').with(:ensure => 'absent')
     end
   end
 
@@ -459,13 +459,13 @@ describe 'heat' do
     end
 
     it 'has instance_user set when specified' do
-      should contain_heat_config('DEFAULT/instance_user').with_value('fred')
+      is_expected.to contain_heat_config('DEFAULT/instance_user').with_value('fred')
     end
   end
 
   shared_examples_for 'without instance_user set' do
     it 'doesnt have instance_user set by default' do
-      should contain_heat_config('DEFAULT/instance_user').with_enure('absent')
+      is_expected.to contain_heat_config('DEFAULT/instance_user').with_enure('absent')
     end
   end
 

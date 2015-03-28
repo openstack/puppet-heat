@@ -81,6 +81,7 @@ class heat::engine (
   package { 'heat-engine':
     ensure => installed,
     name   => $::heat::params::engine_package_name,
+    tag    => 'openstack',
     notify => Exec['heat-dbsync'],
   }
 

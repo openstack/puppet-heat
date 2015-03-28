@@ -78,6 +78,7 @@ class heat::api_cloudwatch (
   package { 'heat-api-cloudwatch':
     ensure => installed,
     name   => $::heat::params::api_cloudwatch_package_name,
+    tag    => 'openstack',
   }
 
   if $manage_service {

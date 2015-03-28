@@ -79,6 +79,7 @@ class heat::api_cfn (
   package { 'heat-api-cfn':
     ensure => installed,
     name   => $::heat::params::api_cfn_package_name,
+    tag    => 'openstack',
   }
 
   if $manage_service {

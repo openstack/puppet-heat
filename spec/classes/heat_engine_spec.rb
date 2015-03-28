@@ -42,7 +42,12 @@ describe 'heat::engine' do
         default_params.merge(params)
       end
 
-      it { is_expected.to contain_package('heat-engine').with_name(os_params[:package_name]) }
+      it { is_expected.to contain_package('heat-engine').with(
+        :ensure => 'installed',
+        :name   => os_params[:package_name],
+        :tag    => 'openstack',
+        :notify => 'Exec[heat-dbsync]'
+      ) }
 
       it { is_expected.to contain_service('heat-engine').with(
         :ensure     => (expected_params[:manage_service] && expected_params[:enabled]) ? 'running' : 'stopped',

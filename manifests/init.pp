@@ -289,6 +289,7 @@ class heat(
   package { 'heat-common':
     ensure => $package_ensure,
     name   => $::heat::params::common_package_name,
+    tag    => 'openstack',
   }
 
   Package['heat-common'] -> Heat_config<||>
@@ -493,6 +494,7 @@ class heat(
       package {'heat-backend-package':
         ensure => present,
         name   => $backend_package,
+        tag    => 'openstack',
       }
     }
 

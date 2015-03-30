@@ -117,7 +117,8 @@ describe 'heat' do
     it 'installs heat common package' do
       is_expected.to contain_package('heat-common').with(
         :ensure => 'present',
-        :name   => platform_params[:common_package_name]
+        :name   => platform_params[:common_package_name],
+        :tag    => 'openstack'
       )
     end
 

@@ -76,6 +76,7 @@ class heat::api (
   package { 'heat-api':
     ensure => installed,
     name   => $::heat::params::api_package_name,
+    tag    => 'openstack',
   }
 
   if $manage_service {

@@ -99,6 +99,21 @@ describe 'heat::engine' do
         :subscribe  => 'Exec[heat-dbsync]'
       ) }
     end
+    context 'with $sync_db set to false in ::heat' do
+      let :pre_condition do
+        "class {'heat': sync_db => false}"
+      end
+
+      it 'configures heat-engine service to not subscribe to the dbsync resource' do
+        is_expected.to contain_service('heat-engine').that_subscribes_to(nil)
+      end
+
+     it 'configures the heat-engine package to not be notified by the dbsync resource ' do
+        is_expected.to contain_package('heat-engine').with(
+          :notify => nil,
+       )
+     end
+    end
   end
 
   context 'on Debian platforms' do

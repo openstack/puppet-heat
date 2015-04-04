@@ -164,6 +164,10 @@
 #   (Optional) Enable the stack-abandon feature.
 #   Defaults to undef
 #
+# [*sync_db*]
+#   (Optional) Run db sync on nodes after connection setting has been set.
+#   Defaults to true
+#
 # === Deprecated Parameters
 #
 # [*mysql_module*]
@@ -229,6 +233,7 @@ class heat(
   $region_name                 = undef,
   $enable_stack_adopt          = undef,
   $enable_stack_abandon        = undef,
+  $sync_db                     = true,
   # Deprecated parameters
   $mysql_module                = undef,
   $sql_connection              = undef,
@@ -506,14 +511,17 @@ class heat(
         value => $database_idle_timeout;
     }
 
-    Heat_config['database/connection'] ~> Exec['heat-dbsync']
+    if $sync_db {
+      $subscribe_sync_db = Exec['heat-dbsync']
+      Heat_config['database/connection'] ~> Exec['heat-dbsync']
 
-    exec { 'heat-dbsync':
-      command     => $::heat::params::dbsync_command,
-      path        => '/usr/bin',
-      user        => 'heat',
-      refreshonly => true,
-      logoutput   => on_failure,
+      exec { 'heat-dbsync':
+        command     => $::heat::params::dbsync_command,
+        path        => '/usr/bin',
+        user        => 'heat',
+        refreshonly => true,
+        logoutput   => on_failure,
+      }
     }
   }
 

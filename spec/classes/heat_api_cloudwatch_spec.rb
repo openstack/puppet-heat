@@ -100,6 +100,17 @@ describe 'heat::api_cloudwatch' do
         is_expected.to contain_service('heat-api-cloudwatch').that_subscribes_to('Exec[heat-dbsync]')
       end
     end
+
+    context 'with $sync_db set to false in ::heat' do
+      let :pre_condition do
+        "class {'heat': sync_db => false}"
+      end
+
+      it 'configures heat-api-cloudwatch service to not subscribe to the dbsync resource' do
+        is_expected.to contain_service('heat-api-cloudwatch').that_subscribes_to(nil)
+      end
+    end
+
   end
 
   context 'on Debian platforms' do

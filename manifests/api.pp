@@ -95,7 +95,7 @@ class heat::api (
     hasrestart => true,
     require    => [Package['heat-common'],
                   Package['heat-api']],
-    subscribe  => Exec['heat-dbsync'],
+    subscribe  => $::heat::subscribe_sync_db,
   }
 
   heat_config {

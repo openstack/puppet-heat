@@ -98,7 +98,7 @@ class heat::api_cloudwatch (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    subscribe  => Exec['heat-dbsync'],
+    subscribe  => $::heat::subscribe_sync_db,
   }
 
   heat_config {

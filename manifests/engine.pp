@@ -67,6 +67,7 @@ class heat::engine (
   $configure_delegated_roles     = true,                  #DEPRECATED
 ) {
 
+  include ::heat
   include ::heat::params
 
   Heat_config<||> ~> Service['heat-engine']
@@ -77,7 +78,7 @@ class heat::engine (
     ensure => installed,
     name   => $::heat::params::engine_package_name,
     tag    => 'openstack',
-    notify => Exec['heat-dbsync'],
+    notify => $::heat::subscribe_sync_db,
   }
 
   if $manage_service {
@@ -104,7 +105,7 @@ class heat::engine (
     require    => [ File['/etc/heat/heat.conf'],
                     Package['heat-common'],
                     Package['heat-engine']],
-    subscribe  => Exec['heat-dbsync'],
+    subscribe  => $::heat::subscribe_sync_db,
   }
 
   heat_config {

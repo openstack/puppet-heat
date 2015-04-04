@@ -100,6 +100,17 @@ describe 'heat::api_cfn' do
         is_expected.to contain_service('heat-api-cfn').that_subscribes_to('Exec[heat-dbsync]')
       end
     end
+
+    context 'with $sync_db set to false in ::heat' do
+      let :pre_condition do
+        "class {'heat': sync_db => false}"
+      end
+
+      it 'configures heat-api-cfn service to not subscribe to the dbsync resource' do
+        is_expected.to contain_service('heat-api-cfn').that_subscribes_to(nil)
+      end
+    end
+
   end
 
 

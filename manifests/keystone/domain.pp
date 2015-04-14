@@ -41,6 +41,7 @@ class heat::keystone::domain (
   include ::heat::params
 
   $cmd_evn = [
+    "OS_TENANT_NAME=${keystone_tenant}",
     "OS_USERNAME=${keystone_admin}",
     "OS_PASSWORD=${keystone_password}",
     "OS_AUTH_URL=${auth_url}",

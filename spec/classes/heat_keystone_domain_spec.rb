@@ -36,6 +36,7 @@ describe 'heat::keystone::domain' do
         :path        => '/usr/bin',
         :require     => 'Package[heat-common]',
         :environment => [
+            "OS_TENANT_NAME=#{params[:keystone_tenant]}",
             "OS_USERNAME=#{params[:keystone_admin]}",
             "OS_PASSWORD=#{params[:keystone_password]}",
             "OS_AUTH_URL=#{params[:auth_url]}",

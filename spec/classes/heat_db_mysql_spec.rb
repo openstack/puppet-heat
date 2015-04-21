@@ -11,6 +11,7 @@ describe 'heat::db::mysql' do
       :user         => 'heat',
       :host         => 'localhost',
       :charset      => 'utf8',
+      :collate      => 'utf8_general_ci',
     }
   end
 
@@ -27,6 +28,7 @@ describe 'heat::db::mysql' do
         :password_hash => '*58C036CDA51D8E8BBBBF2F9EA5ABF111ADA444F0',
         :host          => params[:host],
         :charset       => params[:charset],
+        :collate       => 'utf8_general_ci',
         :require       => 'Class[Mysql::Config]'
       )
     end

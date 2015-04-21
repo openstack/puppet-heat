@@ -75,7 +75,7 @@ end
 # +tenantName+::
 #   Tenant name
 #
-def keystone_v2_authenticate(auth_url,
+def heat_handle_requests(auth_url,
                              username,
                              password,
                              tenantId=nil,
@@ -111,7 +111,7 @@ end
 #
 # +auth_url+::
 #   Keystone endpoint.  See the notes for +auth_url+ in
-#   +keystone_v2_authenticate+.
+#   +heat_handle_requests+.
 #
 # +token+::
 #   A Keystone token that will be passed in requests as the value of the
@@ -133,7 +133,7 @@ end
 
 Puppet::Type.type(:heat_domain_id_setter).provide(:ruby) do
     def authenticate
-        token, authinfo = keystone_v2_authenticate(
+        token, authinfo = heat_handle_requests(
             @resource[:auth_url],
             @resource[:auth_username],
             @resource[:auth_password],

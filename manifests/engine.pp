@@ -6,6 +6,10 @@
 # [*auth_encryption_key*]
 #   (required) Encryption key used for authentication info in database
 #
+# [*package_ensure*]
+#    (Optional) Ensure state for package.
+#    Defaults to 'present'
+#
 # [*enabled*]
 #   (optional) Should the service be enabled.
 #   Defaults to 'true'
@@ -55,6 +59,7 @@
 #
 class heat::engine (
   $auth_encryption_key,
+  $package_ensure                = 'present',
   $manage_service                = true,
   $enabled                       = true,
   $heat_stack_user_role          = 'heat_stack_user',
@@ -75,7 +80,7 @@ class heat::engine (
   Package['heat-engine'] -> Heat_config<||>
   Package['heat-engine'] -> Service['heat-engine']
   package { 'heat-engine':
-    ensure => installed,
+    ensure => $package_ensure,
     name   => $::heat::params::engine_package_name,
     tag    => 'openstack',
     notify => $::heat::subscribe_sync_db,

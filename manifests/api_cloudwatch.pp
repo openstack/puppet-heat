@@ -5,6 +5,10 @@
 # Installs & configure the heat CloudWatch API service
 #
 # === Parameters
+# [*package_ensure*]
+#    (Optional) Ensure state for package.
+#    Defaults to 'present'
+#
 # [*enabled*]
 #   (optional) Should the service be enabled.
 #   Defaults to true.
@@ -45,6 +49,7 @@
 # No Deprecated Parameters.
 #
 class heat::api_cloudwatch (
+  $package_ensure    = 'present',
   $manage_service    = true,
   $enabled           = true,
   $bind_host         = '0.0.0.0',
@@ -76,7 +81,7 @@ class heat::api_cloudwatch (
   }
 
   package { 'heat-api-cloudwatch':
-    ensure => installed,
+    ensure => $package_ensure,
     name   => $::heat::params::api_cloudwatch_package_name,
     tag    => 'openstack',
   }

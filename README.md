@@ -53,6 +53,18 @@ Limitations
 
 None
 
+Beaker-Rspec
+------------
+
+This module has beaker-rspec tests
+
+To run:
+
+``shell
+bundle install
+bundle exec rspec spec/acceptance
+``
+
 Development
 -----------
 

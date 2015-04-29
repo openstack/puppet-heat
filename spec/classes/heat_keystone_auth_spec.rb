@@ -154,7 +154,7 @@ describe 'heat::keystone::auth' do
   context 'when configuring delegated roles' do
     let :pre_condition do
       "class { 'heat::engine':
-         auth_encryption_key       => 'abcdef',
+         auth_encryption_key       => '1234567890AZERTYUIOPMLKJHGFDSQ12',
          configure_delegated_roles => false,
        }
       "
@@ -179,7 +179,7 @@ describe 'heat::keystone::auth' do
   describe 'with deprecated and new params both set' do
     let :pre_condition do
       "class { 'heat::engine':
-         auth_encryption_key => 'abcdef',
+         auth_encryption_key => '1234567890AZERTYUIOPMLKJHGFDSQ12',
        }
       "
     end

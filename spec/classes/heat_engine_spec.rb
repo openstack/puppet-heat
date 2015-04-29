@@ -19,8 +19,8 @@ describe 'heat::engine' do
   shared_examples_for 'heat-engine' do
     [
       {},
-      { :auth_encryption_key           => '1234567890AZERTYUIOPMLKJHGFDSQ' },
-      { :auth_encryption_key           => 'foodummybar',
+      { :auth_encryption_key           => '1234567890AZERTYUIOPMLKJHGFDSQ12' },
+      { :auth_encryption_key           => '0234567890AZERTYUIOPMLKJHGFDSQ24',
         :enabled                       => false,
         :heat_stack_user_role          => 'heat_stack_user',
         :heat_metadata_server_url      => 'http://127.0.0.1:8000',
@@ -113,6 +113,13 @@ describe 'heat::engine' do
           :notify => nil,
        )
      end
+    end
+    context 'with wrong auth_encryption_key parameter size' do
+      before do
+        params.merge!({
+          :auth_encryption_key => 'hello' })
+      end
+      it_raises 'a Puppet::Error', /5 is not a correct size for auth_encryption_key parameter, it must be either 16, 24, 32 bytes long./
     end
   end
 

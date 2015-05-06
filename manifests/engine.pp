@@ -5,6 +5,7 @@
 # === Parameters
 # [*auth_encryption_key*]
 #   (required) Encryption key used for authentication info in database
+#   Must be either 16, 24, or 32 bytes long.
 #
 # [*package_ensure*]
 #    (Optional) Ensure state for package.
@@ -71,6 +72,15 @@ class heat::engine (
   $trusts_delegated_roles        = ['heat_stack_owner'],  #DEPRECATED
   $configure_delegated_roles     = true,                  #DEPRECATED
 ) {
+
+  # Validate Heat Engine AES key
+  # must be either 16, 24, or 32 bytes long
+  # https://bugs.launchpad.net/heat/+bug/1415887
+  $allowed_sizes = ['16','24','32']
+  $param_size = size($auth_encryption_key)
+  if ! (member($allowed_sizes, "${param_size}")) { # lint:ignore:only_variable_string
+    fail("${param_size} is not a correct size for auth_encryption_key parameter, it must be either 16, 24, 32 bytes long.")
+  }
 
   include ::heat
   include ::heat::params

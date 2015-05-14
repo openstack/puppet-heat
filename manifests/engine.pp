@@ -45,6 +45,28 @@
 #   Can be "password" or "trusts".
 #   Defaults to 'trusts'
 #
+# [*default_software_config_transport*]
+#   (optional) Template default for how the server should receive the metadata
+#   required for software configuration. POLL_SERVER_CFN will allow calls to the
+#   cfn API action DescribeStackResource authenticated with the provided keypair
+#   (requires enabled heat-api-cfn). POLL_SERVER_HEAT will allow calls to the
+#   Heat API resource-show using the provided keystone credentials (requires
+#   keystone v3 API, and configured stack_user_* config options). POLL_TEMP_URL
+#   will create and populate a Swift TempURL with metadata for polling (requires
+#   object-store endpoint which supports TempURL). (string value)
+#   Allowed values: POLL_SERVER_CFN, POLL_SERVER_HEAT, POLL_TEMP_URL
+#   Defaults to 'POLL_SERVER_CFN'
+#
+# [*default_deployment_signal_transport*]
+#   (optional) Template default for how the server should signal to heat with
+#   the deployment output values. CFN_SIGNAL will allow an HTTP POST to a CFN
+#   keypair signed URL (requires enabled heat-api-cfn). TEMP_URL_SIGNAL will
+#   create a Swift TempURL to be signaled via HTTP PUT (requires object-store
+#   TempURL). HEAT_SIGNAL will allow calls to the Heat API resource-signal using
+#   endpoint which supports the provided keystone credentials (string value)
+#   Allowed values: CFN_SIGNAL, TEMP_URL_SIGNAL, HEAT_SIGNAL
+#   Defaults to 'CFN_SIGNAL'
+
 # [*trusts_delegated_roles*]
 #   (optional) Array of trustor roles to be delegated to heat.
 #   This value is also used by heat::keystone::auth if it is set to
@@ -60,17 +82,19 @@
 #
 class heat::engine (
   $auth_encryption_key,
-  $package_ensure                = 'present',
-  $manage_service                = true,
-  $enabled                       = true,
-  $heat_stack_user_role          = 'heat_stack_user',
-  $heat_metadata_server_url      = 'http://127.0.0.1:8000',
-  $heat_waitcondition_server_url = 'http://127.0.0.1:8000/v1/waitcondition',
-  $heat_watch_server_url         = 'http://127.0.0.1:8003',
-  $engine_life_check_timeout     = '2',
-  $deferred_auth_method          = 'trusts',
-  $trusts_delegated_roles        = ['heat_stack_owner'],  #DEPRECATED
-  $configure_delegated_roles     = true,                  #DEPRECATED
+  $package_ensure                      = 'present',
+  $manage_service                      = true,
+  $enabled                             = true,
+  $heat_stack_user_role                = 'heat_stack_user',
+  $heat_metadata_server_url            = 'http://127.0.0.1:8000',
+  $heat_waitcondition_server_url       = 'http://127.0.0.1:8000/v1/waitcondition',
+  $heat_watch_server_url               = 'http://127.0.0.1:8003',
+  $engine_life_check_timeout           = '2',
+  $deferred_auth_method                = 'trusts',
+  $default_software_config_transport   = 'POLL_SERVER_CFN',
+  $default_deployment_signal_transport = 'CFN_SIGNAL',
+  $trusts_delegated_roles              = ['heat_stack_owner'],  #DEPRECATED
+  $configure_delegated_roles           = true,                  #DEPRECATED
 ) {
 
   # Validate Heat Engine AES key
@@ -124,13 +148,15 @@ class heat::engine (
   }
 
   heat_config {
-    'DEFAULT/auth_encryption_key'          : value => $auth_encryption_key;
-    'DEFAULT/heat_stack_user_role'         : value => $heat_stack_user_role;
-    'DEFAULT/heat_metadata_server_url'     : value => $heat_metadata_server_url;
-    'DEFAULT/heat_waitcondition_server_url': value => $heat_waitcondition_server_url;
-    'DEFAULT/heat_watch_server_url'        : value => $heat_watch_server_url;
-    'DEFAULT/engine_life_check_timeout'    : value => $engine_life_check_timeout;
-    'DEFAULT/trusts_delegated_roles'       : value => $trusts_delegated_roles;
-    'DEFAULT/deferred_auth_method'         : value => $deferred_auth_method;
+    'DEFAULT/auth_encryption_key'                 : value => $auth_encryption_key;
+    'DEFAULT/heat_stack_user_role'                : value => $heat_stack_user_role;
+    'DEFAULT/heat_metadata_server_url'            : value => $heat_metadata_server_url;
+    'DEFAULT/heat_waitcondition_server_url'       : value => $heat_waitcondition_server_url;
+    'DEFAULT/heat_watch_server_url'               : value => $heat_watch_server_url;
+    'DEFAULT/engine_life_check_timeout'           : value => $engine_life_check_timeout;
+    'DEFAULT/default_software_config_transport'   : value => $default_software_config_transport;
+    'DEFAULT/default_deployment_signal_transport' : value => $default_deployment_signal_transport;
+    'DEFAULT/trusts_delegated_roles'              : value => $trusts_delegated_roles;
+    'DEFAULT/deferred_auth_method'                : value => $deferred_auth_method;
   }
 }

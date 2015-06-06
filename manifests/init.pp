@@ -521,6 +521,7 @@ class heat(
         user        => 'heat',
         refreshonly => true,
         logoutput   => on_failure,
+        subscribe   => Package['heat-common'],
       }
     }
   }

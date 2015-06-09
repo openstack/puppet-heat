@@ -13,6 +13,8 @@ describe 'heat::engine' do
       :trusts_delegated_roles        => ['heat_stack_owner'],
       :deferred_auth_method          => 'trusts',
       :configure_delegated_roles     => true,
+      :default_software_config_transport   => 'POLL_SERVER_CFN',
+      :default_deployment_signal_transport => 'CFN_SIGNAL',
     }
   end
 
@@ -30,6 +32,8 @@ describe 'heat::engine' do
         :trusts_delegated_roles        => ['role1', 'role2'],
         :deferred_auth_method          => 'trusts',
         :configure_delegated_roles     => true,
+        :default_software_config_transport   => 'POLL_SERVER_CFN',
+        :default_deployment_signal_transport => 'CFN_SIGNAL',
       }
     ].each do |new_params|
       describe 'when #{param_set == {} ? "using default" : "specifying"} parameters'
@@ -69,6 +73,8 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/engine_life_check_timeout').with_value( expected_params[:engine_life_check_timeout] ) }
       it { is_expected.to contain_heat_config('DEFAULT/trusts_delegated_roles').with_value( expected_params[:trusts_delegated_roles] ) }
       it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/default_software_config_transport').with_value( expected_params[:default_software_config_transport] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/default_deployment_signal_transport').with_value( expected_params[:default_deployment_signal_transport] ) }
 
       it 'configures delegated roles' do
         is_expected.to contain_keystone_role("role1").with(

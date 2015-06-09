@@ -180,58 +180,58 @@ describe 'heat' do
 
   shared_examples_for 'rabbit without HA support (with backward compatibility)' do
     it 'configures rabbit' do
-      is_expected.to contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_password').with_secret( true )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false)
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
     end
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_host').with_value( params[:rabbit_host] ) }
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_port').with_value( params[:rabbit_port] ) }
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" ) }
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('false') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_value( params[:rabbit_host] ) }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_value( params[:rabbit_port] ) }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" ) }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false') }
     it { is_expected.to contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
   end
 
   shared_examples_for 'rabbit without HA support (without backward compatibility)' do
     it 'configures rabbit' do
-      is_expected.to contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_password').with_secret( true )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false)
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
     end
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_host').with_ensure('absent') }
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('false') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false') }
     it { is_expected.to contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
   end
 
   shared_examples_for 'rabbit with HA support' do
     it 'configures rabbit' do
-      is_expected.to contain_heat_config('DEFAULT/rabbit_userid').with_value( params[:rabbit_userid] )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_value( params[:rabbit_password] )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_password').with_secret( true )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
-      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value(false)
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_password').with_secret( true )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false)
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
     end
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_host').with_ensure('absent') }
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_port').with_ensure('absent') }
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
-    it { is_expected.to contain_heat_config('DEFAULT/rabbit_ha_queues').with_value('true') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
     it { is_expected.to contain_heat_config('DEFAULT/amqp_durable_queues').with_value(true) }
   end
 
@@ -277,11 +277,11 @@ describe 'heat' do
     end
 
     it do
-      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value('true')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_value('/path/to/ssl/ca/certs')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('/path/to/ssl/cert/file')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('/path/to/ssl/keyfile')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
     end
   end
 
@@ -293,11 +293,11 @@ describe 'heat' do
     end
 
     it do
-      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value('true')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_value('TLSv1')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('true')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('TLSv1')
     end
   end
 
@@ -310,11 +310,11 @@ describe 'heat' do
     end
 
     it do
-      is_expected.to contain_heat_config('DEFAULT/rabbit_use_ssl').with_value('false')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_ca_certs').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_certfile').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_keyfile').with_ensure('absent')
-      is_expected.to contain_heat_config('DEFAULT/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value('false')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
     end
   end
 

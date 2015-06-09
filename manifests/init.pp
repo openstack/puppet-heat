@@ -302,65 +302,65 @@ class heat(
   if $rpc_backend == 'heat.openstack.common.rpc.impl_kombu' {
 
     if $rabbit_hosts {
-      heat_config { 'DEFAULT/rabbit_host': ensure => absent }
-      heat_config { 'DEFAULT/rabbit_port': ensure => absent }
-      heat_config { 'DEFAULT/rabbit_hosts':
+      heat_config { 'oslo_messaging_rabbit/rabbit_host': ensure => absent }
+      heat_config { 'oslo_messaging_rabbit/rabbit_port': ensure => absent }
+      heat_config { 'oslo_messaging_rabbit/rabbit_hosts':
         value => join($rabbit_hosts, ',')
       }
     } else {
-      heat_config { 'DEFAULT/rabbit_host': value => $rabbit_host }
-      heat_config { 'DEFAULT/rabbit_port': value => $rabbit_port }
-      heat_config { 'DEFAULT/rabbit_hosts':
+      heat_config { 'oslo_messaging_rabbit/rabbit_host': value => $rabbit_host }
+      heat_config { 'oslo_messaging_rabbit/rabbit_port': value => $rabbit_port }
+      heat_config { 'oslo_messaging_rabbit/rabbit_hosts':
         value => "${rabbit_host}:${rabbit_port}"
       }
     }
 
     if size($rabbit_hosts) > 1 {
-      heat_config { 'DEFAULT/rabbit_ha_queues': value => true }
+      heat_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => true }
     } else {
-      heat_config { 'DEFAULT/rabbit_ha_queues': value => false }
+      heat_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
     }
 
     heat_config {
-      'DEFAULT/rabbit_userid'          : value => $rabbit_userid;
-      'DEFAULT/rabbit_password'        : value => $rabbit_password, secret => true;
-      'DEFAULT/rabbit_virtual_host'    : value => $rabbit_virtual_host;
-      'DEFAULT/rabbit_use_ssl'         : value => $rabbit_use_ssl;
+      'oslo_messaging_rabbit/rabbit_userid'          : value => $rabbit_userid;
+      'oslo_messaging_rabbit/rabbit_password'        : value => $rabbit_password, secret => true;
+      'oslo_messaging_rabbit/rabbit_virtual_host'    : value => $rabbit_virtual_host;
+      'oslo_messaging_rabbit/rabbit_use_ssl'         : value => $rabbit_use_ssl;
       'DEFAULT/amqp_durable_queues'    : value => $amqp_durable_queues;
     }
 
     if $rabbit_use_ssl {
 
       if $kombu_ssl_ca_certs {
-        heat_config { 'DEFAULT/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs; }
+        heat_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs; }
       } else {
-        heat_config { 'DEFAULT/kombu_ssl_ca_certs': ensure => absent; }
+        heat_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent; }
       }
 
       if $kombu_ssl_certfile or $kombu_ssl_keyfile {
         heat_config {
-          'DEFAULT/kombu_ssl_certfile': value => $kombu_ssl_certfile;
-          'DEFAULT/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
+          'oslo_messaging_rabbit/kombu_ssl_certfile': value => $kombu_ssl_certfile;
+          'oslo_messaging_rabbit/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
         }
       } else {
         heat_config {
-          'DEFAULT/kombu_ssl_certfile': ensure => absent;
-          'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
+          'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
+          'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
         }
       }
 
       if $kombu_ssl_version {
-        heat_config { 'DEFAULT/kombu_ssl_version':  value => $kombu_ssl_version; }
+        heat_config { 'oslo_messaging_rabbit/kombu_ssl_version':  value => $kombu_ssl_version; }
       } else {
-        heat_config { 'DEFAULT/kombu_ssl_version':  ensure => absent; }
+        heat_config { 'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent; }
       }
 
     } else {
       heat_config {
-        'DEFAULT/kombu_ssl_version':  ensure => absent;
-        'DEFAULT/kombu_ssl_ca_certs': ensure => absent;
-        'DEFAULT/kombu_ssl_certfile': ensure => absent;
-        'DEFAULT/kombu_ssl_keyfile':  ensure => absent;
+        'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent;
+        'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent;
+        'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
+        'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
       }
     }
 

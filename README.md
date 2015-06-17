@@ -1,7 +1,7 @@
 puppet-heat
 =============
 
-5.0.0 - 2014.2.0 - Juno
+5.1.0 - 2014.2 - Juno
 
 #### Table of Contents
 
@@ -67,6 +67,20 @@ Contributors
 
 Release Notes
 -------------
+
+**5.1.0**
+
+* Switch to TLSv1
+* spec: pin rspec-puppet to 1.0.1
+* Implement Keystone domain creation
+* Run dbsync when engine is upgraded
+* db: Added postgresql backend using openstacklib helper
+* Rework delegated roles
+* Pin puppetlabs-concat to 1.2.1 in fixtures
+* change default MySQL collate to utf8_general_ci
+* added option to configure flavor in heat.conf
+* Fix ipv6 support
+* Update .gitreview file for project rename
 
 **5.0.0**
 

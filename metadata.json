@@ -1,10 +1,10 @@
 {
   "name": "stackforge-heat",
-  "version": "5.0.0",
-  "author": "eNovance and StackForge Contributors",
+  "version": "5.1.0",
+  "author": "eNovance and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Heat",
   "license": "Apache-2.0",
-  "source": "git://github.com/stackforge/puppet-heat.git",
+  "source": "git://github.com/openstack/puppet-heat.git",
   "project_page": "https://launchpad.net/puppet-heat",
   "issues_url": "https://bugs.launchpad.net/puppet-heat",
   "requirements": [

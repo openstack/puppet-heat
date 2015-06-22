@@ -55,6 +55,14 @@ describe 'heat' do
       end
     end
 
+    context 'with rabbit heartbeat configured' do
+      before { params.merge!(
+        :rabbit_heartbeat_timeout_threshold => '60',
+        :rabbit_heartbeat_rate => '10' ) }
+      it_configures 'a heat base installation'
+      it_configures 'rabbit with heartbeat configured'
+    end
+
     context 'with qpid instance' do
       before {params.merge!(qpid_params) }
 
@@ -189,6 +197,8 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('2')
     end
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_value( params[:rabbit_host] ) }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_value( params[:rabbit_port] ) }
@@ -208,6 +218,8 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('2')
     end
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent') }
@@ -227,6 +239,8 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('2')
     end
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent') }
@@ -235,6 +249,21 @@ describe 'heat' do
     it { is_expected.to contain_heat_config('DEFAULT/amqp_durable_queues').with_value(true) }
   end
 
+  shared_examples_for 'rabbit with heartbeat configured' do
+    it 'configures rabbit' do
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_password').with_value( params[:rabbit_password] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_password').with_secret( true )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_virtual_host').with_value( params[:rabbit_virtual_host] )
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_use_ssl').with_value(false)
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_ca_certs').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_ensure('absent')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_ensure('absent')
+    end
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
+  end
 
   shared_examples_for 'qpid as rpc backend' do
     context("with default parameters") do

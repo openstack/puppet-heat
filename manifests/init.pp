@@ -50,6 +50,21 @@
 #   (Optional) Virtual_host to use.
 #   Defaults to '/'
 #
+# [*rabbit_heartbeat_timeout_threshold*]
+#   (optional) Number of seconds after which the RabbitMQ broker is considered
+#   down if the heartbeat keepalive fails.  Any value >0 enables heartbeats.
+#   Heartbeating helps to ensure the TCP connection to RabbitMQ isn't silently
+#   closed, resulting in missed or lost messages from the queue.
+#   (Requires kombu >= 3.0.7 and amqp >= 1.4.0)
+#   Defaults to 0
+#
+# [*rabbit_heartbeat_rate*]
+#   (optional) How often during the rabbit_heartbeat_timeout_threshold period to
+#   check the heartbeat on RabbitMQ connection.  (i.e. rabbit_heartbeat_rate=2
+#   when rabbit_heartbeat_timeout_threshold=60, the heartbeat will be checked
+#   every 30 seconds.
+#   Defaults to 2
+#
 # [*rabbit_use_ssl*]
 #   (Optional) Connect over SSL for RabbitMQ.
 #   Defaults to false
@@ -189,58 +204,60 @@
 #   Defaults to http.
 #
 class heat(
-  $auth_uri                    = false,
-  $identity_uri                = false,
-  $package_ensure              = 'present',
-  $verbose                     = false,
-  $debug                       = false,
-  $log_dir                     = '/var/log/heat',
-  $keystone_user               = 'heat',
-  $keystone_tenant             = 'services',
-  $keystone_password           = false,
-  $keystone_ec2_uri            = 'http://127.0.0.1:5000/v2.0/ec2tokens',
-  $rpc_backend                 = 'heat.openstack.common.rpc.impl_kombu',
-  $rabbit_host                 = '127.0.0.1',
-  $rabbit_port                 = 5672,
-  $rabbit_hosts                = undef,
-  $rabbit_userid               = 'guest',
-  $rabbit_password             = '',
-  $rabbit_virtual_host         = '/',
-  $rabbit_use_ssl              = false,
-  $kombu_ssl_ca_certs          = undef,
-  $kombu_ssl_certfile          = undef,
-  $kombu_ssl_keyfile           = undef,
-  $kombu_ssl_version           = 'TLSv1',
-  $amqp_durable_queues         = false,
-  $qpid_hostname               = 'localhost',
-  $qpid_port                   = 5672,
-  $qpid_username               = 'guest',
-  $qpid_password               = 'guest',
-  $qpid_heartbeat              = 60,
-  $qpid_protocol               = 'tcp',
-  $qpid_tcp_nodelay            = true,
-  $qpid_reconnect              = true,
-  $qpid_reconnect_timeout      = 0,
-  $qpid_reconnect_limit        = 0,
-  $qpid_reconnect_interval_min = 0,
-  $qpid_reconnect_interval_max = 0,
-  $qpid_reconnect_interval     = 0,
-  $database_connection         = 'sqlite:////var/lib/heat/heat.sqlite',
-  $database_idle_timeout       = 3600,
-  $use_syslog                  = false,
-  $log_facility                = 'LOG_USER',
-  $flavor                      = undef,
-  $region_name                 = undef,
-  $enable_stack_adopt          = undef,
-  $enable_stack_abandon        = undef,
-  $sync_db                     = true,
+  $auth_uri                           = false,
+  $identity_uri                       = false,
+  $package_ensure                     = 'present',
+  $verbose                            = false,
+  $debug                              = false,
+  $log_dir                            = '/var/log/heat',
+  $keystone_user                      = 'heat',
+  $keystone_tenant                    = 'services',
+  $keystone_password                  = false,
+  $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
+  $rpc_backend                        = 'heat.openstack.common.rpc.impl_kombu',
+  $rabbit_host                        = '127.0.0.1',
+  $rabbit_port                        = 5672,
+  $rabbit_hosts                       = undef,
+  $rabbit_userid                      = 'guest',
+  $rabbit_password                    = '',
+  $rabbit_virtual_host                = '/',
+  $rabbit_heartbeat_timeout_threshold = 0,
+  $rabbit_heartbeat_rate              = 2,
+  $rabbit_use_ssl                     = false,
+  $kombu_ssl_ca_certs                 = undef,
+  $kombu_ssl_certfile                 = undef,
+  $kombu_ssl_keyfile                  = undef,
+  $kombu_ssl_version                  = 'TLSv1',
+  $amqp_durable_queues                = false,
+  $qpid_hostname                      = 'localhost',
+  $qpid_port                          = 5672,
+  $qpid_username                      = 'guest',
+  $qpid_password                      = 'guest',
+  $qpid_heartbeat                     = 60,
+  $qpid_protocol                      = 'tcp',
+  $qpid_tcp_nodelay                   = true,
+  $qpid_reconnect                     = true,
+  $qpid_reconnect_timeout             = 0,
+  $qpid_reconnect_limit               = 0,
+  $qpid_reconnect_interval_min        = 0,
+  $qpid_reconnect_interval_max        = 0,
+  $qpid_reconnect_interval            = 0,
+  $database_connection                = 'sqlite:////var/lib/heat/heat.sqlite',
+  $database_idle_timeout              = 3600,
+  $use_syslog                         = false,
+  $log_facility                       = 'LOG_USER',
+  $flavor                             = undef,
+  $region_name                        = undef,
+  $enable_stack_adopt                 = undef,
+  $enable_stack_abandon               = undef,
+  $sync_db                            = true,
   # Deprecated parameters
-  $mysql_module                = undef,
-  $sql_connection              = undef,
-  $keystone_host               = '127.0.0.1',
-  $keystone_port               = '35357',
-  $keystone_protocol           = 'http',
-  $instance_user               = undef,
+  $mysql_module                       = undef,
+  $sql_connection                     = undef,
+  $keystone_host                      = '127.0.0.1',
+  $keystone_port                      = '35357',
+  $keystone_protocol                  = 'http',
+  $instance_user                      = undef,
 ) {
 
   include ::heat::params
@@ -322,11 +339,13 @@ class heat(
     }
 
     heat_config {
-      'oslo_messaging_rabbit/rabbit_userid'          : value => $rabbit_userid;
-      'oslo_messaging_rabbit/rabbit_password'        : value => $rabbit_password, secret => true;
-      'oslo_messaging_rabbit/rabbit_virtual_host'    : value => $rabbit_virtual_host;
-      'oslo_messaging_rabbit/rabbit_use_ssl'         : value => $rabbit_use_ssl;
-      'DEFAULT/amqp_durable_queues'    : value => $amqp_durable_queues;
+      'oslo_messaging_rabbit/rabbit_userid':                value => $rabbit_userid;
+      'oslo_messaging_rabbit/rabbit_password':              value => $rabbit_password, secret => true;
+      'oslo_messaging_rabbit/rabbit_virtual_host':          value => $rabbit_virtual_host;
+      'oslo_messaging_rabbit/heartbeat_timeout_threshold':  value => $rabbit_heartbeat_timeout_threshold;
+      'oslo_messaging_rabbit/heartbeat_rate':               value => $rabbit_heartbeat_rate;
+      'oslo_messaging_rabbit/rabbit_use_ssl':               value => $rabbit_use_ssl;
+      'DEFAULT/amqp_durable_queues':                        value => $amqp_durable_queues;
     }
 
     if $rabbit_use_ssl {

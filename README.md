@@ -16,10 +16,10 @@ puppet-heat
 Overview
 --------
 
-The heat module is part of [Stackforge](https://github.com/stackforge), an effort by the
+The heat module is part of [OpenStack](https://github.com/openstack), an effort by the
 OpenStack infrastructure team to provice continuous integration testing and code review for
-OpenStack and OpenStack community projects not part of the core software. The module itself
-is used to flexibly configure and manage the orchestration service for OpenStack
+OpenStack and OpenStack community projects as part of the core software. The module itself
+is used to flexibly configure and manage the orchestration service for OpenStack.
 
 Module Description
 ------------------
@@ -74,4 +74,4 @@ Developer documentation for the entire puppet-openstack project.
 Contributors
 ------------
 
-* https://github.com/stackforge/puppet-heat/graphs/contributors
+* https://github.com/openstack/puppet-heat/graphs/contributors

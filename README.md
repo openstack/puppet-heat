@@ -75,8 +75,3 @@ Contributors
 ------------
 
 * https://github.com/stackforge/puppet-heat/graphs/contributors
-
-Contact
--------
-
-techs@enovance.com

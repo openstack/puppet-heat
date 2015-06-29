@@ -50,7 +50,6 @@ describe 'heat::engine' do
         :ensure => 'present',
         :name   => os_params[:package_name],
         :tag    => ['openstack', 'heat-package'],
-        :notify => 'Exec[heat-dbsync]'
       ) }
 
       it { is_expected.to contain_service('heat-engine').with(
@@ -62,7 +61,6 @@ describe 'heat::engine' do
         :require    => [ 'File[/etc/heat/heat.conf]',
                          'Package[heat-common]',
                          'Package[heat-engine]'],
-        :subscribe  => 'Exec[heat-dbsync]',
         :tag        => 'heat-service',
       ) }
 
@@ -103,24 +101,8 @@ describe 'heat::engine' do
         :require    => [ 'File[/etc/heat/heat.conf]',
                          'Package[heat-common]',
                          'Package[heat-engine]'],
-        :subscribe  => 'Exec[heat-dbsync]',
         :tag        => 'heat-service',
       ) }
-    end
-    context 'with $sync_db set to false in ::heat' do
-      let :pre_condition do
-        "class {'heat': sync_db => false}"
-      end
-
-      it 'configures heat-engine service to not subscribe to the dbsync resource' do
-        is_expected.to contain_service('heat-engine').that_subscribes_to(nil)
-      end
-
-     it 'configures the heat-engine package to not be notified by the dbsync resource ' do
-        is_expected.to contain_package('heat-engine').with(
-          :notify => nil,
-       )
-     end
     end
     context 'with wrong auth_encryption_key parameter size' do
       before do

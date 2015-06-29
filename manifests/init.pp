@@ -539,17 +539,7 @@ class heat(
     }
 
     if $sync_db {
-      $subscribe_sync_db = Exec['heat-dbsync']
-      Heat_config['database/connection'] ~> Exec['heat-dbsync']
-
-      exec { 'heat-dbsync':
-        command     => $::heat::params::dbsync_command,
-        path        => '/usr/bin',
-        user        => 'heat',
-        refreshonly => true,
-        logoutput   => on_failure,
-        subscribe   => Package['heat-common'],
-      }
+      include ::heat::db::sync
     }
   }
 

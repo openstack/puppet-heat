@@ -154,7 +154,9 @@
 # [*instance_user*]
 #   (Optional) The default user for new instances. Although heat claims that
 #   this feature is deprecated, it still sets the users to ec2-user if
-#   you leave this unset. This will likely be deprecated in K or L.
+#   you leave this unset. If you want heat to not set instance_user to
+#   ec2-user, you need to set this to an empty string. This feature has been
+#   deprecated for some time and will likely be removed in L or M.
 #
 # [*enable_stack_adopt*]
 #   (Optional) Enable the stack-adopt feature.
@@ -552,7 +554,10 @@ class heat(
   }
 
   # instance_user
-  if $instance_user {
+  # special case for empty string since it's a valid value
+  if $instance_user == '' {
+    heat_config { 'DEFAULT/instance_user': value => ''; }
+  } elsif $instance_user {
     heat_config { 'DEFAULT/instance_user': value => $instance_user; }
   } else {
     heat_config { 'DEFAULT/instance_user': ensure => absent; }

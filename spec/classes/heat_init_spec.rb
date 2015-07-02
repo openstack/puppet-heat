@@ -194,6 +194,7 @@ describe 'heat' do
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_value( params[:rabbit_port] ) }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_hosts').with_value( "#{params[:rabbit_host]}:#{params[:rabbit_port]}" ) }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('false') }
+    it { is_expected.to contain_heat_config('DEFAULT/rpc_response_timeout').with_value('60') }
     it { is_expected.to contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
   end
 
@@ -247,6 +248,7 @@ describe 'heat' do
       it { is_expected.to contain_heat_config('DEFAULT/qpid_heartbeat').with_value('60') }
       it { is_expected.to contain_heat_config('DEFAULT/qpid_protocol').with_value('tcp') }
       it { is_expected.to contain_heat_config('DEFAULT/qpid_tcp_nodelay').with_value(true) }
+      it { is_expected.to contain_heat_config('DEFAULT/rpc_response_timeout').with_value('60') }
       it { is_expected.to contain_heat_config('DEFAULT/amqp_durable_queues').with_value(false) }
     end
 

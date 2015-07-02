@@ -25,6 +25,10 @@
 #   (Optional) Use these options to configure the RabbitMQ message system.
 #   Defaults to 'heat.openstack.common.rpc.impl_kombu'
 #
+# [*rpc_response_timeout*]
+#   (Optional) Configure the timeout (in seconds) for rpc responses
+#   Defaults to 60 seconds
+#
 # [*rabbit_host*]
 #   (Optional) IP or hostname of the rabbit server.
 #   Defaults to '127.0.0.1'
@@ -217,6 +221,7 @@ class heat(
   $keystone_password                  = false,
   $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
   $rpc_backend                        = 'heat.openstack.common.rpc.impl_kombu',
+  $rpc_response_timeout               = 60,
   $rabbit_host                        = '127.0.0.1',
   $rabbit_port                        = 5672,
   $rabbit_hosts                       = undef,
@@ -469,6 +474,7 @@ class heat(
 
   heat_config {
     'DEFAULT/rpc_backend'                  : value => $rpc_backend;
+    'DEFAULT/rpc_response_timeout'         : value => $rpc_response_timeout;
     'DEFAULT/debug'                        : value => $debug;
     'DEFAULT/verbose'                      : value => $verbose;
     'ec2authtoken/auth_uri'                : value => $keystone_ec2_uri;

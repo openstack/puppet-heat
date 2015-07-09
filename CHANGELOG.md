@@ -1,3 +1,36 @@
+##2015-07-08 - 6.0.0
+###Summary
+
+This is a backwards-incompatible major release for OpenStack Kilo.
+
+####Backwards-incompatible changes
+- Move rabbit/kombu settings to oslo_messaging_rabbit section
+
+####Features
+- Puppet 4.x support
+- Implement Keystone domain creation
+- Log output of heat-keystone-setup-domain
+- Refactorise Keystone resources management
+- Move keystone role creation to keystone area
+- Support region_name for Heat
+- Mark heat's keystone password as secret
+- Add support for identity_uri
+- Make configuring the service optional
+- Set instance_user in heat
+- Added missing enable_stack_abandon configuration option
+- Tag all Heat packages
+- Create a sync_db boolean for Heat
+- Engine: validate auth_encryption_key
+- Allow setting default config/signal transport
+- Run db_sync when heat-common is upgraded
+- Introduce public_url, internal_url and admin_url
+
+####Maintenance
+- Acceptance tests with Beaker
+- Fix spec tests for RSpec 3.x and Puppet 4.x
+- Rename keystone_v2_authenticate method
+- Make package_ensure consistent across classes
+
 ##2015-06-17 - 5.1.0
 ###Summary
 

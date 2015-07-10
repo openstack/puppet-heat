@@ -457,7 +457,7 @@ describe 'heat' do
     end
   end
 
-  shared_examples_for 'with instance_user set' do
+  shared_examples_for 'with instance_user set to a string' do
     before do
       params.merge!(
         :instance_user => "fred",
@@ -466,6 +466,18 @@ describe 'heat' do
 
     it 'has instance_user set when specified' do
       is_expected.to contain_heat_config('DEFAULT/instance_user').with_value('fred')
+    end
+  end
+
+  shared_examples_for 'with instance_user set to an empty string' do
+    before do
+      params.merge!(
+        :instance_user => "",
+      )
+    end
+
+    it 'has instance_user set to an empty string when specified' do
+      is_expected.to contain_heat_config('DEFAULT/instance_user').with_value('')
     end
   end
 

@@ -83,7 +83,7 @@ class heat::api_cloudwatch (
   package { 'heat-api-cloudwatch':
     ensure => $package_ensure,
     name   => $::heat::params::api_cloudwatch_package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'heat-package'],
   }
 
   if $manage_service {
@@ -104,6 +104,7 @@ class heat::api_cloudwatch (
     hasstatus  => true,
     hasrestart => true,
     subscribe  => $::heat::subscribe_sync_db,
+    tag        => 'heat-service',
   }
 
   heat_config {

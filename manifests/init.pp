@@ -318,7 +318,7 @@ class heat(
   package { 'heat-common':
     ensure => $package_ensure,
     name   => $::heat::params::common_package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'heat-package'],
   }
 
   Package['heat-common'] -> Heat_config<||>

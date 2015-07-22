@@ -116,7 +116,7 @@ class heat::engine (
   package { 'heat-engine':
     ensure => $package_ensure,
     name   => $::heat::params::engine_package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'heat-package'],
     notify => $::heat::subscribe_sync_db,
   }
 
@@ -145,6 +145,7 @@ class heat::engine (
                     Package['heat-common'],
                     Package['heat-engine']],
     subscribe  => $::heat::subscribe_sync_db,
+    tag        => 'heat-service',
   }
 
   heat_config {

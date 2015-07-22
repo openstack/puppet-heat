@@ -81,7 +81,7 @@ class heat::api (
   package { 'heat-api':
     ensure => $package_ensure,
     name   => $::heat::params::api_package_name,
-    tag    => 'openstack',
+    tag    => ['openstack', 'heat-package'],
   }
 
   if $manage_service {
@@ -101,6 +101,7 @@ class heat::api (
     require    => [Package['heat-common'],
                   Package['heat-api']],
     subscribe  => $::heat::subscribe_sync_db,
+    tag        => 'heat-service',
   }
 
   heat_config {

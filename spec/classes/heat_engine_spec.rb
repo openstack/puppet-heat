@@ -49,7 +49,7 @@ describe 'heat::engine' do
       it { is_expected.to contain_package('heat-engine').with(
         :ensure => 'present',
         :name   => os_params[:package_name],
-        :tag    => 'openstack',
+        :tag    => ['openstack', 'heat-package'],
         :notify => 'Exec[heat-dbsync]'
       ) }
 
@@ -62,7 +62,8 @@ describe 'heat::engine' do
         :require    => [ 'File[/etc/heat/heat.conf]',
                          'Package[heat-common]',
                          'Package[heat-engine]'],
-        :subscribe  => 'Exec[heat-dbsync]'
+        :subscribe  => 'Exec[heat-dbsync]',
+        :tag        => 'heat-service',
       ) }
 
       it { is_expected.to contain_heat_config('DEFAULT/auth_encryption_key').with_value( expected_params[:auth_encryption_key] ) }
@@ -102,7 +103,8 @@ describe 'heat::engine' do
         :require    => [ 'File[/etc/heat/heat.conf]',
                          'Package[heat-common]',
                          'Package[heat-engine]'],
-        :subscribe  => 'Exec[heat-dbsync]'
+        :subscribe  => 'Exec[heat-dbsync]',
+        :tag        => 'heat-service',
       ) }
     end
     context 'with $sync_db set to false in ::heat' do

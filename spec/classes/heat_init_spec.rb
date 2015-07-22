@@ -126,7 +126,7 @@ describe 'heat' do
       is_expected.to contain_package('heat-common').with(
         :ensure => 'present',
         :name   => platform_params[:common_package_name],
-        :tag    => 'openstack'
+        :tag    => ['openstack', 'heat-package'],
       )
     end
 

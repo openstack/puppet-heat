@@ -31,11 +31,11 @@ Setup
 
 **What the heat module affects**
 
-* heat, the orchestration service for OpenStack
+* [Heat](https://wiki.openstack.org/wiki/Heat), the orchestration service for OpenStack
 
-### Installing heat 
+### Installing heat
 
-  example% puppet module install puppetlabs/heat
+    puppet module install openstack/heat
 
 ### Beginning with heat
 

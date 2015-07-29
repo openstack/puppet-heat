@@ -56,19 +56,10 @@ class heat::keystone::domain (
     require     => Package['heat-common'],
   }
 
-  heat_domain_id_setter { 'heat_domain_id':
-    ensure           => present,
-    domain_name      => $domain_name,
-    auth_url         => $auth_url,
-    auth_username    => $keystone_admin,
-    auth_password    => $keystone_password,
-    auth_tenant_name => $keystone_tenant,
-    require          => Exec['heat_domain_create'],
-  }
-
   heat_config {
-    'DEFAULT/stack_domain_admin': value => $domain_admin;
-    'DEFAULT/stack_domain_admin_password': value => $domain_password;
+    'DEFAULT/stack_domain_admin':          value => $domain_admin;
+    'DEFAULT/stack_domain_admin_password': value => $domain_password, secret => true;
+    'DEFAULT/stack_user_domain_name':      value => $domain_name;
   }
 
 }

@@ -326,8 +326,6 @@ class heat(
     tag    => ['openstack', 'heat-package'],
   }
 
-  Package['heat-common'] -> Heat_config<||>
-
   if $rpc_backend == 'heat.openstack.common.rpc.impl_kombu' {
 
     if $rabbit_hosts {

@@ -44,4 +44,8 @@ Puppet::Type.newtype(:heat_config) do
     provider.create
   end
 
+  autorequire(:package) do
+    'heat-common'
+  end
+
 end

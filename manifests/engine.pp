@@ -111,7 +111,6 @@ class heat::engine (
 
   Heat_config<||> ~> Service['heat-engine']
 
-  Package['heat-engine'] -> Heat_config<||>
   Package['heat-engine'] -> Service['heat-engine']
   package { 'heat-engine':
     ensure => $package_ensure,

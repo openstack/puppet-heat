@@ -65,7 +65,6 @@ class heat::api (
   Heat_config<||> ~> Service['heat-api']
   Class['heat::policy'] -> Service['heat-api']
 
-  Package['heat-api'] -> Heat_config<||>
   Package['heat-api'] -> Class['heat::policy']
   Package['heat-api'] -> Service['heat-api']
 

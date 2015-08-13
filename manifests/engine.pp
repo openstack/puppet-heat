@@ -116,7 +116,6 @@ class heat::engine (
     ensure => $package_ensure,
     name   => $::heat::params::engine_package_name,
     tag    => ['openstack', 'heat-package'],
-    notify => $::heat::subscribe_sync_db,
   }
 
   if $manage_service {
@@ -143,7 +142,6 @@ class heat::engine (
     require    => [ File['/etc/heat/heat.conf'],
                     Package['heat-common'],
                     Package['heat-engine']],
-    subscribe  => $::heat::subscribe_sync_db,
     tag        => 'heat-service',
   }
 

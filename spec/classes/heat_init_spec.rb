@@ -132,9 +132,7 @@ describe 'heat' do
     end
 
     it 'has db_sync enabled' do
-      is_expected.to contain_exec('heat-dbsync').with(
-        :subscribe => 'Package[heat-common]',
-      )
+      is_expected.to contain_class('heat::db::sync')
     end
 
     it 'configures debug and verbose' do

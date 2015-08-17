@@ -86,6 +86,8 @@ describe 'basic heat' do
         database_connection => 'mysql://heat:a_big_secret@127.0.0.1/heat?charset=utf8',
         identity_uri        => 'http://127.0.0.1:35357/',
         keystone_password   => 'a_big_secret',
+        debug               => true,
+        verbose             => true,
       }
       class { '::heat::db::mysql':
         password => 'a_big_secret',

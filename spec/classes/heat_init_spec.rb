@@ -203,6 +203,16 @@ describe 'heat' do
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
   end
 
+  shared_examples_for 'single rabbit_host with ha queues' do
+    let :params do
+      req_params.merge({'rabbit_ha_queues' => true})
+    end
+
+    it 'should contain rabbit_ha_queues' do
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
+    end
+  end
+
   shared_examples_for 'rabbit with heartbeat configured' do
     it 'configures rabbit' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_userid').with_value( params[:rabbit_userid] )

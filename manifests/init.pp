@@ -54,6 +54,10 @@
 #   (Optional) Virtual_host to use.
 #   Defaults to '/'
 #
+# [*rabbit_ha_queues*]
+#   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
+#   Defaults to undef
+#
 # [*rabbit_heartbeat_timeout_threshold*]
 #   (optional) Number of seconds after which the RabbitMQ broker is considered
 #   down if the heartbeat keepalive fails.  Any value >0 enables heartbeats.
@@ -252,6 +256,7 @@ class heat(
   $rabbit_userid                      = 'guest',
   $rabbit_password                    = '',
   $rabbit_virtual_host                = '/',
+  $rabbit_ha_queues                   = undef,
   $rabbit_heartbeat_timeout_threshold = 0,
   $rabbit_heartbeat_rate              = 2,
   $rabbit_use_ssl                     = false,
@@ -368,10 +373,14 @@ class heat(
       }
     }
 
-    if size($rabbit_hosts) > 1 {
-      heat_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => true }
+    if $rabbit_ha_queues == undef {
+      if size($rabbit_hosts) > 1 {
+        heat_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => true }
+      } else {
+        heat_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
+      }
     } else {
-      heat_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
+      heat_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues }
     }
 
     heat_config {

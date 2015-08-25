@@ -76,10 +76,9 @@ describe 'heat::api' do
             :enable     => params[:enabled],
             :hasstatus  => true,
             :hasrestart => true,
-            :require    => ['Package[heat-common]', 'Package[heat-api]'],
             :tag        => 'heat-service',
           )
-          is_expected.to contain_service('heat-api').that_subscribes_to('Exec[heat-dbsync]')
+          is_expected.to contain_service('heat-api').that_subscribes_to(nil)
         end
       end
     end
@@ -99,10 +98,9 @@ describe 'heat::api' do
           :enable     => false,
           :hasstatus  => true,
           :hasrestart => true,
-          :require    => ['Package[heat-common]', 'Package[heat-api]'],
           :tag        => 'heat-service',
         )
-        is_expected.to contain_service('heat-api').that_subscribes_to('Exec[heat-dbsync]')
+        is_expected.to contain_service('heat-api').that_subscribes_to(nil)
       end
     end
 

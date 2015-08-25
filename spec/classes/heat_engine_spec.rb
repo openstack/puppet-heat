@@ -58,9 +58,6 @@ describe 'heat::engine' do
         :enable     => expected_params[:enabled],
         :hasstatus  => 'true',
         :hasrestart => 'true',
-        :require    => [ 'File[/etc/heat/heat.conf]',
-                         'Package[heat-common]',
-                         'Package[heat-engine]'],
         :tag        => 'heat-service',
       ) }
 
@@ -98,9 +95,6 @@ describe 'heat::engine' do
         :enable     => false,
         :hasstatus  => 'true',
         :hasrestart => 'true',
-        :require    => [ 'File[/etc/heat/heat.conf]',
-                         'Package[heat-common]',
-                         'Package[heat-engine]'],
         :tag        => 'heat-service',
       ) }
     end

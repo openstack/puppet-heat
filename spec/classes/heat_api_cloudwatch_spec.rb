@@ -77,7 +77,7 @@ describe 'heat::api_cloudwatch' do
             :hasrestart => true,
             :tag        => 'heat-service',
           )
-          is_expected.to contain_service('heat-api-cloudwatch').that_subscribes_to('Exec[heat-dbsync]')
+          is_expected.to contain_service('heat-api-cloudwatch').that_subscribes_to(nil)
         end
       end
     end
@@ -99,7 +99,7 @@ describe 'heat::api_cloudwatch' do
           :hasrestart => true,
           :tag        => 'heat-service',
         )
-        is_expected.to contain_service('heat-api-cloudwatch').that_subscribes_to('Exec[heat-dbsync]')
+        is_expected.to contain_service('heat-api-cloudwatch').that_subscribes_to(nil)
       end
     end
 

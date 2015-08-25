@@ -88,10 +88,8 @@ describe 'heat' do
     it { is_expected.to contain_class('heat::params') }
 
     it 'configures heat group' do
-      is_expected.to contain_group('heat').with(
-        :name    => 'heat',
-        :require => 'Package[heat-common]'
-      )
+      is_expected.to contain_group('heat').with_name('heat')
+      is_expected.to contain_group('heat').that_requires('Package[heat-common]')
     end
 
     it 'configures heat user' do
@@ -100,8 +98,8 @@ describe 'heat' do
         :gid     => 'heat',
         :groups  => ['heat'],
         :system  => true,
-        :require => 'Package[heat-common]'
       )
+      is_expected.to contain_user('heat').that_requires('Package[heat-common]')
     end
 
     it 'configures heat configuration folder' do
@@ -110,17 +108,8 @@ describe 'heat' do
         :owner   => 'heat',
         :group   => 'heat',
         :mode    => '0750',
-        :require => 'Package[heat-common]'
       )
-    end
-
-    it 'configures heat configuration file' do
-      is_expected.to contain_file('/etc/heat/heat.conf').with(
-        :owner   => 'heat',
-        :group   => 'heat',
-        :mode    => '0640',
-        :require => 'Package[heat-common]'
-      )
+      is_expected.to contain_file('/etc/heat/').that_requires('Package[heat-common]')
     end
 
     it 'installs heat common package' do

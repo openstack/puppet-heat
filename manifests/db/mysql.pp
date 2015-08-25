@@ -66,5 +66,7 @@ class heat::db::mysql(
     allowed_hosts => $allowed_hosts,
   }
 
-  ::Openstacklib::Db::Mysql['heat'] ~> Exec<| title == 'heat-dbsync' |>
+  Anchor['heat::db::begin']
+  ~> Class['heat::db::mysql']
+  ~> Anchor['heat::db::end']
 }

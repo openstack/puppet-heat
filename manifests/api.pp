@@ -62,12 +62,6 @@ class heat::api (
   include ::heat::params
   include ::heat::policy
 
-  Heat_config<||> ~> Service['heat-api']
-  Class['heat::policy'] -> Service['heat-api']
-
-  Package['heat-api'] -> Class['heat::policy']
-  Package['heat-api'] -> Service['heat-api']
-
   if $use_ssl {
     if !$cert_file {
       fail('The cert_file parameter is required when use_ssl is set to true')
@@ -97,9 +91,6 @@ class heat::api (
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    require    => [Package['heat-common'],
-                  Package['heat-api']],
-    subscribe  => $::heat::subscribe_sync_db,
     tag        => 'heat-service',
   }
 

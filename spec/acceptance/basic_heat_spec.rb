@@ -13,7 +13,8 @@ describe 'basic heat' do
         'Debian': {
           include ::apt
           class { '::openstack_extras::repo::debian::ubuntu':
-            release         => 'kilo',
+            release         => 'liberty',
+            repo            => 'proposed',
             package_require => true,
           }
           $package_provider = 'apt'

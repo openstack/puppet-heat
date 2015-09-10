@@ -21,7 +21,24 @@ describe 'basic heat' do
         }
         'RedHat': {
           class { '::openstack_extras::repo::redhat::redhat':
-            release => 'kilo',
+            manage_rdo => false,
+            repo_hash => {
+              'openstack-common-testing' => {
+                'baseurl'  => 'http://cbs.centos.org/repos/cloud7-openstack-common-testing/x86_64/os/',
+                'descr'    => 'openstack-common-testing',
+                'gpgcheck' => 'no',
+              },
+              'openstack-liberty-testing' => {
+                'baseurl'  => 'http://cbs.centos.org/repos/cloud7-openstack-liberty-testing/x86_64/os/',
+                'descr'    => 'openstack-liberty-testing',
+                'gpgcheck' => 'no',
+              },
+              'openstack-liberty-trunk' => {
+                'baseurl'  => 'http://trunk.rdoproject.org/centos7-liberty/current/',
+                'descr'    => 'openstack-liberty-trunk',
+                'gpgcheck' => 'no',
+              },
+            },
           }
           package { 'openstack-selinux': ensure => 'latest' }
           $package_provider = 'yum'

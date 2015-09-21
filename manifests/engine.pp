@@ -20,7 +20,11 @@
 #   Defaults to true.
 #
 # [*heat_stack_user_role*]
-#   (optional) Keystone role for heat template-defined users
+#   (optional) Keystone role for heat template-defined users.
+#   This setting does not actually create the role. If you change
+#   this to a different value you should also set
+#   heat::keystone::auth::heat_stack_user_role if you want the
+#   correct role created.
 #   Defaults to 'heat_stack_user'
 #
 # [*heat_metadata_server_url*]

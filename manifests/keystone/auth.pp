@@ -111,6 +111,19 @@
 #   Admin address for endpoint. (Defaults to '127.0.0.1')
 #   Setting this parameter overrides admin_url parameter.
 #
+# [*heat_stack_user_role*]
+#   (optional) Keystone role for heat template-defined users.
+#   In this context this will create the role for the heat_stack_user.
+#   It will not set the value in the config file, if you want to do
+#   that you must set heat::engine::heat_stack_user_role. Generally
+#   these should be set to the same value.
+#   Defaults to 'heat_stack_user'
+
+# [*manage_heat_stack_user_role*]
+#   (optional) If true, this will manage the Keystone role for
+#   $heat_stack_user_role.
+#   Defaults to true
+#
 # === Deprecation notes
 #
 # If any value is provided for public_protocol, public_address or port parameters,
@@ -125,32 +138,34 @@
 #  }
 #
 class heat::keystone::auth (
-  $password                  = false,
-  $email                     = 'heat@localhost',
-  $auth_name                 = 'heat',
-  $service_name              = undef,
-  $service_type              = 'orchestration',
-  $service_description       = 'Openstack Orchestration Service',
-  $region                    = 'RegionOne',
-  $tenant                    = 'services',
-  $configure_endpoint        = true,
-  $configure_service         = true,
-  $configure_user            = true,
-  $configure_user_role       = true,
-  $trusts_delegated_roles    = ['heat_stack_owner'],
-  $configure_delegated_roles = false,
-  $public_url                = 'http://127.0.0.1:8004/v1/%(tenant_id)s',
-  $admin_url                 = 'http://127.0.0.1:8004/v1/%(tenant_id)s',
-  $internal_url              = 'http://127.0.0.1:8004/v1/%(tenant_id)s',
+  $password                    = false,
+  $email                       = 'heat@localhost',
+  $auth_name                   = 'heat',
+  $service_name                = undef,
+  $service_type                = 'orchestration',
+  $service_description         = 'Openstack Orchestration Service',
+  $region                      = 'RegionOne',
+  $tenant                      = 'services',
+  $configure_endpoint          = true,
+  $configure_service           = true,
+  $configure_user              = true,
+  $configure_user_role         = true,
+  $trusts_delegated_roles      = ['heat_stack_owner'],
+  $configure_delegated_roles   = false,
+  $public_url                  = 'http://127.0.0.1:8004/v1/%(tenant_id)s',
+  $admin_url                   = 'http://127.0.0.1:8004/v1/%(tenant_id)s',
+  $internal_url                = 'http://127.0.0.1:8004/v1/%(tenant_id)s',
+  $heat_stack_user_role        = 'heat_stack_user',
+  $manage_heat_stack_user_role = true,
   # DEPRECATED PARAMETERS
-  $version                   = undef,
-  $port                      = undef,
-  $public_protocol           = undef,
-  $public_address            = undef,
-  $internal_protocol         = undef,
-  $internal_address          = undef,
-  $admin_protocol            = undef,
-  $admin_address             = undef,
+  $version                     = undef,
+  $port                        = undef,
+  $public_protocol             = undef,
+  $public_address              = undef,
+  $internal_protocol           = undef,
+  $internal_address            = undef,
+  $admin_protocol              = undef,
+  $admin_address               = undef,
 ) {
 
   validate_string($password)
@@ -241,15 +256,16 @@ class heat::keystone::auth (
       Service <| name == 'heat-api' |>
   }
 
-  keystone_role { 'heat_stack_user':
-        ensure => present,
+  if $manage_heat_stack_user_role {
+    keystone_role { $heat_stack_user_role:
+      ensure => present,
+    }
   }
 
   if $configure_delegated_roles {
     # if this is a keystone only node, we configure the role here
     # but let engine.pp set the config file. A keystone only node
-    # will not have a heat.conf file. We will use the value in
-    # engine.pp as the one source of truth for the delegated role list.
+    # will not have a heat.conf file.
     keystone_role { $trusts_delegated_roles:
       ensure => present,
     }

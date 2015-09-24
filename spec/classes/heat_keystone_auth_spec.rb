@@ -154,18 +154,6 @@ describe 'heat::keystone::auth' do
     end
 
     context 'when configuring delegated roles' do
-      let :pre_condition do
-        "class { 'heat::engine':
-           auth_encryption_key       => '1234567890AZERTYUIOPMLKJHGFDSQ12',
-           configure_delegated_roles => false,
-         }
-        "
-      end
-
-      let :facts do
-        { :osfamily => 'Debian' }
-      end
-
       before do
         params.merge!({
           :configure_delegated_roles => true,
@@ -176,28 +164,6 @@ describe 'heat::keystone::auth' do
           :ensure  => 'present'
         )
       end
-    end
-
-    describe 'with deprecated and new params both set' do
-      let :pre_condition do
-        "class { 'heat::engine':
-           auth_encryption_key => '1234567890AZERTYUIOPMLKJHGFDSQ12',
-         }
-        "
-      end
-
-      let :facts do
-        { :osfamily => 'Debian' }
-      end
-
-      let :params do
-        {
-          :configure_delegated_roles => true,
-          :password                  => 'something',
-        }
-      end
-      it_raises 'a Puppet::Error', /both heat::engine and heat::keystone::auth are both trying to configure delegated roles/
-
     end
 
   end

@@ -246,10 +246,6 @@ class heat::keystone::auth (
   }
 
   if $configure_delegated_roles {
-    # Sanity check - remove after we remove the deprecated item
-    if $heat::engine::configure_delegated_roles {
-      fail('both heat::engine and heat::keystone::auth are both trying to configure delegated roles')
-    }
     # if this is a keystone only node, we configure the role here
     # but let engine.pp set the config file. A keystone only node
     # will not have a heat.conf file. We will use the value in

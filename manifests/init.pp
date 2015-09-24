@@ -22,8 +22,8 @@
 #   Defaults to '/var/log/heat'
 #
 # [*rpc_backend*]
-#   (Optional) Use these options to configure the RabbitMQ message system.
-#   Defaults to 'heat.openstack.common.rpc.impl_kombu'
+#   (Optional) Use these options to configure the message system.
+#   Defaults to 'rabbit'
 #
 # [*rpc_response_timeout*]
 #   (Optional) Configure the timeout (in seconds) for rpc responses
@@ -224,7 +224,7 @@ class heat(
   $keystone_tenant                    = 'services',
   $keystone_password                  = false,
   $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
-  $rpc_backend                        = 'heat.openstack.common.rpc.impl_kombu',
+  $rpc_backend                        = 'rabbit',
   $rpc_response_timeout               = 60,
   $rabbit_host                        = '127.0.0.1',
   $rabbit_port                        = 5672,
@@ -326,7 +326,7 @@ class heat(
     tag    => ['openstack', 'heat-package'],
   }
 
-  if $rpc_backend == 'heat.openstack.common.rpc.impl_kombu' {
+  if $rpc_backend == 'rabbit' {
 
     if $rabbit_hosts {
       heat_config { 'oslo_messaging_rabbit/rabbit_host': ensure => absent }
@@ -395,7 +395,7 @@ class heat(
 
   }
 
-  if $rpc_backend == 'heat.openstack.common.rpc.impl_qpid' {
+  if $rpc_backend == 'qpid' {
 
     heat_config {
       'DEFAULT/qpid_hostname'               : value => $qpid_hostname;

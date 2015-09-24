@@ -137,24 +137,6 @@ describe 'heat' do
       is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value( params[:auth_uri] )
     end
 
-    it 'configures database_connection' do
-      is_expected.to contain_heat_config('database/connection').with_value( params[:database_connection] )
-    end
-
-    it 'configures database_idle_timeout' do
-      is_expected.to contain_heat_config('database/idle_timeout').with_value( params[:database_idle_timeout] )
-    end
-
-    context("failing if database_connection is invalid") do
-      before { params[:database_connection] = 'foo://foo:bar@baz/moo' }
-      it { expect { is_expected.to raise_error(Puppet::Error) } }
-    end
-
-    context("with deprecated sql_connection parameter") do
-      before { params[:sql_connection] = 'mysql://a:b@c/d' }
-      it { is_expected.to contain_heat_config('database/connection').with_value( params[:sql_connection] )}
-    end
-
     it 'configures keystone_ec2_uri' do
       is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value( params[:keystone_ec2_uri] )
     end
@@ -356,18 +338,6 @@ describe 'heat' do
       end
     end
 
-  end
-
-  shared_examples_for 'with database_idle_timeout modified' do
-    before do
-      params.merge!(
-        :database_idle_timeout => 69
-      )
-    end
-
-    it do
-      is_expected.to contain_heat_config('database/idle_timeout').with_value(69)
-    end
   end
 
   shared_examples_for 'with ec2authtoken auth uri set' do

@@ -71,9 +71,6 @@ describe 'heat' do
       it_configures 'qpid as rpc backend'
     end
 
-    it_configures 'with syslog disabled'
-    it_configures 'with syslog enabled'
-    it_configures 'with syslog enabled and custom settings'
     it_configures 'with SSL enabled with kombu'
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
@@ -85,6 +82,7 @@ describe 'heat' do
 
   shared_examples_for 'a heat base installation' do
 
+    it { is_expected.to contain_class('heat::logging') }
     it { is_expected.to contain_class('heat::params') }
 
     it 'configures heat group' do
@@ -135,27 +133,8 @@ describe 'heat' do
       is_expected.to contain_class('heat::db::sync')
     end
 
-    it 'configures debug and verbose' do
-      is_expected.to contain_heat_config('DEFAULT/debug').with_value( params[:debug] )
-      is_expected.to contain_heat_config('DEFAULT/verbose').with_value( params[:verbose] )
-    end
-
-    it 'configures use_stderr option' do
-      is_expected.to contain_heat_config('DEFAULT/use_stderr').with_value( params[:use_stderr] )
-    end
-
     it 'configures auth_uri' do
       is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value( params[:auth_uri] )
-    end
-
-    it 'configures logging directory by default' do
-      is_expected.to contain_heat_config('DEFAULT/log_dir').with_value( params[:log_dir] )
-    end
-
-    context 'with logging directory disabled' do
-      before { params.merge!( :log_dir => false) }
-
-      it { is_expected.to contain_heat_config('DEFAULT/log_dir').with_ensure('absent') }
     end
 
     it 'configures database_connection' do
@@ -377,37 +356,6 @@ describe 'heat' do
       end
     end
 
-  end
-
-  shared_examples_for 'with syslog disabled' do
-    it { is_expected.to contain_heat_config('DEFAULT/use_syslog').with_value(false) }
-  end
-
-  shared_examples_for 'with syslog enabled' do
-    before do
-      params.merge!(
-        :use_syslog => 'true'
-      )
-    end
-
-    it do
-      is_expected.to contain_heat_config('DEFAULT/use_syslog').with_value(true)
-      is_expected.to contain_heat_config('DEFAULT/syslog_log_facility').with_value('LOG_USER')
-    end
-  end
-
-  shared_examples_for 'with syslog enabled and custom settings' do
-    before do
-      params.merge!(
-        :use_syslog    => 'true',
-        :log_facility  => 'LOG_LOCAL0'
-      )
-    end
-
-    it do
-      is_expected.to contain_heat_config('DEFAULT/use_syslog').with_value(true)
-      is_expected.to contain_heat_config('DEFAULT/syslog_log_facility').with_value('LOG_LOCAL0')
-    end
   end
 
   shared_examples_for 'with database_idle_timeout modified' do

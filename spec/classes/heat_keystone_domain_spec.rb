@@ -37,6 +37,16 @@ describe 'heat::keystone::domain' do
         :roles => ['admin'],
       )
     end
+
+    context 'when not managing the domain creation' do
+      before do
+        params.merge!(
+          :manage_domain => false
+        )
+      end
+
+      it { is_expected.to_not contain_keystone_domain('heat_domain') }
+    end
   end
 
 

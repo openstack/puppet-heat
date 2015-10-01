@@ -1,7 +1,7 @@
 puppet-heat
 =============
 
-5.1.0 - 2014.2 - Juno
+5.2.0 - 2014.2 - Juno
 
 #### Table of Contents
 
@@ -67,6 +67,11 @@ Contributors
 
 Release Notes
 -------------
+
+**5.2.0**
+
+* Add an ability to manage use_stderr parameter
+* Remove deprecated parameter stack_user_domain
 
 **5.1.0**
 

@@ -79,7 +79,7 @@ class heat::keystone::domain (
     'password' => $domain_password,
     'domain'   => $domain_name,
   })
-  ensure_resource('keystone_user_role', "${domain_admin}@::${domain_name}", {
+  ensure_resource('keystone_user_role', "${domain_admin}::${domain_name}@::${domain_name}", {
     'roles' => ['admin'],
   })
 

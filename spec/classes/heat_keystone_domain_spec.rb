@@ -33,7 +33,7 @@ describe 'heat::keystone::domain' do
         :password => params[:domain_password],
         :domain   => params[:domain_name],
       )
-      is_expected.to contain_keystone_user_role('heat_admin@::heat').with(
+      is_expected.to contain_keystone_user_role('heat_admin::heat@::heat').with(
         :roles => ['admin'],
       )
     end

@@ -99,6 +99,20 @@
 #   (Optional) Use durable queues in amqp.
 #   Defaults to false
 #
+# [*max_template_size*]
+#   (Optional) Maximum raw byte size of any template.
+#   Defaults to '524288'
+#
+# [*max_json_body_size*]
+#   (Optional) Maximum raw byte size of JSON request body.
+#   Should be larger than max_template_size.
+#   Defaults to '1048576'
+#
+# [*notification_driver*]
+#   (Optional) Driver or drivers to handle sending notifications.
+#   Value can be a string or a list.
+#   Defaults to messagingv2
+#
 # == keystone authentication options
 #
 # [*auth_uri*]
@@ -293,6 +307,9 @@ class heat(
   $enable_stack_adopt                 = undef,
   $enable_stack_abandon               = undef,
   $sync_db                            = undef,
+  $max_template_size                  = '524288',
+  $max_json_body_size                 = '1048576',
+  $notification_driver                = 'messagingv2',
   # Deprecated parameters
   $mysql_module                       = undef,
   $sql_connection                     = undef,
@@ -484,12 +501,15 @@ class heat(
   }
 
   heat_config {
-    'DEFAULT/rpc_backend'                  : value => $rpc_backend;
-    'DEFAULT/rpc_response_timeout'         : value => $rpc_response_timeout;
-    'ec2authtoken/auth_uri'                : value => $keystone_ec2_uri;
-    'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
-    'keystone_authtoken/admin_user'        : value => $keystone_user;
-    'keystone_authtoken/admin_password'    : value => $keystone_password, secret => true;
+    'DEFAULT/rpc_backend':                  value => $rpc_backend;
+    'DEFAULT/rpc_response_timeout':         value => $rpc_response_timeout;
+    'DEFAULT/max_template_size':            value => $max_template_size;
+    'DEFAULT/max_json_body_size':           value => $max_json_body_size;
+    'DEFAULT/notification_driver':          value => $notification_driver;
+    'ec2authtoken/auth_uri':                value => $keystone_ec2_uri;
+    'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
+    'keystone_authtoken/admin_user':        value => $keystone_user;
+    'keystone_authtoken/admin_password':    value => $keystone_password, secret => true;
   }
 
   if $flavor {

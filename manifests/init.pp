@@ -10,16 +10,16 @@
 #
 # [*verbose*]
 #   (Optional) Should the daemons log verbose messages
-#   Defaults to 'false'
+#   Defaults to undef.
 #
 # [*debug*]
 #   (Optional) Should the daemons log debug messages
-#   Defaults to 'false'
+#   Defaults to undef.
 #
 # [*log_dir*]
 #   (Optional) Directory where logs should be stored
 #   If set to boolean 'false', it will not log to any directory
-#   Defaults to '/var/log/heat'
+#   Defaults to undef.
 #
 # [*rpc_backend*]
 #   (Optional) Use these options to configure the message system.
@@ -153,15 +153,15 @@
 #
 # [*use_syslog*]
 #   (Optional) Use syslog for logging.
-#   Defaults to false.
+#   Defaults to undef.
 #
 # [*use_stderr*]
 #   (optional) Use stderr for logging
-#   Defaults to true
+#   Defaults to undef.
 #
 # [*log_facility*]
 #   (Optional) Syslog facility to receive log lines.
-#   Defaults to LOG_USER.
+#   Defaults to undef.
 #
 # [*flavor*]
 #   (optional) Specifies the Authentication method.
@@ -217,9 +217,9 @@ class heat(
   $auth_uri                           = false,
   $identity_uri                       = false,
   $package_ensure                     = 'present',
-  $verbose                            = false,
-  $debug                              = false,
-  $log_dir                            = '/var/log/heat',
+  $verbose                            = undef,
+  $debug                              = undef,
+  $log_dir                            = undef,
   $keystone_user                      = 'heat',
   $keystone_tenant                    = 'services',
   $keystone_password                  = false,
@@ -255,9 +255,9 @@ class heat(
   $qpid_reconnect_interval            = 0,
   $database_connection                = 'sqlite:////var/lib/heat/heat.sqlite',
   $database_idle_timeout              = 3600,
-  $use_syslog                         = false,
-  $use_stderr                         = true,
-  $log_facility                       = 'LOG_USER',
+  $use_syslog                         = undef,
+  $use_stderr                         = undef,
+  $log_facility                       = undef,
   $flavor                             = undef,
   $region_name                        = undef,
   $enable_stack_adopt                 = undef,
@@ -272,6 +272,7 @@ class heat(
   $instance_user                      = undef,
 ) {
 
+  include ::heat::logging
   include ::heat::params
 
   if $kombu_ssl_ca_certs and !$rabbit_use_ssl {
@@ -474,28 +475,13 @@ class heat(
     }
   }
 
-
   heat_config {
     'DEFAULT/rpc_backend'                  : value => $rpc_backend;
     'DEFAULT/rpc_response_timeout'         : value => $rpc_response_timeout;
-    'DEFAULT/debug'                        : value => $debug;
-    'DEFAULT/verbose'                      : value => $verbose;
-    'DEFAULT/use_stderr'                   : value => $use_stderr;
     'ec2authtoken/auth_uri'                : value => $keystone_ec2_uri;
     'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
     'keystone_authtoken/admin_user'        : value => $keystone_user;
     'keystone_authtoken/admin_password'    : value => $keystone_password, secret => true;
-  }
-
-  # Log configuration
-  if $log_dir {
-    heat_config {
-      'DEFAULT/log_dir' : value  => $log_dir;
-    }
-  } else {
-    heat_config {
-      'DEFAULT/log_dir' : ensure => absent;
-    }
   }
 
   if $sql_connection {
@@ -544,18 +530,6 @@ class heat(
 
     if $sync_db {
       include ::heat::db::sync
-    }
-  }
-
-  # Syslog configuration
-  if $use_syslog {
-    heat_config {
-      'DEFAULT/use_syslog':           value => true;
-      'DEFAULT/syslog_log_facility':  value => $log_facility;
-    }
-  } else {
-    heat_config {
-      'DEFAULT/use_syslog':           value => false;
     }
   }
 

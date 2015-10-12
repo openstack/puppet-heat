@@ -78,6 +78,7 @@ describe 'heat' do
     it_configures "with custom keystone identity_uri"
     it_configures "with custom keystone identity_uri and auth_uri"
     it_configures 'with enable_stack_adopt and enable_stack_abandon set'
+    it_configures 'with notification_driver set to a string'
   end
 
   shared_examples_for 'a heat base installation' do
@@ -97,6 +98,14 @@ describe 'heat' do
       is_expected.to contain_class('heat::db::sync')
     end
 
+    it 'configures max_template_size' do
+      is_expected.to contain_heat_config('DEFAULT/max_template_size').with_value('<SERVICE DEFAULT>')
+    end
+
+    it 'configures max_json_body_size' do
+      is_expected.to contain_heat_config('DEFAULT/max_json_body_size').with_value('<SERVICE DEFAULT>')
+    end
+
     it 'configures auth_uri' do
       is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value( params[:auth_uri] )
     end
@@ -111,6 +120,9 @@ describe 'heat' do
       is_expected.to contain_heat_config('keystone_authtoken/admin_password').with_secret(true)
     end
 
+    it 'configures notification_driver' do
+        is_expected.to contain_heat_config('DEFAULT/notification_driver').with_value('<SERVICE DEFAULT>')
+    end
 
   end
 
@@ -436,6 +448,18 @@ describe 'heat' do
     it 'sets enable_stack_adopt and enable_stack_abandon' do
       is_expected.to contain_heat_config('DEFAULT/enable_stack_adopt').with_value(true);
       is_expected.to contain_heat_config('DEFAULT/enable_stack_abandon').with_value(true);
+    end
+  end
+
+  shared_examples_for 'with notification_driver set to a string' do
+    before do
+      params.merge!(
+        :notification_driver => 'bar.foo.rpc_notifier',
+      )
+    end
+
+    it 'has notification_driver set when specified' do
+      is_expected.to contain_heat_config('DEFAULT/notification_driver').with_value('bar.foo.rpc_notifier')
     end
   end
 

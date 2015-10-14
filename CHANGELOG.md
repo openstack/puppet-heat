@@ -1,3 +1,15 @@
+##2015-10-14 - 6.1.0
+###Summary
+
+This is a feature and maintenance release in the Kilo series.
+
+####Features
+- Create Heat Domain with Keystone_domain resource
+
+####Maintenance
+- Remove deprecated parameter stack_user_domain
+- acceptance: checkout stable/kilo puppet modules
+
 ##2015-07-08 - 6.0.0
 ###Summary
 

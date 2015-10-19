@@ -317,21 +317,25 @@ class heat(
     warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
   }
 
-  File {
-    require => Package['heat-common'],
+  if $package_ensure != 'absent' {
+    Package['heat-common'] -> User['heat']
+    Package['heat-common'] -> Group['heat']
+    Package['heat-common'] -> File['/etc/heat/']
   }
 
   group { 'heat':
-    name    => 'heat',
-    require => Package['heat-common'],
+    ensure => 'present',
+    name   => 'heat',
+    before => Anchor['heat::install::end'],
   }
 
   user { 'heat':
-    name    => 'heat',
-    gid     => 'heat',
-    groups  => ['heat'],
-    system  => true,
-    require => Package['heat-common'],
+    ensure => 'present',
+    name   => 'heat',
+    gid    => 'heat',
+    groups => ['heat'],
+    system => true,
+    before => Anchor['heat::install::end'],
   }
 
   file { '/etc/heat/':
@@ -339,12 +343,6 @@ class heat(
     owner  => 'heat',
     group  => 'heat',
     mode   => '0750',
-  }
-
-  file { '/etc/heat/heat.conf':
-    owner => 'heat',
-    group => 'heat',
-    mode  => '0640',
   }
 
   package { 'heat-common':
@@ -546,4 +544,29 @@ class heat(
   } else {
     heat_config { 'DEFAULT/enable_stack_abandon': ensure => absent; }
   }
+
+  # Setup anchors for install, config and service phases of the module.  These
+  # anchors allow external modules to hook the begin and end of any of these
+  # phases.  Package or service management can also be replaced by ensuring the
+  # package is absent or turning off service management and having the
+  # replacement depend on the appropriate anchors.  When applicable, end tags
+  # should be notified so that subscribers can determine if installation,
+  # config or service state changed and act on that if needed.
+  anchor { 'heat::install::begin': }
+  -> Package<| tag == 'heat-package'|>
+  ~> anchor { 'heat::install::end': }
+  -> anchor { 'heat::config::begin': }
+  -> Heat_config<||>
+  ~> anchor { 'heat::config::end': }
+  -> anchor { 'heat::db::begin': }
+  -> anchor { 'heat::db::end': }
+  ~> anchor { 'heat::dbsync::begin': }
+  -> anchor { 'heat::dbsync::end': }
+  ~> anchor { 'heat::service::begin': }
+  ~> Service<| tag == 'heat-service' |>
+  ~> anchor { 'heat::service::end': }
+
+  # Installation or config changes will always restart services.
+  Anchor['heat::install::end'] ~> Anchor['heat::service::begin']
+  Anchor['heat::config::end']  ~> Anchor['heat::service::begin']
 }

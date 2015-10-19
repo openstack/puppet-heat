@@ -65,12 +65,6 @@ class heat::api_cfn (
   include ::heat::params
   include ::heat::policy
 
-  Heat_config<||> ~> Service['heat-api-cfn']
-  Class['heat::policy'] -> Service['heat-api-cfn']
-
-  Package['heat-api-cfn'] -> Class['heat::policy']
-  Package['heat-api-cfn'] -> Service['heat-api-cfn']
-
   if $use_ssl {
     if !$cert_file {
       fail('The cert_file parameter is required when use_ssl is set to true')
@@ -94,15 +88,12 @@ class heat::api_cfn (
     }
   }
 
-  Package['heat-common'] -> Service['heat-api-cfn']
-
   service { 'heat-api-cfn':
     ensure     => $service_ensure,
     name       => $::heat::params::api_cfn_service_name,
     enable     => $enabled,
     hasstatus  => true,
     hasrestart => true,
-    subscribe  => $::heat::subscribe_sync_db,
     tag        => 'heat-service',
   }
 

@@ -40,6 +40,7 @@ class heat::db::postgresql(
     privileges    => $privileges,
   }
 
-  ::Openstacklib::Db::Postgresql['heat'] ~> Exec<| title == 'heat-dbsync' |>
-
+  Anchor['heat::db::begin']
+  ~> Class['heat::db::postgresql']
+  ~> Anchor['heat::db::end']
 }

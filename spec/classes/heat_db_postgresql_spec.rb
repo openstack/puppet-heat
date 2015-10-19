@@ -7,7 +7,9 @@ describe 'heat::db::postgresql' do
   end
 
   let :pre_condition do
-    'include postgresql::server'
+    'include ::postgresql::server
+     include ::heat
+    '
   end
 
   context 'on a RedHat osfamily' do

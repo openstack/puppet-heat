@@ -31,4 +31,7 @@ class heat::policy (
 
   create_resources('openstacklib::policy::base', $policies)
 
+  Anchor<| title == 'heat::config::start' |>
+  -> Class['heat::policy']
+  ~> Anchor<| title == 'heat::config::end' |>
 }

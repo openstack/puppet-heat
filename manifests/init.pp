@@ -317,34 +317,6 @@ class heat(
     warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
   }
 
-  if $package_ensure != 'absent' {
-    Package['heat-common'] -> User['heat']
-    Package['heat-common'] -> Group['heat']
-    Package['heat-common'] -> File['/etc/heat/']
-  }
-
-  group { 'heat':
-    ensure => 'present',
-    name   => 'heat',
-    before => Anchor['heat::install::end'],
-  }
-
-  user { 'heat':
-    ensure => 'present',
-    name   => 'heat',
-    gid    => 'heat',
-    groups => ['heat'],
-    system => true,
-    before => Anchor['heat::install::end'],
-  }
-
-  file { '/etc/heat/':
-    ensure => directory,
-    owner  => 'heat',
-    group  => 'heat',
-    mode   => '0750',
-  }
-
   package { 'heat-common':
     ensure => $package_ensure,
     name   => $::heat::params::common_package_name,

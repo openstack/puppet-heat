@@ -32,6 +32,8 @@ class heat::db::postgresql(
   $privileges = 'ALL',
 ) {
 
+  include ::heat::deps
+
   ::openstacklib::db::postgresql { 'heat':
     password_hash => postgresql_password($user, $password),
     dbname        => $dbname,

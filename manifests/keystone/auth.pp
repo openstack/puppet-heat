@@ -168,6 +168,8 @@ class heat::keystone::auth (
   $admin_address               = undef,
 ) {
 
+  include ::heat::deps
+
   validate_string($password)
 
   if $version {

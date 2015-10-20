@@ -110,6 +110,8 @@ class heat::logging(
   $log_date_format               = undef,
 ) {
 
+  include ::heat::deps
+
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use heat::<myparam> first then heat::logging::<myparam>.
   $use_syslog_real = pick($::heat::use_syslog,$use_syslog)

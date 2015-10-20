@@ -62,6 +62,7 @@ class heat::api_cfn (
 ) {
 
   include ::heat
+  include ::heat::deps
   include ::heat::params
   include ::heat::policy
 

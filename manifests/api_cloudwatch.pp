@@ -61,6 +61,7 @@ class heat::api_cloudwatch (
 ) {
 
   include ::heat
+  include ::heat::deps
   include ::heat::params
   include ::heat::policy
 

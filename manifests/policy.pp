@@ -23,6 +23,8 @@ class heat::policy (
   $policy_path = '/etc/heat/policy.json',
 ) {
 
+  include ::heat::deps
+
   validate_hash($policies)
 
   Openstacklib::Policy::Base {

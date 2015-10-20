@@ -48,6 +48,8 @@ class heat::db (
   $sync_db                 = true,
 ) {
 
+  include ::heat::deps
+
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use heat::<myparam> if heat::db::<myparam> isn't specified.
   $database_connection_real = pick($::heat::database_connection, $database_connection)

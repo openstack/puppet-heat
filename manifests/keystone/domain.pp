@@ -49,6 +49,7 @@ class heat::keystone::domain (
   $keystone_tenant    = undef,
 ) {
 
+  include ::heat::deps
   include ::heat::params
 
   if $auth_url {

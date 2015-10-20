@@ -50,6 +50,8 @@ class heat::db::mysql(
   $mysql_module  = undef
 ) {
 
+  include ::heat::deps
+
   if $mysql_module {
     warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
   }

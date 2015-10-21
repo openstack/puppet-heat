@@ -43,7 +43,6 @@ describe 'heat::keystone::auth' do
           :ensure   => 'present',
           :password => params[:password],
           :email    => params[:email],
-          :tenant   => params[:tenant]
         )
       end
 

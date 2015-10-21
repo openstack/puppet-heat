@@ -90,7 +90,7 @@ describe 'basic heat' do
       class { '::keystone::roles::admin':
         email       => 'test@example.tld',
         password    => 'a_big_secret',
-        admin_roles => ['admin', '_member_', 'heat_stack_owner']
+        admin_roles => ['admin', 'heat_stack_owner']
       }
       class { '::keystone::endpoint':
         public_url => "https://${::fqdn}:5000/",

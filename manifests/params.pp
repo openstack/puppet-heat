@@ -16,7 +16,6 @@ class heat::params {
       $engine_package_name = 'openstack-heat-engine'
       $client_package_name = 'python-heatclient'
       $common_package_name = 'openstack-heat-common'
-      $psycopg_package_name = 'python-psycopg2'
       $sqlite_package_name  = undef
       # service names
       $api_service_name = 'openstack-heat-api'
@@ -32,7 +31,6 @@ class heat::params {
       $engine_package_name = 'heat-engine'
       $client_package_name = 'python-heatclient'
       $common_package_name = 'heat-common'
-      $psycopg_package_name = 'python-psycopg2'
       $sqlite_package_name  = 'python-pysqlite2'
       # service names
       $api_service_name = 'heat-api'

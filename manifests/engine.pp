@@ -93,6 +93,8 @@ class heat::engine (
   $trusts_delegated_roles              = ['heat_stack_owner'],
 ) {
 
+  include ::heat::deps
+
   # Validate Heat Engine AES key
   # must be either 16, 24, or 32 bytes long
   # https://bugs.launchpad.net/heat/+bug/1415887

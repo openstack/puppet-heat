@@ -137,6 +137,8 @@ class heat::keystone::auth_cfn (
   $admin_address        = undef,
 ) {
 
+  include ::heat::deps
+
   validate_string($password)
 
   if $version {

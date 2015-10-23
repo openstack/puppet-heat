@@ -59,6 +59,7 @@ class heat::api (
 ) {
 
   include ::heat
+  include ::heat::deps
   include ::heat::params
   include ::heat::policy
 

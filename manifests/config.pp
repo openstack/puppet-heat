@@ -24,6 +24,8 @@ class heat::config (
   $heat_config = {},
 ) {
 
+  include ::heat::deps
+
   validate_hash($heat_config)
 
   create_resources('heat_config', $heat_config)

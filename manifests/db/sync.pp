@@ -3,6 +3,7 @@
 #
 class heat::db::sync {
 
+  include ::heat::deps
   include ::heat::params
 
   exec { 'heat-dbsync':

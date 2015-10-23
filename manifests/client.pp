@@ -11,6 +11,7 @@ class heat::client (
   $ensure = 'present'
 ) {
 
+  include ::heat::deps
   include ::heat::params
 
   package { 'python-heatclient':

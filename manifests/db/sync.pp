@@ -1,13 +1,23 @@
 #
 # Class to execute heat dbsync
 #
-class heat::db::sync {
+# ==Parameters
+#
+# [*extra_params*]
+#   (optional) String of extra command line parameters to append
+#   to the heat-manage db_sync command. These will be inserted
+#   in the command line between 'heat-manage' and 'db_sync'.
+#   Defaults to '--config-file /etc/heat/heat.conf'
+#
+class heat::db::sync(
+  $extra_params = '--config-file /etc/heat/heat.conf',
+) {
 
   include ::heat::deps
   include ::heat::params
 
   exec { 'heat-dbsync':
-    command     => $::heat::params::dbsync_command,
+    command     => "heat-manage ${extra_params} db_sync",
     path        => '/usr/bin',
     user        => 'heat',
     refreshonly => true,

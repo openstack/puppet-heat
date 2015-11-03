@@ -4,9 +4,6 @@
 #
 class heat::params {
 
-  $dbsync_command =
-    'heat-manage --config-file /etc/heat/heat.conf db_sync'
-
   case $::osfamily {
     'RedHat': {
       # package names

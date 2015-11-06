@@ -34,7 +34,7 @@ describe 'heat::keystone::auth' do
           :admin_url                 => 'http://127.0.0.1:8004/v1/%(tenant_id)s',
           :internal_url              => 'http://127.0.0.1:8004/v1/%(tenant_id)s',
           :configure_delegated_roles => false,
-          :heat_stack_user_role      => 'HeatUser',
+          :heat_stack_user_role      => 'HeatUser::foobaz@::foobaz',
         })
       end
 
@@ -54,7 +54,7 @@ describe 'heat::keystone::auth' do
       end
 
       it 'configures heat stack_user role' do
-        is_expected.to contain_keystone_role("HeatUser").with(
+        is_expected.to contain_keystone_role("HeatUser::foobaz@::foobaz").with(
           :ensure  => 'present'
         )
       end
@@ -168,12 +168,13 @@ describe 'heat::keystone::auth' do
     context 'when not managing heat_stack_user_role' do
       before do
         params.merge!({
+          :heat_stack_user_role        => 'HeatUser::foobaz@::foobaz',
           :manage_heat_stack_user_role => false
         })
       end
 
       it 'doesnt manage the heat_stack_user_role' do
-        is_expected.to_not contain_keystone_user_role("#{params[:auth_name]}@#{params[:tenant]}")
+        is_expected.to_not contain_keystone_user_role(params[:heat_stack_user_role])
       end
     end
 

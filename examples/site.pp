@@ -15,7 +15,7 @@ node default {
   class { '::heat':
     # The keystone_password parameter is mandatory
     keystone_password => 'password',
-    sql_connection    => 'mysql://heat:heat@localhost/heat'
+    sql_connection    => 'mysql+pymysql://heat:heat@localhost/heat'
   }
 
   # Install heat-engine

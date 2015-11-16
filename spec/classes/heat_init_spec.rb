@@ -14,7 +14,7 @@ describe 'heat' do
       :rabbit_userid         => 'guest',
       :rabbit_password       => '',
       :rabbit_virtual_host   => '/',
-      :database_connection   => 'mysql://user@host/database',
+      :database_connection   => 'mysql+pymysql://user@host/database',
       :database_idle_timeout => 3600,
       :auth_uri              => 'http://127.0.0.1:5000/v2.0',
       :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',

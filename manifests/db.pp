@@ -49,6 +49,7 @@ class heat::db (
 ) {
 
   include ::heat::deps
+  include ::heat::params
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use heat::<myparam> if heat::db::<myparam> isn't specified.
@@ -62,14 +63,18 @@ class heat::db (
   $sync_db_real = pick($::heat::sync_db, $sync_db)
 
   validate_re($database_connection_real,
-    '(sqlite|mysql|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+    '^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
 
   if $database_connection_real {
     case $database_connection_real {
-      /^mysql:\/\//: {
-        $backend_package = false
+      /^mysql(\+pymysql)?:\/\//: {
         require 'mysql::bindings'
         require 'mysql::bindings::python'
+        if $database_connection_real =~ /^mysql\+pymysql/ {
+          $backend_package = $::heat::params::pymysql_package_name
+        } else {
+          $backend_package = false
+        }
       }
       /^postgresql:\/\//: {
         $backend_package = false

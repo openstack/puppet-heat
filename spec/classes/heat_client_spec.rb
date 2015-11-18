@@ -29,7 +29,9 @@ describe 'heat::client' do
 
   context 'on Debian platform' do
     let :facts do
-      { :osfamily => 'Debian' }
+      @default_facts.merge({
+        :osfamily => 'Debian',
+      })
     end
 
     it_configures 'heat client'
@@ -37,7 +39,9 @@ describe 'heat::client' do
 
   context 'on RedHat platform' do
     let :facts do
-      { :osfamily => 'RedHat' }
+      @default_facts.merge({
+        :osfamily => 'RedHat',
+      })
     end
 
     it_configures 'heat client'

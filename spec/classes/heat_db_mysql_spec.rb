@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 describe 'heat::db::mysql' do
-  let :facts do
-    { :osfamily => 'RedHat' }
-  end
+    let :facts do
+      @default_facts.merge({
+        :osfamily => 'RedHat',
+      })
+    end
 
   let :params do
     { :password     => 's3cr3t',

@@ -18,11 +18,11 @@ describe 'heat::db::sync' do
 
   context 'on a RedHat osfamily' do
     let :facts do
-      {
+      @default_facts.merge({
         :osfamily                 => 'RedHat',
         :operatingsystemrelease   => '7.0',
         :concat_basedir => '/var/lib/puppet/concat'
-      }
+      })
     end
 
     it_configures 'heat-dbsync'
@@ -30,12 +30,12 @@ describe 'heat::db::sync' do
 
   context 'on a Debian osfamily' do
     let :facts do
-      {
+      @default_facts.merge({
         :operatingsystemrelease => '7.8',
         :operatingsystem        => 'Debian',
         :osfamily               => 'Debian',
         :concat_basedir => '/var/lib/puppet/concat'
-      }
+      })
     end
 
     it_configures 'heat-dbsync'

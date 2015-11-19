@@ -19,21 +19,19 @@ describe 'heat::keystone::domain' do
     end
 
     it 'should create keystone domain' do
-      is_expected.to contain_keystone_domain('heat_domain').with(
+      is_expected.to contain_keystone_domain(params[:domain_name]).with(
         :ensure  => 'present',
         :enabled => 'true',
         :name    => params[:domain_name]
       )
 
-      is_expected.to contain_keystone_user('heat_domain_admin').with(
+      is_expected.to contain_keystone_user("#{params[:domain_admin]}::#{params[:domain_name]}").with(
         :ensure   => 'present',
         :enabled  => 'true',
-        :name     => params[:domain_admin],
         :email    => params[:domain_admin_email],
         :password => params[:domain_password],
-        :domain   => params[:domain_name],
       )
-      is_expected.to contain_keystone_user_role('heat_admin::heat@::heat').with(
+      is_expected.to contain_keystone_user_role("#{params[:domain_admin]}::#{params[:domain_name]}@::#{params[:domain_name]}").with(
         :roles => ['admin'],
       )
     end
@@ -46,6 +44,26 @@ describe 'heat::keystone::domain' do
       end
 
       it { is_expected.to_not contain_keystone_domain('heat_domain') }
+    end
+
+    context 'when not managing the user creation' do
+      before do
+        params.merge!(
+          :manage_user => false
+        )
+      end
+
+      it { is_expected.to_not contain_keystone_user("#{params[:domain_admin]}::#{params[:domain_name]}") }
+    end
+
+    context 'when not managing the user role creation' do
+      before do
+        params.merge!(
+          :manage_role => false
+        )
+      end
+
+      it { is_expected.to_not contain_keystone_user_role("#{params[:domain_admin]}::#{params[:domain_name]}@::#{params[:domain_name]}") }
     end
   end
 

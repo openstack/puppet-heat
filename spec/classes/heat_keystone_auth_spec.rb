@@ -30,6 +30,7 @@ describe 'heat::keystone::auth' do
           :service_type              => 'orchestration',
           :region                    => 'RegionOne',
           :tenant                    => 'services',
+          :configure_user_role       => true,
           :public_url                => 'http://127.0.0.1:8004/v1/%(tenant_id)s',
           :admin_url                 => 'http://127.0.0.1:8004/v1/%(tenant_id)s',
           :internal_url              => 'http://127.0.0.1:8004/v1/%(tenant_id)s',

@@ -85,31 +85,6 @@ describe 'heat' do
     it { is_expected.to contain_class('heat::logging') }
     it { is_expected.to contain_class('heat::params') }
 
-    it 'configures heat group' do
-      is_expected.to contain_group('heat').with_name('heat')
-      is_expected.to contain_group('heat').that_requires('Package[heat-common]')
-    end
-
-    it 'configures heat user' do
-      is_expected.to contain_user('heat').with(
-        :name    => 'heat',
-        :gid     => 'heat',
-        :groups  => ['heat'],
-        :system  => true,
-      )
-      is_expected.to contain_user('heat').that_requires('Package[heat-common]')
-    end
-
-    it 'configures heat configuration folder' do
-      is_expected.to contain_file('/etc/heat/').with(
-        :ensure  => 'directory',
-        :owner   => 'heat',
-        :group   => 'heat',
-        :mode    => '0750',
-      )
-      is_expected.to contain_file('/etc/heat/').that_requires('Package[heat-common]')
-    end
-
     it 'installs heat common package' do
       is_expected.to contain_package('heat-common').with(
         :ensure => 'present',

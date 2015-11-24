@@ -27,7 +27,7 @@
 #
 # [*rpc_response_timeout*]
 #   (Optional) Configure the timeout (in seconds) for rpc responses
-#   Defaults to 60 seconds
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_host*]
 #   (Optional) IP or hostname of the rabbit server.
@@ -44,7 +44,7 @@
 #
 # [*rabbit_userid*]
 #   (Optional) User to connect to the rabbit server.
-#   Defaults to 'guest'
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_password*]
 #   (Optional) Password to connect to the rabbit_server.
@@ -52,7 +52,7 @@
 #
 # [*rabbit_virtual_host*]
 #   (Optional) Virtual_host to use.
-#   Defaults to '/'
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_ha_queues*]
 #   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
@@ -71,7 +71,7 @@
 #   check the heartbeat on RabbitMQ connection.  (i.e. rabbit_heartbeat_rate=2
 #   when rabbit_heartbeat_timeout_threshold=60, the heartbeat will be checked
 #   every 30 seconds.
-#   Defaults to 2
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_use_ssl*]
 #   (Optional) Connect over SSL for RabbitMQ.
@@ -79,21 +79,21 @@
 #
 # [*kombu_ssl_ca_certs*]
 #   (Optional) SSL certification authority file (valid only if SSL enabled).
-#   Defaults to undef
+#   Defaults to $::os_service_default.
 #
 # [*kombu_ssl_certfile*]
 #   (Optional) SSL cert file (valid only if SSL enabled).
-#   Defaults to undef
+#   Defaults to $::os_service_default.
 #
 # [*kombu_ssl_keyfile*]
 #   (Optional) SSL key file (valid only if SSL enabled).
-#   Defaults to undef
+#   Defaults to $::os_service_default.
 #
 # [*kombu_ssl_version*]
 #   (Optional) SSL version to use (valid only if SSL enabled).
 #   Valid values are TLSv1, SSLv23 and SSLv3. SSLv2 may be
 #   available on some distributions.
-#   Defaults to 'TLSv1'
+#   Defaults to $::os_service_default.
 #
 # [*amqp_durable_queues*]
 #   (Optional) Use durable queues in amqp.
@@ -191,12 +191,12 @@
 #   (optional) Specifies the Authentication method.
 #   Set to 'standalone' to get Heat to work with a remote OpenStack
 #   Tested versions include 0.9 and 2.2
-#   Defaults to undef
+#   Defaults to $::os_service_default.
 #
 # [*region_name*]
 #   (Optional) Region name for services. This is the
 #   default region name that heat talks to service endpoints on.
-#   Defaults to undef
+#   Defaults to $::os_service_default.
 #
 # [*instance_user*]
 #   (Optional) The default user for new instances. Although heat claims that
@@ -207,11 +207,11 @@
 #
 # [*enable_stack_adopt*]
 #   (Optional) Enable the stack-adopt feature.
-#   Defaults to undef
+#   Defaults to $::os_service_default.
 #
 # [*enable_stack_abandon*]
 #   (Optional) Enable the stack-abandon feature.
-#   Defaults to undef
+#   Defaults to $::os_service_default.
 #
 # [*sync_db*]
 #   (Optional) Run db sync on nodes after connection setting has been set.
@@ -249,29 +249,29 @@ class heat(
   $keystone_password                  = false,
   $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
   $rpc_backend                        = 'rabbit',
-  $rpc_response_timeout               = 60,
+  $rpc_response_timeout               = $::os_service_default,
   $rabbit_host                        = '127.0.0.1',
   $rabbit_port                        = 5672,
   $rabbit_hosts                       = undef,
-  $rabbit_userid                      = 'guest',
+  $rabbit_userid                      = $::os_service_default,
   $rabbit_password                    = '',
-  $rabbit_virtual_host                = '/',
+  $rabbit_virtual_host                = $::os_service_default,
   $rabbit_ha_queues                   = undef,
   $rabbit_heartbeat_timeout_threshold = 0,
-  $rabbit_heartbeat_rate              = 2,
+  $rabbit_heartbeat_rate              = $::os_service_default,
   $rabbit_use_ssl                     = false,
-  $kombu_ssl_ca_certs                 = undef,
-  $kombu_ssl_certfile                 = undef,
-  $kombu_ssl_keyfile                  = undef,
-  $kombu_ssl_version                  = 'TLSv1',
+  $kombu_ssl_ca_certs                 = $::os_service_default,
+  $kombu_ssl_certfile                 = $::os_service_default,
+  $kombu_ssl_keyfile                  = $::os_service_default,
+  $kombu_ssl_version                  = $::os_service_default,
   $amqp_durable_queues                = false,
   $qpid_hostname                      = 'localhost',
   $qpid_port                          = 5672,
   $qpid_username                      = 'guest',
   $qpid_password                      = 'guest',
-  $qpid_heartbeat                     = 60,
-  $qpid_protocol                      = 'tcp',
-  $qpid_tcp_nodelay                   = true,
+  $qpid_heartbeat                     = $::os_service_default,
+  $qpid_protocol                      = $::os_service_default,
+  $qpid_tcp_nodelay                   = $::os_service_default,
   $qpid_reconnect                     = true,
   $qpid_reconnect_timeout             = 0,
   $qpid_reconnect_limit               = 0,
@@ -288,10 +288,10 @@ class heat(
   $database_min_pool_size             = undef,
   $database_max_pool_size             = undef,
   $database_max_overflow              = undef,
-  $flavor                             = undef,
-  $region_name                        = undef,
-  $enable_stack_adopt                 = undef,
-  $enable_stack_abandon               = undef,
+  $flavor                             = $::os_service_default,
+  $region_name                        = $::os_service_default,
+  $enable_stack_adopt                 = $::os_service_default,
+  $enable_stack_abandon               = $::os_service_default,
   $sync_db                            = undef,
   # Deprecated parameters
   $mysql_module                       = undef,
@@ -307,16 +307,17 @@ class heat(
   include ::heat::deps
   include ::heat::params
 
-  if $kombu_ssl_ca_certs and !$rabbit_use_ssl {
+  if (!is_service_default($kombu_ssl_ca_certs)) and !$rabbit_use_ssl {
     fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')
   }
-  if $kombu_ssl_certfile and !$rabbit_use_ssl {
+  if (!is_service_default($kombu_ssl_certfile)) and !$rabbit_use_ssl {
     fail('The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true')
   }
-  if $kombu_ssl_keyfile and !$rabbit_use_ssl {
+  if (!is_service_default($kombu_ssl_keyfile)) and !$rabbit_use_ssl {
     fail('The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true')
   }
-  if ($kombu_ssl_certfile and !$kombu_ssl_keyfile) or ($kombu_ssl_keyfile and !$kombu_ssl_certfile) {
+  if ((!is_service_default($kombu_ssl_certfile)) and is_service_default($kombu_ssl_keyfile))
+    or ((!is_service_default($kombu_ssl_keyfile)) and is_service_default($kombu_ssl_certfile)) {
     fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
   }
   if $mysql_module {
@@ -363,41 +364,10 @@ class heat(
       'oslo_messaging_rabbit/heartbeat_rate':               value => $rabbit_heartbeat_rate;
       'oslo_messaging_rabbit/rabbit_use_ssl':               value => $rabbit_use_ssl;
       'oslo_messaging_rabbit/amqp_durable_queues':          value => $amqp_durable_queues;
-    }
-
-    if $rabbit_use_ssl {
-
-      if $kombu_ssl_ca_certs {
-        heat_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': value => $kombu_ssl_ca_certs; }
-      } else {
-        heat_config { 'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent; }
-      }
-
-      if $kombu_ssl_certfile or $kombu_ssl_keyfile {
-        heat_config {
-          'oslo_messaging_rabbit/kombu_ssl_certfile': value => $kombu_ssl_certfile;
-          'oslo_messaging_rabbit/kombu_ssl_keyfile':  value => $kombu_ssl_keyfile;
-        }
-      } else {
-        heat_config {
-          'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
-          'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
-        }
-      }
-
-      if $kombu_ssl_version {
-        heat_config { 'oslo_messaging_rabbit/kombu_ssl_version':  value => $kombu_ssl_version; }
-      } else {
-        heat_config { 'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent; }
-      }
-
-    } else {
-      heat_config {
-        'oslo_messaging_rabbit/kombu_ssl_version':  ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_ca_certs': ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_certfile': ensure => absent;
-        'oslo_messaging_rabbit/kombu_ssl_keyfile':  ensure => absent;
-      }
+      'oslo_messaging_rabbit/kombu_ssl_ca_certs':           value => $kombu_ssl_ca_certs;
+      'oslo_messaging_rabbit/kombu_ssl_certfile':           value => $kombu_ssl_certfile;
+      'oslo_messaging_rabbit/kombu_ssl_keyfile':            value => $kombu_ssl_keyfile;
+      'oslo_messaging_rabbit/kombu_ssl_version':            value => $kombu_ssl_version;
     }
 
   }
@@ -481,26 +451,25 @@ class heat(
     }
   }
 
+  if (!is_service_default($enable_stack_adopt)) {
+    validate_bool($enable_stack_adopt)
+  }
+
+  if (!is_service_default($enable_stack_abandon)) {
+    validate_bool($enable_stack_abandon)
+  }
+
   heat_config {
-    'DEFAULT/rpc_backend'                  : value => $rpc_backend;
-    'DEFAULT/rpc_response_timeout'         : value => $rpc_response_timeout;
-    'ec2authtoken/auth_uri'                : value => $keystone_ec2_uri;
-    'keystone_authtoken/admin_tenant_name' : value => $keystone_tenant;
-    'keystone_authtoken/admin_user'        : value => $keystone_user;
-    'keystone_authtoken/admin_password'    : value => $keystone_password, secret => true;
-  }
-
-  if $flavor {
-    heat_config { 'paste_deploy/flavor': value => $flavor; }
-  } else {
-    heat_config { 'paste_deploy/flavor': ensure => absent; }
-  }
-
-  # region name
-  if $region_name {
-    heat_config { 'DEFAULT/region_name_for_services': value => $region_name; }
-  } else {
-    heat_config { 'DEFAULT/region_name_for_services': ensure => absent; }
+    'DEFAULT/rpc_backend':                  value => $rpc_backend;
+    'DEFAULT/rpc_response_timeout':         value => $rpc_response_timeout;
+    'DEFAULT/region_name_for_services':     value => $region_name;
+    'DEFAULT/enable_stack_abandon':         value => $enable_stack_abandon;
+    'DEFAULT/enable_stack_adopt':           value => $enable_stack_adopt;
+    'ec2authtoken/auth_uri':                value => $keystone_ec2_uri;
+    'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
+    'keystone_authtoken/admin_user':        value => $keystone_user;
+    'keystone_authtoken/admin_password':    value => $keystone_password, secret => true;
+    'paste_deploy/flavor':                  value => $flavor;
   }
 
   # instance_user
@@ -513,17 +482,4 @@ class heat(
     heat_config { 'DEFAULT/instance_user': ensure => absent; }
   }
 
-  if $enable_stack_adopt != undef {
-    validate_bool($enable_stack_adopt)
-    heat_config { 'DEFAULT/enable_stack_adopt': value => $enable_stack_adopt; }
-  } else {
-    heat_config { 'DEFAULT/enable_stack_adopt': ensure => absent; }
-  }
-
-  if $enable_stack_abandon != undef {
-    validate_bool($enable_stack_abandon)
-    heat_config { 'DEFAULT/enable_stack_abandon': value => $enable_stack_abandon; }
-  } else {
-    heat_config { 'DEFAULT/enable_stack_abandon': ensure => absent; }
-  }
 }

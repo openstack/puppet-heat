@@ -15,7 +15,7 @@ describe 'heat::logging' do
       :logging_exception_prefix => '%(asctime)s.%(msecs)03d %(process)d TRACE %(name)s %(instance)s',
       :log_config_append => '/etc/heat/logging.conf',
       :publish_errors => true,
-      :default_log_levels => { 
+      :default_log_levels => {
         'amqp' => 'WARN', 'amqplib' => 'WARN', 'boto' => 'WARN',
         'qpid' => 'WARN', 'sqlalchemy' => 'WARN', 'suds' => 'INFO',
         'iso8601' => 'WARN',
@@ -57,11 +57,11 @@ describe 'heat::logging' do
 
   shared_examples 'basic default logging settings' do
     it 'configures heat logging settins with default values' do
-      is_expected.to contain_heat_config('DEFAULT/use_syslog').with(:value => 'false')
-      is_expected.to contain_heat_config('DEFAULT/use_stderr').with(:value => 'true')
+      is_expected.to contain_heat_config('DEFAULT/use_syslog').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('DEFAULT/use_stderr').with(:value => '<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('DEFAULT/log_dir').with(:value => '/var/log/heat')
-      is_expected.to contain_heat_config('DEFAULT/verbose').with(:value => 'false')
-      is_expected.to contain_heat_config('DEFAULT/debug').with(:value => 'false')
+      is_expected.to contain_heat_config('DEFAULT/verbose').with(:value => '<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('DEFAULT/debug').with(:value => '<SERVICE DEFAULT>')
     end
   end
 
@@ -120,7 +120,7 @@ describe 'heat::logging' do
      :default_log_levels, :fatal_deprecations,
      :instance_format, :instance_uuid_format,
      :log_date_format, ].each { |param|
-        it { is_expected.to contain_heat_config("DEFAULT/#{param}").with_ensure('absent') }
+        it { is_expected.to contain_heat_config("DEFAULT/#{param}").with_value('<SERVICE DEFAULT>') }
       }
   end
 

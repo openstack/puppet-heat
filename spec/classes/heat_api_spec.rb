@@ -7,7 +7,7 @@ describe 'heat::api' do
       :manage_service => true,
       :bind_host      => '127.0.0.1',
       :bind_port      => '1234',
-      :workers        => '0' }
+      :workers        => '<SERVICE DEFAULT>' }
   end
 
   shared_examples_for 'heat-api' do
@@ -52,13 +52,11 @@ describe 'heat::api' do
       let :params do
         {
           :use_ssl   => false,
-          :cert_file => false,
-          :key_file  => false
         }
       end
 
-      it { is_expected.to contain_heat_config('heat_api/cert_file').with_ensure('absent') }
-      it { is_expected.to contain_heat_config('heat_api/key_file').with_ensure('absent') }
+      it { is_expected.to contain_heat_config('heat_api/cert_file').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('heat_api/key_file').with_value('<SERVICE DEFAULT>') }
     end
 
 

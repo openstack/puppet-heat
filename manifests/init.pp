@@ -23,7 +23,7 @@
 #
 # [*rpc_backend*]
 #   (Optional) Use these options to configure the message system.
-#   Defaults to 'rabbit'
+#   Defaults to $::os_service_default.
 #
 # [*rpc_response_timeout*]
 #   (Optional) Configure the timeout (in seconds) for rpc responses
@@ -31,16 +31,16 @@
 #
 # [*rabbit_host*]
 #   (Optional) IP or hostname of the rabbit server.
-#   Defaults to '127.0.0.1'
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_port*]
 #   (Optional) Port of the rabbit server.
-#   Defaults to 5672.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_hosts*]
 #   (Optional) Array of host:port (used with HA queues).
 #   If defined, will remove rabbit_host & rabbit_port parameters from config
-#   Defaults to undef.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_userid*]
 #   (Optional) User to connect to the rabbit server.
@@ -48,7 +48,7 @@
 #
 # [*rabbit_password*]
 #   (Optional) Password to connect to the rabbit_server.
-#   Defaults to empty.
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_virtual_host*]
 #   (Optional) Virtual_host to use.
@@ -56,7 +56,7 @@
 #
 # [*rabbit_ha_queues*]
 #   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
-#   Defaults to undef
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_heartbeat_timeout_threshold*]
 #   (optional) Number of seconds after which the RabbitMQ broker is considered
@@ -75,7 +75,7 @@
 #
 # [*rabbit_use_ssl*]
 #   (Optional) Connect over SSL for RabbitMQ.
-#   Defaults to false
+#   Defaults to $::os_service_default.
 #
 # [*kombu_ssl_ca_certs*]
 #   (Optional) SSL certification authority file (valid only if SSL enabled).
@@ -97,7 +97,7 @@
 #
 # [*amqp_durable_queues*]
 #   (Optional) Use durable queues in amqp.
-#   Defaults to false
+#   Defaults to $::os_service_default.
 #
 # [*max_template_size*]
 #   (Optional) Maximum raw byte size of any template.
@@ -260,23 +260,23 @@ class heat(
   $keystone_tenant                    = 'services',
   $keystone_password                  = false,
   $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
-  $rpc_backend                        = 'rabbit',
+  $rpc_backend                        = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
-  $rabbit_host                        = '127.0.0.1',
-  $rabbit_port                        = 5672,
-  $rabbit_hosts                       = undef,
+  $rabbit_host                        = $::os_service_default,
+  $rabbit_port                        = $::os_service_default,
+  $rabbit_hosts                       = $::os_service_default,
   $rabbit_userid                      = $::os_service_default,
-  $rabbit_password                    = '',
+  $rabbit_password                    = $::os_service_default,
   $rabbit_virtual_host                = $::os_service_default,
-  $rabbit_ha_queues                   = undef,
+  $rabbit_ha_queues                   = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = 0,
   $rabbit_heartbeat_rate              = $::os_service_default,
-  $rabbit_use_ssl                     = false,
+  $rabbit_use_ssl                     = $::os_service_default,
   $kombu_ssl_ca_certs                 = $::os_service_default,
   $kombu_ssl_certfile                 = $::os_service_default,
   $kombu_ssl_keyfile                  = $::os_service_default,
   $kombu_ssl_version                  = $::os_service_default,
-  $amqp_durable_queues                = false,
+  $amqp_durable_queues                = $::os_service_default,
   $use_syslog                         = undef,
   $use_stderr                         = undef,
   $log_facility                       = undef,
@@ -322,14 +322,16 @@ class heat(
   include ::heat::deps
   include ::heat::params
 
-  if (!is_service_default($kombu_ssl_ca_certs)) and !$rabbit_use_ssl {
-    fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')
-  }
-  if (!is_service_default($kombu_ssl_certfile)) and !$rabbit_use_ssl {
-    fail('The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true')
-  }
-  if (!is_service_default($kombu_ssl_keyfile)) and !$rabbit_use_ssl {
-    fail('The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true')
+  if !$rabbit_use_ssl or is_service_default(rabbit_use_ssl) {
+    if !is_service_default($kombu_ssl_ca_certs) {
+      fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')
+    }
+    if !is_service_default($kombu_ssl_certfile) {
+      fail('The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true')
+    }
+    if !is_service_default($kombu_ssl_keyfile) {
+      fail('The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true')
+    }
   }
   if ((!is_service_default($kombu_ssl_certfile)) and is_service_default($kombu_ssl_keyfile))
     or ((!is_service_default($kombu_ssl_keyfile)) and is_service_default($kombu_ssl_certfile)) {
@@ -345,32 +347,34 @@ class heat(
     tag    => ['openstack', 'heat-package'],
   }
 
-  if $rpc_backend == 'rabbit' {
+  if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {
 
-    if $rabbit_hosts {
-      heat_config { 'oslo_messaging_rabbit/rabbit_host': ensure => absent }
-      heat_config { 'oslo_messaging_rabbit/rabbit_port': ensure => absent }
-      heat_config { 'oslo_messaging_rabbit/rabbit_hosts':
-        value => join($rabbit_hosts, ',')
+    if ! is_service_default($rabbit_hosts) and $rabbit_hosts {
+      heat_config {
+        'oslo_messaging_rabbit/rabbit_hosts': value => join(any2array($rabbit_hosts), ',');
+        'oslo_messaging_rabbit/rabbit_host':  ensure => absent;
+        'oslo_messaging_rabbit/rabbit_port':  ensure => absent;
       }
-    } else {
-      heat_config { 'oslo_messaging_rabbit/rabbit_host': value => $rabbit_host }
-      heat_config { 'oslo_messaging_rabbit/rabbit_port': value => $rabbit_port }
-      heat_config { 'oslo_messaging_rabbit/rabbit_hosts':
-        value => "${rabbit_host}:${rabbit_port}"
-      }
-    }
-
-    if $rabbit_ha_queues == undef {
-      if size($rabbit_hosts) > 1 {
-        heat_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => true }
+      if size($rabbit_hosts) > 1 and is_service_default($rabbit_ha_queues) {
+        heat_config {
+          'oslo_messaging_rabbit/rabbit_ha_queues': value => true;
+        }
       } else {
-        heat_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => false }
+        heat_config {
+          'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues;
+        }
       }
     } else {
-      heat_config { 'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues }
+      heat_config {
+        'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host;
+        'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port;
+        'oslo_messaging_rabbit/rabbit_hosts':     ensure => absent;
+        'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues;
+      }
     }
-
+    if $rabbit_heartbeat_timeout_threshold == 0 {
+      warning('Default value for rabbit_heartbeat_timeout_threshold parameter is different from OpenStack project defaults')
+    }
     heat_config {
       'oslo_messaging_rabbit/rabbit_userid':                value => $rabbit_userid;
       'oslo_messaging_rabbit/rabbit_password':              value => $rabbit_password, secret => true;

@@ -52,13 +52,11 @@ describe 'heat::api_cloudwatch' do
       let :params do
         {
           :use_ssl   => false,
-          :cert_file => false,
-          :key_file  => false
         }
       end
 
-      it { is_expected.to contain_heat_config('heat_api_cloudwatch/cert_file').with_ensure('absent') }
-      it { is_expected.to contain_heat_config('heat_api_cloudwatch/key_file').with_ensure('absent') }
+      it { is_expected.to contain_heat_config('heat_api_cloudwatch/cert_file').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('heat_api_cloudwatch/key_file').with_value('<SERVICE DEFAULT>') }
     end
 
     [{:enabled => true}, {:enabled => false}].each do |param_hash|

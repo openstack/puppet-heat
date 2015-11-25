@@ -1,3 +1,46 @@
+##2015-11-25 - 7.0.0
+###Summary
+
+This is a backwards-incompatible major release for OpenStack Liberty.
+
+####Backwards-incompatible changes
+- change section name for AMQP qpid parameters
+- change section name for AMQP rabbit parameters
+- update rpc_backend default parameter
+- cleanup configure_delegated_roles deprecated parameter
+
+####Features
+- add support for RabbitMQ connection heartbeat
+- keystone/auth: make service description configurable
+- add tag to package and service resources
+- add heat::config class
+- expose RPC response timeout as a puppet parameter
+- support setting instance_user to an empty string
+- add heat::db::sync
+- add an ability to manage use_stderr parameter
+- reflect provider change in puppet-openstacklib
+- put all the logging related parameters to the logging class
+- add rabbit_ha_queues option
+- improve heat::keystone::domain
+- remove POSIX users, groups, and file modes
+- use postgresql lib class for psycopg package
+- move deps & external hooks into a standalone class
+- introduce heat::db class
+- make the role for heat_stack_user configurable
+- allow to not manage Keystone domain
+- add hooks for external install & svc management
+
+####Bugfixes
+- rely on autorequire for config resource ordering
+- fix up doc string for workers variable
+
+####Maintenance
+- acceptance: enable debug & verbosity for OpenStack logs
+- initial msync run for all Puppet OpenStack modules
+- try to use zuul-cloner to prepare fixtures
+- remove class_parameter_defaults puppet-lint check
+- acceptance: use common bits from puppet-openstack-integration
+
 ##2015-10-14 - 6.1.0
 ###Summary
 

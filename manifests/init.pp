@@ -404,6 +404,8 @@ class heat(
 
   if $rpc_backend == 'qpid' {
 
+    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
+
     heat_config {
       'oslo_messaging_qpid/qpid_hostname'               : value => $qpid_hostname;
       'oslo_messaging_qpid/qpid_port'                   : value => $qpid_port;

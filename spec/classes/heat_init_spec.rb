@@ -23,16 +23,6 @@ describe 'heat' do
     }
   end
 
-  let :qpid_params do
-    {
-      :rpc_backend   => "qpid",
-      :qpid_hostname => 'localhost',
-      :qpid_port     => 5672,
-      :qpid_username => 'guest',
-      :qpid_password  => 'guest',
-    }
-  end
-
   shared_examples_for 'heat' do
 
     context 'with rabbit_host parameter' do
@@ -62,13 +52,6 @@ describe 'heat' do
         :rabbit_heartbeat_rate => '10' ) }
       it_configures 'a heat base installation'
       it_configures 'rabbit with heartbeat configured'
-    end
-
-    context 'with qpid instance' do
-      before {params.merge!(qpid_params) }
-
-      it_configures 'a heat base installation'
-      it_configures 'qpid as rpc backend'
     end
 
     it_configures 'with SSL enabled with kombu'
@@ -214,36 +197,6 @@ describe 'heat' do
     end
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
-  end
-
-  shared_examples_for 'qpid as rpc backend' do
-    context("with default parameters") do
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_reconnect').with_value(true) }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_reconnect_timeout').with_value('0') }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_reconnect_limit').with_value('0') }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_reconnect_interval_min').with_value('0') }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_reconnect_interval_max').with_value('0') }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_reconnect_interval').with_value('0') }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_heartbeat').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_protocol').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_tcp_nodelay').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_heat_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/amqp_durable_queues').with_value(false) }
-    end
-
-    context("with mandatory parameters set") do
-      it { is_expected.to contain_heat_config('DEFAULT/rpc_backend').with_value('qpid') }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_hostname').with_value( params[:qpid_hostname] ) }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_port').with_value( params[:qpid_port] ) }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_username').with_value( params[:qpid_username]) }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_password').with_value(params[:qpid_password]) }
-      it { is_expected.to contain_heat_config('oslo_messaging_qpid/qpid_password').with_secret( true ) }
-    end
-
-    context("failing if the rpc_backend is not present") do
-      before { params.delete( :rpc_backend) }
-      it { expect { is_expected.to raise_error(Puppet::Error) } }
-    end
   end
 
   shared_examples_for 'with SSL enabled with kombu' do

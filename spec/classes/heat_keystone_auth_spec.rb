@@ -17,7 +17,7 @@ describe 'heat::keystone::auth' do
       before do
         params.merge!({:configure_service => false})
       end
-      it { is_expected.to_not contain_keystone_service('RegionOne/heat') }
+      it { is_expected.to_not contain_keystone_service('heat::orchestration') }
     end
 
     context 'with overridden parameters' do
@@ -61,15 +61,14 @@ describe 'heat::keystone::auth' do
       end
 
       it 'configures heat service' do
-        is_expected.to contain_keystone_service( params[:auth_name] ).with(
+        is_expected.to contain_keystone_service("#{params[:auth_name]}::#{params[:service_type]}").with(
           :ensure      => 'present',
-          :type        => params[:service_type],
           :description => 'Openstack Orchestration Service'
         )
       end
 
       it 'configure heat endpoints' do
-        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
+        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}::#{params[:service_type]}").with(
           :ensure       => 'present',
           :public_url   => params[:public_url],
           :admin_url    => params[:admin_url],
@@ -92,7 +91,7 @@ describe 'heat::keystone::auth' do
         })
       end
 
-      it { is_expected.to contain_keystone_endpoint('RegionOne/heat').with(
+      it { is_expected.to contain_keystone_endpoint('RegionOne/heat::orchestration').with(
         :ensure       => 'present',
           :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}/#{params[:version]}/%(tenant_id)s",
           :admin_url    => "#{params[:admin_protocol]}://#{params[:admin_address]}:#{params[:port]}/#{params[:version]}/%(tenant_id)s",
@@ -113,10 +112,10 @@ describe 'heat::keystone::auth' do
         is_expected.to contain_keystone_user_role('heat@services')
       end
       it 'configures correct service name' do
-        is_expected.to contain_keystone_service('heat_service')
+        is_expected.to contain_keystone_service('heat_service::orchestration')
       end
       it 'configures correct endpoint name' do
-        is_expected.to contain_keystone_endpoint('RegionOne/heat_service')
+        is_expected.to contain_keystone_endpoint('RegionOne/heat_service::orchestration')
       end
     end
 
@@ -128,9 +127,8 @@ describe 'heat::keystone::auth' do
       it { is_expected.to_not contain_keystone_user('heat') }
       it { is_expected.to contain_keystone_user_role('heat@services') }
 
-      it { is_expected.to contain_keystone_service('heat').with(
+      it { is_expected.to contain_keystone_service('heat::orchestration').with(
         :ensure       => 'present',
-        :type         => 'orchestration',
         :description  => 'Openstack Orchestration Service'
       )}
     end
@@ -146,9 +144,8 @@ describe 'heat::keystone::auth' do
       it { is_expected.to_not contain_keystone_user('heat') }
       it { is_expected.to_not contain_keystone_user_role('heat@services') }
 
-      it { is_expected.to contain_keystone_service('heat').with(
+      it { is_expected.to contain_keystone_service('heat::orchestration').with(
         :ensure       => 'present',
-        :type         => 'orchestration',
         :description  => 'Openstack Orchestration Service'
       )}
     end

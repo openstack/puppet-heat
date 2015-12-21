@@ -45,15 +45,14 @@ describe 'heat::keystone::auth_cfn' do
       end
 
       it 'configures heat service' do
-        is_expected.to contain_keystone_service( params[:auth_name] ).with(
+        is_expected.to contain_keystone_service("#{params[:auth_name]}::#{params[:service_type]}").with(
           :ensure      => 'present',
-          :type        => params[:service_type],
           :description => 'Openstack Cloudformation Service'
         )
       end
 
       it 'configure heat endpoints' do
-        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}").with(
+        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}::#{params[:service_type]}").with(
           :ensure       => 'present',
           :public_url   => params[:public_url],
           :admin_url    => params[:admin_url],
@@ -67,7 +66,7 @@ describe 'heat::keystone::auth_cfn' do
             :configure_service => false
           })
         end
-        it { is_expected.to_not contain_keystone_service("#{params[:region]}/#{params[:auth_name]}") }
+        it { is_expected.to_not contain_keystone_service("#{params[:auth_name]}::#{params[:service_type]}") }
       end
     end
 
@@ -85,7 +84,7 @@ describe 'heat::keystone::auth_cfn' do
         })
       end
 
-      it { is_expected.to contain_keystone_endpoint('RegionOne/heat-cfn').with(
+      it { is_expected.to contain_keystone_endpoint('RegionOne/heat-cfn::cloudformation').with(
         :ensure       => 'present',
           :public_url   => "#{params[:public_protocol]}://#{params[:public_address]}:#{params[:port]}/#{params[:version]}",
           :admin_url    => "#{params[:admin_protocol]}://#{params[:admin_address]}:#{params[:port]}/#{params[:version]}",
@@ -106,10 +105,10 @@ describe 'heat::keystone::auth_cfn' do
         is_expected.to contain_keystone_user_role('heat-cfn@services')
       end
       it 'configures correct service name' do
-        is_expected.to contain_keystone_service('heat-cfn_service')
+        is_expected.to contain_keystone_service('heat-cfn_service::cloudformation')
       end
       it 'configures correct endpoint name' do
-        is_expected.to contain_keystone_endpoint('RegionOne/heat-cfn_service')
+        is_expected.to contain_keystone_endpoint('RegionOne/heat-cfn_service::cloudformation')
       end
     end
 
@@ -121,9 +120,8 @@ describe 'heat::keystone::auth_cfn' do
       it { is_expected.to_not contain_keystone_user('heat_cfn') }
       it { is_expected.to contain_keystone_user_role('heat-cfn@services') }
 
-      it { is_expected.to contain_keystone_service('heat-cfn').with(
+      it { is_expected.to contain_keystone_service('heat-cfn::cloudformation').with(
         :ensure       => 'present',
-        :type         => 'cloudformation',
         :description  => 'Openstack Cloudformation Service'
       )}
     end
@@ -139,9 +137,8 @@ describe 'heat::keystone::auth_cfn' do
       it { is_expected.to_not contain_keystone_user('heat_cfn') }
       it { is_expected.to_not contain_keystone_user_role('heat-cfn@services') }
 
-      it { is_expected.to contain_keystone_service('heat-cfn').with(
+      it { is_expected.to contain_keystone_service('heat-cfn::cloudformation').with(
         :ensure       => 'present',
-        :type         => 'cloudformation',
         :description  => 'Openstack Cloudformation Service'
       )}
     end

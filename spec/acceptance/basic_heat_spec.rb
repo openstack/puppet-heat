@@ -55,6 +55,7 @@ describe 'basic heat' do
       }
       class { '::heat::api_cloudwatch': }
       class { '::heat::api_cfn': }
+      class { '::heat::cron::purge_deleted': }
       EOS
 
 
@@ -75,5 +76,8 @@ describe 'basic heat' do
       it { is_expected.to be_listening.with('tcp') }
     end
 
+    describe cron do
+      it { is_expected.to have_entry('1 0 * * * heat-manage purge_deleted -g days 1 >>/var/log/heat/heat-purge_deleted.log 2>&1').with_user('heat') }
+    end
   end
 end

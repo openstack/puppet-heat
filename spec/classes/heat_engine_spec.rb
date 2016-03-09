@@ -3,35 +3,41 @@ require 'spec_helper'
 describe 'heat::engine' do
 
   let :default_params do
-    { :enabled                       => true,
-      :manage_service                => true,
-      :heat_stack_user_role          => 'heat_stack_user',
-      :heat_metadata_server_url      => 'http://127.0.0.1:8000',
-      :heat_waitcondition_server_url => 'http://127.0.0.1:8000/v1/waitcondition',
-      :heat_watch_server_url         => 'http://128.0.0.1:8003',
-      :engine_life_check_timeout     => '2',
-      :trusts_delegated_roles        => ['heat_stack_owner'],
-      :deferred_auth_method          => 'trusts',
-      :default_software_config_transport   => 'POLL_SERVER_CFN',
-      :default_deployment_signal_transport => 'CFN_SIGNAL',
+    { :enabled                                         => true,
+      :manage_service                                  => true,
+      :heat_stack_user_role                            => 'heat_stack_user',
+      :heat_metadata_server_url                        => 'http://127.0.0.1:8000',
+      :heat_waitcondition_server_url                   => 'http://127.0.0.1:8000/v1/waitcondition',
+      :heat_watch_server_url                           => 'http://128.0.0.1:8003',
+      :engine_life_check_timeout                       => '2',
+      :trusts_delegated_roles                          => ['heat_stack_owner'],
+      :deferred_auth_method                            => 'trusts',
+      :default_software_config_transport               => 'POLL_SERVER_CFN',
+      :default_deployment_signal_transport             => 'CFN_SIGNAL',
+      :max_resources_per_stack                         => '1000',
+      :instance_connection_is_secure                   => '0',
+      :instance_connection_https_validate_certificates => '1,'
     }
   end
 
   shared_examples_for 'heat-engine' do
     [
       {},
-      { :auth_encryption_key           => '1234567890AZERTYUIOPMLKJHGFDSQ12' },
-      { :auth_encryption_key           => '0234567890AZERTYUIOPMLKJHGFDSQ24',
-        :enabled                       => false,
-        :heat_stack_user_role          => 'heat_stack_user',
-        :heat_metadata_server_url      => 'http://127.0.0.1:8000',
-        :heat_waitcondition_server_url => 'http://127.0.0.1:8000/v1/waitcondition',
-        :heat_watch_server_url         => 'http://128.0.0.1:8003',
-        :engine_life_check_timeout     => '2',
-        :trusts_delegated_roles        => ['role1', 'role2'],
-        :deferred_auth_method          => 'trusts',
-        :default_software_config_transport   => 'POLL_SERVER_CFN',
-        :default_deployment_signal_transport => 'CFN_SIGNAL',
+      { :auth_encryption_key                             => '1234567890AZERTYUIOPMLKJHGFDSQ12' },
+      { :auth_encryption_key                             => '0234567890AZERTYUIOPMLKJHGFDSQ24',
+        :enabled                                         => false,
+        :heat_stack_user_role                            => 'heat_stack_user',
+        :heat_metadata_server_url                        => 'http://127.0.0.1:8000',
+        :heat_waitcondition_server_url                   => 'http://127.0.0.1:8000/v1/waitcondition',
+        :heat_watch_server_url                           => 'http://128.0.0.1:8003',
+        :engine_life_check_timeout                       => '2',
+        :trusts_delegated_roles                          => ['role1', 'role2'],
+        :deferred_auth_method                            => 'trusts',
+        :default_software_config_transport               => 'POLL_SERVER_CFN',
+        :default_deployment_signal_transport             => 'CFN_SIGNAL',
+        :max_resources_per_stack                         => '2000',
+        :instance_connection_is_secure                   => '1',
+        :instance_connection_https_validate_certificates => '0,'
       }
     ].each do |new_params|
       describe 'when #{param_set == {} ? "using default" : "specifying"} parameters'
@@ -69,6 +75,9 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
       it { is_expected.to contain_heat_config('DEFAULT/default_software_config_transport').with_value( expected_params[:default_software_config_transport] ) }
       it { is_expected.to contain_heat_config('DEFAULT/default_deployment_signal_transport').with_value( expected_params[:default_deployment_signal_transport] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/instance_connection_is_secure').with_value( expected_params[:instance_connection_is_secure] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/instance_connection_https_validate_certificates').with_value( expected_params[:instance_connection_https_validate_certificates] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_resources_per_stack').with_value( expected_params[:max_resources_per_stack] ) }
     end
 
     context 'with disabled service managing' do

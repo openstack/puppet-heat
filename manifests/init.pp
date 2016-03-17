@@ -471,6 +471,7 @@ class heat(
     'DEFAULT/enable_stack_abandon':         value => $enable_stack_abandon;
     'DEFAULT/enable_stack_adopt':           value => $enable_stack_adopt;
     'ec2authtoken/auth_uri':                value => $keystone_ec2_uri;
+    'keystone_authtoken/region_name':       value => $region_name;
     'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
     'keystone_authtoken/admin_user':        value => $keystone_user;
     'keystone_authtoken/admin_password':    value => $keystone_password, secret => true;

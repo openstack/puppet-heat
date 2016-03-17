@@ -325,12 +325,14 @@ describe 'heat' do
 
     it 'has region_name set when specified' do
       is_expected.to contain_heat_config('DEFAULT/region_name_for_services').with_value('East')
+      is_expected.to contain_heat_config('keystone_authtoken/region_name').with_value('East')
     end
   end
 
   shared_examples_for 'without region_name set' do
     it 'doesnt have region_name set by default' do
       is_expected.to contain_heat_config('DEFAULT/region_name_for_services').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('keystone_authtoken/region_name').with_value('<SERVICE DEFAULT>')
     end
   end
 

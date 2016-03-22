@@ -1,0 +1,11 @@
+---
+features:
+  - Configure "trustee" and "clients_keystone" sections.
+    Support auth_plugin and versionless auth urls.
+upgrade:
+  - Removed deprecated options "keystone_host",
+    "keystone_port", "keystone_protocol".
+deprecations:
+  - Deprecated "admin_user", "admin_password" and
+    "admin_tenant_name" options in favour of auth_plugin
+    auth method.

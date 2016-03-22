@@ -16,7 +16,6 @@ describe 'heat' do
       :rabbit_virtual_host   => '<SERVICE DEFAULT>',
       :database_connection   => 'mysql+pymysql://user@host/database',
       :database_idle_timeout => 3600,
-      :auth_uri              => 'http://127.0.0.1:5000/v2.0',
       :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',
       :flavor                => 'keystone',
       :keystone_password     => 'secretpassword',
@@ -58,8 +57,7 @@ describe 'heat' do
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
     it_configures 'with SSL wrongly configured'
-    it_configures "with custom keystone identity_uri"
-    it_configures "with custom keystone identity_uri and auth_uri"
+    it_configures "with auth_plugin"
     it_configures 'with enable_stack_adopt and enable_stack_abandon set'
     it_configures 'with notification_driver set to a string'
   end
@@ -89,8 +87,32 @@ describe 'heat' do
       is_expected.to contain_heat_config('DEFAULT/max_json_body_size').with_value('<SERVICE DEFAULT>')
     end
 
-    it 'configures auth_uri' do
-      is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value( params[:auth_uri] )
+    it 'configures project_domain_id' do
+      is_expected.to contain_heat_config('trustee/project_domain_id').with_value( 'Default' )
+    end
+
+    it 'configures user_domain_id' do
+      is_expected.to contain_heat_config('trustee/user_domain_id').with_value( 'Default' )
+    end
+
+    it 'configures auth_plugin' do
+      is_expected.to contain_heat_config('trustee/auth_plugin').with_value( 'password' )
+    end
+
+    it 'configures auth_url' do
+      is_expected.to contain_heat_config('trustee/auth_url').with_value( 'http://127.0.0.1:35357/' )
+    end
+
+    it 'configures username' do
+      is_expected.to contain_heat_config('trustee/username').with_value( 'heat' )
+    end
+
+    it 'configures ' do
+      is_expected.to contain_heat_config('trustee/password').with_secret( true )
+    end
+
+    it 'configures auth_uri for clients_keystone' do
+      is_expected.to contain_heat_config('clients_keystone/auth_uri').with_value( 'http://127.0.0.1:35357/' )
     end
 
     it 'configures keystone_ec2_uri' do
@@ -99,14 +121,11 @@ describe 'heat' do
 
     it { is_expected.to contain_heat_config('paste_deploy/flavor').with_value('keystone') }
 
-    it 'keeps keystone secrets secret' do
-      is_expected.to contain_heat_config('keystone_authtoken/admin_password').with_secret(true)
-    end
-
     it 'configures notification_driver' do
         is_expected.to contain_heat_config('DEFAULT/notification_driver').with_value('<SERVICE DEFAULT>')
     end
 
+    it_configures "with default auth method"
   end
 
   shared_examples_for 'rabbit without HA support (with backward compatibility)' do
@@ -304,18 +323,6 @@ describe 'heat' do
     end
   end
 
-  shared_examples_for 'with auth uri set' do
-    before do
-      params.merge!(
-        :auth_uri => 'http://1.2.3.4:35357/v2.0'
-      )
-    end
-
-    it do
-      is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value('http://1.2.3.4:35357/v2.0')
-    end
-  end
-
   shared_examples_for 'with region_name set' do
     before do
       params.merge!(
@@ -325,41 +332,52 @@ describe 'heat' do
 
     it 'has region_name set when specified' do
       is_expected.to contain_heat_config('DEFAULT/region_name_for_services').with_value('East')
-      is_expected.to contain_heat_config('keystone_authtoken/region_name').with_value('East')
     end
   end
 
   shared_examples_for 'without region_name set' do
     it 'doesnt have region_name set by default' do
       is_expected.to contain_heat_config('DEFAULT/region_name_for_services').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('keystone_authtoken/region_name').with_value('<SERVICE DEFAULT>')
     end
   end
 
-  shared_examples_for "with custom keystone identity_uri" do
-    before do
-      params.merge!({
-        :identity_uri => 'https://foo.bar:1234/',
-      })
-    end
-    it 'configures identity_uri' do
-      is_expected.to contain_heat_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:1234/");
+  shared_examples_for "with default auth method" do
+    it 'configures auth_uri, identity_uri, admin_tenant_name, admin_user, admin_password' do
+      is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value("http://127.0.0.1:5000/")
+      is_expected.to contain_heat_config('keystone_authtoken/identity_uri').with_value("http://127.0.0.1:35357/")
+      is_expected.to contain_heat_config('keystone_authtoken/admin_tenant_name').with_value("services")
+      is_expected.to contain_heat_config('keystone_authtoken/admin_user').with_value("heat")
+      is_expected.to contain_heat_config('keystone_authtoken/admin_password').with_secret( true )
     end
   end
 
-  shared_examples_for "with custom keystone identity_uri and auth_uri" do
+  shared_examples_for "with auth_plugin" do
     before do
       params.merge!({
-        :identity_uri => 'https://foo.bar:35357/',
-        :auth_uri => 'https://foo.bar:5000/v2.0/',
+        :auth_plugin => 'password',
       })
     end
-    it 'configures identity_uri and auth_uri but deprecates old auth settings' do
-      is_expected.to contain_heat_config('keystone_authtoken/identity_uri').with_value("https://foo.bar:35357/");
-      is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value("https://foo.bar:5000/v2.0/");
-      is_expected.to contain_heat_config('keystone_authtoken/auth_port').with(:ensure => 'absent')
-      is_expected.to contain_heat_config('keystone_authtoken/auth_protocol').with(:ensure => 'absent')
-      is_expected.to contain_heat_config('keystone_authtoken/auth_host').with(:ensure => 'absent')
+    it 'configures ' do
+      is_expected.to contain_heat_config('keystone_authtoken/auth_plugin').with_value("password")
+      is_expected.to contain_heat_config('keystone_authtoken/auth_url').with_value("http://127.0.0.1:35357/")
+      is_expected.to contain_heat_config('keystone_authtoken/username').with_value("heat")
+      is_expected.to contain_heat_config('keystone_authtoken/password').with_secret( true )
+      is_expected.to contain_heat_config('keystone_authtoken/project_name').with_value("services")
+      is_expected.to contain_heat_config('keystone_authtoken/user_domain_id').with_value('Default')
+      is_expected.to contain_heat_config('keystone_authtoken/project_domain_id').with_value('Default')
+    end
+  end
+
+  shared_examples_for "with custom keystone project_domain_id and user_domain_id" do
+    before do
+      params.merge!({
+        :keystone_project_domain_id => 'domain1',
+        :keystone_user_domain_id => 'domain1',
+      })
+    end
+    it 'configures project_domain_id and user_domain_id' do
+      is_expected.to contain_heat_config('trustee/project_domain_id').with_value("domain1");
+      is_expected.to contain_heat_config('trustee/user_domain_id').with_value("domain1");
     end
   end
 

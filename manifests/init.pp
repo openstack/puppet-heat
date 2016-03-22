@@ -118,18 +118,39 @@
 # [*auth_uri*]
 #   (Optional) Specifies the public Identity URI for Heat to use.
 #   Located in heat.conf.
-#   Defaults to: false
+#   Defaults to: 'http://127.0.0.1:5000/'.
 #
 # [*identity_uri*]
 #   (Optional) Specifies the admin Identity URI for Heat to use.
 #   Located in heat.conf.
-#   Defaults to: false
+#   Defaults to: 'http://127.0.0.1:35357/'.
+#
+# [*auth_plugin*]
+#   Specifies the plugin used for authentication.
+#   Defaults to undef.
 #
 # [*keystone_user*]
+#   Defaults to 'heat'.
 #
 # [*keystone_tenant*]
+#   Defaults to 'services'.
 #
 # [*keystone_password*]
+#
+# [*keystone_project_domain_name*]
+#   Specifies the project domain of Keystone account for "password" auth_plugin.
+#   Defaults to 'Default'.
+#
+# [*keystone_user_domain_id*]
+#   (Optional) Domain ID of the principal if the principal has a domain.
+#   Defaults to: 'Default'.
+#
+# [*keystone_user_domain_name*]
+#   Defaults to 'Default'.
+#
+# [*keystone_project_domain_id*]
+#   (Optional) Domain ID of the scoped project if auth is project-scoped.
+#   Defaults to: 'Default'.
 #
 # [*keystone_ec2_uri*]
 #
@@ -211,18 +232,6 @@
 # [*sql_connection*]
 #   Deprecated. Use database_connection instead.
 #
-# [*keystone_host*]
-#   (Optional) DEPRECATED The keystone host.
-#   Defaults to localhost.
-#
-# [*keystone_port*]
-#   (Optional) DEPRECATED The port used to access the keystone host.
-#   Defaults to 35357.
-#
-# [*keystone_protocol*]
-#   (Optional) DEPRECATED. The protocol used to access the keystone host
-#   Defaults to http.
-#
 # [*qpid_hostname*]
 #
 # [*qpid_port*]
@@ -250,16 +259,21 @@
 # [*qpid_reconnect_interval_max*]
 #
 class heat(
-  $auth_uri                           = false,
-  $identity_uri                       = false,
+  $auth_uri                           = 'http://127.0.0.1:5000/',
+  $identity_uri                       = 'http://127.0.0.1:35357/',
   $package_ensure                     = 'present',
   $verbose                            = undef,
   $debug                              = undef,
   $log_dir                            = undef,
+  $auth_plugin                        = undef,
   $keystone_user                      = 'heat',
   $keystone_tenant                    = 'services',
   $keystone_password                  = false,
   $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
+  $keystone_project_domain_id         = 'Default',
+  $keystone_project_domain_name       = 'Default',
+  $keystone_user_domain_id            = 'Default',
+  $keystone_user_domain_name          = 'Default',
   $rpc_backend                        = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
   $rabbit_host                        = $::os_service_default,
@@ -298,9 +312,6 @@ class heat(
   # Deprecated parameters
   $mysql_module                       = undef,
   $sql_connection                     = undef,
-  $keystone_host                      = '127.0.0.1',
-  $keystone_port                      = '35357',
-  $keystone_protocol                  = 'http',
   $instance_user                      = undef,
   $qpid_hostname                      = undef,
   $qpid_port                          = undef,
@@ -395,62 +406,40 @@ class heat(
     warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
   }
 
-  # if both auth_uri and identity_uri are set we skip these deprecated settings entirely
-  if !$auth_uri or !$identity_uri {
-    if $keystone_host {
-      warning('The keystone_host parameter is deprecated. Please use auth_uri and identity_uri instead.')
+  if $auth_plugin {
+    if $auth_plugin == 'password' {
       heat_config {
-        'keystone_authtoken/auth_host': value => $keystone_host;
+        'keystone_authtoken/auth_url':          value => $identity_uri;
+        'keystone_authtoken/auth_plugin':       value => $auth_plugin;
+        'keystone_authtoken/username':          value => $keystone_user;
+        'keystone_authtoken/password':          value => $keystone_password, secret => true;
+        'keystone_authtoken/user_domain_id':    value => $keystone_user_domain_id;
+        'keystone_authtoken/project_name':      value => $keystone_tenant;
+        'keystone_authtoken/project_domain_id': value => $keystone_project_domain_id;
       }
     } else {
-      heat_config {
-        'keystone_authtoken/auth_host': ensure => absent;
-      }
-    }
-
-    if $keystone_port {
-      warning('The keystone_port parameter is deprecated. Please use auth_uri and identity_uri instead.')
-      heat_config {
-        'keystone_authtoken/auth_port': value => $keystone_port;
-      }
-    } else {
-      heat_config {
-        'keystone_authtoken/auth_port': ensure => absent;
-      }
-    }
-
-    if $keystone_protocol {
-      warning('The keystone_protocol parameter is deprecated. Please use auth_uri and identity_uri instead.')
-      heat_config {
-        'keystone_authtoken/auth_protocol': value => $keystone_protocol;
-      }
-    } else {
-      heat_config {
-        'keystone_authtoken/auth_protocol': ensure => absent;
-      }
+      fail('Currently only "password" auth_plugin is supported.')
     }
   } else {
+    warning('"admin_user", "admin_password", "admin_tenant_name" configuration options are deprecated in favor of auth_plugin and related options')
     heat_config {
-      'keystone_authtoken/auth_host': ensure => absent;
-      'keystone_authtoken/auth_port': ensure => absent;
-      'keystone_authtoken/auth_protocol': ensure => absent;
+      'keystone_authtoken/auth_uri':          value => $auth_uri;
+      'keystone_authtoken/identity_uri':      value => $identity_uri;
+      'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
+      'keystone_authtoken/admin_user':        value => $keystone_user;
+      'keystone_authtoken/admin_password':    value => $keystone_password, secret => true;
     }
   }
 
-  if $auth_uri {
-    heat_config { 'keystone_authtoken/auth_uri': value => $auth_uri; }
-  } else {
-    heat_config { 'keystone_authtoken/auth_uri': value => "${keystone_protocol}://${keystone_host}:5000/v2.0"; }
-  }
+  heat_config {
+    'trustee/auth_plugin':       value => 'password';
+    'trustee/auth_url':          value => $identity_uri;
+    'trustee/username':          value => $keystone_user;
+    'trustee/password':          value => $keystone_password, secret => true;
+    'trustee/project_domain_id': value => $keystone_project_domain_id;
+    'trustee/user_domain_id':    value => $keystone_user_domain_id;
 
-  if $identity_uri {
-    heat_config {
-      'keystone_authtoken/identity_uri': value => $identity_uri;
-    }
-  } else {
-    heat_config {
-      'keystone_authtoken/identity_uri': ensure => absent;
-    }
+    'clients_keystone/auth_uri': value => $identity_uri;
   }
 
   if (!is_service_default($enable_stack_adopt)) {
@@ -471,10 +460,6 @@ class heat(
     'DEFAULT/enable_stack_abandon':         value => $enable_stack_abandon;
     'DEFAULT/enable_stack_adopt':           value => $enable_stack_adopt;
     'ec2authtoken/auth_uri':                value => $keystone_ec2_uri;
-    'keystone_authtoken/region_name':       value => $region_name;
-    'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
-    'keystone_authtoken/admin_user':        value => $keystone_user;
-    'keystone_authtoken/admin_password':    value => $keystone_password, secret => true;
     'paste_deploy/flavor':                  value => $flavor;
   }
 

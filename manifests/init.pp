@@ -359,51 +359,27 @@ class heat(
   }
 
   if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {
-
-    if ! is_service_default($rabbit_hosts) and $rabbit_hosts {
-      heat_config {
-        'oslo_messaging_rabbit/rabbit_hosts': value => join(any2array($rabbit_hosts), ',');
-        'oslo_messaging_rabbit/rabbit_host':  ensure => absent;
-        'oslo_messaging_rabbit/rabbit_port':  ensure => absent;
-      }
-      if size($rabbit_hosts) > 1 and is_service_default($rabbit_ha_queues) {
-        heat_config {
-          'oslo_messaging_rabbit/rabbit_ha_queues': value => true;
-        }
-      } else {
-        heat_config {
-          'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues;
-        }
-      }
-    } else {
-      heat_config {
-        'oslo_messaging_rabbit/rabbit_host':      value => $rabbit_host;
-        'oslo_messaging_rabbit/rabbit_port':      value => $rabbit_port;
-        'oslo_messaging_rabbit/rabbit_hosts':     ensure => absent;
-        'oslo_messaging_rabbit/rabbit_ha_queues': value => $rabbit_ha_queues;
-      }
-    }
     if $rabbit_heartbeat_timeout_threshold == 0 {
       warning('Default value for rabbit_heartbeat_timeout_threshold parameter is different from OpenStack project defaults')
     }
-    heat_config {
-      'oslo_messaging_rabbit/rabbit_userid':                value => $rabbit_userid;
-      'oslo_messaging_rabbit/rabbit_password':              value => $rabbit_password, secret => true;
-      'oslo_messaging_rabbit/rabbit_virtual_host':          value => $rabbit_virtual_host;
-      'oslo_messaging_rabbit/heartbeat_timeout_threshold':  value => $rabbit_heartbeat_timeout_threshold;
-      'oslo_messaging_rabbit/heartbeat_rate':               value => $rabbit_heartbeat_rate;
-      'oslo_messaging_rabbit/rabbit_use_ssl':               value => $rabbit_use_ssl;
-      'oslo_messaging_rabbit/amqp_durable_queues':          value => $amqp_durable_queues;
-      'oslo_messaging_rabbit/kombu_ssl_ca_certs':           value => $kombu_ssl_ca_certs;
-      'oslo_messaging_rabbit/kombu_ssl_certfile':           value => $kombu_ssl_certfile;
-      'oslo_messaging_rabbit/kombu_ssl_keyfile':            value => $kombu_ssl_keyfile;
-      'oslo_messaging_rabbit/kombu_ssl_version':            value => $kombu_ssl_version;
+
+    oslo::messaging::rabbit { 'heat_config':
+      kombu_ssl_version           => $kombu_ssl_version,
+      kombu_ssl_keyfile           => $kombu_ssl_keyfile,
+      kombu_ssl_certfile          => $kombu_ssl_certfile,
+      kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
+      rabbit_userid               => $rabbit_userid,
+      rabbit_password             => $rabbit_password,
+      rabbit_virtual_host         => $rabbit_virtual_host,
+      heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
+      heartbeat_rate              => $rabbit_heartbeat_rate,
+      rabbit_use_ssl              => $rabbit_use_ssl,
+      amqp_durable_queues         => $amqp_durable_queues,
+      rabbit_host                 => $rabbit_host,
+      rabbit_port                 => $rabbit_port,
+      rabbit_hosts                => $rabbit_hosts,
+      rabbit_ha_queues            => $rabbit_ha_queues,
     }
-
-  }
-
-  if $rpc_backend == 'qpid' {
-    warning('Qpid driver is removed from Oslo.messaging in the Mitaka release')
   }
 
   if $auth_plugin {
@@ -451,16 +427,21 @@ class heat(
   }
 
   heat_config {
-    'DEFAULT/rpc_backend':                  value => $rpc_backend;
-    'DEFAULT/rpc_response_timeout':         value => $rpc_response_timeout;
     'DEFAULT/max_template_size':            value => $max_template_size;
     'DEFAULT/max_json_body_size':           value => $max_json_body_size;
-    'DEFAULT/notification_driver':          value => $notification_driver;
     'DEFAULT/region_name_for_services':     value => $region_name;
     'DEFAULT/enable_stack_abandon':         value => $enable_stack_abandon;
     'DEFAULT/enable_stack_adopt':           value => $enable_stack_adopt;
     'ec2authtoken/auth_uri':                value => $keystone_ec2_uri;
     'paste_deploy/flavor':                  value => $flavor;
+  }
+
+  oslo::messaging::notifications { 'heat_config':
+    driver => $notification_driver,
+  }
+
+  oslo::messaging::default { 'heat_config':
+    rpc_response_timeout => $rpc_response_timeout,
   }
 
   # instance_user

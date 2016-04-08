@@ -122,7 +122,7 @@ describe 'heat' do
     it { is_expected.to contain_heat_config('paste_deploy/flavor').with_value('keystone') }
 
     it 'configures notification_driver' do
-        is_expected.to contain_heat_config('DEFAULT/notification_driver').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_heat_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
     end
 
     it_configures "with default auth method"
@@ -144,7 +144,7 @@ describe 'heat' do
     end
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_value( params[:rabbit_host] ) }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_value( params[:rabbit_port] ) }
-    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_hosts').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_hosts').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_heat_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
@@ -164,8 +164,8 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
     end
-    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent') }
-    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
@@ -185,8 +185,8 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
     end
-    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_ensure('absent') }
-    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_ensure('absent') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_host').with_value('<SERVICE DEFAULT>') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_port').with_value('<SERVICE DEFAULT>') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_hosts').with_value( params[:rabbit_hosts].join(',') ) }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
@@ -432,7 +432,7 @@ describe 'heat' do
     end
 
     it 'has notification_driver set when specified' do
-      is_expected.to contain_heat_config('DEFAULT/notification_driver').with_value('bar.foo.rpc_notifier')
+      is_expected.to contain_heat_config('oslo_messaging_notifications/driver').with_value('bar.foo.rpc_notifier')
     end
   end
 

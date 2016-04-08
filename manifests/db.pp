@@ -95,14 +95,14 @@ class heat::db (
     }
   }
 
-  heat_config {
-    'database/connection':     value => $database_connection_real, secret => true;
-    'database/idle_timeout':   value => $database_idle_timeout_real;
-    'database/min_pool_size':  value => $database_min_pool_size_real;
-    'database/max_retries':    value => $database_max_retries_real;
-    'database/retry_interval': value => $database_retry_interval_real;
-    'database/max_pool_size':  value => $database_max_pool_size_real;
-    'database/max_overflow':   value => $database_max_overflow_real;
+  oslo::db { 'heat_config':
+    connection     => $database_connection_real,
+    idle_timeout   => $database_idle_timeout_real,
+    min_pool_size  => $database_min_pool_size_real,
+    max_pool_size  => $database_max_pool_size_real,
+    max_retries    => $database_max_retries_real,
+    retry_interval => $database_retry_interval_real,
+    max_overflow   => $database_max_overflow_real,
   }
 
   if $sync_db_real {

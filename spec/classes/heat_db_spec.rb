@@ -90,7 +90,7 @@ describe 'heat::db' do
         { :database_connection     => 'mysql+pymysql://heat:heat@localhost/heat' }
       end
 
-      it { is_expected.to contain_package('heat-backend-package').with({ :ensure => 'present', :name => 'python-pymysql' }) }
+      it { is_expected.to contain_package('db_backend_package').with({ :ensure => 'present', :name => 'python-pymysql' }) }
     end
   end
 
@@ -109,7 +109,7 @@ describe 'heat::db' do
         { :database_connection     => 'mysql+pymysql://heat:heat@localhost/heat' }
       end
 
-      it { is_expected.not_to contain_package('heat-backend-package') }
+      it { is_expected.not_to contain_package('db_backend_package') }
     end
   end
 

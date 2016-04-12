@@ -49,7 +49,6 @@ class heat::db (
 ) {
 
   include ::heat::deps
-  include ::heat::params
 
   # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
   # to use heat::<myparam> if heat::db::<myparam> isn't specified.
@@ -64,36 +63,6 @@ class heat::db (
 
   validate_re($database_connection_real,
     '^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
-
-  case $database_connection_real {
-    /^mysql(\+pymysql)?:\/\//: {
-      require 'mysql::bindings'
-      require 'mysql::bindings::python'
-      if $database_connection_real =~ /^mysql\+pymysql/ {
-        $backend_package = $::heat::params::pymysql_package_name
-      } else {
-        $backend_package = false
-      }
-    }
-    /^postgresql:\/\//: {
-      $backend_package = false
-      require 'postgresql::lib::python'
-    }
-    /^sqlite:\/\//: {
-      $backend_package = $::heat::params::sqlite_package_name
-    }
-    default: {
-      fail('Unsupported backend configured')
-    }
-  }
-
-  if $backend_package and !defined(Package[$backend_package]) {
-    package {'heat-backend-package':
-      ensure => present,
-      name   => $backend_package,
-      tag    => 'openstack',
-    }
-  }
 
   oslo::db { 'heat_config':
     connection     => $database_connection_real,

@@ -32,6 +32,7 @@ describe 'heat::engine' do
         :deferred_auth_method          => 'trusts',
         :default_software_config_transport   => 'POLL_SERVER_CFN',
         :default_deployment_signal_transport => 'CFN_SIGNAL',
+        :num_engine_workers            => '4',
       }
     ].each do |new_params|
       describe 'when #{param_set == {} ? "using default" : "specifying"} parameters'
@@ -72,6 +73,7 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/instance_connection_is_secure').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/instance_connection_https_validate_certificates').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/max_resources_per_stack').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('DEFAULT/num_engine_workers').with_value( expected_params[:num_engine_workers] ) }
     end
 
     context 'with disabled service managing' do

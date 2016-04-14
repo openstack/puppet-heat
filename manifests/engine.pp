@@ -89,6 +89,10 @@
 #   (Optional) Maximum resources allowed per top-level stack.
 #   Defaults to $::os_service_default
 #
+# [*num_engine_workers*]
+#   (Optional) The number of workers to spawn.
+#   Defaults to $::os_service_default.
+#
 class heat::engine (
   $auth_encryption_key,
   $package_ensure                                  = 'present',
@@ -106,6 +110,7 @@ class heat::engine (
   $instance_connection_is_secure                   = $::os_service_default,
   $instance_connection_https_validate_certificates = $::os_service_default,
   $max_resources_per_stack                         = $::os_service_default,
+  $num_engine_workers                              = $::os_service_default,
 ) {
 
   include ::heat::deps
@@ -159,5 +164,6 @@ class heat::engine (
     'DEFAULT/max_resources_per_stack':                         value => $max_resources_per_stack;
     'DEFAULT/instance_connection_https_validate_certificates': value => $instance_connection_https_validate_certificates;
     'DEFAULT/instance_connection_is_secure':                   value => $instance_connection_is_secure;
+    'DEFAULT/num_engine_workers':                              value => $num_engine_workers;
   }
 }

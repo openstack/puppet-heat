@@ -20,6 +20,7 @@ describe 'heat::policy' do
         :key   => 'context_is_admin',
         :value => 'foo:bar'
       })
+      is_expected.to contain_heat_config('oslo_policy/policy_file').with_value('/etc/heat/policy.json')
     end
   end
 

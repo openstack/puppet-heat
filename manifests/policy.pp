@@ -32,6 +32,7 @@ class heat::policy (
   }
 
   create_resources('openstacklib::policy::base', $policies)
+  oslo::policy { 'heat_config': policy_file => $policy_path }
 
   Anchor<| title == 'heat::config::start' |>
   -> Class['heat::policy']

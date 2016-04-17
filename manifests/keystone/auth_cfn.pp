@@ -8,11 +8,11 @@
 #
 # [*email*]
 #   (Optional) Email for heat-cfn user.
-#   Defaults to 'heat@localhost'.
+#   Defaults to 'heat-cfn@localhost'.
 #
 # [*auth_name*]
 #   (Optional) Username for heat-cfn service.
-#   Defaults to 'heat'.
+#   Defaults to 'heat-cfn'.
 #
 # [*configure_endpoint*]
 #   (Optional) Should heat-cfn endpoint be configured?

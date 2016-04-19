@@ -232,32 +232,6 @@
 # [*sql_connection*]
 #   Deprecated. Use database_connection instead.
 #
-# [*qpid_hostname*]
-#
-# [*qpid_port*]
-#
-# [*qpid_username*]
-#
-# [*qpid_password*]
-#
-# [*qpid_heartbeat*]
-#
-# [*qpid_protocol*]
-#
-# [*qpid_tcp_nodelay*]
-#
-# [*qpid_reconnect*]
-#
-# [*qpid_reconnect_timeout*]
-#
-# [*qpid_reconnect_limit*]
-#
-# [*qpid_reconnect_interval*]
-#
-# [*qpid_reconnect_interval_min*]
-#
-# [*qpid_reconnect_interval_max*]
-#
 class heat(
   $auth_uri                           = 'http://127.0.0.1:5000/',
   $identity_uri                       = 'http://127.0.0.1:35357/',
@@ -313,19 +287,6 @@ class heat(
   $mysql_module                       = undef,
   $sql_connection                     = undef,
   $instance_user                      = undef,
-  $qpid_hostname                      = undef,
-  $qpid_port                          = undef,
-  $qpid_username                      = undef,
-  $qpid_password                      = undef,
-  $qpid_heartbeat                     = undef,
-  $qpid_protocol                      = undef,
-  $qpid_tcp_nodelay                   = undef,
-  $qpid_reconnect                     = undef,
-  $qpid_reconnect_timeout             = undef,
-  $qpid_reconnect_limit               = undef,
-  $qpid_reconnect_interval_min        = undef,
-  $qpid_reconnect_interval_max        = undef,
-  $qpid_reconnect_interval            = undef,
 ) {
 
   include ::heat::logging

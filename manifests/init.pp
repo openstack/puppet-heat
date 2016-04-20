@@ -294,21 +294,6 @@ class heat(
   include ::heat::deps
   include ::heat::params
 
-  if !$rabbit_use_ssl or is_service_default(rabbit_use_ssl) {
-    if !is_service_default($kombu_ssl_ca_certs) {
-      fail('The kombu_ssl_ca_certs parameter requires rabbit_use_ssl to be set to true')
-    }
-    if !is_service_default($kombu_ssl_certfile) {
-      fail('The kombu_ssl_certfile parameter requires rabbit_use_ssl to be set to true')
-    }
-    if !is_service_default($kombu_ssl_keyfile) {
-      fail('The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true')
-    }
-  }
-  if ((!is_service_default($kombu_ssl_certfile)) and is_service_default($kombu_ssl_keyfile))
-    or ((!is_service_default($kombu_ssl_keyfile)) and is_service_default($kombu_ssl_certfile)) {
-    fail('The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together')
-  }
   if $mysql_module {
     warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
   }

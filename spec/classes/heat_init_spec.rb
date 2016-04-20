@@ -293,20 +293,6 @@ describe 'heat' do
         before { params.merge!(:kombu_ssl_keyfile => '/path/to/ssl/keyfile')}
         it_raises 'a Puppet::Error', /The kombu_ssl_keyfile parameter requires rabbit_use_ssl to be set to true/
       end
-      context 'with kombu_ssl_certfile set to default and custom kombu_ssl_keyfile parameter' do
-        before { params.merge!(
-          :rabbit_use_ssl    => true,
-          :kombu_ssl_keyfile => '/path/to/ssl/keyfile',
-        )}
-        it_raises 'a Puppet::Error', /The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together/
-      end
-      context 'with kombu_ssl_keyfile set to default and custom kombu_ssl_certfile parameter' do
-        before { params.merge!(
-          :rabbit_use_ssl    => true,
-          :kombu_ssl_certfile => '/path/to/ssl/cert/file',
-        )}
-        it_raises 'a Puppet::Error', /The kombu_ssl_certfile and kombu_ssl_keyfile parameters must be used together/
-      end
     end
 
   end

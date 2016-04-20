@@ -205,13 +205,6 @@
 #   default region name that heat talks to service endpoints on.
 #   Defaults to $::os_service_default.
 #
-# [*instance_user*]
-#   (Optional) The default user for new instances. Although heat claims that
-#   this feature is deprecated, it still sets the users to ec2-user if
-#   you leave this unset. If you want heat to not set instance_user to
-#   ec2-user, you need to set this to an empty string. This feature has been
-#   deprecated for some time and will likely be removed in L or M.
-#
 # [*enable_stack_adopt*]
 #   (Optional) Enable the stack-adopt feature.
 #   Defaults to $::os_service_default.
@@ -223,14 +216,6 @@
 # [*sync_db*]
 #   (Optional) Run db sync on nodes after connection setting has been set.
 #   Defaults to true
-#
-# === Deprecated Parameters
-#
-# [*mysql_module*]
-#   Deprecated. Does nothing.
-#
-# [*sql_connection*]
-#   Deprecated. Use database_connection instead.
 #
 class heat(
   $auth_uri                           = 'http://127.0.0.1:5000/',
@@ -283,20 +268,12 @@ class heat(
   $max_template_size                  = $::os_service_default,
   $max_json_body_size                 = $::os_service_default,
   $notification_driver                = $::os_service_default,
-  # Deprecated parameters
-  $mysql_module                       = undef,
-  $sql_connection                     = undef,
-  $instance_user                      = undef,
 ) {
 
   include ::heat::logging
   include ::heat::db
   include ::heat::deps
   include ::heat::params
-
-  if $mysql_module {
-    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
-  }
 
   package { 'heat-common':
     ensure => $package_ensure,
@@ -388,16 +365,6 @@ class heat(
 
   oslo::messaging::default { 'heat_config':
     rpc_response_timeout => $rpc_response_timeout,
-  }
-
-  # instance_user
-  # special case for empty string since it's a valid value
-  if $instance_user == '' {
-    heat_config { 'DEFAULT/instance_user': value => ''; }
-  } elsif $instance_user {
-    heat_config { 'DEFAULT/instance_user': value => $instance_user; }
-  } else {
-    heat_config { 'DEFAULT/instance_user': ensure => absent; }
   }
 
 }

@@ -30,20 +30,6 @@
 #   Whether manage or not the user role creation.
 #   Defaults to 'true'.
 #
-# === Deprecated Parameters
-#
-# [*auth_url*]
-#   Keystone auth url
-#
-# [*keystone_admin*]
-#   Keystone admin user
-#
-# [*keystone_password*]
-#   Keystone admin password
-#
-# [*keystone_tenant*]
-#   Keystone admin tenant name
-#
 class heat::keystone::domain (
   $domain_name        = 'heat',
   $domain_admin       = 'heat_admin',
@@ -52,28 +38,10 @@ class heat::keystone::domain (
   $manage_domain      = true,
   $manage_user        = true,
   $manage_role        = true,
-  # DEPRECATED PARAMETERS
-  $auth_url           = undef,
-  $keystone_admin     = undef,
-  $keystone_password  = undef,
-  $keystone_tenant    = undef,
 ) {
 
   include ::heat::deps
   include ::heat::params
-
-  if $auth_url {
-    warning('The auth_url parameter is deprecated and will be removed in future releases')
-  }
-  if $keystone_admin {
-    warning('The keystone_admin parameter is deprecated and will be removed in future releases')
-  }
-  if $keystone_password {
-    warning('The keystone_password parameter is deprecated and will be removed in future releases')
-  }
-  if $keystone_tenant {
-    warning('The keystone_tenant parameter is deprecated and will be removed in future releases')
-  }
 
   if $manage_domain {
     ensure_resource('keystone_domain', $domain_name, {

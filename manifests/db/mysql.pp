@@ -34,11 +34,6 @@
 #   Only used with mysql modules >= 2.2.
 #   Defaults to 'utf8_general_ci'
 #
-# === Deprecated Parameters
-#
-# [*mysql_module*]
-#   (Optional) Does nothing.
-#
 class heat::db::mysql(
   $password      = false,
   $dbname        = 'heat',
@@ -47,14 +42,9 @@ class heat::db::mysql(
   $allowed_hosts = undef,
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
-  $mysql_module  = undef
 ) {
 
   include ::heat::deps
-
-  if $mysql_module {
-    warning('The mysql_module parameter is deprecated. The latest 2.x mysql module will be used.')
-  }
 
   validate_string($password)
 

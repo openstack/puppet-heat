@@ -13,6 +13,7 @@ describe 'heat::db' do
       it { is_expected.to contain_heat_config('database/max_pool_size').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('database/max_retries').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('database/retry_interval').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('database/db_max_retries').with_value('<SERVICE DEFAULT>') }
 
     end
 
@@ -24,6 +25,7 @@ describe 'heat::db' do
           :database_max_pool_size  => '12',
           :database_max_retries    => '11',
           :database_retry_interval => '11',
+          :database_db_max_retries => '-1',
           :sync_db                 => false }
       end
 
@@ -34,6 +36,7 @@ describe 'heat::db' do
       it { is_expected.to contain_heat_config('database/max_pool_size').with_value('12') }
       it { is_expected.to contain_heat_config('database/max_retries').with_value('11') }
       it { is_expected.to contain_heat_config('database/retry_interval').with_value('11') }
+      it { is_expected.to contain_heat_config('database/db_max_retries').with_value('-1') }
 
     end
 

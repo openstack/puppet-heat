@@ -143,6 +143,9 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
     end
@@ -165,6 +168,9 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
     end
@@ -186,6 +192,9 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
     end
@@ -217,6 +226,9 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_certfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_keyfile').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_ssl_version').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>')
     end
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }

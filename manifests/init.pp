@@ -95,6 +95,23 @@
 #   available on some distributions.
 #   Defaults to $::os_service_default.
 #
+# [*kombu_reconnect_delay*]
+#   (Optional) How long to wait before reconnecting in response
+#   to an AMQP consumer cancel notification. (floating point value)
+#   Defaults to $::os_service_default
+#
+# [*kombu_failover_strategy*]
+#   (Optional) Determines how the next RabbitMQ node is chosen in case the one
+#   we are currently connected to becomes unavailable. Takes effect only if
+#   more than one RabbitMQ node is provided in config. (string value)
+#   Defaults to $::os_service_default
+#
+# [*kombu_compression*]
+#   (optional) Possible values are: gzip, bz2. If not set compression will not
+#   be used. This option may notbe available in future versions. EXPERIMENTAL.
+#   (string value)
+#   Defaults to $::os_service_default
+#
 # [*amqp_durable_queues*]
 #   (Optional) Use durable queues in amqp.
 #   Defaults to $::os_service_default.
@@ -313,6 +330,9 @@ class heat(
   $kombu_ssl_certfile                 = $::os_service_default,
   $kombu_ssl_keyfile                  = $::os_service_default,
   $kombu_ssl_version                  = $::os_service_default,
+  $kombu_reconnect_delay              = $::os_service_default,
+  $kombu_failover_strategy            = $::os_service_default,
+  $kombu_compression                  = $::os_service_default,
   $amqp_durable_queues                = $::os_service_default,
   $amqp_server_request_prefix         = $::os_service_default,
   $amqp_broadcast_prefix              = $::os_service_default,
@@ -371,6 +391,9 @@ class heat(
       kombu_ssl_keyfile           => $kombu_ssl_keyfile,
       kombu_ssl_certfile          => $kombu_ssl_certfile,
       kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
+      kombu_reconnect_delay       => $kombu_reconnect_delay,
+      kombu_failover_strategy     => $kombu_failover_strategy,
+      kombu_compression           => $kombu_compression,
       rabbit_userid               => $rabbit_userid,
       rabbit_password             => $rabbit_password,
       rabbit_virtual_host         => $rabbit_virtual_host,

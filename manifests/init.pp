@@ -8,10 +8,6 @@
 #    (Optional) Ensure state for package.
 #    Defaults to 'present'
 #
-# [*verbose*]
-#   (Optional) Should the daemons log verbose messages
-#   Defaults to undef.
-#
 # [*debug*]
 #   (Optional) Should the daemons log debug messages
 #   Defaults to undef.
@@ -298,11 +294,16 @@
 #   (Optional) Run db sync on nodes after connection setting has been set.
 #   Defaults to true
 #
+# DEPRECATED PARAMETERS
+#
+# [*verbose*]
+#   (Optional) Deprecated. Should the daemons log verbose messages
+#   Defaults to undef.
+#
 class heat(
   $auth_uri                           = 'http://127.0.0.1:5000/',
   $identity_uri                       = 'http://127.0.0.1:35357/',
   $package_ensure                     = 'present',
-  $verbose                            = undef,
   $debug                              = undef,
   $log_dir                            = undef,
   $auth_plugin                        = undef,
@@ -368,12 +369,18 @@ class heat(
   $max_template_size                  = $::os_service_default,
   $max_json_body_size                 = $::os_service_default,
   $notification_driver                = $::os_service_default,
+  # Deprecated
+  $verbose                            = undef,
 ) {
 
   include ::heat::logging
   include ::heat::db
   include ::heat::deps
   include ::heat::params
+
+  if $verbose {
+    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
 
   package { 'heat-common':
     ensure => $package_ensure,

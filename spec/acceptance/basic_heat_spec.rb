@@ -36,7 +36,6 @@ describe 'basic heat' do
         identity_uri        => 'http://127.0.0.1:35357/',
         keystone_password   => 'a_big_secret',
         debug               => true,
-        verbose             => true,
       }
       class { '::heat::db::mysql':
         password => 'a_big_secret',

@@ -82,12 +82,12 @@ extra functionality through types and providers.
 The `heat_config` provider is a children of the ini_setting provider. It allows one to write an entry in the `/etc/heat/heat.conf` file.
 
 ```puppet
-heat_config { 'DEFAULT/verbose' :
-  value => true,
+heat_config { 'DEFAULT/enable_stack_adopt' :
+  value => True,
 }
 ```
 
-This will write `verbose=true` in the `[DEFAULT]` section.
+This will write `enable_stack_adopt=True` in the `[DEFAULT]` section.
 
 ##### name
 

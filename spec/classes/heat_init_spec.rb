@@ -5,7 +5,6 @@ describe 'heat' do
   let :params do
     {
       :package_ensure        => 'present',
-      :verbose               => 'False',
       :debug                 => 'False',
       :use_stderr            => 'True',
       :log_dir               => '/var/log/heat',

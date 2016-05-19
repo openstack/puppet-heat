@@ -128,6 +128,10 @@ describe 'heat' do
         is_expected.to contain_heat_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
     end
 
+    it 'sets default value for http_proxy_to_wsgi middleware' do
+      is_expected.to contain_heat_config('oslo_middleware/enable_proxy_headers_parsing').with_value('<SERVICE DEFAULT>')
+    end
+
     it_configures "with default auth method"
   end
 

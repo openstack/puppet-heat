@@ -294,6 +294,11 @@
 #   (Optional) Run db sync on nodes after connection setting has been set.
 #   Defaults to true
 #
+# [*enable_proxy_headers_parsing*]
+#   (Optional) Enable paste middleware to handle SSL requests through
+#   HTTPProxyToWSGI middleware.
+#   Defaults to $::os_service_default.
+#
 # DEPRECATED PARAMETERS
 #
 # [*verbose*]
@@ -369,6 +374,7 @@ class heat(
   $max_template_size                  = $::os_service_default,
   $max_json_body_size                 = $::os_service_default,
   $notification_driver                = $::os_service_default,
+  $enable_proxy_headers_parsing       = $::os_service_default,
   # Deprecated
   $verbose                            = undef,
 ) {
@@ -495,6 +501,10 @@ class heat(
 
   oslo::messaging::default { 'heat_config':
     rpc_response_timeout => $rpc_response_timeout,
+  }
+
+  oslo::middleware { 'heat_config':
+    enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
   }
 
 }

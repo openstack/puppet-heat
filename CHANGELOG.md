@@ -1,3 +1,19 @@
+##2016-05-20 - 7.1.0
+
+###Summary
+
+This is a feature and bugfix release in the Liberty series.
+
+####Features
+
+- Implement crontab to purge deleted data
+- Support of PyMySQL driver for MySQL backend
+
+####Maintenance
+
+- Add deprecation warning for Qpid rpc driver
+
+
 ##2015-11-25 - 7.0.0
 ###Summary
 

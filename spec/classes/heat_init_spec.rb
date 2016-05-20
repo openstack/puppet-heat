@@ -18,6 +18,7 @@ describe 'heat' do
       :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',
       :flavor                => 'keystone',
       :keystone_password     => 'secretpassword',
+      :heat_clients_url      => '<SERVICE DEFAULT>',
     }
   end
 
@@ -130,6 +131,10 @@ describe 'heat' do
 
     it 'sets default value for http_proxy_to_wsgi middleware' do
       is_expected.to contain_heat_config('oslo_middleware/enable_proxy_headers_parsing').with_value('<SERVICE DEFAULT>')
+    end
+
+    it 'sets clients_heat url' do
+      is_expected.to contain_heat_config('clients_heat/url').with_value('<SERVICE DEFAULT>')
     end
 
     it_configures "with default auth method"

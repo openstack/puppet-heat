@@ -299,6 +299,10 @@
 #   HTTPProxyToWSGI middleware.
 #   Defaults to $::os_service_default.
 #
+# [*heat_clients_url*]
+#   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
+#   Defaults to $::os_service_default.
+#
 # DEPRECATED PARAMETERS
 #
 # [*verbose*]
@@ -375,6 +379,7 @@ class heat(
   $max_json_body_size                 = $::os_service_default,
   $notification_driver                = $::os_service_default,
   $enable_proxy_headers_parsing       = $::os_service_default,
+  $heat_clients_url                   = $::os_service_default,
   # Deprecated
   $verbose                            = undef,
 ) {
@@ -475,6 +480,7 @@ class heat(
     'trustee/user_domain_id':    value => $keystone_user_domain_id;
 
     'clients_keystone/auth_uri': value => $identity_uri;
+    'clients_heat/url':          value => $heat_clients_url;
   }
 
   if (!is_service_default($enable_stack_adopt)) {

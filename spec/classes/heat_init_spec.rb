@@ -19,6 +19,7 @@ describe 'heat' do
       :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',
       :flavor                => 'keystone',
       :keystone_password     => 'secretpassword',
+      :heat_clients_url      => '<SERVICE DEFAULT>',
     }
   end
 
@@ -123,6 +124,10 @@ describe 'heat' do
 
     it 'configures notification_driver' do
         is_expected.to contain_heat_config('DEFAULT/notification_driver').with_value('<SERVICE DEFAULT>')
+    end
+
+    it 'sets clients_heat url' do
+      is_expected.to contain_heat_config('clients_heat/url').with_value('<SERVICE DEFAULT>')
     end
 
     it_configures "with default auth method"

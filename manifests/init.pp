@@ -224,6 +224,10 @@
 #   (Optional) Run db sync on nodes after connection setting has been set.
 #   Defaults to true
 #
+# [*heat_clients_url*]
+#   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
+#   Defaults to $::os_service_default.
+#
 # === Deprecated Parameters
 #
 # [*mysql_module*]
@@ -309,6 +313,7 @@ class heat(
   $max_template_size                  = $::os_service_default,
   $max_json_body_size                 = $::os_service_default,
   $notification_driver                = $::os_service_default,
+  $heat_clients_url                   = $::os_service_default,
   # Deprecated parameters
   $mysql_module                       = undef,
   $sql_connection                     = undef,
@@ -440,6 +445,7 @@ class heat(
     'trustee/user_domain_id':    value => $keystone_user_domain_id;
 
     'clients_keystone/auth_uri': value => $identity_uri;
+    'clients_heat/url':          value => $heat_clients_url;
   }
 
   if (!is_service_default($enable_stack_adopt)) {

@@ -126,6 +126,7 @@ describe 'heat' do
     it { is_expected.to contain_heat_config('paste_deploy/flavor').with_value('keystone') }
 
     it 'configures notification_driver' do
+        is_expected.to contain_heat_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_heat_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
     end
 
@@ -437,11 +438,13 @@ describe 'heat' do
   shared_examples_for 'with notification_driver set to a string' do
     before do
       params.merge!(
-        :notification_driver => 'bar.foo.rpc_notifier',
+        :notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+        :notification_driver        => 'bar.foo.rpc_notifier',
       )
     end
 
     it 'has notification_driver set when specified' do
+      is_expected.to contain_heat_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
       is_expected.to contain_heat_config('oslo_messaging_notifications/driver').with_value('bar.foo.rpc_notifier')
     end
   end

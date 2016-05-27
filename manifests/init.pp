@@ -17,6 +17,12 @@
 #   If set to boolean 'false', it will not log to any directory
 #   Defaults to undef.
 #
+# [*default_transport_url*]
+#    (optional) A URL representing the messaging driver to use and its full
+#    configuration. Transport URLs take the form:
+#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#    Defaults to $::os_service_default
+#
 # [*rpc_backend*]
 #   (Optional) Use these options to configure the message system.
 #   Defaults to $::os_service_default.
@@ -185,6 +191,12 @@
 #   Should be larger than max_template_size.
 #   Defaults to $::os_service_default
 #
+# [*notification_transport_url*]
+#   (optional) A URL representing the messaging driver to use for notifications
+#   and its full configuration. Transport URLs take the form:
+#     transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $::os_service_default
+#
 # [*notification_driver*]
 #   (Optional) Driver or drivers to handle sending notifications.
 #   Value can be a string or a list.
@@ -324,6 +336,7 @@ class heat(
   $keystone_project_domain_name       = 'Default',
   $keystone_user_domain_id            = 'Default',
   $keystone_user_domain_name          = 'Default',
+  $default_transport_url              = $::os_service_default,
   $rpc_backend                        = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
   $rabbit_host                        = $::os_service_default,
@@ -377,6 +390,7 @@ class heat(
   $sync_db                            = undef,
   $max_template_size                  = $::os_service_default,
   $max_json_body_size                 = $::os_service_default,
+  $notification_transport_url         = $::os_service_default,
   $notification_driver                = $::os_service_default,
   $enable_proxy_headers_parsing       = $::os_service_default,
   $heat_clients_url                   = $::os_service_default,
@@ -502,10 +516,12 @@ class heat(
   }
 
   oslo::messaging::notifications { 'heat_config':
-    driver => $notification_driver,
+    transport_url => $notification_transport_url,
+    driver        => $notification_driver,
   }
 
   oslo::messaging::default { 'heat_config':
+    transport_url        => $default_transport_url,
     rpc_response_timeout => $rpc_response_timeout,
   }
 

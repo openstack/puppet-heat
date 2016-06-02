@@ -32,7 +32,7 @@
 #
 # [*service_name*]
 #   (Optional) Name of the service.
-#   Defaults to the value of auth_name.
+#   Defaults to 'heat'.
 #
 # [*service_type*]
 #   (Optional) Type of service.
@@ -97,7 +97,7 @@ class heat::keystone::auth (
   $password                    = false,
   $email                       = 'heat@localhost',
   $auth_name                   = 'heat',
-  $service_name                = undef,
+  $service_name                = 'heat',
   $service_type                = 'orchestration',
   $service_description         = 'Openstack Orchestration Service',
   $region                      = 'RegionOne',
@@ -119,17 +119,16 @@ class heat::keystone::auth (
 
   validate_string($password)
 
-  $real_service_name = pick($service_name, $auth_name)
-
-  keystone::resource::service_identity { $auth_name:
+  keystone::resource::service_identity { 'heat':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     configure_service   => $configure_service,
     service_type        => $service_type,
     service_description => $service_description,
-    service_name        => $real_service_name,
+    service_name        => $service_name,
     region              => $region,
+    auth_name           => $auth_name,
     password            => $password,
     email               => $email,
     tenant              => $tenant,

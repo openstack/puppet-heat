@@ -32,7 +32,7 @@
 #
 # [*service_name*]
 #   (Optional) Name of the service.
-#   Defaults to the value of auth_name.
+#   Defaults to 'heat'.
 #
 # [*service_type*]
 #   (Optional) Type of service.
@@ -70,7 +70,7 @@ class heat::keystone::auth_cfn (
   $password             = false,
   $email                = 'heat-cfn@localhost',
   $auth_name            = 'heat-cfn',
-  $service_name         = undef,
+  $service_name         = 'heat-cfn',
   $service_type         = 'cloudformation',
   $region               = 'RegionOne',
   $tenant               = 'services',
@@ -87,17 +87,16 @@ class heat::keystone::auth_cfn (
 
   validate_string($password)
 
-  $real_service_name = pick($service_name, $auth_name)
-
-  keystone::resource::service_identity { $auth_name:
+  keystone::resource::service_identity { 'heat-cfn':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
     configure_endpoint  => $configure_endpoint,
     configure_service   => $configure_service,
     service_type        => $service_type,
     service_description => 'Openstack Cloudformation Service',
-    service_name        => $real_service_name,
+    service_name        => $service_name,
     region              => $region,
+    auth_name           => $auth_name,
     password            => $password,
     email               => $email,
     tenant              => $tenant,

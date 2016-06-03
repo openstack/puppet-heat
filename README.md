@@ -1,8 +1,6 @@
 puppet-heat
 =============
 
-7.0.0 - 2015.2 - Liberty
-
 #### Table of Contents
 
 1. [Overview - What is the heat module?](#overview)

@@ -19,6 +19,7 @@ describe 'heat' do
       :flavor                => 'keystone',
       :keystone_password     => 'secretpassword',
       :heat_clients_url      => '<SERVICE DEFAULT>',
+      :purge_config          => false,
     }
   end
 
@@ -77,6 +78,12 @@ describe 'heat' do
         :name   => platform_params[:common_package_name],
         :tag    => ['openstack', 'heat-package'],
       )
+    end
+
+    it 'passes purge to resource' do
+      is_expected.to contain_resources('heat_config').with({
+        :purge => false
+      })
     end
 
     it 'has db_sync enabled' do

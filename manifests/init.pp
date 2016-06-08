@@ -315,6 +315,11 @@
 #   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
 #   Defaults to $::os_service_default.
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified config options
+#   in the heat config.
+#   Defaults to false.
+#
 # DEPRECATED PARAMETERS
 #
 # [*verbose*]
@@ -394,6 +399,7 @@ class heat(
   $notification_driver                = $::os_service_default,
   $enable_proxy_headers_parsing       = $::os_service_default,
   $heat_clients_url                   = $::os_service_default,
+  $purge_config                       = false,
   # Deprecated
   $verbose                            = undef,
 ) {
@@ -411,6 +417,10 @@ class heat(
     ensure => $package_ensure,
     name   => $::heat::params::common_package_name,
     tag    => ['openstack', 'heat-package'],
+  }
+
+  resources { 'heat_config':
+    purge => $purge_config,
   }
 
   if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {

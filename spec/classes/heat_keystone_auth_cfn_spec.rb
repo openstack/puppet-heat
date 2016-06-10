@@ -70,23 +70,24 @@ describe 'heat::keystone::auth_cfn' do
       end
     end
 
-    context 'when overriding service name' do
+    context 'when overriding auth and service name' do
       before do
         params.merge!({
-          :service_name => 'heat-cfn_service'
+          :auth_name => 'heat-cfny',
+          :service_name => 'heat-cfny'
         })
       end
       it 'configures correct user name' do
-        is_expected.to contain_keystone_user('heat-cfn')
+        is_expected.to contain_keystone_user('heat-cfny')
       end
       it 'configures correct user role' do
-        is_expected.to contain_keystone_user_role('heat-cfn@services')
+        is_expected.to contain_keystone_user_role('heat-cfny@services')
       end
       it 'configures correct service name' do
-        is_expected.to contain_keystone_service('heat-cfn_service::cloudformation')
+        is_expected.to contain_keystone_service('heat-cfny::cloudformation')
       end
       it 'configures correct endpoint name' do
-        is_expected.to contain_keystone_endpoint('RegionOne/heat-cfn_service::cloudformation')
+        is_expected.to contain_keystone_endpoint('RegionOne/heat-cfny::cloudformation')
       end
     end
 

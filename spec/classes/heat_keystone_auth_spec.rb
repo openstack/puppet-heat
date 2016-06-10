@@ -77,23 +77,24 @@ describe 'heat::keystone::auth' do
       end
     end
 
-    context 'when overriding service name' do
+    context 'when overriding auth and service name' do
       before do
         params.merge!({
-          :service_name => 'heat_service'
+          :auth_name => 'heaty',
+          :service_name => 'heaty'
         })
       end
       it 'configures correct user name' do
-        is_expected.to contain_keystone_user('heat')
+        is_expected.to contain_keystone_user('heaty')
       end
       it 'configures correct user role' do
-        is_expected.to contain_keystone_user_role('heat@services')
+        is_expected.to contain_keystone_user_role('heaty@services')
       end
       it 'configures correct service name' do
-        is_expected.to contain_keystone_service('heat_service::orchestration')
+        is_expected.to contain_keystone_service('heaty::orchestration')
       end
       it 'configures correct endpoint name' do
-        is_expected.to contain_keystone_endpoint('RegionOne/heat_service::orchestration')
+        is_expected.to contain_keystone_endpoint('RegionOne/heaty::orchestration')
       end
     end
 

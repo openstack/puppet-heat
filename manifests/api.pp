@@ -99,8 +99,12 @@ class heat::api (
     'heat_api/bind_host': value => $bind_host;
     'heat_api/bind_port': value => $bind_port;
     'heat_api/workers':   value => $workers;
-    'heat_api/cert_file': value => $cert_file;
-    'heat_api/key_file':  value => $key_file;
   }
 
+  if $use_ssl {
+    heat_config {
+      'heat_api/cert_file': value => $cert_file;
+      'heat_api/key_file':  value => $key_file;
+    }
+  }
 }

@@ -101,8 +101,12 @@ class heat::api_cloudwatch (
     'heat_api_cloudwatch/bind_host': value => $bind_host;
     'heat_api_cloudwatch/bind_port': value => $bind_port;
     'heat_api_cloudwatch/workers':   value => $workers;
-    'heat_api_cloudwatch/cert_file': value => $cert_file;
-    'heat_api_cloudwatch/key_file':  value => $key_file;
   }
 
+  if $use_ssl {
+    heat_config {
+      'heat_api_cloudwatch/cert_file': value => $cert_file;
+      'heat_api_cloudwatch/key_file':  value => $key_file;
+    }
+  }
 }

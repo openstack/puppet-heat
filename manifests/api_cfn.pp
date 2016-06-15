@@ -102,8 +102,13 @@ class heat::api_cfn (
     'heat_api_cfn/bind_host': value => $bind_host;
     'heat_api_cfn/bind_port': value => $bind_port;
     'heat_api_cfn/workers':   value => $workers;
-    'heat_api_cfn/cert_file': value => $cert_file;
-    'heat_api_cfn/key_file':  value => $key_file;
+  }
+
+  if $use_ssl {
+    heat_config {
+      'heat_api_cfn/cert_file': value => $cert_file;
+      'heat_api_cfn/key_file':  value => $key_file;
+    }
   }
 
 }

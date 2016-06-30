@@ -243,6 +243,11 @@
 #
 # [*keystone_ec2_uri*]
 #
+# [*memcached_servers*]
+#   (optinal) a list of memcached server(s) to use for caching. If left
+#   undefined, tokens will instead be cached in-process.
+#   Defaults to $::os_service_default.
+#
 # [*database_connection*]
 #   (optional) Connection url for the heat database.
 #   Defaults to undef.
@@ -341,6 +346,7 @@ class heat(
   $keystone_project_domain_name       = 'Default',
   $keystone_user_domain_id            = 'Default',
   $keystone_user_domain_name          = 'Default',
+  $memcached_servers                  = $::os_service_default,
   $default_transport_url              = $::os_service_default,
   $rpc_backend                        = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
@@ -523,6 +529,7 @@ class heat(
     'DEFAULT/enable_stack_adopt':           value => $enable_stack_adopt;
     'ec2authtoken/auth_uri':                value => $keystone_ec2_uri;
     'paste_deploy/flavor':                  value => $flavor;
+    'keystone_authtoken/memcached_servers': value => join(any2array($memcached_servers), ',');
   }
 
   oslo::messaging::notifications { 'heat_config':

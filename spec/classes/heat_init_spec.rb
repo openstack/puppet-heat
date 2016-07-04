@@ -98,12 +98,14 @@ describe 'heat' do
       is_expected.to contain_heat_config('DEFAULT/max_json_body_size').with_value('<SERVICE DEFAULT>')
     end
 
-    it 'configures project_domain_id' do
-      is_expected.to contain_heat_config('trustee/project_domain_id').with_value( 'Default' )
+    it 'configures project_domain_*' do
+      is_expected.to contain_heat_config('trustee/project_domain_id').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('trustee/project_domain_name').with_value( 'Default' )
     end
 
-    it 'configures user_domain_id' do
-      is_expected.to contain_heat_config('trustee/user_domain_id').with_value( 'Default' )
+    it 'configures user_domain_*' do
+      is_expected.to contain_heat_config('trustee/user_domain_id').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('trustee/user_domain_name').with_value( 'Default' )
     end
 
     it 'configures auth_plugin' do
@@ -385,19 +387,25 @@ describe 'heat' do
       is_expected.to contain_heat_config('keystone_authtoken/username').with_value("heat")
       is_expected.to contain_heat_config('keystone_authtoken/password').with_secret( true )
       is_expected.to contain_heat_config('keystone_authtoken/project_name').with_value("services")
-      is_expected.to contain_heat_config('keystone_authtoken/user_domain_id').with_value('Default')
-      is_expected.to contain_heat_config('keystone_authtoken/project_domain_id').with_value('Default')
+      is_expected.to contain_heat_config('keystone_authtoken/user_domain_name').with_value('Default')
+      is_expected.to contain_heat_config('keystone_authtoken/project_domain_name').with_value('Default')
+      is_expected.to contain_heat_config('keystone_authtoken/user_domain_id').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('keystone_authtoken/project_domain_id').with_value('<SERVICE DEFAULT>')
     end
   end
 
-  shared_examples_for "with custom keystone project_domain_id and user_domain_id" do
+  shared_examples_for "with custom keystone project_domain_* and user_domain_*" do
     before do
       params.merge!({
-        :keystone_project_domain_id => 'domain1',
-        :keystone_user_domain_id => 'domain1',
+        :keystone_project_domain_id   => 'domain1',
+        :keystone_user_domain_id      => 'domain1',
+        :keystone_project_domain_name => 'domain1',
+        :keystone_user_domain_name    => 'domain1',
       })
     end
-    it 'configures project_domain_id and user_domain_id' do
+    it 'configures project_domain_* and user_domain_*' do
+      is_expected.to contain_heat_config('trustee/project_domain_name').with_value("domain1");
+      is_expected.to contain_heat_config('trustee/user_domain_name').with_value("domain1");
       is_expected.to contain_heat_config('trustee/project_domain_id').with_value("domain1");
       is_expected.to contain_heat_config('trustee/user_domain_id').with_value("domain1");
     end

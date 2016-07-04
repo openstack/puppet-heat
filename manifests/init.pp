@@ -232,14 +232,14 @@
 #
 # [*keystone_user_domain_id*]
 #   (Optional) Domain ID of the principal if the principal has a domain.
-#   Defaults to: 'Default'.
+#   Defaults to: $::os_service_default.
 #
 # [*keystone_user_domain_name*]
 #   Defaults to 'Default'.
 #
 # [*keystone_project_domain_id*]
 #   (Optional) Domain ID of the scoped project if auth is project-scoped.
-#   Defaults to: 'Default'.
+#   Defaults to: $::os_service_default.
 #
 # [*keystone_ec2_uri*]
 #
@@ -342,9 +342,9 @@ class heat(
   $keystone_tenant                    = 'services',
   $keystone_password                  = false,
   $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
-  $keystone_project_domain_id         = 'Default',
+  $keystone_project_domain_id         = $::os_service_default,
   $keystone_project_domain_name       = 'Default',
-  $keystone_user_domain_id            = 'Default',
+  $keystone_user_domain_id            = $::os_service_default,
   $keystone_user_domain_name          = 'Default',
   $memcached_servers                  = $::os_service_default,
   $default_transport_url              = $::os_service_default,
@@ -479,13 +479,15 @@ class heat(
   if $auth_plugin {
     if $auth_plugin == 'password' {
       heat_config {
-        'keystone_authtoken/auth_url':          value => $identity_uri;
-        'keystone_authtoken/auth_plugin':       value => $auth_plugin;
-        'keystone_authtoken/username':          value => $keystone_user;
-        'keystone_authtoken/password':          value => $keystone_password, secret => true;
-        'keystone_authtoken/user_domain_id':    value => $keystone_user_domain_id;
-        'keystone_authtoken/project_name':      value => $keystone_tenant;
-        'keystone_authtoken/project_domain_id': value => $keystone_project_domain_id;
+        'keystone_authtoken/auth_url':            value => $identity_uri;
+        'keystone_authtoken/auth_plugin':         value => $auth_plugin;
+        'keystone_authtoken/username':            value => $keystone_user;
+        'keystone_authtoken/password':            value => $keystone_password, secret => true;
+        'keystone_authtoken/user_domain_id':      value => $keystone_user_domain_id;
+        'keystone_authtoken/user_domain_name':    value => $keystone_user_domain_name;
+        'keystone_authtoken/project_name':        value => $keystone_tenant;
+        'keystone_authtoken/project_domain_id':   value => $keystone_project_domain_id;
+        'keystone_authtoken/project_domain_name': value => $keystone_project_domain_name;
       }
     } else {
       fail('Currently only "password" auth_plugin is supported.')
@@ -502,12 +504,14 @@ class heat(
   }
 
   heat_config {
-    'trustee/auth_plugin':       value => 'password';
-    'trustee/auth_url':          value => $identity_uri;
-    'trustee/username':          value => $keystone_user;
-    'trustee/password':          value => $keystone_password, secret => true;
-    'trustee/project_domain_id': value => $keystone_project_domain_id;
-    'trustee/user_domain_id':    value => $keystone_user_domain_id;
+    'trustee/auth_plugin':         value => 'password';
+    'trustee/auth_url':            value => $identity_uri;
+    'trustee/username':            value => $keystone_user;
+    'trustee/password':            value => $keystone_password, secret => true;
+    'trustee/project_domain_id':   value => $keystone_project_domain_id;
+    'trustee/user_domain_id':      value => $keystone_user_domain_id;
+    'trustee/project_domain_name': value => $keystone_project_domain_name;
+    'trustee/user_domain_name':    value => $keystone_user_domain_name;
 
     'clients_keystone/auth_uri': value => $identity_uri;
     'clients_heat/url':          value => $heat_clients_url;

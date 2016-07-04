@@ -145,6 +145,10 @@ describe 'heat' do
       is_expected.to contain_heat_config('clients_heat/url').with_value('<SERVICE DEFAULT>')
     end
 
+    it 'configures keystone_authtoken memcached' do
+      is_expected.to contain_heat_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>')
+    end
+
     it_configures "with default auth method"
   end
 

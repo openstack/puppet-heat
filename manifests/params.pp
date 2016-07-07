@@ -3,6 +3,7 @@
 # Parameters for puppet-heat
 #
 class heat::params {
+  include ::openstacklib::defaults
 
   case $::osfamily {
     'RedHat': {

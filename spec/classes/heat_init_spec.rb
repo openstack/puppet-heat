@@ -411,36 +411,6 @@ describe 'heat' do
     end
   end
 
-  shared_examples_for 'with instance_user set to a string' do
-    before do
-      params.merge!(
-        :instance_user => "fred",
-      )
-    end
-
-    it 'has instance_user set when specified' do
-      is_expected.to contain_heat_config('DEFAULT/instance_user').with_value('fred')
-    end
-  end
-
-  shared_examples_for 'with instance_user set to an empty string' do
-    before do
-      params.merge!(
-        :instance_user => "",
-      )
-    end
-
-    it 'has instance_user set to an empty string when specified' do
-      is_expected.to contain_heat_config('DEFAULT/instance_user').with_value('')
-    end
-  end
-
-  shared_examples_for 'without instance_user set' do
-    it 'doesnt have instance_user set by default' do
-      is_expected.to contain_heat_config('DEFAULT/instance_user').with_enure('absent')
-    end
-  end
-
   shared_examples_for "with enable_stack_adopt and enable_stack_abandon set" do
     before do
       params.merge!({

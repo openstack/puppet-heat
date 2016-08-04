@@ -97,6 +97,14 @@
 #   (Optional) Enables engine with convergence architecture.
 #   Defaults to $::os_service_default.
 #
+# [*environment_dir*]
+#   (Optional) The directory to search for environment files.
+#   Defaults to $::os_service_default
+#
+# [*template_dir*]
+#   (Optional) The directory to search for template files.
+#   Defaults to $::os_service_default
+#
 class heat::engine (
   $auth_encryption_key,
   $package_ensure                                  = 'present',
@@ -116,6 +124,8 @@ class heat::engine (
   $max_resources_per_stack                         = $::os_service_default,
   $num_engine_workers                              = $::os_service_default,
   $convergence_engine                              = $::os_service_default,
+  $environment_dir                                 = $::os_service_default,
+  $template_dir                                    = $::os_service_default,
 ) {
 
   include ::heat::deps
@@ -171,5 +181,7 @@ class heat::engine (
     'DEFAULT/instance_connection_is_secure':                   value => $instance_connection_is_secure;
     'DEFAULT/num_engine_workers':                              value => $num_engine_workers;
     'DEFAULT/convergence_engine':                              value => $convergence_engine;
+    'DEFAULT/environment_dir':                                 value => $environment_dir;
+    'DEFAULT/template_dir':                                    value => $template_dir;
   }
 }

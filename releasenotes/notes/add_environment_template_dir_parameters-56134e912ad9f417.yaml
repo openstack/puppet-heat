@@ -1,0 +1,3 @@
+---
+features:
+  - Add environment_dir and template_dir options to config.

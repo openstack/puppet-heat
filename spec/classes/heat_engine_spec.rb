@@ -15,6 +15,8 @@ describe 'heat::engine' do
       :default_software_config_transport   => '<SERVICE DEFAULT>',
       :default_deployment_signal_transport => '<SERVICE DEFAULT>',
       :convergence_engine                  => '<SERVICE DEFAULT>',
+      :environment_dir                     => '<SERVICE DEFAULT>',
+      :template_dir                        => '<SERVICE DEFAULT>',
     }
   end
 
@@ -35,6 +37,8 @@ describe 'heat::engine' do
         :default_deployment_signal_transport => 'CFN_SIGNAL',
         :num_engine_workers                  => '4',
         :convergence_engine                  => false,
+        :environment_dir                     => '/etc/heat/environment.d',
+        :template_dir                        => '/etc/heat/templates',
       }
     ].each do |new_params|
       describe 'when #{param_set == {} ? "using default" : "specifying"} parameters'
@@ -77,6 +81,8 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/max_resources_per_stack').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/num_engine_workers').with_value( expected_params[:num_engine_workers] ) }
       it { is_expected.to contain_heat_config('DEFAULT/convergence_engine').with_value( expected_params[:convergence_engine] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/environment_dir').with_value( expected_params[:environment_dir] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/template_dir').with_value( expected_params[:template_dir] ) }
     end
 
     context 'with disabled service managing' do

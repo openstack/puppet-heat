@@ -11,6 +11,11 @@ describe 'heat::api_cfn' do
   end
 
   shared_examples_for 'heat-api-cfn' do
+    let :pre_condition do
+      "class {'heat::keystone::authtoken':
+         password => 'a_big_secret',
+       }"
+    end
 
     context 'config params' do
 
@@ -92,7 +97,10 @@ describe 'heat::api_cfn' do
 
     context 'with $sync_db set to false in ::heat' do
       let :pre_condition do
-        "class {'heat': sync_db => false}"
+        "class {'heat':
+           keystone_password => 'password',
+           sync_db => false
+         }"
       end
 
       it 'configures heat-api-cfn service to not subscribe to the dbsync resource' do

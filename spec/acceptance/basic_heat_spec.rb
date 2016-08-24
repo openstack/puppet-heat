@@ -27,14 +27,15 @@ describe 'basic heat' do
         require              => Class['rabbitmq'],
       }
 
+      class { '::heat::keystone::authtoken':
+        password => 'a_big_secret',
+      }
       # heat resources
       class { '::heat':
         rabbit_userid       => 'heat',
         rabbit_password     => 'an_even_bigger_secret',
         rabbit_host         => '127.0.0.1',
         database_connection => 'mysql+pymysql://heat:a_big_secret@127.0.0.1/heat?charset=utf8',
-        identity_uri        => 'http://127.0.0.1:35357/',
-        keystone_password   => 'a_big_secret',
         debug               => true,
       }
       class { '::heat::db::mysql':

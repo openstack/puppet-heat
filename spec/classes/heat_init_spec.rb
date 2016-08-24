@@ -58,7 +58,6 @@ describe 'heat' do
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
     it_configures 'with SSL wrongly configured'
-    it_configures "with auth_plugin"
     it_configures 'with enable_stack_adopt and enable_stack_abandon set'
     it_configures 'with notification_driver set to a string'
 
@@ -125,7 +124,7 @@ describe 'heat' do
     end
 
     it 'configures auth_uri for clients_keystone' do
-      is_expected.to contain_heat_config('clients_keystone/auth_uri').with_value( 'http://127.0.0.1:35357/' )
+      is_expected.to contain_heat_config('clients_keystone/auth_uri').with_value( 'http://127.0.0.1:5000/' )
     end
 
     it 'configures keystone_ec2_uri' do
@@ -145,10 +144,6 @@ describe 'heat' do
 
     it 'sets clients_heat url' do
       is_expected.to contain_heat_config('clients_heat/url').with_value('<SERVICE DEFAULT>')
-    end
-
-    it 'configures keystone_authtoken memcached' do
-      is_expected.to contain_heat_config('keystone_authtoken/memcached_servers').with_value('<SERVICE DEFAULT>')
     end
 
     it_configures "with default auth method"
@@ -368,29 +363,10 @@ describe 'heat' do
   shared_examples_for "with default auth method" do
     it 'configures auth_uri, identity_uri, admin_tenant_name, admin_user, admin_password' do
       is_expected.to contain_heat_config('keystone_authtoken/auth_uri').with_value("http://127.0.0.1:5000/")
-      is_expected.to contain_heat_config('keystone_authtoken/identity_uri').with_value("http://127.0.0.1:35357/")
-      is_expected.to contain_heat_config('keystone_authtoken/admin_tenant_name').with_value("services")
-      is_expected.to contain_heat_config('keystone_authtoken/admin_user').with_value("heat")
-      is_expected.to contain_heat_config('keystone_authtoken/admin_password').with_secret( true )
-    end
-  end
-
-  shared_examples_for "with auth_plugin" do
-    before do
-      params.merge!({
-        :auth_plugin => 'password',
-      })
-    end
-    it 'configures ' do
-      is_expected.to contain_heat_config('keystone_authtoken/auth_plugin').with_value("password")
       is_expected.to contain_heat_config('keystone_authtoken/auth_url').with_value("http://127.0.0.1:35357/")
+      is_expected.to contain_heat_config('keystone_authtoken/project_name').with_value("services")
       is_expected.to contain_heat_config('keystone_authtoken/username').with_value("heat")
       is_expected.to contain_heat_config('keystone_authtoken/password').with_secret( true )
-      is_expected.to contain_heat_config('keystone_authtoken/project_name').with_value("services")
-      is_expected.to contain_heat_config('keystone_authtoken/user_domain_name').with_value('Default')
-      is_expected.to contain_heat_config('keystone_authtoken/project_domain_name').with_value('Default')
-      is_expected.to contain_heat_config('keystone_authtoken/user_domain_id').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('keystone_authtoken/project_domain_id').with_value('<SERVICE DEFAULT>')
     end
   end
 

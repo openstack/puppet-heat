@@ -10,7 +10,13 @@ describe 'heat::api_cloudwatch' do
       :workers        => '0' }
   end
 
+
   shared_examples_for 'heat-api-cloudwatch' do
+    let :pre_condition do
+      "class { 'heat::keystone::authtoken':
+           password => 'a_big_secret',
+       }"
+    end
 
     context 'config params' do
 
@@ -92,7 +98,10 @@ describe 'heat::api_cloudwatch' do
 
     context 'with $sync_db set to false in ::heat' do
       let :pre_condition do
-        "class {'heat': sync_db => false}"
+        "class {'heat':
+           keystone_password => 'password',
+           sync_db => false
+         }"
       end
 
       it 'configures heat-api-cloudwatch service to not subscribe to the dbsync resource' do

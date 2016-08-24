@@ -11,6 +11,11 @@ describe 'heat::api' do
   end
 
   shared_examples_for 'heat-api' do
+    let :pre_condition do
+      "class { 'heat::keystone::authtoken':
+           password => 'a_big_secret',
+       }"
+    end
 
     context 'config params' do
 
@@ -92,7 +97,10 @@ describe 'heat::api' do
 
     context 'with $sync_db set to false in ::heat' do
       let :pre_condition do
-        "class {'heat': sync_db => false}"
+        "class {'heat':
+           keystone_password => 'password',
+           sync_db => false
+         }"
       end
 
       it 'configures heat-api service to not subscribe to the dbsync resource' do

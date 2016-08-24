@@ -21,6 +21,12 @@ describe 'heat::engine' do
   end
 
   shared_examples_for 'heat-engine' do
+    let :pre_condition do
+      "class { 'heat::keystone::authtoken':
+         password => 'password',
+       }"
+    end
+
     [
       {},
       { :auth_encryption_key                 => '1234567890AZERTYUIOPMLKJHGFDSQ12' },

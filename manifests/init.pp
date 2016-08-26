@@ -18,10 +18,10 @@
 #   Defaults to undef.
 #
 # [*default_transport_url*]
-#    (optional) A URL representing the messaging driver to use and its full
-#    configuration. Transport URLs take the form:
-#      transport://user:pass@host1:port[,hostN:portN]/virtual_host
-#    Defaults to $::os_service_default
+#   (optional) A URL representing the messaging driver to use and its full
+#   configuration. Transport URLs take the form:
+#   transport://user:pass@host1:port[,hostN:portN]/virtual_host
+#   Defaults to $::os_service_default
 #
 # [*rpc_backend*]
 #   (Optional) Use these options to configure the message system.
@@ -202,51 +202,7 @@
 #   Value can be a string or a list.
 #   Defaults to $::os_service_default
 #
-# == keystone authentication options
-#
-# [*auth_uri*]
-#   (Optional) Specifies the public Identity URI for Heat to use.
-#   Located in heat.conf.
-#   Defaults to: 'http://127.0.0.1:5000/'.
-#
-# [*identity_uri*]
-#   (Optional) Specifies the admin Identity URI for Heat to use.
-#   Located in heat.conf.
-#   Defaults to: 'http://127.0.0.1:35357/'.
-#
-# [*auth_plugin*]
-#   Specifies the plugin used for authentication.
-#   Defaults to undef.
-#
-# [*keystone_user*]
-#   Defaults to 'heat'.
-#
-# [*keystone_tenant*]
-#   Defaults to 'services'.
-#
-# [*keystone_password*]
-#
-# [*keystone_project_domain_name*]
-#   Specifies the project domain of Keystone account for "password" auth_plugin.
-#   Defaults to 'Default'.
-#
-# [*keystone_user_domain_id*]
-#   (Optional) Domain ID of the principal if the principal has a domain.
-#   Defaults to: $::os_service_default.
-#
-# [*keystone_user_domain_name*]
-#   Defaults to 'Default'.
-#
-# [*keystone_project_domain_id*]
-#   (Optional) Domain ID of the scoped project if auth is project-scoped.
-#   Defaults to: $::os_service_default.
-#
 # [*keystone_ec2_uri*]
-#
-# [*memcached_servers*]
-#   (optinal) a list of memcached server(s) to use for caching. If left
-#   undefined, tokens will instead be cached in-process.
-#   Defaults to $::os_service_default.
 #
 # [*database_connection*]
 #   (optional) Connection url for the heat database.
@@ -325,28 +281,67 @@
 #   in the heat config.
 #   Defaults to false.
 #
+# [*auth_strategy*]
+#   (optional) Type of authentication to use
+#   Defaults to 'keystone'
+#
 # DEPRECATED PARAMETERS
 #
 # [*verbose*]
 #   (Optional) Deprecated. Should the daemons log verbose messages
 #   Defaults to undef.
 #
+# [*auth_uri*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::auth_uri
+#   Defaults to undef
+#
+# [*identity_uri*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::auth_url
+#   Defaults to undef
+#
+# [*auth_plugin*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::auth_type
+#   Defaults to undef
+#
+# [*keystone_user*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::username
+#   Defaults to undef
+#
+# [*keystone_tenant*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::
+#   Defaults to undef
+#
+# [*keystone_password*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::password
+#   Defaults to undef
+#
+# [*keystone_user_domain_name*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::user_domain_name
+#   Defaults to undef
+#
+# [*keystone_user_domain_id*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::user_domain_name
+#   instead, there is no need for both id and name options.
+#   Defaults to $::os_service_default
+#
+# [*keystone_project_domain_name*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::project_domain_name
+#   Defaults to undef
+#
+# [*keystone_project_domain_id*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::project_domain_name
+#   instead, there is no need for both id and name options.
+#   Defaults to $::os_service_default
+#
+# [*memcached_servers*]
+#   (Optional) Deprecated. Use heat::keystone::authtoken::memcached_servers.
+#   Defaults to undef
+#
 class heat(
-  $auth_uri                           = 'http://127.0.0.1:5000/',
-  $identity_uri                       = 'http://127.0.0.1:35357/',
   $package_ensure                     = 'present',
   $debug                              = undef,
   $log_dir                            = undef,
-  $auth_plugin                        = undef,
-  $keystone_user                      = 'heat',
-  $keystone_tenant                    = 'services',
-  $keystone_password                  = false,
   $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
-  $keystone_project_domain_id         = $::os_service_default,
-  $keystone_project_domain_name       = 'Default',
-  $keystone_user_domain_id            = $::os_service_default,
-  $keystone_user_domain_name          = 'Default',
-  $memcached_servers                  = $::os_service_default,
   $default_transport_url              = $::os_service_default,
   $rpc_backend                        = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
@@ -406,8 +401,20 @@ class heat(
   $enable_proxy_headers_parsing       = $::os_service_default,
   $heat_clients_url                   = $::os_service_default,
   $purge_config                       = false,
+  $auth_strategy                      = 'keystone',
   # Deprecated
   $verbose                            = undef,
+  $auth_uri                           = undef,
+  $identity_uri                       = undef,
+  $auth_plugin                        = undef,
+  $keystone_user                      = undef,
+  $keystone_tenant                    = undef,
+  $keystone_password                  = undef,
+  $keystone_user_domain_name          = undef,
+  $keystone_user_domain_id            = $::os_service_default,
+  $keystone_project_domain_name       = undef,
+  $keystone_project_domain_id         = $::os_service_default,
+  $memcached_servers                  = undef,
 ) {
 
   include ::heat::logging
@@ -415,8 +422,56 @@ class heat(
   include ::heat::deps
   include ::heat::params
 
+  if $auth_strategy == 'keystone' {
+    include ::heat::keystone::authtoken
+  }
+
   if $verbose {
     warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
+  }
+
+  if $auth_uri {
+    warning('auth_uri is deprecated, use heat::keystone::authtoken::auth_uri instead.')
+  }
+
+  if $identity_uri {
+    warning('identity_uri is deprecated, use heat::keystone::authtoken::auth_url instead.')
+  }
+
+  if $auth_plugin {
+    warning('auth_plugin is deprecated, use heat::keystone::authtoken::auth_type instead.')
+  }
+
+  if $keystone_user {
+    warning('keystone_user is deprecated, use heat::keystone::authtoken::username instead.')
+  }
+
+  if $keystone_tenant {
+    warning('keystone_tenant is deprecated, use heat::keystone::authtoken::project_name instead.')
+  }
+
+  if $keystone_password {
+    warning('keystone_password is deprecated, use heat::keystone::authtoken::password instead.')
+  }
+
+  if $keystone_user_domain_name {
+    warning('keystone_user_domain_name is deprecated, use heat::keystone::authtoken::user_domain_name instead.')
+  }
+
+  if $keystone_user_domain_id {
+    warning('keystone_user_domain_id is deprecated, use the name option instead.')
+  }
+
+  if $keystone_project_domain_name {
+    warning('keystone_project_domain_name is deprecated, use heat::keystone::authtoken::project_domain_name instead.')
+  }
+
+  if $keystone_project_domain_id {
+    warning('keystone_project_domain_id is deprecated, use the name option instead.')
+  }
+
+  if $memcached_servers {
+    warning('memcached_servers is deprecated, use heat::keystone::authtoken::memcached_servers instead.')
   }
 
   package { 'heat-common':
@@ -476,45 +531,24 @@ class heat(
     }
   }
 
-  if $auth_plugin {
-    if $auth_plugin == 'password' {
-      heat_config {
-        'keystone_authtoken/auth_url':            value => $identity_uri;
-        'keystone_authtoken/auth_plugin':         value => $auth_plugin;
-        'keystone_authtoken/username':            value => $keystone_user;
-        'keystone_authtoken/password':            value => $keystone_password, secret => true;
-        'keystone_authtoken/user_domain_id':      value => $keystone_user_domain_id;
-        'keystone_authtoken/user_domain_name':    value => $keystone_user_domain_name;
-        'keystone_authtoken/project_name':        value => $keystone_tenant;
-        'keystone_authtoken/project_domain_id':   value => $keystone_project_domain_id;
-        'keystone_authtoken/project_domain_name': value => $keystone_project_domain_name;
-      }
-    } else {
-      fail('Currently only "password" auth_plugin is supported.')
-    }
-  } else {
-    warning('"admin_user", "admin_password", "admin_tenant_name" configuration options are deprecated in favor of auth_plugin and related options')
-    heat_config {
-      'keystone_authtoken/auth_uri':          value => $auth_uri;
-      'keystone_authtoken/identity_uri':      value => $identity_uri;
-      'keystone_authtoken/admin_tenant_name': value => $keystone_tenant;
-      'keystone_authtoken/admin_user':        value => $keystone_user;
-      'keystone_authtoken/admin_password':    value => $keystone_password, secret => true;
-    }
-  }
+  $auth_url_real = pick($identity_uri, $::heat::keystone::authtoken::auth_url)
+  $auth_uri_real = pick($identity_uri, $::heat::keystone::authtoken::auth_uri)
+  $keystone_user_real = pick($keystone_user, $::heat::keystone::authtoken::username)
+  $keystone_password_real = pick($keystone_password, $::heat::keystone::authtoken::password)
+  $keystone_project_domain_name_real = pick($keystone_project_domain_name, $::heat::keystone::authtoken::project_domain_name)
+  $keystone_user_domain_name_real = pick($keystone_user_domain_name, $::heat::keystone::authtoken::user_domain_name)
 
   heat_config {
     'trustee/auth_plugin':         value => 'password';
-    'trustee/auth_url':            value => $identity_uri;
-    'trustee/username':            value => $keystone_user;
-    'trustee/password':            value => $keystone_password, secret => true;
+    'trustee/auth_url':            value => $auth_url_real;
+    'trustee/username':            value => $keystone_user_real;
+    'trustee/password':            value => $keystone_password_real, secret => true;
     'trustee/project_domain_id':   value => $keystone_project_domain_id;
     'trustee/user_domain_id':      value => $keystone_user_domain_id;
-    'trustee/project_domain_name': value => $keystone_project_domain_name;
-    'trustee/user_domain_name':    value => $keystone_user_domain_name;
-
-    'clients_keystone/auth_uri': value => $identity_uri;
-    'clients_heat/url':          value => $heat_clients_url;
+    'trustee/project_domain_name': value => $keystone_project_domain_name_real;
+    'trustee/user_domain_name':    value => $keystone_user_domain_name_real;
+    'clients_keystone/auth_uri':   value => $auth_uri_real;
+    'clients_heat/url':            value => $heat_clients_url;
   }
 
   if (!is_service_default($enable_stack_adopt)) {
@@ -533,7 +567,6 @@ class heat(
     'DEFAULT/enable_stack_adopt':           value => $enable_stack_adopt;
     'ec2authtoken/auth_uri':                value => $keystone_ec2_uri;
     'paste_deploy/flavor':                  value => $flavor;
-    'keystone_authtoken/memcached_servers': value => join(any2array($memcached_servers), ',');
   }
 
   oslo::messaging::notifications { 'heat_config':

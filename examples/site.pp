@@ -11,10 +11,11 @@ node default {
     password => 'heat',
   }
 
+  class { '::heat::keystone::authtoken':
+    password => 'password',
+  }
   # Common class
   class { '::heat':
-    # The keystone_password parameter is mandatory
-    keystone_password => 'password',
     sql_connection    => 'mysql+pymysql://heat:heat@localhost/heat'
   }
 

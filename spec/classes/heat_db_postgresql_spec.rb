@@ -1,16 +1,17 @@
 require 'spec_helper'
 
 describe 'heat::db::postgresql' do
-
   shared_examples_for 'heat::db::postgresql' do
     let :req_params do
       { :password => 'pw' }
     end
 
     let :pre_condition do
-      'include ::postgresql::server
-       include ::heat
-      '
+      "include ::postgresql::server
+       class { '::heat::keystone::authtoken':
+         password => 'password',
+       }
+       include ::heat"
     end
 
     context 'with only required parameters' do

@@ -308,7 +308,7 @@
 #   Defaults to undef
 #
 # [*keystone_tenant*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::
+#   (Optional) Deprecated. Use heat::keystone::authtoken::project_name
 #   Defaults to undef
 #
 # [*keystone_password*]

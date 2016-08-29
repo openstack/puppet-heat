@@ -532,7 +532,6 @@ class heat(
   }
 
   $auth_url_real = pick($identity_uri, $::heat::keystone::authtoken::auth_url)
-  $auth_uri_real = pick($identity_uri, $::heat::keystone::authtoken::auth_uri)
   $keystone_user_real = pick($keystone_user, $::heat::keystone::authtoken::username)
   $keystone_password_real = pick($keystone_password, $::heat::keystone::authtoken::password)
   $keystone_project_domain_name_real = pick($keystone_project_domain_name, $::heat::keystone::authtoken::project_domain_name)
@@ -547,7 +546,7 @@ class heat(
     'trustee/user_domain_id':      value => $keystone_user_domain_id;
     'trustee/project_domain_name': value => $keystone_project_domain_name_real;
     'trustee/user_domain_name':    value => $keystone_user_domain_name_real;
-    'clients_keystone/auth_uri':   value => $auth_uri_real;
+    'clients_keystone/auth_uri':   value => $auth_url_real;
     'clients_heat/url':            value => $heat_clients_url;
   }
 

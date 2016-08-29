@@ -124,7 +124,7 @@ describe 'heat' do
     end
 
     it 'configures auth_uri for clients_keystone' do
-      is_expected.to contain_heat_config('clients_keystone/auth_uri').with_value( 'http://127.0.0.1:5000/' )
+      is_expected.to contain_heat_config('clients_keystone/auth_uri').with_value( 'http://127.0.0.1:35357/' )
     end
 
     it 'configures keystone_ec2_uri' do

@@ -89,6 +89,10 @@ describe 'heat' do
       is_expected.to contain_class('heat::db::sync')
     end
 
+    it 'configures host' do
+      is_expected.to contain_heat_config('DEFAULT/host').with_value('<SERVICE DEFAULT>')
+    end
+
     it 'configures max_template_size' do
       is_expected.to contain_heat_config('DEFAULT/max_template_size').with_value('<SERVICE DEFAULT>')
     end

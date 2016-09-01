@@ -182,6 +182,11 @@
 #   (Optional) Password for message broker authentication
 #   Defaults to $::os_service_default.
 #
+# [*host*]
+#   (Optional) Name of this node. This is typically a hostname, FQDN, or
+#   IP address.
+#   Defaults to $::os_service_default.
+#
 # [*max_template_size*]
 #   (Optional) Maximum raw byte size of any template.
 #   Defaults to $::os_service_default
@@ -379,6 +384,7 @@ class heat(
   $amqp_sasl_config_name              = $::os_service_default,
   $amqp_username                      = $::os_service_default,
   $amqp_password                      = $::os_service_default,
+  $host                               = $::os_service_default,
   $use_syslog                         = undef,
   $use_stderr                         = undef,
   $log_facility                       = undef,
@@ -559,6 +565,7 @@ class heat(
   }
 
   heat_config {
+    'DEFAULT/host':                         value => $host;
     'DEFAULT/max_template_size':            value => $max_template_size;
     'DEFAULT/max_json_body_size':           value => $max_json_body_size;
     'DEFAULT/region_name_for_services':     value => $region_name;

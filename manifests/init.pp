@@ -302,10 +302,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*verbose*]
-#   (Optional) Deprecated. Should the daemons log verbose messages
-#   Defaults to undef.
-#
 # [*auth_uri*]
 #   (Optional) Deprecated. Use heat::keystone::authtoken::auth_uri
 #   Defaults to undef
@@ -420,8 +416,6 @@ class heat(
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
-  # Deprecated
-  $verbose                            = undef,
   $auth_uri                           = undef,
   $identity_uri                       = undef,
   $auth_plugin                        = undef,
@@ -442,10 +436,6 @@ class heat(
 
   if $auth_strategy == 'keystone' {
     include ::heat::keystone::authtoken
-  }
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
   }
 
   if $auth_uri {

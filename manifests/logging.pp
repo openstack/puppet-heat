@@ -85,12 +85,6 @@
 #   Defaults to $::os_service_default.
 #   Example: 'Y-%m-%d %H:%M:%S'
 #
-#  DEPRECATED PARAMETERS
-#
-#  [*verbose*]
-#    (Optional) Deprecated. Should the daemons log verbose messages.
-#    Defaults to undef
-#
 class heat::logging(
   $use_syslog                    = $::os_service_default,
   $use_stderr                    = $::os_service_default,
@@ -108,8 +102,6 @@ class heat::logging(
   $instance_format               = $::os_service_default,
   $instance_uuid_format          = $::os_service_default,
   $log_date_format               = $::os_service_default,
-  #Deprecated
-  $verbose                       = undef,
 ) {
 
   include ::heat::deps
@@ -121,10 +113,6 @@ class heat::logging(
   $log_facility_real = pick($::heat::log_facility,$log_facility)
   $log_dir_real = pick($::heat::log_dir,$log_dir)
   $debug_real = pick($::heat::debug,$debug)
-
-  if $verbose {
-    warning('verbose is deprecated, has no effect and will be removed after Newton cycle.')
-  }
 
   oslo::log { 'heat_config':
     debug                         => $debug_real,

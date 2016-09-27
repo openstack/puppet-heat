@@ -290,6 +290,16 @@
 #   (optional) Type of authentication to use
 #   Defaults to 'keystone'
 #
+# [*yaql_limit_iterators*]
+#   (optional) The maximum number of elements YAQL collection expressions can
+#     take for evaluation.
+#   Defaults to $::os_service_default.
+#
+# [*yaql_memory_quota*]
+#   (optional) The maximum size of memory in bytes that YAQL expressions can
+#     take for evaluation.
+#   Defaults to $::os_service_default.
+#
 # DEPRECATED PARAMETERS
 #
 # [*verbose*]
@@ -408,6 +418,8 @@ class heat(
   $heat_clients_url                   = $::os_service_default,
   $purge_config                       = false,
   $auth_strategy                      = 'keystone',
+  $yaql_memory_quota                  = $::os_service_default,
+  $yaql_limit_iterators               = $::os_service_default,
   # Deprecated
   $verbose                            = undef,
   $auth_uri                           = undef,
@@ -573,6 +585,8 @@ class heat(
     'DEFAULT/enable_stack_adopt':           value => $enable_stack_adopt;
     'ec2authtoken/auth_uri':                value => $keystone_ec2_uri;
     'paste_deploy/flavor':                  value => $flavor;
+    'yaql/limit_iterators':                 value => $yaql_limit_iterators;
+    'yaql/memory_quota':                    value => $yaql_memory_quota;
   }
 
   oslo::messaging::notifications { 'heat_config':

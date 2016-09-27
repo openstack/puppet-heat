@@ -20,6 +20,8 @@ describe 'heat' do
       :keystone_password     => 'secretpassword',
       :heat_clients_url      => '<SERVICE DEFAULT>',
       :purge_config          => false,
+      :yaql_limit_iterators  => 400,
+      :yaql_memory_quota     => 20000,
     }
   end
 
@@ -133,6 +135,14 @@ describe 'heat' do
 
     it 'configures keystone_ec2_uri' do
       is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value( params[:keystone_ec2_uri] )
+    end
+
+    it 'configures yaql_limit_iterators' do
+      is_expected.to contain_heat_config('yaql/limit_iterators').with_value( params[:yaql_limit_iterators] )
+    end
+
+    it 'configures yaql_memory_quota' do
+      is_expected.to contain_heat_config('yaql/memory_quota').with_value( params[:yaql_memory_quota] )
     end
 
     it { is_expected.to contain_heat_config('paste_deploy/flavor').with_value('keystone') }

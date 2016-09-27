@@ -1,0 +1,4 @@
+---
+features:
+  - Allows configuration of [yaql] settings to control
+    memory_quota and limit_iterators settings.

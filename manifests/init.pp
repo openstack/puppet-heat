@@ -143,14 +143,14 @@
 #
 # [*keystone_user_domain_id*]
 #   (Optional) Domain ID of the principal if the principal has a domain.
-#   Defaults to: 'Default'.
+#   Defaults to: 'default'.
 #
 # [*keystone_user_domain_name*]
 #   Defaults to 'Default'.
 #
 # [*keystone_project_domain_id*]
 #   (Optional) Domain ID of the scoped project if auth is project-scoped.
-#   Defaults to: 'Default'.
+#   Defaults to: 'default'.
 #
 # [*keystone_ec2_uri*]
 #
@@ -274,9 +274,9 @@ class heat(
   $keystone_tenant                    = 'services',
   $keystone_password                  = false,
   $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
-  $keystone_project_domain_id         = 'Default',
+  $keystone_project_domain_id         = 'default',
   $keystone_project_domain_name       = 'Default',
-  $keystone_user_domain_id            = 'Default',
+  $keystone_user_domain_id            = 'default',
   $keystone_user_domain_name          = 'Default',
   $rpc_backend                        = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,

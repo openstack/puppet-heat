@@ -89,11 +89,11 @@ describe 'heat' do
     end
 
     it 'configures project_domain_id' do
-      is_expected.to contain_heat_config('trustee/project_domain_id').with_value( 'Default' )
+      is_expected.to contain_heat_config('trustee/project_domain_id').with_value( 'default' )
     end
 
     it 'configures user_domain_id' do
-      is_expected.to contain_heat_config('trustee/user_domain_id').with_value( 'Default' )
+      is_expected.to contain_heat_config('trustee/user_domain_id').with_value( 'default' )
     end
 
     it 'configures auth_plugin' do
@@ -368,8 +368,8 @@ describe 'heat' do
       is_expected.to contain_heat_config('keystone_authtoken/username').with_value("heat")
       is_expected.to contain_heat_config('keystone_authtoken/password').with_secret( true )
       is_expected.to contain_heat_config('keystone_authtoken/project_name').with_value("services")
-      is_expected.to contain_heat_config('keystone_authtoken/user_domain_id').with_value('Default')
-      is_expected.to contain_heat_config('keystone_authtoken/project_domain_id').with_value('Default')
+      is_expected.to contain_heat_config('keystone_authtoken/user_domain_id').with_value('default')
+      is_expected.to contain_heat_config('keystone_authtoken/project_domain_id').with_value('default')
     end
   end
 

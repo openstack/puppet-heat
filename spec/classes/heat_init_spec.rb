@@ -113,8 +113,8 @@ describe 'heat' do
       is_expected.to contain_heat_config('trustee/user_domain_name').with_value( 'Default' )
     end
 
-    it 'configures auth_plugin' do
-      is_expected.to contain_heat_config('trustee/auth_plugin').with_value( 'password' )
+    it 'configures auth_type' do
+      is_expected.to contain_heat_config('trustee/auth_type').with_value( 'password' )
     end
 
     it 'configures auth_url' do

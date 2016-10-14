@@ -556,7 +556,7 @@ class heat(
   $keystone_user_domain_name_real = pick($keystone_user_domain_name, $::heat::keystone::authtoken::user_domain_name)
 
   heat_config {
-    'trustee/auth_plugin':         value => 'password';
+    'trustee/auth_type':           value => 'password';
     'trustee/auth_url':            value => $auth_url_real;
     'trustee/username':            value => $keystone_user_real;
     'trustee/password':            value => $keystone_password_real, secret => true;

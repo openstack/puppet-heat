@@ -30,6 +30,10 @@
 #   Whether manage or not the user role creation.
 #   Defaults to 'true'.
 #
+# [*manage_config*]
+#   Should the stack configuration be updated with the user information
+#   Defaults to 'true'
+#
 class heat::keystone::domain (
   $domain_name        = 'heat',
   $domain_admin       = 'heat_admin',
@@ -38,6 +42,7 @@ class heat::keystone::domain (
   $manage_domain      = true,
   $manage_user        = true,
   $manage_role        = true,
+  $manage_config      = true,
 ) {
 
   include ::heat::deps
@@ -63,9 +68,11 @@ class heat::keystone::domain (
     })
   }
 
-  heat_config {
-    'DEFAULT/stack_domain_admin':          value => $domain_admin;
-    'DEFAULT/stack_domain_admin_password': value => $domain_password, secret => true;
-    'DEFAULT/stack_user_domain_name':      value => $domain_name;
+  if $manage_config {
+    heat_config {
+      'DEFAULT/stack_domain_admin':          value => $domain_admin;
+      'DEFAULT/stack_domain_admin_password': value => $domain_password, secret => true;
+      'DEFAULT/stack_user_domain_name':      value => $domain_name;
+    }
   }
 }

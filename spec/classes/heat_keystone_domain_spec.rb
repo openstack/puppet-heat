@@ -65,6 +65,21 @@ describe 'heat::keystone::domain' do
 
       it { is_expected.to_not contain_keystone_user_role("#{params[:domain_admin]}::#{params[:domain_name]}@::#{params[:domain_name]}") }
     end
+
+    context 'when not managing the config' do
+      before do
+        params.merge!(
+          :manage_config => false
+        )
+      end
+
+      it 'does not write out the heat admin user configuration settings' do
+        is_expected.to_not contain_heat_config('DEFAULT/stack_domain_admin')
+        is_expected.to_not contain_heat_config('DEFAULT/stack_domain_admin_password')
+        is_expected.to_not contain_heat_config('DEFAULT/stack_user_domain_name')
+      end
+    end
+
   end
 
 

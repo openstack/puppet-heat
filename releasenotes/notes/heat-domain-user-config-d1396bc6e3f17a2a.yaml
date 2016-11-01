@@ -1,0 +1,5 @@
+---
+other:
+  - Management of heat configuration is now optional for
+    heat::keystone::domain which allows you to manage the
+    users and domain seperately from the service configuration.

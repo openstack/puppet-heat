@@ -300,54 +300,6 @@
 #     take for evaluation.
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*auth_uri*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::auth_uri
-#   Defaults to undef
-#
-# [*identity_uri*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::auth_url
-#   Defaults to undef
-#
-# [*auth_plugin*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::auth_type
-#   Defaults to undef
-#
-# [*keystone_user*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::username
-#   Defaults to undef
-#
-# [*keystone_tenant*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::project_name
-#   Defaults to undef
-#
-# [*keystone_password*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::password
-#   Defaults to undef
-#
-# [*keystone_user_domain_name*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::user_domain_name
-#   Defaults to undef
-#
-# [*keystone_user_domain_id*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::user_domain_name
-#   instead, there is no need for both id and name options.
-#   Defaults to $::os_service_default
-#
-# [*keystone_project_domain_name*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::project_domain_name
-#   Defaults to undef
-#
-# [*keystone_project_domain_id*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::project_domain_name
-#   instead, there is no need for both id and name options.
-#   Defaults to $::os_service_default
-#
-# [*memcached_servers*]
-#   (Optional) Deprecated. Use heat::keystone::authtoken::memcached_servers.
-#   Defaults to undef
-#
 class heat(
   $package_ensure                     = 'present',
   $debug                              = undef,
@@ -416,17 +368,6 @@ class heat(
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
-  $auth_uri                           = undef,
-  $identity_uri                       = undef,
-  $auth_plugin                        = undef,
-  $keystone_user                      = undef,
-  $keystone_tenant                    = undef,
-  $keystone_password                  = undef,
-  $keystone_user_domain_name          = undef,
-  $keystone_user_domain_id            = $::os_service_default,
-  $keystone_project_domain_name       = undef,
-  $keystone_project_domain_id         = $::os_service_default,
-  $memcached_servers                  = undef,
 ) {
 
   include ::heat::logging
@@ -436,50 +377,6 @@ class heat(
 
   if $auth_strategy == 'keystone' {
     include ::heat::keystone::authtoken
-  }
-
-  if $auth_uri {
-    warning('auth_uri is deprecated, use heat::keystone::authtoken::auth_uri instead.')
-  }
-
-  if $identity_uri {
-    warning('identity_uri is deprecated, use heat::keystone::authtoken::auth_url instead.')
-  }
-
-  if $auth_plugin {
-    warning('auth_plugin is deprecated, use heat::keystone::authtoken::auth_type instead.')
-  }
-
-  if $keystone_user {
-    warning('keystone_user is deprecated, use heat::keystone::authtoken::username instead.')
-  }
-
-  if $keystone_tenant {
-    warning('keystone_tenant is deprecated, use heat::keystone::authtoken::project_name instead.')
-  }
-
-  if $keystone_password {
-    warning('keystone_password is deprecated, use heat::keystone::authtoken::password instead.')
-  }
-
-  if $keystone_user_domain_name {
-    warning('keystone_user_domain_name is deprecated, use heat::keystone::authtoken::user_domain_name instead.')
-  }
-
-  if $keystone_user_domain_id {
-    warning('keystone_user_domain_id is deprecated, use the name option instead.')
-  }
-
-  if $keystone_project_domain_name {
-    warning('keystone_project_domain_name is deprecated, use heat::keystone::authtoken::project_domain_name instead.')
-  }
-
-  if $keystone_project_domain_id {
-    warning('keystone_project_domain_id is deprecated, use the name option instead.')
-  }
-
-  if $memcached_servers {
-    warning('memcached_servers is deprecated, use heat::keystone::authtoken::memcached_servers instead.')
   }
 
   package { 'heat-common':
@@ -539,22 +436,20 @@ class heat(
     }
   }
 
-  $auth_url_real = pick($identity_uri, $::heat::keystone::authtoken::auth_url)
-  $keystone_user_real = pick($keystone_user, $::heat::keystone::authtoken::username)
-  $keystone_password_real = pick($keystone_password, $::heat::keystone::authtoken::password)
-  $keystone_project_domain_name_real = pick($keystone_project_domain_name, $::heat::keystone::authtoken::project_domain_name)
-  $keystone_user_domain_name_real = pick($keystone_user_domain_name, $::heat::keystone::authtoken::user_domain_name)
+  $auth_url = $::heat::keystone::authtoken::auth_url
+  $keystone_username = $::heat::keystone::authtoken::username
+  $keystone_password = $::heat::keystone::authtoken::password
+  $keystone_project_domain_name = $::heat::keystone::authtoken::project_domain_name
+  $keystone_user_domain_name = $::heat::keystone::authtoken::user_domain_name
 
   heat_config {
     'trustee/auth_type':           value => 'password';
-    'trustee/auth_url':            value => $auth_url_real;
-    'trustee/username':            value => $keystone_user_real;
-    'trustee/password':            value => $keystone_password_real, secret => true;
-    'trustee/project_domain_id':   value => $keystone_project_domain_id;
-    'trustee/user_domain_id':      value => $keystone_user_domain_id;
-    'trustee/project_domain_name': value => $keystone_project_domain_name_real;
-    'trustee/user_domain_name':    value => $keystone_user_domain_name_real;
-    'clients_keystone/auth_uri':   value => $auth_url_real;
+    'trustee/auth_url':            value => $auth_url;
+    'trustee/username':            value => $keystone_username;
+    'trustee/password':            value => $keystone_password, secret => true;
+    'trustee/project_domain_name': value => $keystone_project_domain_name;
+    'trustee/user_domain_name':    value => $keystone_user_domain_name;
+    'clients_keystone/auth_uri':   value => $auth_url;
     'clients_heat/url':            value => $heat_clients_url;
   }
 

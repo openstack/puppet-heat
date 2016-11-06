@@ -97,9 +97,11 @@ describe 'heat::api' do
 
     context 'with $sync_db set to false in ::heat' do
       let :pre_condition do
-        "class {'heat':
-           keystone_password => 'password',
-           sync_db => false
+        "class { '::heat::keystone::authtoken':
+           password => 'a_big_secret',
+         }
+         class {'heat':
+           sync_db => false,
          }"
       end
 

@@ -5,6 +5,8 @@
 class heat::params {
   include ::openstacklib::defaults
 
+  $client_package_name         = 'python-heatclient'
+
   case $::osfamily {
     'RedHat': {
       # package names
@@ -12,7 +14,6 @@ class heat::params {
       $api_cloudwatch_package_name = 'openstack-heat-api-cloudwatch'
       $api_cfn_package_name        = 'openstack-heat-api-cfn'
       $engine_package_name         = 'openstack-heat-engine'
-      $client_package_name         = 'python-heatclient'
       $common_package_name         = 'openstack-heat-common'
       # service names
       $api_service_name            = 'openstack-heat-api'
@@ -26,7 +27,6 @@ class heat::params {
       $api_cloudwatch_package_name = 'heat-api-cloudwatch'
       $api_cfn_package_name        = 'heat-api-cfn'
       $engine_package_name         = 'heat-engine'
-      $client_package_name         = 'python-heatclient'
       $common_package_name         = 'heat-common'
       # service names
       $api_service_name            = 'heat-api'

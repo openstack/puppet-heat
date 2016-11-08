@@ -44,6 +44,16 @@
 #   Required when $use_ssl is set to 'true'.
 #   Defaults to $::os_service_default.
 #
+# [*service_name*]
+#   (optional) Name of the service that will be providing the
+#   server functionality of heat-api-cloudwatch.
+#   If the value is 'httpd', this means heat-api-cloudwatch will be a web
+#   service, and you must use another class to configure that
+#   web service. For example, use
+#   class{ 'heat::wsgi::apache_api_cloudwatch'...} to make heat-api-cloudwatch
+#   be a web app using apache mod_wsgi.
+#   Defaults to '$::heat::params::api_cloudwatch_service_name'
+#
 # == Deprecated Parameters
 #
 # No Deprecated Parameters.
@@ -58,7 +68,8 @@ class heat::api_cloudwatch (
   $use_ssl           = false,
   $cert_file         = $::os_service_default,
   $key_file          = $::os_service_default,
-) {
+  $service_name      = $::heat::params::api_cloudwatch_service_name,
+) inherits heat::params {
 
   include ::heat
   include ::heat::deps
@@ -88,13 +99,29 @@ class heat::api_cloudwatch (
     }
   }
 
-  service { 'heat-api-cloudwatch':
-    ensure     => $service_ensure,
-    name       => $::heat::params::api_cloudwatch_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    tag        => 'heat-service',
+  if $service_name == $::heat::params::api_cloudwatch_service_name {
+    service { 'heat-api-cloudwatch':
+      ensure     => $service_ensure,
+      name       => $::heat::params::api_cloudwatch_service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => 'heat-service',
+    }
+  } elsif $service_name == 'httpd' {
+    include ::apache::params
+    service { 'heat-api-cloudwatch':
+      ensure => 'stopped',
+      name   => $::heat::params::api_cloudwatch_service_name,
+      enable => false,
+      tag    => ['heat-service'],
+    }
+
+    # we need to make sure heat-api-cloudwatch/eventlet is stopped before trying to start apache
+    Service['heat-api-cloudwatch'] -> Service[$service_name]
+  } else {
+    fail("Invalid service_name. Either heat-api-cloudwatch/openstack-heat-api-cloudwatch for \
+running as a standalone service, or httpd for being run by a httpd server")
   }
 
   heat_config {

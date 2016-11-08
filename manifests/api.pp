@@ -42,6 +42,15 @@
 #   Required when $use_ssl is set to 'true'.
 #   Defaults to $::os_service_default.
 #
+# [*service_name*]
+#   (optional) Name of the service that will be providing the
+#   server functionality of heat-api.
+#   If the value is 'httpd', this means heat-api will be a web
+#   service, and you must use another class to configure that
+#   web service. For example, use class { 'heat::wsgi::apache_api'...}
+#   to make heat-api be a web app using apache mod_wsgi.
+#   Defaults to '$::heat::params::api_service_name'
+#
 # === Deprecated Parameters
 #
 # No Deprecated Parameters.
@@ -56,7 +65,8 @@ class heat::api (
   $use_ssl           = false,
   $cert_file         = $::os_service_default,
   $key_file          = $::os_service_default,
-) {
+  $service_name      = $::heat::params::api_service_name,
+) inherits heat::params {
 
   include ::heat
   include ::heat::deps
@@ -86,13 +96,29 @@ class heat::api (
     }
   }
 
-  service { 'heat-api':
-    ensure     => $service_ensure,
-    name       => $::heat::params::api_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    tag        => 'heat-service',
+  if $service_name == $::heat::params::api_service_name {
+    service { 'heat-api':
+      ensure     => $service_ensure,
+      name       => $::heat::params::api_service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => 'heat-service',
+    }
+  } elsif $service_name == 'httpd' {
+    include ::apache::params
+    service { 'heat-api':
+      ensure => 'stopped',
+      name   => $::heat::params::api_service_name,
+      enable => false,
+      tag    => ['heat-service'],
+    }
+
+    # we need to make sure heat-api/eventlet is stopped before trying to start apache
+    Service['heat-api'] -> Service[$service_name]
+  } else {
+    fail("Invalid service_name. Either heat-api/openstack-heat-api for \
+running as a standalone service, or httpd for being run by a httpd server")
   }
 
   heat_config {

@@ -64,7 +64,7 @@ describe 'heat::api_cloudwatch' do
 
           is_expected.to contain_service('heat-api-cloudwatch').with(
             :ensure     => (params[:manage_service] && params[:enabled]) ? 'running' : 'stopped',
-            :name       => platform_params[:api_service_name],
+            :name       => platform_params[:api_cloudwatch_service_name],
             :enable     => params[:enabled],
             :hasstatus  => true,
             :hasrestart => true,
@@ -86,7 +86,7 @@ describe 'heat::api_cloudwatch' do
 
         is_expected.to contain_service('heat-api-cloudwatch').with(
           :ensure     => nil,
-          :name       => platform_params[:api_service_name],
+          :name       => platform_params[:api_cloudwatch_service_name],
           :enable     => false,
           :hasstatus  => true,
           :hasrestart => true,
@@ -124,9 +124,9 @@ describe 'heat::api_cloudwatch' do
       let :platform_params do
         case facts[:osfamily]
         when 'Debian'
-          { :api_service_name => 'heat-api-cloudwatch' }
+          { :api_cloudwatch_service_name => 'heat-api-cloudwatch' }
         when 'RedHat'
-          { :api_service_name => 'openstack-heat-api-cloudwatch' }
+          { :api_cloudwatch_service_name => 'openstack-heat-api-cloudwatch' }
         end
       end
 

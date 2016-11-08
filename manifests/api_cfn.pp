@@ -45,6 +45,15 @@
 #   Required when $use_ssl is set to 'true'.
 #   Defaults to $::os_service_default.
 #
+# [*service_name*]
+#   (optional) Name of the service that will be providing the
+#   server functionality of heat-api-cfn.
+#   If the value is 'httpd', this means heat-api-cfn will be a web
+#   service, and you must use another class to configure that
+#   web service. For example, use class { 'heat::wsgi::apache_api_cfn'...}
+#   to make heat-api-cfn be a web app using apache mod_wsgi.
+#   Defaults to '$::heat::params::api_cfn_service_name'
+#
 # == Deprecated Parameters
 #
 # No Deprecated Parameters.
@@ -59,7 +68,8 @@ class heat::api_cfn (
   $use_ssl           = false,
   $cert_file         = $::os_service_default,
   $key_file          = $::os_service_default,
-) {
+  $service_name      = $::heat::params::api_cfn_service_name,
+) inherits heat::params {
 
   include ::heat
   include ::heat::deps
@@ -89,13 +99,29 @@ class heat::api_cfn (
     }
   }
 
-  service { 'heat-api-cfn':
-    ensure     => $service_ensure,
-    name       => $::heat::params::api_cfn_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    tag        => 'heat-service',
+  if $service_name == $::heat::params::api_cfn_service_name {
+    service { 'heat-api-cfn':
+      ensure     => $service_ensure,
+      name       => $::heat::params::api_cfn_service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => 'heat-service',
+    }
+  } elsif $service_name == 'httpd' {
+    include ::apache::params
+    service { 'heat-api-cfn':
+      ensure => 'stopped',
+      name   => $::heat::params::api_cfn_service_name,
+      enable => false,
+      tag    => ['heat-service'],
+    }
+
+    # we need to make sure heat-api-cfn/eventlet is stopped before trying to start apache
+    Service['heat-api-cfn'] -> Service[$service_name]
+  } else {
+    fail("Invalid service_name. Either heat-api-cfn/openstack-heat-api-cfn for \
+running as a standalone service, or httpd for being run by a httpd server")
   }
 
   heat_config {

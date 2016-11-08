@@ -47,12 +47,21 @@ describe 'basic heat' do
         domain_password => 'oh_my_no_secret',
       }
       class { '::heat::client': }
-      class { '::heat::api': }
+      class { '::heat::api':
+        service_name => 'httpd',
+      }
+      include ::heat::wsgi::apache_api
       class { '::heat::engine':
         auth_encryption_key => '1234567890AZERTYUIOPMLKJHGFDSQ12',
       }
-      class { '::heat::api_cloudwatch': }
-      class { '::heat::api_cfn': }
+      class { '::heat::api_cloudwatch':
+        service_name => 'httpd',
+      }
+      include ::heat::wsgi::apache_api_cloudwatch
+      class { '::heat::api_cfn':
+        service_name => 'httpd',
+      }
+      include ::heat::wsgi::apache_api_cfn
       class { '::heat::cron::purge_deleted': }
       EOS
 
@@ -63,15 +72,15 @@ describe 'basic heat' do
     end
 
     describe port(8000) do
-      it { is_expected.to be_listening.with('tcp') }
+      it { is_expected.to be_listening }
     end
 
     describe port(8003) do
-      it { is_expected.to be_listening.with('tcp') }
+      it { is_expected.to be_listening }
     end
 
     describe port(8004) do
-      it { is_expected.to be_listening.with('tcp') }
+      it { is_expected.to be_listening }
     end
 
     describe cron do

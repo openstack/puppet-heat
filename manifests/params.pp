@@ -20,6 +20,11 @@ class heat::params {
       $api_cloudwatch_service_name = 'openstack-heat-api-cloudwatch'
       $api_cfn_service_name        = 'openstack-heat-api-cfn'
       $engine_service_name         = 'openstack-heat-engine'
+      # WSGI scripts
+      $heat_wsgi_script_path                  = '/var/www/cgi-bin/heat'
+      $heat_api_wsgi_script_source            = '/usr/bin/heat-wsgi-api'
+      $heat_api_cfn_wsgi_script_source        = '/usr/bin/heat-wsgi-api-cfn'
+      $heat_api_cloudwatch_wsgi_script_source = '/usr/bin/heat-wsgi-api-cloudwatch'
     }
     'Debian': {
       # package names
@@ -33,6 +38,11 @@ class heat::params {
       $api_cloudwatch_service_name = 'heat-api-cloudwatch'
       $api_cfn_service_name        = 'heat-api-cfn'
       $engine_service_name         = 'heat-engine'
+      # WSGI scripts
+      $heat_wsgi_script_path                  = '/usr/lib/cgi-bin/heat'
+      $heat_api_wsgi_script_source            = '/usr/bin/heat-wsgi-api'
+      $heat_api_cfn_wsgi_script_source        = '/usr/bin/heat-wsgi-api-cfn'
+      $heat_api_cloudwatch_wsgi_script_source = '/usr/bin/heat-wsgi-api-cloudwatch'
       # Operating system specific
       case $::operatingsystem {
         'Ubuntu': {

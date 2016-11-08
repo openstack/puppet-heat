@@ -31,31 +31,6 @@
 #   (Optional) Configure the timeout (in seconds) for rpc responses
 #   Defaults to $::os_service_default.
 #
-# [*rabbit_host*]
-#   (Optional) IP or hostname of the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_port*]
-#   (Optional) Port of the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_hosts*]
-#   (Optional) Array of host:port (used with HA queues).
-#   If defined, will remove rabbit_host & rabbit_port parameters from config
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_userid*]
-#   (Optional) User to connect to the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_password*]
-#   (Optional) Password to connect to the rabbit_server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_virtual_host*]
-#   (Optional) Virtual_host to use.
-#   Defaults to $::os_service_default.
-#
 # [*rabbit_ha_queues*]
 #   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
 #   Defaults to $::os_service_default.
@@ -300,6 +275,33 @@
 #     take for evaluation.
 #   Defaults to $::os_service_default.
 #
+# === DEPRECATED PARAMETERS
+#
+# [*rabbit_host*]
+#   (Optional) IP or hostname of the rabbit server.
+#   Defaults to $::os_service_default.
+#
+# [*rabbit_port*]
+#   (Optional) Port of the rabbit server.
+#   Defaults to $::os_service_default.
+#
+# [*rabbit_hosts*]
+#   (Optional) Array of host:port (used with HA queues).
+#   If defined, will remove rabbit_host & rabbit_port parameters from config
+#   Defaults to $::os_service_default.
+#
+# [*rabbit_userid*]
+#   (Optional) User to connect to the rabbit server.
+#   Defaults to $::os_service_default.
+#
+# [*rabbit_password*]
+#   (Optional) Password to connect to the rabbit_server.
+#   Defaults to $::os_service_default.
+#
+# [*rabbit_virtual_host*]
+#   (Optional) Virtual_host to use.
+#   Defaults to $::os_service_default.
+#
 class heat(
   $package_ensure                     = 'present',
   $debug                              = undef,
@@ -308,12 +310,6 @@ class heat(
   $default_transport_url              = $::os_service_default,
   $rpc_backend                        = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
-  $rabbit_host                        = $::os_service_default,
-  $rabbit_port                        = $::os_service_default,
-  $rabbit_hosts                       = $::os_service_default,
-  $rabbit_userid                      = $::os_service_default,
-  $rabbit_password                    = $::os_service_default,
-  $rabbit_virtual_host                = $::os_service_default,
   $rabbit_ha_queues                   = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = 0,
   $rabbit_heartbeat_rate              = $::os_service_default,
@@ -368,6 +364,13 @@ class heat(
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $rabbit_host                        = $::os_service_default,
+  $rabbit_port                        = $::os_service_default,
+  $rabbit_hosts                       = $::os_service_default,
+  $rabbit_userid                      = $::os_service_default,
+  $rabbit_password                    = $::os_service_default,
+  $rabbit_virtual_host                = $::os_service_default,
 ) {
 
   include ::heat::logging
@@ -377,6 +380,17 @@ class heat(
 
   if $auth_strategy == 'keystone' {
     include ::heat::keystone::authtoken
+  }
+
+  if !is_service_default($rabbit_host) or
+    !is_service_default($rabbit_hosts) or
+    !is_service_default($rabbit_password) or
+    !is_service_default($rabbit_port) or
+    !is_service_default($rabbit_userid) or
+    !is_service_default($rabbit_virtual_host) {
+    warning("heat::rabbit_host, heat::rabbit_hosts, heat::rabbit_password, \
+heat::rabbit_port, heat::rabbit_userid and heat::rabbit_virtual_host are \
+deprecated. Please use heat::default_transport_url instead.")
   }
 
   package { 'heat-common':

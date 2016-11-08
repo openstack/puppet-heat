@@ -1,0 +1,6 @@
+---
+deprecations:
+  - heat::rabbit_host, heat::rabbit_hosts, heat::rabbit_password,
+    heat::rabbit_port, heat::rabbit_userid and
+    heat::rabbit_virtual_host are deprecated.
+    heat::default_transport_url should be used instead.

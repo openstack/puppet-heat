@@ -138,7 +138,7 @@ describe 'heat::keystone::authtoken' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'heat authtoken'
+      it_behaves_like 'heat authtoken'
     end
   end
 

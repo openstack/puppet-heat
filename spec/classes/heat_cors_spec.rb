@@ -42,7 +42,7 @@ describe 'heat::cors' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'heat cors'
+      it_behaves_like 'heat cors'
     end
   end
 

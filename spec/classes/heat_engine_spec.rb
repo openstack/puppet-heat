@@ -59,13 +59,13 @@ describe 'heat::engine' do
 
       it { is_expected.to contain_package('heat-engine').with(
         :ensure => 'present',
-        :name   => os_params[:package_name],
+        :name   => platform_params[:package_name],
         :tag    => ['openstack', 'heat-package'],
       ) }
 
       it { is_expected.to contain_service('heat-engine').with(
         :ensure     => (expected_params[:manage_service] && expected_params[:enabled]) ? 'running' : 'stopped',
-        :name       => os_params[:service_name],
+        :name       => platform_params[:service_name],
         :enable     => expected_params[:enabled],
         :hasstatus  => 'true',
         :hasrestart => 'true',
@@ -100,7 +100,7 @@ describe 'heat::engine' do
 
       it { is_expected.to contain_service('heat-engine').with(
         :ensure     => nil,
-        :name       => os_params[:service_name],
+        :name       => platform_params[:service_name],
         :enable     => false,
         :hasstatus  => 'true',
         :hasrestart => 'true',
@@ -116,35 +116,29 @@ describe 'heat::engine' do
     end
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'Debian',
-      })
-    end
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-    let :os_params do
-      { :package_name => 'heat-engine',
-        :service_name => 'heat-engine'
-      }
-    end
+      let :platform_params do
+        case facts[:osfamily]
+        when 'Debian'
+          { :package_name => 'heat-engine',
+            :service_name => 'heat-engine'
+          }
+        when 'RedHat'
+          { :package_name => 'openstack-heat-engine',
+            :service_name => 'openstack-heat-engine'
+          }
+        end
+      end
 
-    it_configures 'heat-engine'
+      it_behaves_like 'heat-engine'
+    end
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'RedHat',
-      })
-    end
-
-    let :os_params do
-      { :package_name => 'openstack-heat-engine',
-        :service_name => 'openstack-heat-engine'
-      }
-    end
-
-    it_configures 'heat-engine'
-  end
 end

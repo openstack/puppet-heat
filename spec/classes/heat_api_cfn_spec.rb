@@ -110,33 +110,25 @@ describe 'heat::api_cfn' do
 
   end
 
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'Debian',
-      })
+      let :platform_params do
+        case facts[:osfamily]
+        when 'Debian'
+          { :api_service_name => 'heat-api-cfn' }
+        when 'RedHat'
+          { :api_service_name => 'openstack-heat-api-cfn' }
+        end
+      end
+
+      it_behaves_like 'heat-api-cfn'
     end
-
-    let :platform_params do
-      { :api_service_name => 'heat-api-cfn' }
-    end
-
-    it_configures 'heat-api-cfn'
-  end
-
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'RedHat',
-      })
-    end
-
-    let :platform_params do
-      { :api_service_name => 'openstack-heat-api-cfn' }
-    end
-
-    it_configures 'heat-api-cfn'
   end
 
 end

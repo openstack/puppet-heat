@@ -44,7 +44,7 @@ describe 'heat::db::sync' do
         }))
       end
 
-      it_configures 'heat-dbsync'
+      it_behaves_like 'heat-dbsync'
     end
   end
 

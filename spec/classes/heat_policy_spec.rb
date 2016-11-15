@@ -32,7 +32,7 @@ describe 'heat::policy' do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_configures 'heat policies'
+      it_behaves_like 'heat policies'
     end
   end
 

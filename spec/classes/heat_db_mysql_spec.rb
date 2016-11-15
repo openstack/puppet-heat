@@ -1,11 +1,6 @@
 require 'spec_helper'
 
 describe 'heat::db::mysql' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'RedHat',
-      })
-    end
 
   let :params do
     { :password     => 's3cr3t',
@@ -31,7 +26,6 @@ describe 'heat::db::mysql' do
         :host          => params[:host],
         :charset       => params[:charset],
         :collate       => 'utf8_general_ci',
-        :require       => 'Class[Mysql::Config]'
       )
     end
   end
@@ -65,4 +59,17 @@ describe 'heat::db::mysql' do
     end
 
   end
+
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge(OSDefaults.get_facts())
+      end
+
+      it_behaves_like 'heat mysql database'
+    end
+  end
+
 end

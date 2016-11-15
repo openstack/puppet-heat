@@ -82,24 +82,16 @@ describe 'heat::keystone::domain' do
 
   end
 
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
+      end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'Debian',
-      })
+      it_behaves_like 'heat keystone domain'
     end
-
-    it_configures 'heat keystone domain'
   end
 
-  context 'on RedHat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'RedHat',
-      })
-    end
-
-    it_configures 'heat keystone domain'
-  end
 end

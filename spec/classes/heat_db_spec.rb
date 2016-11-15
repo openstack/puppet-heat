@@ -77,42 +77,29 @@ describe 'heat::db' do
 
   end
 
-  context 'on Debian platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'Debian',
-        :operatingsystem => 'Debian',
-        :operatingsystemrelease => 'jessie',
-      })
-    end
-
-    it_configures 'heat::db'
-
-    context 'using pymysql driver' do
-      let :params do
-        { :database_connection     => 'mysql+pymysql://heat:heat@localhost/heat' }
+  on_supported_os({
+    :supported_os   => OSDefaults.get_supported_os
+  }).each do |os,facts|
+    context "on #{os}" do
+      let (:facts) do
+        facts.merge!(OSDefaults.get_facts())
       end
 
-      it { is_expected.to contain_package('db_backend_package').with({ :ensure => 'present', :name => 'python-pymysql' }) }
-    end
-  end
+      it_behaves_like 'heat::db'
 
-  context 'on Redhat platforms' do
-    let :facts do
-      @default_facts.merge({
-        :osfamily => 'RedHat',
-        :operatingsystemrelease => '7.1',
-      })
-    end
+      context 'using pymysql driver' do
+        let :params do
+          { :database_connection     => 'mysql+pymysql://heat:heat@localhost/heat' }
+        end
 
-    it_configures 'heat::db'
-
-    context 'using pymysql driver' do
-      let :params do
-        { :database_connection     => 'mysql+pymysql://heat:heat@localhost/heat' }
+        case facts[:osfamily]
+        when 'Debian'
+          it { is_expected.to contain_package('db_backend_package').with({ :ensure => 'present', :name => 'python-pymysql' }) }
+        when 'RedHat'
+          it { is_expected.not_to contain_package('db_backend_package') }
+        end
       end
 
-      it { is_expected.not_to contain_package('db_backend_package') }
     end
   end
 

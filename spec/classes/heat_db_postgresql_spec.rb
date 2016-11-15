@@ -37,7 +37,7 @@ describe 'heat::db::postgresql' do
         }))
       end
 
-      it_configures 'heat::db::postgresql'
+      it_behaves_like 'heat::db::postgresql'
     end
   end
 

@@ -29,15 +29,15 @@
 #
 # [*heat_metadata_server_url*]
 #   (optional) URL of the Heat metadata server
-#   Defaults to 'http://127.0.0.1:8000'
+#   Defaults to $::os_service_default.
 #
 # [*heat_waitcondition_server_url*]
 #   (optional) URL of the Heat waitcondition server
-#   Defaults to 'http://127.0.0.1:8000/v1/waitcondition'
+#   Defaults to $::os_service_default.
 #
 # [*heat_watch_server_url*]
 #   (optional) URL of the Heat cloudwatch server
-#   Defaults to 'http://127.0.0.1:8003'
+#   Defaults to $::os_service_default.
 #
 # [*engine_life_check_timeout*]
 #   (optional) RPC timeout (in seconds) for the engine liveness check that is
@@ -111,9 +111,9 @@ class heat::engine (
   $manage_service                                  = true,
   $enabled                                         = true,
   $heat_stack_user_role                            = $::os_service_default,
-  $heat_metadata_server_url                        = 'http://127.0.0.1:8000',
-  $heat_waitcondition_server_url                   = 'http://127.0.0.1:8000/v1/waitcondition',
-  $heat_watch_server_url                           = 'http://127.0.0.1:8003',
+  $heat_metadata_server_url                        = $::os_service_default,
+  $heat_waitcondition_server_url                   = $::os_service_default,
+  $heat_watch_server_url                           = $::os_service_default,
   $engine_life_check_timeout                       = $::os_service_default,
   $deferred_auth_method                            = $::os_service_default,
   $default_software_config_transport               = $::os_service_default,

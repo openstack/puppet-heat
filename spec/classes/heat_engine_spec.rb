@@ -17,6 +17,7 @@ describe 'heat::engine' do
       :convergence_engine                  => '<SERVICE DEFAULT>',
       :environment_dir                     => '<SERVICE DEFAULT>',
       :template_dir                        => '<SERVICE DEFAULT>',
+      :max_nested_stack_depth              => '<SERVICE DEFAULT>',
     }
   end
 

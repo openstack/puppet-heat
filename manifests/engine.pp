@@ -105,6 +105,10 @@
 #   (Optional) The directory to search for template files.
 #   Defaults to $::os_service_default
 #
+# [*max_nested_stack_depth*]
+#   (Optional) Maximum depth allowed when using nested stacks.
+#   Defaults to $::os_service_default
+#
 class heat::engine (
   $auth_encryption_key,
   $package_ensure                                  = 'present',
@@ -126,6 +130,7 @@ class heat::engine (
   $convergence_engine                              = $::os_service_default,
   $environment_dir                                 = $::os_service_default,
   $template_dir                                    = $::os_service_default,
+  $max_nested_stack_depth                          = $::os_service_default,
 ) {
 
   include ::heat::deps
@@ -183,5 +188,6 @@ class heat::engine (
     'DEFAULT/convergence_engine':                              value => $convergence_engine;
     'DEFAULT/environment_dir':                                 value => $environment_dir;
     'DEFAULT/template_dir':                                    value => $template_dir;
+    'DEFAULT/max_nested_stack_depth':                          value => $max_nested_stack_depth;
   }
 }

@@ -1,0 +1,5 @@
+---
+other:
+  - Management of heat configuration is now optional for
+    heat::keystone::max_nested_stack_depth which allows
+    the maximum depth of nested stacks to be set.

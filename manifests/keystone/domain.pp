@@ -14,7 +14,7 @@
 #   Keystone domain admin user email address. Defaults to 'heat_admin@localhost'.
 #
 # [*domain_password*]
-#   Keystone domain admin user password. Defaults to 'changeme'.
+#   (Required) Keystone domain admin user password.
 #
 # [*manage_domain*]
 #   Whether manage or not the domain creation.
@@ -35,10 +35,10 @@
 #   Defaults to 'true'
 #
 class heat::keystone::domain (
+  $domain_password,
   $domain_name        = 'heat',
   $domain_admin       = 'heat_admin',
   $domain_admin_email = 'heat_admin@localhost',
-  $domain_password    = 'changeme',
   $manage_domain      = true,
   $manage_user        = true,
   $manage_role        = true,

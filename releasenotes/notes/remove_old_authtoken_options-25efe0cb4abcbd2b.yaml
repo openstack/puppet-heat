@@ -1,0 +1,13 @@
+---
+other:
+  - removed deprecated heat::auth_uri
+  - removed deprecated heat::identity_uri
+  - removed deprecated heat::auth_plugin
+  - removed deprecated heat::keystone_user
+  - removed deprecated heat::keystone_password
+  - removed deprecated heat::keystone_tenant
+  - removed deprecated heat::keystone_user_domain_name
+  - removed deprecated heat::keystone_user_domain_id
+  - removed deprecated heat::keystone_project_domain_name
+  - removed deprecated heat::keystone_project_domain_id
+  - removed deprecated heat::memcached_servers

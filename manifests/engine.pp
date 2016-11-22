@@ -75,7 +75,7 @@
 #   (optional) Array of trustor roles to be delegated to heat.
 #   This value is also used by heat::keystone::auth if it is set to
 #   configure the keystone roles.
-#   Defaults to ['heat_stack_owner']
+#   Defaults to $::os_service_default. 
 #
 # [*instance_connection_is_secure*]
 #   (Optional) Instance connection to CFN/CW API via https.
@@ -122,7 +122,7 @@ class heat::engine (
   $deferred_auth_method                            = $::os_service_default,
   $default_software_config_transport               = $::os_service_default,
   $default_deployment_signal_transport             = $::os_service_default,
-  $trusts_delegated_roles                          = ['heat_stack_owner'],
+  $trusts_delegated_roles                          = $::os_service_default,
   $instance_connection_is_secure                   = $::os_service_default,
   $instance_connection_https_validate_certificates = $::os_service_default,
   $max_resources_per_stack                         = $::os_service_default,

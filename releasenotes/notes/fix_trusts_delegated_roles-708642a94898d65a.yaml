@@ -1,0 +1,4 @@
+---
+fixes:
+  - Change trusts_delegated_roles to os_service_default, it has
+    changed to [] since Kilo.

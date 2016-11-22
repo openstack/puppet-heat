@@ -10,7 +10,7 @@ describe 'heat::engine' do
       :heat_waitcondition_server_url       => 'http://127.0.0.1:8000/v1/waitcondition',
       :heat_watch_server_url               => 'http://128.0.0.1:8003',
       :engine_life_check_timeout           => '<SERVICE DEFAULT>',
-      :trusts_delegated_roles              => ['heat_stack_owner'],
+      :trusts_delegated_roles              => '<SERVICE DEFAULT>',
       :deferred_auth_method                => '<SERVICE DEFAULT>',
       :default_software_config_transport   => '<SERVICE DEFAULT>',
       :default_deployment_signal_transport => '<SERVICE DEFAULT>',

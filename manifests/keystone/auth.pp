@@ -138,8 +138,7 @@ class heat::keystone::auth (
   }
 
   if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] ~>
-      Service <| name == 'heat-api' |>
+    Keystone_user_role["${auth_name}@${tenant}"] ~> Anchor['heat::service::end']
   }
 
   if $manage_heat_stack_user_role {

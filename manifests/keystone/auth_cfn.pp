@@ -106,8 +106,7 @@ class heat::keystone::auth_cfn (
   }
 
   if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] ~>
-      Service <| name == 'heat-api-cfn' |>
+    Keystone_user_role["${auth_name}@${tenant}"] ~> Anchor['heat::service::end']
   }
 
 }

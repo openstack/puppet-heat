@@ -223,6 +223,8 @@ class heat::keystone::authtoken(
   $token_cache_time               = $::os_service_default,
 ) {
 
+  include ::heat::deps
+
   if is_service_default($password) {
     fail('Please set password for heat service user')
   }

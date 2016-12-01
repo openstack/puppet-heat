@@ -10,7 +10,13 @@ describe 'heat::db::sync' do
         :path        => '/usr/bin',
         :user        => 'heat',
         :refreshonly => 'true',
-        :logoutput   => 'on_failure'
+        :try_sleep   => 5,
+        :tries       => 10,
+        :logoutput   => 'on_failure',
+        :subscribe   => ['Anchor[heat::install::end]',
+                         'Anchor[heat::config::end]',
+                         'Anchor[heat::dbsync::begin]'],
+        :notify      => 'Anchor[heat::dbsync::end]',
       )
     end
 
@@ -27,7 +33,13 @@ describe 'heat::db::sync' do
           :path        => '/usr/bin',
           :user        => 'heat',
           :refreshonly => 'true',
-          :logoutput   => 'on_failure'
+          :try_sleep   => 5,
+          :tries       => 10,
+          :logoutput   => 'on_failure',
+          :subscribe   => ['Anchor[heat::install::end]',
+                           'Anchor[heat::config::end]',
+                           'Anchor[heat::dbsync::begin]'],
+          :notify      => 'Anchor[heat::dbsync::end]',
         )
         }
       end

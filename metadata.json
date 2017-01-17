@@ -1,6 +1,6 @@
 {
   "name": "openstack-heat",
-  "version": "9.4.1",
+  "version": "9.5.0",
   "author": "eNovance and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Heat",
   "license": "Apache-2.0",
@@ -53,7 +53,7 @@
     },
     {
       "name": "openstack/keystone",
-      "version_requirement": ">=9.4.0 <10.0.0"
+      "version_requirement": ">=9.5.0 <10.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
@@ -61,11 +61,11 @@
     },
     {
       "name": "openstack/openstacklib",
-      "version_requirement": ">=9.4.0 <10.0.0"
+      "version_requirement": ">=9.5.0 <10.0.0"
     },
     {
       "name": "openstack/oslo",
-      "version_requirement": ">=9.4.0 <10.0.0"
+      "version_requirement": ">=9.5.0 <10.0.0"
     }
   ]
 }

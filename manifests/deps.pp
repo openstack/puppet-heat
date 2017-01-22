@@ -24,6 +24,10 @@ class heat::deps {
   ~> Service<| tag == 'heat-service' |>
   ~> anchor { 'heat::service::end': }
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db<||> -> Anchor['heat::dbsync::begin']
+
   # Installation or config changes will always restart services.
   Anchor['heat::install::end'] ~> Anchor['heat::service::begin']
   Anchor['heat::config::end']  ~> Anchor['heat::service::begin']

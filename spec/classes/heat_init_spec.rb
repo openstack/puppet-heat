@@ -65,6 +65,7 @@ describe 'heat' do
     it_configures 'with SSL disabled'
     it_configures 'with SSL wrongly configured'
     it_configures 'with enable_stack_adopt and enable_stack_abandon set'
+    it_configures 'with overriden transport_url parameter'
     it_configures 'with notification_driver set to a string'
 
     context 'with amqp rpc_backend value' do
@@ -97,6 +98,12 @@ describe 'heat' do
 
     it 'configures host' do
       is_expected.to contain_heat_config('DEFAULT/host').with_value('<SERVICE DEFAULT>')
+    end
+
+    it 'configures default transport_url' do
+      is_expected.to contain_heat_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
     end
 
     it 'configures max_template_size' do
@@ -398,6 +405,22 @@ describe 'heat' do
     it 'sets enable_stack_adopt and enable_stack_abandon' do
       is_expected.to contain_heat_config('DEFAULT/enable_stack_adopt').with_value(true);
       is_expected.to contain_heat_config('DEFAULT/enable_stack_abandon').with_value(true);
+    end
+  end
+
+  shared_examples_for 'with overriden transport_url parameter' do
+    before do
+      params.merge!(
+        :default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
+        :rpc_response_timeout  => '120',
+        :control_exchange      => 'heat',
+      )
+    end
+
+    it 'configures transport_url' do
+      is_expected.to contain_heat_config('DEFAULT/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
+      is_expected.to contain_heat_config('DEFAULT/rpc_response_timeout').with_value('120')
+      is_expected.to contain_heat_config('DEFAULT/control_exchange').with_value('heat')
     end
   end
 

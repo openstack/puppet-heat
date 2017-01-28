@@ -23,6 +23,12 @@
 #   transport://user:pass@host1:port[,hostN:portN]/virtual_host
 #   Defaults to $::os_service_default
 #
+# [*control_exchange*]
+#   (Optional) The default exchange under which topics are scoped. May be
+#   overridden by an exchange name specified in the transport_url
+#   option.
+#   Defaults to $::os_service_default
+#
 # [*rpc_backend*]
 #   (Optional) Use these options to configure the message system.
 #   Defaults to $::os_service_default.
@@ -310,6 +316,7 @@ class heat(
   $default_transport_url              = $::os_service_default,
   $rpc_backend                        = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
+  $control_exchange                   = $::os_service_default,
   $rabbit_ha_queues                   = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = 0,
   $rabbit_heartbeat_rate              = $::os_service_default,
@@ -496,6 +503,7 @@ deprecated. Please use heat::default_transport_url instead.")
   oslo::messaging::default { 'heat_config':
     transport_url        => $default_transport_url,
     rpc_response_timeout => $rpc_response_timeout,
+    control_exchange     => $control_exchange,
   }
 
   oslo::middleware { 'heat_config':

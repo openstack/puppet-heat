@@ -1,0 +1,4 @@
+---
+features:
+  - Ability to configure cache for heat using
+    oslo::cache class.

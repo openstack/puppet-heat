@@ -159,6 +159,7 @@ describe 'heat' do
     it 'configures notification_driver' do
         is_expected.to contain_heat_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_heat_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_heat_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
     end
 
     it 'sets default value for http_proxy_to_wsgi middleware' do
@@ -429,12 +430,14 @@ describe 'heat' do
       params.merge!(
         :notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
         :notification_driver        => 'bar.foo.rpc_notifier',
+        :notification_topics        => 'messagingv2',
       )
     end
 
     it 'has notification_driver set when specified' do
       is_expected.to contain_heat_config('oslo_messaging_notifications/transport_url').with_value('rabbit://rabbit_user:password@localhost:5673')
       is_expected.to contain_heat_config('oslo_messaging_notifications/driver').with_value('bar.foo.rpc_notifier')
+      is_expected.to contain_heat_config('oslo_messaging_notifications/topics').with_value('messagingv2')
     end
   end
 

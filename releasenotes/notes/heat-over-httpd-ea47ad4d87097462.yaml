@@ -1,0 +1,4 @@
+---
+features:
+  - The necessary manifests have been added to run the heat api services
+    over httpd (heat-api, heat-api-cfn, and heat-api-cloudwatch).

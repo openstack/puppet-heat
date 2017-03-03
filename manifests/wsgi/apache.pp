@@ -66,6 +66,9 @@
 #     apache::vhost ssl parameters.
 #     Optional. Default to apache::vhost 'ssl_*' defaults.
 #
+#   [*vhost_custom_fragment*]
+#     (optional) Additional vhost configuration, if applicable.
+#
 # == Dependencies
 #
 #   requires Class['apache'] & Class['heat']
@@ -78,20 +81,21 @@
 #
 define heat::wsgi::apache (
   $port,
-  $servername    = $::fqdn,
-  $bind_host     = undef,
-  $path          = '/',
-  $ssl           = true,
-  $workers       = 1,
-  $ssl_cert      = undef,
-  $ssl_key       = undef,
-  $ssl_chain     = undef,
-  $ssl_ca        = undef,
-  $ssl_crl_path  = undef,
-  $ssl_crl       = undef,
-  $ssl_certs_dir = undef,
-  $threads       = $::os_workers,
-  $priority      = '10',
+  $servername            = $::fqdn,
+  $bind_host             = undef,
+  $path                  = '/',
+  $ssl                   = true,
+  $workers               = 1,
+  $ssl_cert              = undef,
+  $ssl_key               = undef,
+  $ssl_chain             = undef,
+  $ssl_ca                = undef,
+  $ssl_crl_path          = undef,
+  $ssl_crl               = undef,
+  $ssl_certs_dir         = undef,
+  $threads               = $::os_workers,
+  $priority              = '10',
+  $vhost_custom_fragment = undef,
 ) {
   if $title !~ /^api(|_cfn|_cloudwatch)$/ {
     fail('The valid options are api, api_cfn, api_cloudwatch')
@@ -129,5 +133,6 @@ define heat::wsgi::apache (
     wsgi_script_source    => getvar("::heat::params::heat_${title}_wsgi_script_source"),
     allow_encoded_slashes => 'on',
     require               => Anchor['heat::install::end'],
+    vhost_custom_fragment => $vhost_custom_fragment,
   }
 }

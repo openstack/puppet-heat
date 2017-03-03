@@ -89,6 +89,10 @@ class heat::wsgi::apache_api_cfn (
   $priority      = '10',
 ) {
 
+  # See custom fragment below
+  include ::apache
+  include ::apache::mod::headers
+
   validate_integer($port)
 
   # Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1396553
@@ -99,21 +103,24 @@ class heat::wsgi::apache_api_cfn (
       notify => Heat::Wsgi::Apache['api_cfn'],
     }
   }
+
   heat::wsgi::apache { 'api_cfn':
-    port          => $port,
-    servername    => $servername,
-    bind_host     => $bind_host,
-    path          => $path,
-    ssl           => $ssl,
-    workers       => $workers,
-    ssl_cert      => $ssl_cert,
-    ssl_key       => $ssl_key,
-    ssl_chain     => $ssl_chain,
-    ssl_ca        => $ssl_ca,
-    ssl_crl_path  => $ssl_crl_path,
-    ssl_crl       => $ssl_crl,
-    ssl_certs_dir => $ssl_certs_dir,
-    threads       => $threads,
-    priority      => $priority,
+    port                  => $port,
+    servername            => $servername,
+    bind_host             => $bind_host,
+    path                  => $path,
+    ssl                   => $ssl,
+    workers               => $workers,
+    ssl_cert              => $ssl_cert,
+    ssl_key               => $ssl_key,
+    ssl_chain             => $ssl_chain,
+    ssl_ca                => $ssl_ca,
+    ssl_crl_path          => $ssl_crl_path,
+    ssl_crl               => $ssl_crl,
+    ssl_certs_dir         => $ssl_certs_dir,
+    threads               => $threads,
+    priority              => $priority,
+    # Enforce content-type, see https://bugs.launchpad.net/tripleo/+bug/1641589
+    vhost_custom_fragment => 'RequestHeader set Content-Type "application/json"',
   }
 }

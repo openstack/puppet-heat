@@ -142,6 +142,10 @@ describe 'heat' do
       is_expected.to contain_heat_config('clients_keystone/auth_uri').with_value( 'http://127.0.0.1:35357/' )
     end
 
+    it 'configures endpoint_type for clients' do
+      is_expected.to contain_heat_config('clients/endpoint_type').with_value( '<SERVICE DEFAULT>' )
+    end
+
     it 'configures keystone_ec2_uri' do
       is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value( params[:keystone_ec2_uri] )
     end

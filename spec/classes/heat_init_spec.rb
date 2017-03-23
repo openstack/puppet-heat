@@ -352,6 +352,18 @@ describe 'heat' do
 
   end
 
+  shared_examples_for 'with heat_clients_endpoint_type set' do
+    before do
+      params.merge!(
+        :heat_clients_endpoint_type => 'internal',
+      )
+    end
+
+    it do
+      is_expected.to contain_heat_config('clients/endpoint_type').with_value('internal')
+    end
+  end
+
   shared_examples_for 'with ec2authtoken auth uri set' do
     before do
       params.merge!(

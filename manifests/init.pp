@@ -262,6 +262,15 @@
 #   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
 #   Defaults to $::os_service_default.
 #
+# [*heat_clients_endpoint_type*]
+#   (optional) Type of endpoint in Identity service catalog to use for
+#   communication with the OpenStack service.
+#   TODO(emilien): change the default from false to $::os_service_default
+#   once TripleO use it correctly from hieratata.
+#   The default value is set to false now to avoid duplicated resources in
+#   TripleO puppet catalog.
+#   Defaults to false.
+#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the heat config.
@@ -367,6 +376,7 @@ class heat(
   $notification_driver                = $::os_service_default,
   $enable_proxy_headers_parsing       = $::os_service_default,
   $heat_clients_url                   = $::os_service_default,
+  $heat_clients_endpoint_type         = false,
   $purge_config                       = false,
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $::os_service_default,
@@ -472,6 +482,12 @@ deprecated. Please use heat::default_transport_url instead.")
     'trustee/user_domain_name':    value => $keystone_user_domain_name;
     'clients_keystone/auth_uri':   value => $auth_url;
     'clients_heat/url':            value => $heat_clients_url;
+  }
+
+  if $heat_clients_endpoint_type {
+    heat_config {
+      'clients/endpoint_type': value => $heat_clients_endpoint_type;
+    }
   }
 
   if (!is_service_default($enable_stack_adopt)) {

@@ -1,0 +1,3 @@
+---
+features:
+  - Support the clients/endpoint_type parameter in ::heat.

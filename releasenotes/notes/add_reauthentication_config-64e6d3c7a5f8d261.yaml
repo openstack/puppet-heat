@@ -1,0 +1,4 @@
+---
+features:
+  - Add new parameter 'reauthentication_auth_method' for
+    heat re-authentication configuration.

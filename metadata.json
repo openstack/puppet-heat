@@ -1,6 +1,6 @@
 {
   "name": "openstack-heat",
-  "version": "10.3.0",
+  "version": "10.3.1",
   "author": "eNovance and OpenStack Contributors",
   "summary": "Puppet module for OpenStack Heat",
   "license": "Apache-2.0",

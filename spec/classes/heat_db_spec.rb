@@ -15,6 +15,7 @@ describe 'heat::db' do
         :max_pool_size  => '<SERVICE DEFAULT>',
         :max_retries    => '<SERVICE DEFAULT>',
         :retry_interval => '<SERVICE DEFAULT>',
+        :max_overflow   => '<SERVICE DEFAULT>',
       )}
 
     end
@@ -28,6 +29,7 @@ describe 'heat::db' do
           :database_max_retries    => '11',
           :database_retry_interval => '11',
           :database_db_max_retries => '-1',
+          :database_max_overflow   => '21',
           :sync_db                 => false }
       end
 
@@ -40,6 +42,7 @@ describe 'heat::db' do
         :max_pool_size  => '12',
         :max_retries    => '11',
         :retry_interval => '11',
+        :max_overflow   => '21',
       )}
 
     end

@@ -6,20 +6,21 @@ describe 'heat::wsgi::apache_api' do
     context 'default parameters' do
       it { is_expected.to contain_class('heat::wsgi::apache_api') }
       it { is_expected.to contain_heat__wsgi__apache('api').with(
-        :port          => 8004,
-        :servername    => facts[:fqdn],
-        :bind_host     => nil,
-        :path          => '/',
-        :ssl           => true,
-        :workers       => 1,
-        :ssl_cert      => nil,
-        :ssl_key       => nil,
-        :ssl_chain     => nil,
-        :ssl_ca        => nil,
-        :ssl_crl_path  => nil,
-        :ssl_certs_dir => nil,
-        :threads       => facts[:os_workers],
-        :priority      => 10, )
+        :port                        => 8004,
+        :servername                  => facts[:fqdn],
+        :bind_host                   => nil,
+        :path                        => '/',
+        :ssl                         => true,
+        :workers                     => 1,
+        :ssl_cert                    => nil,
+        :ssl_key                     => nil,
+        :ssl_chain                   => nil,
+        :ssl_ca                      => nil,
+        :ssl_crl_path                => nil,
+        :ssl_certs_dir               => nil,
+        :threads                     => facts[:os_workers],
+        :priority                    => 10,
+        :custom_wsgi_process_options => {}, )
       }
     end
   end

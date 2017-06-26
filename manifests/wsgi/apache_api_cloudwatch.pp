@@ -61,6 +61,14 @@
 #     apache::vhost ssl parameters.
 #     Optional. Default to apache::vhost 'ssl_*' defaults.
 #
+#   [*custom_wsgi_process_options*]
+#     (optional) gives you the oportunity to add custom process options or to
+#     overwrite the default options for the WSGI main process.
+#     eg. to use a virtual python environment for the WSGI process
+#     you could set it to:
+#     { python-path => '/my/python/virtualenv' }
+#     Defaults to {}
+#
 # == Dependencies
 #
 #   requires Class['apache'] & Class['heat']
@@ -72,37 +80,39 @@
 #   class { 'heat::wsgi::apache': }
 #
 class heat::wsgi::apache_api_cloudwatch (
-  $port          = 8003,
-  $servername    = $::fqdn,
-  $bind_host     = undef,
-  $path          = '/',
-  $ssl           = true,
-  $workers       = 1,
-  $ssl_cert      = undef,
-  $ssl_key       = undef,
-  $ssl_chain     = undef,
-  $ssl_ca        = undef,
-  $ssl_crl_path  = undef,
-  $ssl_crl       = undef,
-  $ssl_certs_dir = undef,
-  $threads       = $::os_workers,
-  $priority      = '10',
+  $port                        = 8003,
+  $servername                  = $::fqdn,
+  $bind_host                   = undef,
+  $path                        = '/',
+  $ssl                         = true,
+  $workers                     = 1,
+  $ssl_cert                    = undef,
+  $ssl_key                     = undef,
+  $ssl_chain                   = undef,
+  $ssl_ca                      = undef,
+  $ssl_crl_path                = undef,
+  $ssl_crl                     = undef,
+  $ssl_certs_dir               = undef,
+  $threads                     = $::os_workers,
+  $priority                    = '10',
+  $custom_wsgi_process_options = {},
 ) {
   heat::wsgi::apache { 'api_cloudwatch':
-    port          => $port,
-    servername    => $servername,
-    bind_host     => $bind_host,
-    path          => $path,
-    ssl           => $ssl,
-    workers       => $workers,
-    ssl_cert      => $ssl_cert,
-    ssl_key       => $ssl_key,
-    ssl_chain     => $ssl_chain,
-    ssl_ca        => $ssl_ca,
-    ssl_crl_path  => $ssl_crl_path,
-    ssl_crl       => $ssl_crl,
-    ssl_certs_dir => $ssl_certs_dir,
-    threads       => $threads,
-    priority      => $priority,
+    port                        => $port,
+    servername                  => $servername,
+    bind_host                   => $bind_host,
+    path                        => $path,
+    ssl                         => $ssl,
+    workers                     => $workers,
+    ssl_cert                    => $ssl_cert,
+    ssl_key                     => $ssl_key,
+    ssl_chain                   => $ssl_chain,
+    ssl_ca                      => $ssl_ca,
+    ssl_crl_path                => $ssl_crl_path,
+    ssl_crl                     => $ssl_crl,
+    ssl_certs_dir               => $ssl_certs_dir,
+    threads                     => $threads,
+    priority                    => $priority,
+    custom_wsgi_process_options => $custom_wsgi_process_options,
   }
 }

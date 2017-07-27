@@ -1,0 +1,4 @@
+---
+deprecations:
+  - heat::rpc_backend is deprecated and will be removed in a future
+    release. Please use heat::default_transport_url instead.

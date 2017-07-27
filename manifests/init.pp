@@ -29,10 +29,6 @@
 #   option.
 #   Defaults to $::os_service_default
 #
-# [*rpc_backend*]
-#   (Optional) Use these options to configure the message system.
-#   Defaults to $::os_service_default.
-#
 # [*rpc_response_timeout*]
 #   (Optional) Configure the timeout (in seconds) for rpc responses
 #   Defaults to $::os_service_default.
@@ -317,13 +313,16 @@
 #   (Optional) Virtual_host to use.
 #   Defaults to $::os_service_default.
 #
+# [*rpc_backend*]
+#   (Optional) Use these options to configure the message system.
+#   Defaults to $::os_service_default.
+#
 class heat(
   $package_ensure                     = 'present',
   $debug                              = undef,
   $log_dir                            = undef,
   $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
   $default_transport_url              = $::os_service_default,
-  $rpc_backend                        = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
   $control_exchange                   = $::os_service_default,
   $rabbit_ha_queues                   = $::os_service_default,
@@ -389,6 +388,7 @@ class heat(
   $rabbit_userid                      = $::os_service_default,
   $rabbit_password                    = $::os_service_default,
   $rabbit_virtual_host                = $::os_service_default,
+  $rpc_backend                        = $::os_service_default,
 ) {
 
   include ::heat::logging
@@ -405,10 +405,12 @@ class heat(
     !is_service_default($rabbit_password) or
     !is_service_default($rabbit_port) or
     !is_service_default($rabbit_userid) or
-    !is_service_default($rabbit_virtual_host) {
+    !is_service_default($rabbit_virtual_host) or
+    !is_service_default($rpc_backend) {
     warning("heat::rabbit_host, heat::rabbit_hosts, heat::rabbit_password, \
-heat::rabbit_port, heat::rabbit_userid and heat::rabbit_virtual_host are \
-deprecated. Please use heat::default_transport_url instead.")
+heat::rabbit_port, heat::rabbit_userid, heat::rabbit_virtual_host and \
+heat::rpc_backend are deprecated. Please use heat::default_transport_url \
+instead.")
   }
 
   package { 'heat-common':
@@ -421,51 +423,48 @@ deprecated. Please use heat::default_transport_url instead.")
     purge => $purge_config,
   }
 
-  if $rpc_backend == 'rabbit' or is_service_default($rpc_backend) {
-    if $rabbit_heartbeat_timeout_threshold == 0 {
-      warning('Default value for rabbit_heartbeat_timeout_threshold parameter is different from OpenStack project defaults')
-    }
-
-    oslo::messaging::rabbit { 'heat_config':
-      kombu_ssl_version           => $kombu_ssl_version,
-      kombu_ssl_keyfile           => $kombu_ssl_keyfile,
-      kombu_ssl_certfile          => $kombu_ssl_certfile,
-      kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
-      kombu_reconnect_delay       => $kombu_reconnect_delay,
-      kombu_failover_strategy     => $kombu_failover_strategy,
-      kombu_compression           => $kombu_compression,
-      rabbit_userid               => $rabbit_userid,
-      rabbit_password             => $rabbit_password,
-      rabbit_virtual_host         => $rabbit_virtual_host,
-      heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
-      heartbeat_rate              => $rabbit_heartbeat_rate,
-      rabbit_use_ssl              => $rabbit_use_ssl,
-      amqp_durable_queues         => $amqp_durable_queues,
-      rabbit_host                 => $rabbit_host,
-      rabbit_port                 => $rabbit_port,
-      rabbit_hosts                => $rabbit_hosts,
-      rabbit_ha_queues            => $rabbit_ha_queues,
-    }
+  if $rabbit_heartbeat_timeout_threshold == 0 {
+    warning('Default value for rabbit_heartbeat_timeout_threshold parameter is different from OpenStack project defaults')
   }
-  elsif $rpc_backend == 'amqp' {
-    oslo::messaging::amqp { 'heat_config':
-      server_request_prefix  => $amqp_server_request_prefix,
-      broadcast_prefix       => $amqp_broadcast_prefix,
-      group_request_prefix   => $amqp_group_request_prefix,
-      container_name         => $amqp_container_name,
-      idle_timeout           => $amqp_idle_timeout,
-      trace                  => $amqp_trace,
-      ssl_ca_file            => $amqp_ssl_ca_file,
-      ssl_cert_file          => $amqp_ssl_cert_file,
-      ssl_key_file           => $amqp_ssl_key_file,
-      ssl_key_password       => $amqp_ssl_key_password,
-      allow_insecure_clients => $amqp_allow_insecure_clients,
-      sasl_mechanisms        => $amqp_sasl_mechanisms,
-      sasl_config_dir        => $amqp_sasl_config_dir,
-      sasl_config_name       => $amqp_sasl_config_name,
-      username               => $amqp_username,
-      password               => $amqp_password,
-    }
+
+  oslo::messaging::rabbit { 'heat_config':
+    kombu_ssl_version           => $kombu_ssl_version,
+    kombu_ssl_keyfile           => $kombu_ssl_keyfile,
+    kombu_ssl_certfile          => $kombu_ssl_certfile,
+    kombu_ssl_ca_certs          => $kombu_ssl_ca_certs,
+    kombu_reconnect_delay       => $kombu_reconnect_delay,
+    kombu_failover_strategy     => $kombu_failover_strategy,
+    kombu_compression           => $kombu_compression,
+    rabbit_userid               => $rabbit_userid,
+    rabbit_password             => $rabbit_password,
+    rabbit_virtual_host         => $rabbit_virtual_host,
+    heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
+    heartbeat_rate              => $rabbit_heartbeat_rate,
+    rabbit_use_ssl              => $rabbit_use_ssl,
+    amqp_durable_queues         => $amqp_durable_queues,
+    rabbit_host                 => $rabbit_host,
+    rabbit_port                 => $rabbit_port,
+    rabbit_hosts                => $rabbit_hosts,
+    rabbit_ha_queues            => $rabbit_ha_queues,
+  }
+
+  oslo::messaging::amqp { 'heat_config':
+    server_request_prefix  => $amqp_server_request_prefix,
+    broadcast_prefix       => $amqp_broadcast_prefix,
+    group_request_prefix   => $amqp_group_request_prefix,
+    container_name         => $amqp_container_name,
+    idle_timeout           => $amqp_idle_timeout,
+    trace                  => $amqp_trace,
+    ssl_ca_file            => $amqp_ssl_ca_file,
+    ssl_cert_file          => $amqp_ssl_cert_file,
+    ssl_key_file           => $amqp_ssl_key_file,
+    ssl_key_password       => $amqp_ssl_key_password,
+    allow_insecure_clients => $amqp_allow_insecure_clients,
+    sasl_mechanisms        => $amqp_sasl_mechanisms,
+    sasl_config_dir        => $amqp_sasl_config_dir,
+    sasl_config_name       => $amqp_sasl_config_name,
+    username               => $amqp_username,
+    password               => $amqp_password,
   }
 
   $auth_url = $::heat::keystone::authtoken::auth_url

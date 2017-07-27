@@ -68,7 +68,7 @@ describe 'heat' do
     it_configures 'with overriden transport_url parameter'
     it_configures 'with notification_driver set to a string'
 
-    context 'with amqp rpc_backend value' do
+    context 'with amqp messaging' do
       it_configures 'amqp support'
     end
   end
@@ -459,8 +459,6 @@ describe 'heat' do
 
   shared_examples_for 'amqp support' do
     context 'with default parameters' do
-      before { params.merge!( :rpc_backend => 'amqp' ) }
-
       it { is_expected.to contain_heat_config('oslo_messaging_amqp/server_request_prefix').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('oslo_messaging_amqp/broadcast_prefix').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('oslo_messaging_amqp/group_request_prefix').with_value('<SERVICE DEFAULT>') }
@@ -481,7 +479,6 @@ describe 'heat' do
 
     context 'with overriden amqp parameters' do
       before { params.merge!(
-        :rpc_backend        => 'amqp',
         :amqp_idle_timeout  => '60',
         :amqp_trace         => true,
         :amqp_ssl_ca_file   => '/path/to/ca.cert',

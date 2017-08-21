@@ -43,7 +43,7 @@
 #   Heartbeating helps to ensure the TCP connection to RabbitMQ isn't silently
 #   closed, resulting in missed or lost messages from the queue.
 #   (Requires kombu >= 3.0.7 and amqp >= 1.4.0)
-#   Defaults to 0
+#   Defaults to $::os_service_default.
 #
 # [*rabbit_heartbeat_rate*]
 #   (optional) How often during the rabbit_heartbeat_timeout_threshold period to
@@ -326,7 +326,7 @@ class heat(
   $rpc_response_timeout               = $::os_service_default,
   $control_exchange                   = $::os_service_default,
   $rabbit_ha_queues                   = $::os_service_default,
-  $rabbit_heartbeat_timeout_threshold = 0,
+  $rabbit_heartbeat_timeout_threshold = $::os_service_default,
   $rabbit_heartbeat_rate              = $::os_service_default,
   $rabbit_use_ssl                     = $::os_service_default,
   $kombu_ssl_ca_certs                 = $::os_service_default,
@@ -421,10 +421,6 @@ instead.")
 
   resources { 'heat_config':
     purge => $purge_config,
-  }
-
-  if $rabbit_heartbeat_timeout_threshold == 0 {
-    warning('Default value for rabbit_heartbeat_timeout_threshold parameter is different from OpenStack project defaults')
   }
 
   oslo::messaging::rabbit { 'heat_config':

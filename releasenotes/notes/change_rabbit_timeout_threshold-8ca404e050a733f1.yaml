@@ -1,0 +1,6 @@
+---
+other:
+  - |
+    Change rabbit_heartbeat_timeout_threshold param from 0 (disable the
+    heartbeat) and use default value from oslo module (unset param in
+    configuration file).

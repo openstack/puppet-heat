@@ -185,7 +185,7 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_oslo__messaging__rabbit('heat_config').with(
         :rabbit_use_ssl     => '<SERVICE DEFAULT>',
@@ -212,7 +212,7 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_oslo__messaging__rabbit('heat_config').with(
         :rabbit_use_ssl     => '<SERVICE DEFAULT>',
@@ -238,7 +238,7 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('0')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_oslo__messaging__rabbit('heat_config').with(
         :rabbit_use_ssl     => '<SERVICE DEFAULT>',

@@ -20,7 +20,6 @@ describe 'heat' do
       :rabbit_virtual_host   => '<SERVICE DEFAULT>',
       :database_connection   => 'mysql+pymysql://user@host/database',
       :database_idle_timeout => 3600,
-      :keystone_ec2_uri      => 'http://127.0.0.1:5000/v2.0/ec2tokens',
       :flavor                => 'keystone',
       :heat_clients_url      => '<SERVICE DEFAULT>',
       :purge_config          => false,
@@ -147,7 +146,7 @@ describe 'heat' do
     end
 
     it 'configures keystone_ec2_uri' do
-      is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value( params[:keystone_ec2_uri] )
+      is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value( '<SERVICE DEFAULT>' )
     end
 
     it 'configures yaql_limit_iterators' do

@@ -1,0 +1,5 @@
+---
+other:
+  - |
+    Drop keystone_ec2_uri default value because engine was down when user is
+    checking heat service status and the endpoint was not created in Keystone.

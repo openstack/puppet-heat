@@ -189,6 +189,8 @@
 #   Defaults to ::os_service_default
 #
 # [*keystone_ec2_uri*]
+#   (optional) Authentication Endpoint URI for ec2 service.
+#   Defaults to ::os_service_default
 #
 # [*database_connection*]
 #   (optional) Connection url for the heat database.
@@ -321,7 +323,7 @@ class heat(
   $package_ensure                     = 'present',
   $debug                              = undef,
   $log_dir                            = undef,
-  $keystone_ec2_uri                   = 'http://127.0.0.1:5000/v2.0/ec2tokens',
+  $keystone_ec2_uri                   = $::os_service_default,
   $default_transport_url              = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
   $control_exchange                   = $::os_service_default,

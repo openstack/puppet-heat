@@ -20,7 +20,9 @@ describe 'heat::wsgi::apache_api' do
         :ssl_certs_dir               => nil,
         :threads                     => facts[:os_workers],
         :priority                    => 10,
-        :custom_wsgi_process_options => {}, )
+        :custom_wsgi_process_options => {},
+        :access_log_file             => false,
+        :access_log_format           => false,)
       }
     end
   end

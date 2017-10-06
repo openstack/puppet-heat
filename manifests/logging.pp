@@ -111,7 +111,11 @@ class heat::logging(
   $use_syslog_real = pick($::heat::use_syslog,$use_syslog)
   $use_stderr_real = pick($::heat::use_stderr,$use_stderr)
   $log_facility_real = pick($::heat::log_facility,$log_facility)
-  $log_dir_real = pick($::heat::log_dir,$log_dir)
+  if $log_dir != '' {
+    $log_dir_real = pick($::heat::log_dir,$log_dir)
+  } else {
+    $log_dir_real = $log_dir
+  }
   $debug_real = pick($::heat::debug,$debug)
 
   oslo::log { 'heat_config':

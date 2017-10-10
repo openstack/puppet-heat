@@ -69,6 +69,18 @@
 #   [*vhost_custom_fragment*]
 #     (optional) Additional vhost configuration, if applicable.
 #
+#   [*access_log_file*]
+#     The log file name for the virtualhost.
+#     Optional. Defaults to false.
+#
+#   [*access_log_format*]
+#     The log format for the virtualhost.
+#     Optional. Defaults to false.
+#
+#   [*error_log_file*]
+#     The error log file name for the virtualhost.
+#     Optional. Defaults to undef.
+#
 #   [*custom_wsgi_process_options*]
 #     (optional) gives you the oportunity to add custom process options or to
 #     overwrite the default options for the WSGI main process.
@@ -104,6 +116,9 @@ define heat::wsgi::apache (
   $threads                     = $::os_workers,
   $priority                    = '10',
   $vhost_custom_fragment       = undef,
+  $access_log_file             = false,
+  $access_log_format           = false,
+  $error_log_file              = undef,
   $custom_wsgi_process_options = {},
 ) {
   if $title !~ /^api(|_cfn|_cloudwatch)$/ {
@@ -144,5 +159,8 @@ define heat::wsgi::apache (
     allow_encoded_slashes       => 'on',
     require                     => Anchor['heat::install::end'],
     vhost_custom_fragment       => $vhost_custom_fragment,
+    access_log_file             => $access_log_file,
+    access_log_format           => $access_log_format,
+    error_log_file              => $error_log_file,
   }
 }

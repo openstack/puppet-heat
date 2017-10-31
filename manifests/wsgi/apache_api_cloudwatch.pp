@@ -61,6 +61,18 @@
 #     apache::vhost ssl parameters.
 #     Optional. Default to apache::vhost 'ssl_*' defaults.
 #
+#   [*access_log_file*]
+#     The log file name for the virtualhost.
+#     Optional. Defaults to false.
+#
+#   [*access_log_format*]
+#     The log format for the virtualhost.
+#     Optional. Defaults to false.
+#
+#   [*error_log_file*]
+#     The error log file name for the virtualhost.
+#     Optional. Defaults to undef.
+#
 #   [*custom_wsgi_process_options*]
 #     (optional) gives you the oportunity to add custom process options or to
 #     overwrite the default options for the WSGI main process.
@@ -95,6 +107,9 @@ class heat::wsgi::apache_api_cloudwatch (
   $ssl_certs_dir               = undef,
   $threads                     = 1,
   $priority                    = '10',
+  $access_log_file             = false,
+  $access_log_format           = false,
+  $error_log_file              = undef,
   $custom_wsgi_process_options = {},
 ) {
   heat::wsgi::apache { 'api_cloudwatch':
@@ -114,5 +129,8 @@ class heat::wsgi::apache_api_cloudwatch (
     threads                     => $threads,
     priority                    => $priority,
     custom_wsgi_process_options => $custom_wsgi_process_options,
+    access_log_file             => $access_log_file,
+    access_log_format           => $access_log_format,
+    error_log_file              => $error_log_file,
   }
 }

@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The access_log_file, access_log_format, error_log_file fields for each
+    apache vhost are now configurable.

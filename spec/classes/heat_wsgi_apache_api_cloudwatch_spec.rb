@@ -18,6 +18,7 @@ describe 'heat::wsgi::apache_api_cloudwatch' do
         :ssl_ca                      => nil,
         :ssl_crl_path                => nil,
         :ssl_certs_dir               => nil,
+        :wsgi_process_display_name   => nil,
         :threads                     => 1,
         :priority                    => 10,
         :custom_wsgi_process_options => {}, )

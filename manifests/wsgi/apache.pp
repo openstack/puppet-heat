@@ -89,6 +89,10 @@
 #     { python-path => '/my/python/virtualenv' }
 #     Defaults to {}
 #
+#   [*wsgi_process_display_name*]
+#     (optional) Name of the WSGI process display-name.
+#     Defaults to undef
+#
 # == Dependencies
 #
 #   requires Class['apache'] & Class['heat']
@@ -120,6 +124,7 @@ define heat::wsgi::apache (
   $access_log_format           = false,
   $error_log_file              = undef,
   $custom_wsgi_process_options = {},
+  $wsgi_process_display_name   = undef,
 ) {
   if $title !~ /^api(|_cfn|_cloudwatch)$/ {
     fail('The valid options are api, api_cfn, api_cloudwatch')
@@ -151,6 +156,7 @@ define heat::wsgi::apache (
     user                        => 'heat',
     workers                     => $workers,
     wsgi_daemon_process         => "heat_${title}",
+    wsgi_process_display_name   => $wsgi_process_display_name,
     wsgi_process_group          => "heat_${title}",
     wsgi_script_dir             => $::heat::params::heat_wsgi_script_path,
     wsgi_script_file            => "heat_${title}",

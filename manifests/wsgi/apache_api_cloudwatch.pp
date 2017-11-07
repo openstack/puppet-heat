@@ -81,6 +81,10 @@
 #     { python-path => '/my/python/virtualenv' }
 #     Defaults to {}
 #
+#   [*wsgi_process_display_name*]
+#     (optional) Name of the WSGI process display-name.
+#     Defaults to undef
+#
 # == Dependencies
 #
 #   requires Class['apache'] & Class['heat']
@@ -111,6 +115,7 @@ class heat::wsgi::apache_api_cloudwatch (
   $access_log_format           = false,
   $error_log_file              = undef,
   $custom_wsgi_process_options = {},
+  $wsgi_process_display_name   = undef,
 ) {
   heat::wsgi::apache { 'api_cloudwatch':
     port                        => $port,
@@ -132,5 +137,6 @@ class heat::wsgi::apache_api_cloudwatch (
     access_log_file             => $access_log_file,
     access_log_format           => $access_log_format,
     error_log_file              => $error_log_file,
+    wsgi_process_display_name   => $wsgi_process_display_name,
   }
 }

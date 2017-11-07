@@ -1,0 +1,4 @@
+---
+features:
+  - Add wsgi_process_display_name option to add customization
+    for wsgi process display name.

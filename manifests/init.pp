@@ -264,6 +264,10 @@
 #   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
 #   Defaults to $::os_service_default.
 #
+# [*heat_clients_keystone_uri*]
+#   (optional) Heat clients auth url in format like http://127.0.0.1:5000/.
+#   Defaults to $::os_service_default.
+#
 # [*heat_clients_endpoint_type*]
 #   (optional) Type of endpoint in Identity service catalog to use for
 #   communication with the OpenStack service.
@@ -378,6 +382,7 @@ class heat(
   $notification_topics                = $::os_service_default,
   $enable_proxy_headers_parsing       = $::os_service_default,
   $heat_clients_url                   = $::os_service_default,
+  $heat_clients_keystone_uri          = $::os_service_default,
   $heat_clients_endpoint_type         = $::os_service_default,
   $purge_config                       = false,
   $auth_strategy                      = 'keystone',
@@ -470,6 +475,12 @@ instead.")
   $keystone_password = $::heat::keystone::authtoken::password
   $keystone_project_domain_name = $::heat::keystone::authtoken::project_domain_name
   $keystone_user_domain_name = $::heat::keystone::authtoken::user_domain_name
+  if (defined($heat_clients_keystone_uri)) {
+    $heat_clients_keystone_uri_real = $heat_clients_keystone_uri
+  } else {
+    $heat_clients_keystone_uri_real = $auth_url
+  }
+
 
   heat_config {
     'trustee/auth_type':           value => 'password';
@@ -478,7 +489,7 @@ instead.")
     'trustee/password':            value => $keystone_password, secret => true;
     'trustee/project_domain_name': value => $keystone_project_domain_name;
     'trustee/user_domain_name':    value => $keystone_user_domain_name;
-    'clients_keystone/auth_uri':   value => $auth_url;
+    'clients_keystone/auth_uri':   value => $heat_clients_keystone_uri_real;
     'clients_heat/url':            value => $heat_clients_url;
     'clients/endpoint_type':       value => $heat_clients_endpoint_type;
   }

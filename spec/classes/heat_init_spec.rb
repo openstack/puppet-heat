@@ -505,6 +505,11 @@ describe 'heat' do
     end
   end
 
+  shared_examples_for "with custom heat_clients_keystone_uri" do
+      before { params.merge!( :heat_clients_keystone_uri => 'https://domain1/' ) }
+      it { is_expected.to contain_heat_config('clients_keystone/auth_uri').with_value('https://domain1/') }
+  end
+
   on_supported_os({
     :supported_os   => OSDefaults.get_supported_os
   }).each do |os,facts|

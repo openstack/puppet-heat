@@ -5,7 +5,8 @@
 class heat::params {
   include ::openstacklib::defaults
 
-  $client_package_name         = 'python-heatclient'
+  $client_package_name = 'python-heatclient'
+  $group               = 'heat'
 
   case $::osfamily {
     'RedHat': {

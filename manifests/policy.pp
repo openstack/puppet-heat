@@ -2,21 +2,26 @@
 #
 # Configure the heat policies
 #
-# == Parameters
+# === Parameters
 #
 # [*policies*]
-#   (optional) Set of policies to configure for heat.
+#   (optional) Set of policies to configure for heat
+#   Example :
+#     {
+#       'heat-context_is_admin' => {
+#         'key' => 'context_is_admin',
+#         'value' => 'true'
+#       },
+#       'heat-default' => {
+#         'key' => 'default',
+#         'value' => 'rule:admin_or_owner'
+#       }
+#     }
 #   Defaults to empty hash.
 #
-#   Example:
-#      {
-#        'heat-context_is_admin' => {'context_is_admin' => 'true'},
-#        'heat-default'          => {'default' => 'rule:admin_or_owner'}
-#      }
-#
 # [*policy_path*]
-#   (optional) Path to the heat policy.json file.
-#   Defaults to '/etc/heat/policy.json'.
+#   (optional) Path to the heat policy.json file
+#   Defaults to /etc/heat/policy.json
 #
 class heat::policy (
   $policies    = {},
@@ -24,17 +29,18 @@ class heat::policy (
 ) {
 
   include ::heat::deps
+  include ::heat::params
 
   validate_hash($policies)
 
   Openstacklib::Policy::Base {
-    file_path => $policy_path,
+    file_path  => $policy_path,
+    file_user  => 'root',
+    file_group => $::heat::params::group,
   }
 
   create_resources('openstacklib::policy::base', $policies)
+
   oslo::policy { 'heat_config': policy_file => $policy_path }
 
-  Anchor<| title == 'heat::config::start' |>
-  -> Class['heat::policy']
-  ~> Anchor<| title == 'heat::config::end' |>
 }

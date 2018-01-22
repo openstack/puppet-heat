@@ -105,6 +105,10 @@
 #   (Optional) The directory to search for template files.
 #   Defaults to $::os_service_default
 #
+# [*plugin_dirs*]
+#   (Optional) List of directories to search for plug-ins.
+#   Defaults to $::os_service_default
+#
 class heat::engine (
   $auth_encryption_key,
   $package_ensure                                  = 'present',
@@ -126,6 +130,7 @@ class heat::engine (
   $convergence_engine                              = $::os_service_default,
   $environment_dir                                 = $::os_service_default,
   $template_dir                                    = $::os_service_default,
+  $plugin_dirs                                     = $::os_service_default,
 ) {
 
   include ::heat::deps
@@ -141,6 +146,17 @@ class heat::engine (
 
   include ::heat
   include ::heat::params
+
+  # plugin_dirs value follows these rules:
+  # - default is $::os_service_default so Puppet won't try to configure it.
+  # - if set, array validation will be done for not empty and then configure the parameter.
+  # - Otherwise, fallback to default.
+  if !is_service_default($plugin_dirs) and !empty($plugin_dirs) {
+    validate_array($plugin_dirs)
+    $plugin_dirs_real = join($plugin_dirs, ',')
+  } else {
+    $plugin_dirs_real = $::os_service_default
+  }
 
   package { 'heat-engine':
     ensure => $package_ensure,
@@ -183,5 +199,6 @@ class heat::engine (
     'DEFAULT/convergence_engine':                              value => $convergence_engine;
     'DEFAULT/environment_dir':                                 value => $environment_dir;
     'DEFAULT/template_dir':                                    value => $template_dir;
+    'DEFAULT/plugin_dirs':                                     value => $plugin_dirs_real;
   }
 }

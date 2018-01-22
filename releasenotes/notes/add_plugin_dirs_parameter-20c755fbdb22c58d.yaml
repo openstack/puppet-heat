@@ -1,0 +1,6 @@
+---
+features:
+  - Heat has additional configuration option for plugin_dirs
+    parameter. This parameter provides a list of directories
+    to search for plug-ins. This change allows configuration
+    of plugin_dirs parameter in heat.conf file.

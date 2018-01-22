@@ -19,6 +19,7 @@ describe 'heat::engine' do
       :environment_dir                     => '<SERVICE DEFAULT>',
       :template_dir                        => '<SERVICE DEFAULT>',
       :max_nested_stack_depth              => '<SERVICE DEFAULT>',
+      :plugin_dirs                         => '<SERVICE DEFAULT>',
     }
   end
 
@@ -93,6 +94,7 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/reauthentication_auth_method').with_value( expected_params[:reauthentication_auth_method] ) }
       it { is_expected.to contain_heat_config('DEFAULT/environment_dir').with_value( expected_params[:environment_dir] ) }
       it { is_expected.to contain_heat_config('DEFAULT/template_dir').with_value( expected_params[:template_dir] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'with disabled service managing' do
@@ -111,6 +113,15 @@ describe 'heat::engine' do
         :tag        => 'heat-service',
       ) }
     end
+
+    context 'with plugin_dirs value set' do
+      before do
+        params.merge!({
+          :plugin_dirs => ['/usr/lib/heat', '/usr/local/lib/heat'] })
+      end
+      it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value(['/usr/lib/heat,/usr/local/lib/heat']) }
+    end
+
     context 'with wrong auth_encryption_key parameter size' do
       before do
         params.merge!({

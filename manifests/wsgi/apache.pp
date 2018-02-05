@@ -13,7 +13,7 @@
 #
 # Resource to serve Heat API with apache mod_wsgi in place of heat-api service.
 #
-# This is useful for the main API as well as the CFN and Cloudwatch APIs.
+# This is useful for the main API as well as the CFN API.
 # Serving Heat API from apache is the recommended way to go for production
 # because of limited performance for concurrent accesses when running eventlet.
 #
@@ -23,7 +23,7 @@
 #
 #   [*title*]
 #     The heat API that will be running over this vhost.
-#     The valid options are "api", "api_cfn" and "api_cloudwatch"
+#     The valid options are "api" and "api_cfn"
 #
 #   [*port*]
 #     The port for the specific API.
@@ -126,8 +126,8 @@ define heat::wsgi::apache (
   $custom_wsgi_process_options = {},
   $wsgi_process_display_name   = undef,
 ) {
-  if $title !~ /^api(|_cfn|_cloudwatch)$/ {
-    fail('The valid options are api, api_cfn, api_cloudwatch')
+  if $title !~ /^api(|_cfn)$/ {
+    fail('The valid options are api, api_cfn')
   }
   include ::heat::deps
   include ::heat::params

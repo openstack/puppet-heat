@@ -54,10 +54,6 @@ describe 'basic heat' do
       class { '::heat::engine':
         auth_encryption_key => '1234567890AZERTYUIOPMLKJHGFDSQ12',
       }
-      class { '::heat::api_cloudwatch':
-        service_name => 'httpd',
-      }
-      include ::heat::wsgi::apache_api_cloudwatch
       class { '::heat::api_cfn':
         service_name => 'httpd',
       }
@@ -72,10 +68,6 @@ describe 'basic heat' do
     end
 
     describe port(8000) do
-      it { is_expected.to be_listening }
-    end
-
-    describe port(8003) do
       it { is_expected.to be_listening }
     end
 

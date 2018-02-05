@@ -67,8 +67,6 @@ class { '::heat::engine':
   auth_encryption_key => '1234567890AZERTYUIOPMLKJHGFDSQ12',
 }
 
-class { '::heat::api_cloudwatch': }
-
 class { '::heat::api_cfn': }
 ```
 

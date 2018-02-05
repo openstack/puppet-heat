@@ -66,17 +66,6 @@ describe 'heat::wsgi::apache' do
         )}
       end
 
-      context 'with cloudwatch options' do
-        let (:title) { 'api_cloudwatch' }
-        it { is_expected.to contain_openstacklib__wsgi__apache("heat_#{title}_wsgi").with(
-          'wsgi_daemon_process'         => "heat_#{title}",
-          'wsgi_process_group'          => "heat_#{title}",
-          'wsgi_script_dir'             => platform_params[:wsgi_script_dir],
-          'wsgi_script_file'            => "heat_#{title}",
-          'wsgi_script_source'          => platform_params[:script_source_cloudwatch],
-        )}
-      end
-
     end
 
     context 'invalid title' do
@@ -101,7 +90,6 @@ describe 'heat::wsgi::apache' do
             :wsgi_script_dir          => '/usr/lib/cgi-bin/heat',
             :script_source_api        => '/usr/bin/heat-wsgi-api',
             :script_source_cfn        => '/usr/bin/heat-wsgi-api-cfn',
-            :script_source_cloudwatch => '/usr/bin/heat-wsgi-api-cloudwatch',
           }
         when 'RedHat'
           { :httpd_service_name       => 'httpd',
@@ -109,7 +97,6 @@ describe 'heat::wsgi::apache' do
             :wsgi_script_dir          => '/var/www/cgi-bin/heat',
             :script_source_api        => '/usr/bin/heat-wsgi-api',
             :script_source_cfn        => '/usr/bin/heat-wsgi-api-cfn',
-            :script_source_cloudwatch => '/usr/bin/heat-wsgi-api-cloudwatch',
           }
         end
       end

@@ -17,6 +17,7 @@ describe 'heat::db::sync' do
                          'Anchor[heat::config::end]',
                          'Anchor[heat::dbsync::begin]'],
         :notify      => 'Anchor[heat::dbsync::end]',
+        :tag         => 'openstack-db',
       )
     end
 
@@ -40,6 +41,7 @@ describe 'heat::db::sync' do
                            'Anchor[heat::config::end]',
                            'Anchor[heat::dbsync::begin]'],
           :notify      => 'Anchor[heat::dbsync::end]',
+          :tag         => 'openstack-db',
         )
         }
       end

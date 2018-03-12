@@ -30,5 +30,6 @@ class heat::db::sync(
       Anchor['heat::dbsync::begin']
     ],
     notify      => Anchor['heat::dbsync::end'],
+    tag         => 'openstack-db',
   }
 }

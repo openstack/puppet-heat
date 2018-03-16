@@ -24,6 +24,10 @@ class heat::deps {
   ~> Service<| tag == 'heat-service' |>
   ~> anchor { 'heat::service::end': }
 
+  # all cache settings should be applied and all packages should be installed
+  # before service startup
+  Oslo::Cache<||> -> Anchor['heat::service::begin']
+
   # all db settings should be applied and all packages should be installed
   # before dbsync starts
   Oslo::Db<||> -> Anchor['heat::dbsync::begin']

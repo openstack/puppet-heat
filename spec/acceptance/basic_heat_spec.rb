@@ -11,54 +11,7 @@ describe 'basic heat' do
       include ::openstack_integration::rabbitmq
       include ::openstack_integration::mysql
       include ::openstack_integration::keystone
-
-      rabbitmq_user { 'heat':
-        admin    => true,
-        password => 'an_even_bigger_secret',
-        provider => 'rabbitmqctl',
-        require  => Class['rabbitmq'],
-      }
-
-      rabbitmq_user_permissions { 'heat@/':
-        configure_permission => '.*',
-        write_permission     => '.*',
-        read_permission      => '.*',
-        provider             => 'rabbitmqctl',
-        require              => Class['rabbitmq'],
-      }
-
-      class { '::heat::keystone::authtoken':
-        password => 'a_big_secret',
-      }
-      # heat resources
-      class { '::heat':
-        default_transport_url => 'rabbit://heat:an_even_bigger_secret@127.0.0.1:5672/',
-        database_connection   => 'mysql+pymysql://heat:a_big_secret@127.0.0.1/heat?charset=utf8',
-        debug                 => true,
-      }
-      class { '::heat::db::mysql':
-        password => 'a_big_secret',
-      }
-      class { '::heat::keystone::auth':
-        password                  => 'a_big_secret',
-        configure_delegated_roles => true,
-      }
-      class { '::heat::keystone::domain':
-        domain_password => 'oh_my_no_secret',
-      }
-      class { '::heat::client': }
-      class { '::heat::api':
-        service_name => 'httpd',
-      }
-      include ::heat::wsgi::apache_api
-      class { '::heat::engine':
-        auth_encryption_key => '1234567890AZERTYUIOPMLKJHGFDSQ12',
-      }
-      class { '::heat::api_cfn':
-        service_name => 'httpd',
-      }
-      include ::heat::wsgi::apache_api_cfn
-      class { '::heat::cron::purge_deleted': }
+      include ::openstack_integration::heat
       EOS
 
 

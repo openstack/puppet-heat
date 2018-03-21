@@ -160,13 +160,15 @@ describe 'heat' do
     it { is_expected.to contain_heat_config('paste_deploy/flavor').with_value('keystone') }
 
     it 'configures notification_driver' do
-        is_expected.to contain_heat_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_heat_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
-        is_expected.to contain_heat_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_notifications/transport_url').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_notifications/driver').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_notifications/topics').with_value('<SERVICE DEFAULT>')
     end
 
     it 'sets default value for http_proxy_to_wsgi middleware' do
-      is_expected.to contain_heat_config('oslo_middleware/enable_proxy_headers_parsing').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_oslo__middleware('heat_config').with(
+        :enable_proxy_headers_parsing => '<SERVICE DEFAULT>',
+      )
     end
 
     it 'sets clients_heat url' do

@@ -64,7 +64,7 @@ describe 'heat' do
     it_configures 'with SSL disabled'
     it_configures 'with SSL wrongly configured'
     it_configures 'with enable_stack_adopt and enable_stack_abandon set'
-    it_configures 'with overriden transport_url parameter'
+    it_configures 'with overridden transport_url parameter'
     it_configures 'with notification_driver set to a string'
 
     context 'with amqp messaging' do
@@ -426,7 +426,7 @@ describe 'heat' do
     end
   end
 
-  shared_examples_for 'with overriden transport_url parameter' do
+  shared_examples_for 'with overridden transport_url parameter' do
     before do
       params.merge!(
         :default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
@@ -478,7 +478,7 @@ describe 'heat' do
       it { is_expected.to contain_heat_config('oslo_messaging_amqp/password').with_value('<SERVICE DEFAULT>') }
     end
 
-    context 'with overriden amqp parameters' do
+    context 'with overridden amqp parameters' do
       before { params.merge!(
         :amqp_idle_timeout  => '60',
         :amqp_trace         => true,

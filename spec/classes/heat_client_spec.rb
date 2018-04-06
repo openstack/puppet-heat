@@ -19,7 +19,7 @@ describe 'heat::client' do
 
     it 'installs heat client package' do
       is_expected.to contain_package('python-heatclient').with(
-        :name   => 'python-heatclient',
+        :name   => platform_params[:client_package_name],
         :ensure => p[:package_ensure],
         :tag    => 'openstack'
       )
@@ -33,6 +33,19 @@ describe 'heat::client' do
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
+      end
+
+      let(:platform_params) do
+        case facts[:osfamily]
+        when 'Debian'
+          if facts[:os_package_type] == 'debian'
+            { :client_package_name => 'python3-heatclient' }
+          else
+            { :client_package_name => 'python-heatclient' }
+          end
+        when 'RedHat'
+          { :client_package_name => 'python-heatclient' }
+        end
       end
 
       it_behaves_like 'heat client'

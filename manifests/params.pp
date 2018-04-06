@@ -5,7 +5,12 @@
 class heat::params {
   include ::openstacklib::defaults
 
-  $client_package_name = 'python-heatclient'
+  if ($::os_package_type == 'debian') {
+    $pyvers = '3'
+  } else {
+    $pyvers = ''
+  }
+  $client_package_name = "python${pyvers}-heatclient"
   $group               = 'heat'
 
   case $::osfamily {

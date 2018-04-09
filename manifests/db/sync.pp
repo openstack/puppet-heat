@@ -14,7 +14,6 @@ class heat::db::sync(
 ) {
 
   include ::heat::deps
-  include ::heat::params
 
   exec { 'heat-dbsync':
     command     => "heat-manage ${extra_params} db_sync",

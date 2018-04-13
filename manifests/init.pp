@@ -470,6 +470,7 @@ instead.")
     password               => $amqp_password,
   }
 
+  $auth_uri = $::heat::keystone::authtoken::www_authenticate_uri
   $auth_url = $::heat::keystone::authtoken::auth_url
   $keystone_username = $::heat::keystone::authtoken::username
   $keystone_password = $::heat::keystone::authtoken::password
@@ -478,7 +479,7 @@ instead.")
   if (defined($heat_clients_keystone_uri)) {
     $heat_clients_keystone_uri_real = $heat_clients_keystone_uri
   } else {
-    $heat_clients_keystone_uri_real = $auth_url
+    $heat_clients_keystone_uri_real = $auth_uri
   }
 
 

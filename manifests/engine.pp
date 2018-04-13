@@ -103,7 +103,7 @@
 #
 # [*num_engine_workers*]
 #   (Optional) The number of workers to spawn.
-#   Defaults to $::os_service_default.
+#   Defaults to $::os_workers_heat_engine
 #
 # [*convergence_engine*]
 #   (Optional) Enables engine with convergence architecture.
@@ -147,7 +147,7 @@ class heat::engine (
   $instance_connection_is_secure                   = $::os_service_default,
   $instance_connection_https_validate_certificates = $::os_service_default,
   $max_resources_per_stack                         = $::os_service_default,
-  $num_engine_workers                              = $::os_service_default,
+  $num_engine_workers                              = $::os_workers_heat_engine,
   $convergence_engine                              = $::os_service_default,
   $reauthentication_auth_method                    = $::os_service_default,
   $environment_dir                                 = $::os_service_default,

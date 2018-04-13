@@ -1,0 +1,11 @@
+---
+fixes:
+  - |
+    Previously the number of heat engine workers was set to $::os_service_default
+    which would use the default from python. Usually this means it will use
+    the number of processors in the system. We have found that this is not an
+    ideal default for large number of cpu systems. We have a provided fact
+    specific to heat engine named $::os_workers_heat_engine. We have changed
+    the default value for the heat engine works to use this fact. This
+    fact will cap the value at 24 but usually is the larger of
+    (number of procs / 2) or 4.

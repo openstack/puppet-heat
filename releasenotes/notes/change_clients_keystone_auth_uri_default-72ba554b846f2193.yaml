@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The default for the clients_keystone/auth_uri configuration parameter has
+    been updated to use the public Keystone endpoint rather than the admin
+    endpoint, as expected by Heat. To continue using the admin endpoint, use
+    the heat_clients_keystone_uri parameter of the ::heat class.

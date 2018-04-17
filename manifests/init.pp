@@ -470,7 +470,8 @@ instead.")
     password               => $amqp_password,
   }
 
-  $auth_uri = $::heat::keystone::authtoken::www_authenticate_uri
+  # TODO(aschultz): remove this after completely switched to www_authenticate_uri
+  $auth_uri = pick($::heat::keystone::authtoken::auth_uri, $::heat::keystone::authtoken::www_authenticate_uri)
   $auth_url = $::heat::keystone::authtoken::auth_url
   $keystone_username = $::heat::keystone::authtoken::username
   $keystone_password = $::heat::keystone::authtoken::password

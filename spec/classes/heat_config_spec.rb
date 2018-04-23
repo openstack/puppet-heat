@@ -16,6 +16,8 @@ describe 'heat::config' do
     }
   end
 
+  it { is_expected.to contain_class('heat::deps') }
+
   it 'configures arbitrary heat configurations' do
     is_expected.to contain_heat_config('DEFAULT/foo').with_value('fooValue')
     is_expected.to contain_heat_config('DEFAULT/bar').with_value('barValue')

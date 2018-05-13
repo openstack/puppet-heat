@@ -126,7 +126,7 @@ describe 'heat' do
     end
 
     it 'configures auth_url' do
-      is_expected.to contain_heat_config('trustee/auth_url').with_value( 'http://127.0.0.1:35357/' )
+      is_expected.to contain_heat_config('trustee/auth_url').with_value( 'http://127.0.0.1:5000/' )
     end
 
     it 'configures username' do
@@ -373,12 +373,12 @@ describe 'heat' do
   shared_examples_for 'with ec2authtoken auth uri set' do
     before do
       params.merge!(
-        :keystone_ec2_uri => 'http://1.2.3.4:35357/v2.0/ec2tokens'
+        :keystone_ec2_uri => 'http://1.2.3.4:5000/v2.0/ec2tokens'
       )
     end
 
     it do
-      is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value('http://1.2.3.4:35357/v2.0/ec2tokens')
+      is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value('http://1.2.3.4:5000/v2.0/ec2tokens')
     end
   end
 

@@ -57,7 +57,7 @@ class { '::heat':
   rabbit_password     => 'an_even_bigger_secret',
   rabbit_host         => '127.0.0.1',
   database_connection => 'mysql+pymysql://heat:a_big_secret@127.0.0.1/heat?charset=utf8',
-  identity_uri        => 'http://127.0.0.1:35357/',
+  identity_uri        => 'http://127.0.0.1:5000/',
   keystone_password   => 'a_big_secret',
 }
 

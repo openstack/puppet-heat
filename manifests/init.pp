@@ -292,37 +292,6 @@
 #     take for evaluation.
 #   Defaults to $::os_service_default.
 #
-# === DEPRECATED PARAMETERS
-#
-# [*rabbit_host*]
-#   (Optional) IP or hostname of the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_port*]
-#   (Optional) Port of the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_hosts*]
-#   (Optional) Array of host:port (used with HA queues).
-#   If defined, will remove rabbit_host & rabbit_port parameters from config
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_userid*]
-#   (Optional) User to connect to the rabbit server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_password*]
-#   (Optional) Password to connect to the rabbit_server.
-#   Defaults to $::os_service_default.
-#
-# [*rabbit_virtual_host*]
-#   (Optional) Virtual_host to use.
-#   Defaults to $::os_service_default.
-#
-# [*rpc_backend*]
-#   (Optional) Use these options to configure the message system.
-#   Defaults to $::os_service_default.
-#
 class heat(
   $package_ensure                     = 'present',
   $debug                              = undef,
@@ -388,14 +357,6 @@ class heat(
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $rabbit_host                        = $::os_service_default,
-  $rabbit_port                        = $::os_service_default,
-  $rabbit_hosts                       = $::os_service_default,
-  $rabbit_userid                      = $::os_service_default,
-  $rabbit_password                    = $::os_service_default,
-  $rabbit_virtual_host                = $::os_service_default,
-  $rpc_backend                        = $::os_service_default,
 ) {
 
   include ::heat::logging
@@ -405,19 +366,6 @@ class heat(
 
   if $auth_strategy == 'keystone' {
     include ::heat::keystone::authtoken
-  }
-
-  if !is_service_default($rabbit_host) or
-    !is_service_default($rabbit_hosts) or
-    !is_service_default($rabbit_password) or
-    !is_service_default($rabbit_port) or
-    !is_service_default($rabbit_userid) or
-    !is_service_default($rabbit_virtual_host) or
-    !is_service_default($rpc_backend) {
-    warning("heat::rabbit_host, heat::rabbit_hosts, heat::rabbit_password, \
-heat::rabbit_port, heat::rabbit_userid, heat::rabbit_virtual_host and \
-heat::rpc_backend are deprecated. Please use heat::default_transport_url \
-instead.")
   }
 
   package { 'heat-common':
@@ -438,16 +386,10 @@ instead.")
     kombu_reconnect_delay       => $kombu_reconnect_delay,
     kombu_failover_strategy     => $kombu_failover_strategy,
     kombu_compression           => $kombu_compression,
-    rabbit_userid               => $rabbit_userid,
-    rabbit_password             => $rabbit_password,
-    rabbit_virtual_host         => $rabbit_virtual_host,
     heartbeat_timeout_threshold => $rabbit_heartbeat_timeout_threshold,
     heartbeat_rate              => $rabbit_heartbeat_rate,
     rabbit_use_ssl              => $rabbit_use_ssl,
     amqp_durable_queues         => $amqp_durable_queues,
-    rabbit_host                 => $rabbit_host,
-    rabbit_port                 => $rabbit_port,
-    rabbit_hosts                => $rabbit_hosts,
     rabbit_ha_queues            => $rabbit_ha_queues,
   }
 

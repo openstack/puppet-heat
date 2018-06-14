@@ -192,7 +192,7 @@ class heat::engine (
   }
 
   heat_config {
-    'DEFAULT/auth_encryption_key':                             value => $auth_encryption_key;
+    'DEFAULT/auth_encryption_key':                             value => $auth_encryption_key, secret => true;
     'DEFAULT/heat_stack_user_role':                            value => $heat_stack_user_role;
     'DEFAULT/heat_metadata_server_url':                        value => $heat_metadata_server_url;
     'DEFAULT/heat_waitcondition_server_url':                   value => $heat_waitcondition_server_url;

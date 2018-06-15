@@ -6,8 +6,7 @@
 # === Parameters
 #
 # [*password*]
-#   (Mandatory) Password to connect to the database.
-#   Defaults to 'false'.
+#   (Required) Password to connect to the database.
 #
 # [*dbname*]
 #   (Optional) Name of the database.
@@ -35,7 +34,7 @@
 #   Defaults to 'utf8_general_ci'
 #
 class heat::db::mysql(
-  $password      = false,
+  $password,
   $dbname        = 'heat',
   $user          = 'heat',
   $host          = '127.0.0.1',

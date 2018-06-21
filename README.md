@@ -136,3 +136,8 @@ Contributors
 ------------
 
 * https://github.com/openstack/puppet-heat/graphs/contributors
+
+Release Notes
+-------------
+
+* https://docs.openstack.org/releasenotes/puppet-heat

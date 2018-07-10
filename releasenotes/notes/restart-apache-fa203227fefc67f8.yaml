@@ -1,0 +1,4 @@
+---
+fixes:
+  - Deal with API being run using Apache when restarting the API (e.g. due to
+    configuration changes)

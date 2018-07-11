@@ -1,0 +1,5 @@
+---
+deprecations:
+  - heat_watch_server_url is deprecated and will be removed in a future
+    release. The Cloudwatch API support was removed from heat, so this parameter
+    does not have any effect.

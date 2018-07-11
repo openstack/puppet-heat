@@ -253,7 +253,7 @@
 #
 # [*sync_db*]
 #   (Optional) Run db sync on nodes after connection setting has been set.
-#   Defaults to true
+#   Defaults to undef
 #
 # [*enable_proxy_headers_parsing*]
 #   (Optional) Enable paste middleware to handle SSL requests through

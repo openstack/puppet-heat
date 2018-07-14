@@ -8,7 +8,6 @@ describe 'heat::engine' do
       :heat_stack_user_role                => '<SERVICE DEFAULT>',
       :heat_metadata_server_url            => 'http://127.0.0.1:8000',
       :heat_waitcondition_server_url       => 'http://127.0.0.1:8000/v1/waitcondition',
-      :heat_watch_server_url               => 'http://128.0.0.1:8003',
       :engine_life_check_timeout           => '<SERVICE DEFAULT>',
       :trusts_delegated_roles              => '<SERVICE DEFAULT>',
       :deferred_auth_method                => '<SERVICE DEFAULT>',
@@ -39,7 +38,6 @@ describe 'heat::engine' do
         :heat_stack_user_role                => 'heat_stack_user',
         :heat_metadata_server_url            => 'http://127.0.0.1:8000',
         :heat_waitcondition_server_url       => 'http://127.0.0.1:8000/v1/waitcondition',
-        :heat_watch_server_url               => 'http://128.0.0.1:8003',
         :engine_life_check_timeout           => '2',
         :trusts_delegated_roles              => ['role1', 'role2'],
         :deferred_auth_method                => 'trusts',
@@ -82,7 +80,6 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/heat_stack_user_role').with_value( expected_params[:heat_stack_user_role] ) }
       it { is_expected.to contain_heat_config('DEFAULT/heat_metadata_server_url').with_value( expected_params[:heat_metadata_server_url] ) }
       it { is_expected.to contain_heat_config('DEFAULT/heat_waitcondition_server_url').with_value( expected_params[:heat_waitcondition_server_url] ) }
-      it { is_expected.to contain_heat_config('DEFAULT/heat_watch_server_url').with_value( expected_params[:heat_watch_server_url] ) }
       it { is_expected.to contain_heat_config('DEFAULT/engine_life_check_timeout').with_value( expected_params[:engine_life_check_timeout] ) }
       it { is_expected.to contain_heat_config('DEFAULT/trusts_delegated_roles').with_value( expected_params[:trusts_delegated_roles] ) }
       it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }

@@ -35,10 +35,6 @@
 #   (optional) URL of the Heat waitcondition server
 #   Defaults to $::os_service_default.
 #
-# [*heat_watch_server_url*]
-#   (optional) URL of the Heat cloudwatch server
-#   Defaults to $::os_service_default.
-#
 # [*engine_life_check_timeout*]
 #   (optional) RPC timeout (in seconds) for the engine liveness check that is
 #   used for stack locking
@@ -87,7 +83,7 @@
 #   (optional) Array of trustor roles to be delegated to heat.
 #   This value is also used by heat::keystone::auth if it is set to
 #   configure the keystone roles.
-#   Defaults to $::os_service_default. 
+#   Defaults to $::os_service_default.
 #
 # [*instance_connection_is_secure*]
 #   (Optional) Instance connection to CFN/CW API via https.
@@ -129,6 +125,12 @@
 #   (Optional) List of directories to search for plug-ins.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*heat_watch_server_url*]
+#   (optional) URL of the Heat cloudwatch server
+#   Defaults to undef.
+
 class heat::engine (
   $auth_encryption_key,
   $package_ensure                                  = 'present',
@@ -137,7 +139,6 @@ class heat::engine (
   $heat_stack_user_role                            = $::os_service_default,
   $heat_metadata_server_url                        = $::os_service_default,
   $heat_waitcondition_server_url                   = $::os_service_default,
-  $heat_watch_server_url                           = $::os_service_default,
   $engine_life_check_timeout                       = $::os_service_default,
   $deferred_auth_method                            = $::os_service_default,
   $default_software_config_transport               = $::os_service_default,
@@ -154,9 +155,15 @@ class heat::engine (
   $template_dir                                    = $::os_service_default,
   $max_nested_stack_depth                          = $::os_service_default,
   $plugin_dirs                                     = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $heat_watch_server_url                           = undef,
 ) {
 
   include ::heat::deps
+
+  if $heat_watch_server_url {
+    warning('heat_watch_server_url has no effect and will be removed in a future release.')
+  }
 
   # Validate Heat Engine AES key
   # must be either 16, 24, or 32 bytes long
@@ -209,7 +216,6 @@ class heat::engine (
     'DEFAULT/heat_stack_user_role':                            value => $heat_stack_user_role;
     'DEFAULT/heat_metadata_server_url':                        value => $heat_metadata_server_url;
     'DEFAULT/heat_waitcondition_server_url':                   value => $heat_waitcondition_server_url;
-    'DEFAULT/heat_watch_server_url':                           value => $heat_watch_server_url;
     'DEFAULT/engine_life_check_timeout':                       value => $engine_life_check_timeout;
     'DEFAULT/default_software_config_transport':               value => $default_software_config_transport;
     'DEFAULT/default_deployment_signal_transport':             value => $default_deployment_signal_transport;

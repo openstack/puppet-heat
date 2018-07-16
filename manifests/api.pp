@@ -115,9 +115,9 @@ class heat::api (
     }
 
     # we need to make sure heat-api/eventlet is stopped before trying to start apache
-    Service['heat-api'] -> Service[$::apache::params::service_name]
+    Service['heat-api'] -> Service[$service_name]
     # the apache service is untagged so add it to the service section manually
-    Anchor['heat::service::begin'] ~> Service[$::apache::params::service_name]
+    Anchor['heat::service::begin'] ~> Service[$service_name]
   } else {
     fail("Invalid service_name. Either heat-api/openstack-heat-api for \
 running as a standalone service, or httpd for being run by a httpd server")

@@ -25,24 +25,13 @@ describe 'heat' do
 
   shared_examples_for 'heat' do
 
-    context 'with rabbit_host parameter' do
+    context 'with a normal setup' do
       it_configures 'a heat base installation'
-      it_configures 'rabbit without HA support (with backward compatibility)'
+      it_configures 'configures default rabbitmq parameters'
     end
 
-    context 'with rabbit_hosts parameter' do
-      context 'with one server' do
-        it_configures 'a heat base installation'
-        it_configures 'rabbit without HA support (without backward compatibility)'
-      end
-
-      context 'with multiple servers' do
-        before { params.merge!(
-          :rabbit_ha_queues    => true,
-          :amqp_durable_queues => true) }
-        it_configures 'a heat base installation'
-        it_configures 'rabbit with HA support'
-      end
+    context 'with HA support' do
+      it_configures 'configures rabbit with HA and durable'
     end
 
     context 'with rabbit heartbeat configured' do
@@ -171,7 +160,7 @@ describe 'heat' do
 
   end
 
-  shared_examples_for 'rabbit without HA support (with backward compatibility)' do
+  shared_examples_for 'configures default rabbitmq parameters' do
     it 'configures rabbit' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
@@ -191,52 +180,14 @@ describe 'heat' do
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
   end
 
-  shared_examples_for 'rabbit without HA support (without backward compatibility)' do
-    it 'configures rabbit' do
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_oslo__messaging__rabbit('heat_config').with(
-        :rabbit_use_ssl     => '<SERVICE DEFAULT>',
-        :kombu_ssl_ca_certs => '<SERVICE DEFAULT>',
-        :kombu_ssl_certfile => '<SERVICE DEFAULT>',
-        :kombu_ssl_keyfile  => '<SERVICE DEFAULT>',
-        :kombu_ssl_version  => '<SERVICE DEFAULT>',
-      )
+  shared_examples_for 'configures rabbit with HA and durable' do
+    before do
+      params.merge!( :rabbit_ha_queues    => true,
+                     :amqp_durable_queues => true )
     end
-    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('<SERVICE DEFAULT>') }
-    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/amqp_durable_queues').with_value('<SERVICE DEFAULT>') }
-  end
 
-  shared_examples_for 'rabbit with HA support' do
-    it 'configures rabbit' do
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_reconnect_delay').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_failover_strategy').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_oslo__messaging__rabbit('heat_config').with(
-        :rabbit_use_ssl     => '<SERVICE DEFAULT>',
-        :kombu_ssl_ca_certs => '<SERVICE DEFAULT>',
-        :kombu_ssl_certfile => '<SERVICE DEFAULT>',
-        :kombu_ssl_keyfile  => '<SERVICE DEFAULT>',
-        :kombu_ssl_version  => '<SERVICE DEFAULT>',
-      )
-    end
-    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value(true) }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/amqp_durable_queues').with_value(true) }
-  end
-
-  shared_examples_for 'single rabbit_host with ha queues' do
-    let :params do
-      req_params.merge({'rabbit_ha_queues' => true})
-    end
-
-    it 'should contain rabbit_ha_queues' do
-      is_expected.to contain_heat_config('oslo_messaging_rabbit/rabbit_ha_queues').with_value('true')
-    end
   end
 
   shared_examples_for 'rabbit with heartbeat configured' do

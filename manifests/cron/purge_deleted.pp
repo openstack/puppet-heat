@@ -82,5 +82,5 @@ class heat::cron::purge_deleted (
     weekday     => $weekday
   }
 
-  Package['heat-common'] -> Cron['heat-manage purge_deleted']
+  Package<| tag == 'heat-package' |> -> Cron['heat-manage purge_deleted']
 }

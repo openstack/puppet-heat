@@ -412,8 +412,7 @@ class heat(
     password               => $amqp_password,
   }
 
-  # TODO(aschultz): remove this after completely switched to www_authenticate_uri
-  $auth_uri = pick($::heat::keystone::authtoken::auth_uri, $::heat::keystone::authtoken::www_authenticate_uri)
+  $www_authenticate_uri = $::heat::keystone::authtoken::www_authenticate_uri
   $auth_url = $::heat::keystone::authtoken::auth_url
   $keystone_username = $::heat::keystone::authtoken::username
   $keystone_password = $::heat::keystone::authtoken::password
@@ -422,7 +421,7 @@ class heat(
   if (defined($heat_clients_keystone_uri)) {
     $heat_clients_keystone_uri_real = $heat_clients_keystone_uri
   } else {
-    $heat_clients_keystone_uri_real = $auth_uri
+    $heat_clients_keystone_uri_real = $www_authenticate_uri
   }
 
 

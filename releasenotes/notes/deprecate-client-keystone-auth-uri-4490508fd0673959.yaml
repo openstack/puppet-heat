@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The heat::heat_clients_keystone_uri parameter is deprecated, has no effect
+    and will be removed in a future release.

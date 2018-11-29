@@ -264,10 +264,6 @@
 #   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
 #   Defaults to $::os_service_default.
 #
-# [*heat_clients_keystone_uri*]
-#   (optional) Heat clients auth url in format like http://127.0.0.1:5000/.
-#   Defaults to $::os_service_default.
-#
 # [*heat_clients_endpoint_type*]
 #   (optional) Type of endpoint in Identity service catalog to use for
 #   communication with the OpenStack service.
@@ -291,6 +287,12 @@
 #   (optional) The maximum size of memory in bytes that YAQL expressions can
 #     take for evaluation.
 #   Defaults to $::os_service_default.
+#
+## DEPRECATED PARAMS
+#
+# [*heat_clients_keystone_uri*]
+#   (optional) Heat clients auth url in format like http://127.0.0.1:5000/.
+#   Defaults to undef.
 #
 class heat(
   $package_ensure                     = 'present',
@@ -351,18 +353,23 @@ class heat(
   $notification_topics                = $::os_service_default,
   $enable_proxy_headers_parsing       = $::os_service_default,
   $heat_clients_url                   = $::os_service_default,
-  $heat_clients_keystone_uri          = $::os_service_default,
   $heat_clients_endpoint_type         = $::os_service_default,
   $purge_config                       = false,
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
+  ## DEPRECATED PARAMS
+  $heat_clients_keystone_uri          = undef,
 ) {
 
   include ::heat::logging
   include ::heat::db
   include ::heat::deps
   include ::heat::params
+
+  if $heat_clients_keystone_uri {
+    warning('heat_clients_keystone_ur is deprecated, has no effect and will be removed in the future')
+  }
 
   if $auth_strategy == 'keystone' {
     include ::heat::keystone::authtoken
@@ -418,12 +425,6 @@ class heat(
   $keystone_password = $::heat::keystone::authtoken::password
   $keystone_project_domain_name = $::heat::keystone::authtoken::project_domain_name
   $keystone_user_domain_name = $::heat::keystone::authtoken::user_domain_name
-  if (defined($heat_clients_keystone_uri)) {
-    $heat_clients_keystone_uri_real = $heat_clients_keystone_uri
-  } else {
-    $heat_clients_keystone_uri_real = $www_authenticate_uri
-  }
-
 
   heat_config {
     'trustee/auth_type':           value => 'password';
@@ -432,7 +433,6 @@ class heat(
     'trustee/password':            value => $keystone_password, secret => true;
     'trustee/project_domain_name': value => $keystone_project_domain_name;
     'trustee/user_domain_name':    value => $keystone_user_domain_name;
-    'clients_keystone/auth_uri':   value => $heat_clients_keystone_uri_real;
     'clients_heat/url':            value => $heat_clients_url;
     'clients/endpoint_type':       value => $heat_clients_endpoint_type;
   }

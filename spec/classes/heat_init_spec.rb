@@ -10,9 +10,6 @@ describe 'heat' do
   let :params do
     {
       :package_ensure        => 'present',
-      :debug                 => 'False',
-      :use_stderr            => 'True',
-      :log_dir               => '/var/log/heat',
       :database_connection   => 'mysql+pymysql://user@host/database',
       :database_idle_timeout => 3600,
       :flavor                => 'keystone',
@@ -57,7 +54,6 @@ describe 'heat' do
 
   shared_examples_for 'a heat base installation' do
 
-    it { is_expected.to contain_class('heat::logging') }
     it { is_expected.to contain_class('heat::params') }
 
     it 'installs heat common package' do

@@ -8,15 +8,6 @@
 #    (Optional) Ensure state for package.
 #    Defaults to 'present'
 #
-# [*debug*]
-#   (Optional) Should the daemons log debug messages
-#   Defaults to undef.
-#
-# [*log_dir*]
-#   (Optional) Directory where logs should be stored
-#   If set to $::os_service_default, it will not log to any directory
-#   Defaults to undef.
-#
 # [*default_transport_url*]
 #   (optional) A URL representing the messaging driver to use and its full
 #   configuration. Transport URLs take the form:
@@ -220,18 +211,6 @@
 #   (optional) If set, use this value for max_overflow with sqlalchemy.
 #   Defaults to: undef.
 
-# [*use_syslog*]
-#   (Optional) Use syslog for logging.
-#   Defaults to undef.
-#
-# [*use_stderr*]
-#   (optional) Use stderr for logging
-#   Defaults to undef.
-#
-# [*log_facility*]
-#   (Optional) Syslog facility to receive log lines.
-#   Defaults to undef.
-#
 # [*flavor*]
 #   (optional) Specifies the Authentication method.
 #   Set to 'standalone' to get Heat to work with a remote OpenStack
@@ -294,8 +273,6 @@
 #
 class heat(
   $package_ensure                     = 'present',
-  $debug                              = undef,
-  $log_dir                            = undef,
   $keystone_ec2_uri                   = $::os_service_default,
   $default_transport_url              = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
@@ -329,9 +306,6 @@ class heat(
   $amqp_username                      = $::os_service_default,
   $amqp_password                      = $::os_service_default,
   $host                               = $::os_service_default,
-  $use_syslog                         = undef,
-  $use_stderr                         = undef,
-  $log_facility                       = undef,
   $database_connection                = undef,
   $database_max_retries               = undef,
   $database_idle_timeout              = undef,
@@ -359,7 +333,6 @@ class heat(
   $yaql_limit_iterators               = $::os_service_default,
 ) {
 
-  include ::heat::logging
   include ::heat::db
   include ::heat::deps
   include ::heat::params

@@ -116,28 +116,16 @@ class heat::logging(
 
   include ::heat::deps
 
-  # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
-  # to use heat::<myparam> first then heat::logging::<myparam>.
-  $use_syslog_real = pick($::heat::use_syslog,$use_syslog)
-  $use_stderr_real = pick($::heat::use_stderr,$use_stderr)
-  $log_facility_real = pick($::heat::log_facility,$log_facility)
-  if $log_dir != '' {
-    $log_dir_real = pick($::heat::log_dir,$log_dir)
-  } else {
-    $log_dir_real = $log_dir
-  }
-  $debug_real = pick($::heat::debug,$debug)
-
   oslo::log { 'heat_config':
-    debug                         => $debug_real,
+    debug                         => $debug,
     log_config_append             => $log_config_append,
     log_date_format               => $log_date_format,
-    log_dir                       => $log_dir_real,
-    use_syslog                    => $use_syslog_real,
+    log_dir                       => $log_dir,
+    use_syslog                    => $use_syslog,
     use_json                      => $use_json,
     use_journal                   => $use_journal,
-    syslog_log_facility           => $log_facility_real,
-    use_stderr                    => $use_stderr_real,
+    syslog_log_facility           => $log_facility,
+    use_stderr                    => $use_stderr,
     logging_context_format_string => $logging_context_format_string,
     logging_default_format_string => $logging_default_format_string,
     logging_debug_format_suffix   => $logging_debug_format_suffix,

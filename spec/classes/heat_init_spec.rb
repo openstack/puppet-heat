@@ -120,10 +120,6 @@ describe 'heat' do
       is_expected.to contain_heat_config('trustee/password').with_secret( true )
     end
 
-    it 'configures auth_uri for clients_keystone' do
-      is_expected.to contain_heat_config('clients_keystone/auth_uri').with_value( 'http://127.0.0.1:5000/' )
-    end
-
     it 'configures endpoint_type for clients' do
       is_expected.to contain_heat_config('clients/endpoint_type').with_value( '<SERVICE DEFAULT>' )
     end
@@ -425,11 +421,6 @@ describe 'heat' do
       it { is_expected.to contain_heat_config('oslo_messaging_amqp/username').with_value('amqp_user') }
       it { is_expected.to contain_heat_config('oslo_messaging_amqp/password').with_value('password') }
     end
-  end
-
-  shared_examples_for "with custom heat_clients_keystone_uri" do
-      before { params.merge!( :heat_clients_keystone_uri => 'https://domain1/' ) }
-      it { is_expected.to contain_heat_config('clients_keystone/auth_uri').with_value('https://domain1/') }
   end
 
   on_supported_os({

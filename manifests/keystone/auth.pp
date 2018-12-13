@@ -16,19 +16,19 @@
 #
 # [*configure_endpoint*]
 #   (Optional) Should heat endpoint be configured?
-#   Defaults to 'true'.
+#   Defaults to true.
 #
 # [*configure_service*]
 #   (Optional) Should heat service be configured?
-#   Defaults to 'true'.
+#   Defaults to true.
 #
 # [*configure_user*]
 #   (Optional) Whether to create the service user.
-#   Defaults to 'true'.
+#   Defaults to true.
 #
 # [*configure_user_role*]
 #   (Optional) Whether to configure the admin role for the service user.
-#   Defaults to 'true'.
+#   Defaults to true.
 #
 # [*service_name*]
 #   (Optional) Name of the service.
@@ -51,28 +51,31 @@
 #   Defaults to 'services'.
 #
 # [*trusts_delegated_roles*]
-#    (optional) Array of trustor roles to be delegated to heat.
+#    (Optional) Array of trustor roles to be delegated to heat.
 #    Defaults to ['heat_stack_owner']
 #
 # [*configure_delegated_roles*]
-#    (optional) Whether to configure the delegated roles.
+#    (Optional) Whether to configure the delegated roles.
 #    Defaults to false until the deprecated parameters in heat::engine
 #    are removed after Kilo.
 #
 # [*public_url*]
-#   (optional) The endpoint's public url. (Defaults to 'http://127.0.0.1:8004/v1/%(tenant_id)s')
+#   (Optional) The endpoint's public url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:8004/v1/%(tenant_id)s'
 #
 # [*admin_url*]
-#   (optional) The endpoint's admin url. (Defaults to 'http://127.0.0.1:8004/v1/%(tenant_id)s')
+#   (Optional) The endpoint's admin url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:8004/v1/%(tenant_id)s'
 #
 # [*internal_url*]
-#   (optional) The endpoint's internal url. (Defaults to 'http://127.0.0.1:8004/v1/%(tenant_id)s')
+#   (Optional) The endpoint's internal url.
 #   This url should *not* contain any trailing '/'.
+#   Defaults to 'http://127.0.0.1:8004/v1/%(tenant_id)s'
 #
 # [*heat_stack_user_role*]
-#   (optional) Keystone role for heat template-defined users.
+#   (Optional) Keystone role for heat template-defined users.
 #   In this context this will create the role for the heat_stack_user.
 #   It will not set the value in the config file, if you want to do
 #   that you must set heat::engine::heat_stack_user_role. Generally
@@ -80,7 +83,7 @@
 #   Defaults to 'heat_stack_user'
 
 # [*manage_heat_stack_user_role*]
-#   (optional) If true, this will manage the Keystone role for
+#   (Optional) If true, this will manage the Keystone role for
 #   $heat_stack_user_role.
 #   Defaults to true
 #

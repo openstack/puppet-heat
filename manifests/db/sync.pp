@@ -4,7 +4,7 @@
 # ==Parameters
 #
 # [*extra_params*]
-#   (optional) String of extra command line parameters to append
+#   (Optional) String of extra command line parameters to append
 #   to the heat-manage db_sync command. These will be inserted
 #   in the command line between 'heat-manage' and 'db_sync'.
 #   Defaults to '--config-file /etc/heat/heat.conf'

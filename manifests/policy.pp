@@ -5,7 +5,7 @@
 # === Parameters
 #
 # [*policies*]
-#   (optional) Set of policies to configure for heat
+#   (Optional) Set of policies to configure for heat
 #   Example :
 #     {
 #       'heat-context_is_admin' => {
@@ -20,7 +20,7 @@
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (optional) Path to the heat policy.json file
+#   (Optional) Path to the heat policy.json file
 #   Defaults to /etc/heat/policy.json
 #
 class heat::policy (

@@ -30,6 +30,10 @@
 #   (Optional) Whether to configure the admin role for the service user.
 #   Defaults to 'true'.
 #
+# [*service_description*]
+#   (Optional) Description of the service.
+#   Default to 'Openstack Cloudformation Service'
+#
 # [*service_name*]
 #   (Optional) Name of the service.
 #   Defaults to 'heat'.
@@ -71,6 +75,7 @@ class heat::keystone::auth_cfn (
   $email                = 'heat-cfn@localhost',
   $auth_name            = 'heat-cfn',
   $service_name         = 'heat-cfn',
+  $service_description  = 'Openstack Cloudformation Service',
   $service_type         = 'cloudformation',
   $region               = 'RegionOne',
   $tenant               = 'services',
@@ -93,7 +98,7 @@ class heat::keystone::auth_cfn (
     configure_endpoint  => $configure_endpoint,
     configure_service   => $configure_service,
     service_type        => $service_type,
-    service_description => 'Openstack Cloudformation Service',
+    service_description => $service_description,
     service_name        => $service_name,
     region              => $region,
     auth_name           => $auth_name,

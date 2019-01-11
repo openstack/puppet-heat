@@ -4,13 +4,8 @@
 #
 class heat::params {
   include ::openstacklib::defaults
+  $pyvers = $::openstacklib::defaults::pyvers
 
-  if ($::os_package_type == 'debian') or ($::os['name'] == 'Fedora') or
-    ($::os['family'] == 'RedHat' and Integer.new($::os['release']['major']) > 7) {
-    $pyvers = '3'
-  } else {
-    $pyvers = ''
-  }
   $client_package_name = "python${pyvers}-heatclient"
   $group               = 'heat'
 

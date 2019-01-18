@@ -1,13 +1,11 @@
 require 'spec_helper'
 
 describe 'heat::db' do
-
   shared_examples 'heat::db' do
-
     context 'with default parameters' do
+      it { should contain_class('heat::deps') }
 
-      it { is_expected.to contain_class('heat::db::sync') }
-      it { is_expected.to contain_oslo__db('heat_config').with(
+      it { should contain_oslo__db('heat_config').with(
         :db_max_retries => '<SERVICE DEFAULT>',
         :connection     => 'sqlite:////var/lib/heat/heat.sqlite',
         :idle_timeout   => '<SERVICE DEFAULT>',
@@ -19,11 +17,13 @@ describe 'heat::db' do
         :pool_timeout   => '<SERVICE DEFAULT>',
       )}
 
+      it { should contain_class('heat::db::sync') }
     end
 
     context 'with specific parameters' do
       let :params do
-        { :database_connection     => 'mysql+pymysql://heat:heat@localhost/heat',
+        {
+          :database_connection     => 'mysql+pymysql://heat:heat@localhost/heat',
           :database_idle_timeout   => '3601',
           :database_min_pool_size  => '2',
           :database_max_pool_size  => '12',
@@ -32,11 +32,13 @@ describe 'heat::db' do
           :database_db_max_retries => '-1',
           :database_max_overflow   => '21',
           :database_pool_timeout   => '21',
-          :sync_db                 => false }
+          :sync_db                 => false
+        }
       end
 
-      it { is_expected.not_to contain_class('heat::db::sync') }
-      it { is_expected.to contain_oslo__db('heat_config').with(
+      it { should contain_class('heat::deps') }
+
+      it { should contain_oslo__db('heat_config').with(
         :db_max_retries => '-1',
         :connection     => 'mysql+pymysql://heat:heat@localhost/heat',
         :idle_timeout   => '3601',
@@ -48,45 +50,8 @@ describe 'heat::db' do
         :pool_timeout   => '21',
       )}
 
+      it { should_not contain_class('heat::db::sync') }
     end
-
-    context 'with MySQL-python library as backend package' do
-      let :params do
-        { :database_connection => 'mysql://heat:heat@localhost/heat' }
-      end
-
-      it { is_expected.to contain_oslo__db('heat_config').with(
-        :connection => 'mysql://heat:heat@localhost/heat',
-      )}
-    end
-
-    context 'with postgresql backend' do
-      let :params do
-        { :database_connection => 'postgresql://heat:heat@localhost/heat', }
-      end
-
-      it 'install the proper backend package' do
-        is_expected.to contain_package('python-psycopg2').with(:ensure => 'present')
-      end
-
-    end
-
-    context 'with incorrect database_connection string' do
-      let :params do
-        { :database_connection => 'redis://heat:heat@localhost/heat', }
-      end
-
-      it_raises 'a Puppet::Error', /validate_re/
-    end
-
-    context 'with incorrect database_connection string' do
-      let :params do
-        { :database_connection => 'foo+pymysql://heat:heat@localhost/heat', }
-      end
-
-      it_raises 'a Puppet::Error', /validate_re/
-    end
-
   end
 
   on_supported_os({
@@ -98,21 +63,6 @@ describe 'heat::db' do
       end
 
       it_behaves_like 'heat::db'
-
-      context 'using pymysql driver' do
-        let :params do
-          { :database_connection => 'mysql+pymysql://heat:heat@localhost/heat' }
-        end
-
-        case facts[:osfamily]
-        when 'Debian'
-          it { is_expected.to contain_package('python-pymysql').with({ :ensure => 'present', :name => 'python-pymysql' }) }
-        when 'RedHat'
-          it { is_expected.not_to contain_package('python-pymysql') }
-        end
-      end
-
     end
   end
-
 end

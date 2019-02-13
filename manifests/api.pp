@@ -113,6 +113,7 @@ class heat::api (
       enable => false,
       tag    => ['heat-service'],
     }
+    Service <| title == 'httpd' |> { tag +> 'heat-service' }
 
     # we need to make sure heat-api/eventlet is stopped before trying to start apache
     Service['heat-api'] -> Service[$service_name]

@@ -182,7 +182,8 @@ class heat::engine (
   # - if set, array validation will be done for not empty and then configure the parameter.
   # - Otherwise, fallback to default.
   if !is_service_default($plugin_dirs) and !empty($plugin_dirs) {
-    validate_array($plugin_dirs)
+    validate_legacy(Array, 'validate_array', $plugin_dirs)
+
     $plugin_dirs_real = join($plugin_dirs, ',')
   } else {
     $plugin_dirs_real = $::os_service_default

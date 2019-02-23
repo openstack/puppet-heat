@@ -122,7 +122,7 @@ class heat::wsgi::apache_api_cfn (
   include ::apache
   include ::apache::mod::headers
 
-  validate_integer($port)
+  validate_legacy(Integer, 'validate_integer', $port)
 
   # Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1396553
   if $::osfamily == 'RedHat' and $port == 8000 and $::selinux {

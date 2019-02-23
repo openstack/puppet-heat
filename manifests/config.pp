@@ -30,8 +30,8 @@ class heat::config (
 
   include ::heat::deps
 
-  validate_hash($heat_config)
-  validate_hash($heat_api_paste_ini)
+  validate_legacy(Hash, 'validate_hash', $heat_config)
+  validate_legacy(Hash, 'validate_hash', $heat_api_paste_ini)
 
   create_resources('heat_config', $heat_config)
   create_resources('heat_api_paste_ini', $heat_api_paste_ini)

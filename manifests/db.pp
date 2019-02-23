@@ -72,8 +72,8 @@ class heat::db (
   $database_max_overflow_real = pick($::heat::database_max_overflow, $database_max_overflow)
   $sync_db_real = pick($::heat::sync_db, $sync_db)
 
-  validate_re($database_connection_real,
-    '^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?')
+  validate_legacy(Oslo::Dbconn, 'validate_re', $database_connection_real,
+    ['^(sqlite|mysql(\+pymysql)?|postgresql):\/\/(\S+:\S+@\S+\/\S+)?'])
 
   oslo::db { 'heat_config':
     connection     => $database_connection_real,

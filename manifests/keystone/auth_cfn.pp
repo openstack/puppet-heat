@@ -90,7 +90,7 @@ class heat::keystone::auth_cfn (
 
   include ::heat::deps
 
-  validate_string($password)
+  validate_legacy(String, 'validate_string', $password)
 
   keystone::resource::service_identity { 'heat-cfn':
     configure_user      => $configure_user,

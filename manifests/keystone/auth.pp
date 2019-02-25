@@ -120,7 +120,7 @@ class heat::keystone::auth (
 
   include ::heat::deps
 
-  validate_string($password)
+  validate_legacy(String, 'validate_string', $password)
 
   keystone::resource::service_identity { 'heat':
     configure_user      => $configure_user,

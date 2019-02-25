@@ -411,11 +411,11 @@ class heat(
   }
 
   if (!is_service_default($enable_stack_adopt)) {
-    validate_bool($enable_stack_adopt)
+    validate_legacy(Boolean, 'validate_bool', $enable_stack_adopt)
   }
 
   if (!is_service_default($enable_stack_abandon)) {
-    validate_bool($enable_stack_abandon)
+    validate_legacy(Boolean, 'validate_bool', $enable_stack_abandon)
   }
 
   heat_config {

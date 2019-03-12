@@ -33,6 +33,10 @@
 #   If set to $::os_service_default, it will not log to any directory.
 #   Defaults to '/var/log/heat'
 #
+# [*log_file*]
+#   (Optional) File where logs should be stored.
+#   Defaults to $::os_service_default
+#
 # [*logging_context_format_string*]
 #   (Optional) Format string to use for log messages with context.
 #   Defaults to $::os_service_default
@@ -100,6 +104,7 @@ class heat::logging(
   $use_stderr                    = $::os_service_default,
   $log_facility                  = $::os_service_default,
   $log_dir                       = '/var/log/heat',
+  $log_file                      = $::os_service_default,
   $debug                         = $::os_service_default,
   $logging_context_format_string = $::os_service_default,
   $logging_default_format_string = $::os_service_default,
@@ -121,6 +126,7 @@ class heat::logging(
     log_config_append             => $log_config_append,
     log_date_format               => $log_date_format,
     log_dir                       => $log_dir,
+    log_file                      => $log_file,
     use_syslog                    => $use_syslog,
     use_json                      => $use_json,
     use_journal                   => $use_journal,

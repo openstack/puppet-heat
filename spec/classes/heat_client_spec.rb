@@ -25,6 +25,7 @@ describe 'heat::client' do
       )
     end
 
+    it { is_expected.to contain_class('openstacklib::openstackclient') }
   end
 
   on_supported_os({

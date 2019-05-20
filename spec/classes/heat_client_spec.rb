@@ -15,6 +15,7 @@ describe 'heat::client' do
       default_params.merge(params)
     end
 
+    it { is_expected.to contain_class('heat::deps') }
     it { is_expected.to contain_class('heat::params') }
 
     it 'installs heat client package' do

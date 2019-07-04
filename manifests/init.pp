@@ -239,6 +239,10 @@
 #   HTTPProxyToWSGI middleware.
 #   Defaults to $::os_service_default.
 #
+# [*max_request_body_size*]
+#   (Optional) Set max request body size
+#   Defaults to $::os_service_default.
+#
 # [*heat_clients_url*]
 #   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
 #   Defaults to $::os_service_default.
@@ -326,6 +330,7 @@ class heat(
   $notification_driver                = $::os_service_default,
   $notification_topics                = $::os_service_default,
   $enable_proxy_headers_parsing       = $::os_service_default,
+  $max_request_body_size              = $::os_service_default,
   $heat_clients_url                   = $::os_service_default,
   $heat_clients_endpoint_type         = $::os_service_default,
   $purge_config                       = false,
@@ -445,6 +450,7 @@ class heat(
 
   oslo::middleware { 'heat_config':
     enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
+    max_request_body_size        => $max_request_body_size,
   }
 
 }

@@ -143,6 +143,7 @@ describe 'heat' do
     it 'sets default value for http_proxy_to_wsgi middleware' do
       is_expected.to contain_oslo__middleware('heat_config').with(
         :enable_proxy_headers_parsing => '<SERVICE DEFAULT>',
+        :max_request_body_size        => '<SERVICE DEFAULT>',
       )
     end
 

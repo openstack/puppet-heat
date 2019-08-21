@@ -34,7 +34,8 @@ describe 'heat' do
     context 'with rabbit heartbeat configured' do
       before { params.merge!(
         :rabbit_heartbeat_timeout_threshold => '60',
-        :rabbit_heartbeat_rate => '10' ) }
+        :rabbit_heartbeat_rate => '10', 
+        :rabbit_heartbeat_in_pthread => true ) }
       it_configures 'a heat base installation'
       it_configures 'rabbit with heartbeat configured'
     end
@@ -160,6 +161,7 @@ describe 'heat' do
       is_expected.to contain_heat_config('oslo_messaging_rabbit/kombu_compression').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value('<SERVICE DEFAULT>')
       is_expected.to contain_oslo__messaging__rabbit('heat_config').with(
         :rabbit_use_ssl     => '<SERVICE DEFAULT>',
         :kombu_ssl_ca_certs => '<SERVICE DEFAULT>',
@@ -198,6 +200,7 @@ describe 'heat' do
     end
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_timeout_threshold').with_value('60') }
     it { is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_rate').with_value('10') }
+    it { is_expected.to contain_heat_config('oslo_messaging_rabbit/heartbeat_in_pthread').with_value(true) }
   end
 
   shared_examples_for 'with SSL enabled with kombu' do

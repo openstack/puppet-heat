@@ -1,0 +1,3 @@
+---
+upgrade:
+  - Deprecated heat_clients_keystone_uri option has been removed.

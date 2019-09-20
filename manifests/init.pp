@@ -281,12 +281,6 @@
 #     take for evaluation.
 #   Defaults to $::os_service_default.
 #
-## DEPRECATED PARAMS
-#
-# [*heat_clients_keystone_uri*]
-#   (optional) Heat clients auth url in format like http://127.0.0.1:5000/.
-#   Defaults to undef.
-#
 class heat(
   $package_ensure                     = 'present',
   $keystone_ec2_uri                   = $::os_service_default,
@@ -348,17 +342,11 @@ class heat(
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
-  ## DEPRECATED PARAMS
-  $heat_clients_keystone_uri          = undef,
 ) {
 
   include ::heat::db
   include ::heat::deps
   include ::heat::params
-
-  if $heat_clients_keystone_uri {
-    warning('heat_clients_keystone_ur is deprecated, has no effect and will be removed in the future')
-  }
 
   if $auth_strategy == 'keystone' {
     include ::heat::keystone::authtoken

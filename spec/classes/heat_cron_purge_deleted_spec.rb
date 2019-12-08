@@ -21,7 +21,7 @@ describe 'heat::cron::purge_deleted' do
       "class { 'heat::keystone::authtoken':
          password => 'password',
        }
-       include ::heat"
+       include heat"
     end
 
     describe 'with default parameters' do

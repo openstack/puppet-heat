@@ -68,7 +68,7 @@ class heat::db (
   $database_idle_timeout            = undef,
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   if $database_idle_timeout {
     warning('The database_idle_timeout parameter is deprecated. Please use \
@@ -102,7 +102,7 @@ database_connection_recycle_time instead.')
   }
 
   if $sync_db_real {
-    include ::heat::db::sync
+    include heat::db::sync
   }
 
 }

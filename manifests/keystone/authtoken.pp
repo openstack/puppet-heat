@@ -214,7 +214,7 @@ class heat::keystone::authtoken(
   $service_token_roles_required   = $::os_service_default,
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   if is_service_default($password) {
     fail('Please set password for heat service user')

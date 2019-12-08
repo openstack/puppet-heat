@@ -45,7 +45,7 @@ class heat::cors (
   $allow_headers     = $::os_service_default,
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   oslo::cors { 'heat_config':
     allowed_origin    => $allowed_origin,

@@ -28,8 +28,8 @@ class heat::policy (
   $policy_path = '/etc/heat/policy.json',
 ) {
 
-  include ::heat::deps
-  include ::heat::params
+  include heat::deps
+  include heat::params
 
   validate_legacy(Hash, 'validate_hash', $policies)
 

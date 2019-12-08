@@ -344,12 +344,12 @@ class heat(
   $yaql_limit_iterators               = $::os_service_default,
 ) {
 
-  include ::heat::db
-  include ::heat::deps
-  include ::heat::params
+  include heat::db
+  include heat::deps
+  include heat::params
 
   if $auth_strategy == 'keystone' {
-    include ::heat::keystone::authtoken
+    include heat::keystone::authtoken
   }
 
   package { 'heat-common':

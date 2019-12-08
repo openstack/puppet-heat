@@ -28,7 +28,7 @@ class heat::config (
   $heat_api_paste_ini = {},
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   validate_legacy(Hash, 'validate_hash', $heat_config)
   validate_legacy(Hash, 'validate_hash', $heat_api_paste_ini)

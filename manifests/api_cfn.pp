@@ -71,10 +71,10 @@ class heat::api_cfn (
   $service_name      = $::heat::params::api_cfn_service_name,
 ) inherits heat::params {
 
-  include ::heat
-  include ::heat::deps
-  include ::heat::params
-  include ::heat::policy
+  include heat
+  include heat::deps
+  include heat::params
+  include heat::policy
 
   if $use_ssl {
     if is_service_default($cert_file) {
@@ -109,7 +109,7 @@ class heat::api_cfn (
       tag        => 'heat-service',
     }
   } elsif $service_name == 'httpd' {
-    include ::apache::params
+    include apache::params
     service { 'heat-api-cfn':
       ensure => 'stopped',
       name   => $::heat::params::api_cfn_service_name,

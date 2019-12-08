@@ -159,7 +159,7 @@ class heat::engine (
   $heat_watch_server_url                           = undef,
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   if $heat_watch_server_url {
     warning('heat_watch_server_url has no effect and will be removed in a future release.')
@@ -174,8 +174,8 @@ class heat::engine (
     fail("${param_size} is not a correct size for auth_encryption_key parameter, it must be either 16, 24, 32 bytes long.")
   }
 
-  include ::heat
-  include ::heat::params
+  include heat
+  include heat::params
 
   # plugin_dirs value follows these rules:
   # - default is $::os_service_default so Puppet won't try to configure it.

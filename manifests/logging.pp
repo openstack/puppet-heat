@@ -119,7 +119,7 @@ class heat::logging(
   $log_date_format               = $::os_service_default,
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   oslo::log { 'heat_config':
     debug                         => $debug,

@@ -45,8 +45,8 @@ class heat::keystone::domain (
   $manage_config      = true,
 ) {
 
-  include ::heat::deps
-  include ::heat::params
+  include heat::deps
+  include heat::params
 
   if $manage_domain {
     ensure_resource('keystone_domain', $domain_name, {

@@ -102,7 +102,7 @@ class heat::cache (
   $manage_backend_package               = true,
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   oslo::cache { 'heat_config':
     config_prefix                        => $config_prefix,

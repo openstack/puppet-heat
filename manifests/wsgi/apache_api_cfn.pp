@@ -119,8 +119,8 @@ class heat::wsgi::apache_api_cfn (
 ) {
 
   # See custom fragment below
-  include ::apache
-  include ::apache::mod::headers
+  include apache
+  include apache::mod::headers
 
   validate_legacy(Integer, 'validate_integer', $port)
 

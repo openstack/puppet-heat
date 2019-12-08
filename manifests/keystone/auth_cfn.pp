@@ -88,7 +88,7 @@ class heat::keystone::auth_cfn (
   $internal_url         = 'http://127.0.0.1:8000/v1',
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   validate_legacy(String, 'validate_string', $password)
 

@@ -118,7 +118,7 @@ class heat::keystone::auth (
   $manage_heat_stack_user_role = true,
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   validate_legacy(String, 'validate_string', $password)
 

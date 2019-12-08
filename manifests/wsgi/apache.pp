@@ -129,12 +129,12 @@ define heat::wsgi::apache (
   if $title !~ /^api(|_cfn)$/ {
     fail('The valid options are api, api_cfn')
   }
-  include ::heat::deps
-  include ::heat::params
-  include ::apache
-  include ::apache::mod::wsgi
+  include heat::deps
+  include heat::params
+  include apache
+  include apache::mod::wsgi
   if $ssl {
-    include ::apache::mod::ssl
+    include apache::mod::ssl
   }
 
   ::openstacklib::wsgi::apache { "heat_${title}_wsgi":

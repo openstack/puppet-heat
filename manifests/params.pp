@@ -3,7 +3,7 @@
 # Parameters for puppet-heat
 #
 class heat::params {
-  include ::openstacklib::defaults
+  include openstacklib::defaults
   $pyvers = $::openstacklib::defaults::pyvers
 
   $client_package_name = "python${pyvers}-heatclient"

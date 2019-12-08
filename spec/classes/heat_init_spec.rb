@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'heat' do
   let :pre_condition do
-    "class { '::heat::keystone::authtoken':
+    "class { 'heat::keystone::authtoken':
        password => 'secretpassword',
      }"
   end

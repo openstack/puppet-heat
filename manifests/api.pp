@@ -68,10 +68,10 @@ class heat::api (
   $service_name      = $::heat::params::api_service_name,
 ) inherits heat::params {
 
-  include ::heat
-  include ::heat::deps
-  include ::heat::params
-  include ::heat::policy
+  include heat
+  include heat::deps
+  include heat::params
+  include heat::policy
 
   if $use_ssl {
     if is_service_default($cert_file) {
@@ -106,7 +106,7 @@ class heat::api (
       tag        => 'heat-service',
     }
   } elsif $service_name == 'httpd' {
-    include ::apache::params
+    include apache::params
     service { 'heat-api':
       ensure => 'stopped',
       name   => $::heat::params::api_service_name,

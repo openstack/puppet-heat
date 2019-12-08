@@ -7,11 +7,11 @@ describe 'heat::db::postgresql' do
     end
 
     let :pre_condition do
-      "include ::postgresql::server
-       class { '::heat::keystone::authtoken':
+      "include postgresql::server
+       class { 'heat::keystone::authtoken':
          password => 'password',
        }
-       include ::heat"
+       include heat"
     end
 
     context 'with only required parameters' do

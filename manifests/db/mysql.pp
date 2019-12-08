@@ -43,7 +43,7 @@ class heat::db::mysql(
   $collate       = 'utf8_general_ci',
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   validate_legacy(String, 'validate_string', $password)
 

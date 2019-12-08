@@ -13,7 +13,7 @@ class heat::db::sync(
   $extra_params = '--config-file /etc/heat/heat.conf',
 ) {
 
-  include ::heat::deps
+  include heat::deps
 
   exec { 'heat-dbsync':
     command     => "heat-manage ${extra_params} db_sync",

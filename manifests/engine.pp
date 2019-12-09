@@ -125,6 +125,10 @@
 #   (Optional) List of directories to search for plug-ins.
 #   Defaults to $::os_service_default
 #
+# [*client_retry_limit*]
+#   (Optional) Number of times to retry when client encounters a transient error.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*heat_watch_server_url*]
@@ -155,6 +159,7 @@ class heat::engine (
   $template_dir                                    = $::os_service_default,
   $max_nested_stack_depth                          = $::os_service_default,
   $plugin_dirs                                     = $::os_service_default,
+  $client_retry_limit                              = $::os_service_default,
   # DEPRECATED PARAMETERS
   $heat_watch_server_url                           = undef,
 ) {
@@ -233,5 +238,6 @@ class heat::engine (
     'DEFAULT/template_dir':                                    value => $template_dir;
     'DEFAULT/max_nested_stack_depth':                          value => $max_nested_stack_depth;
     'DEFAULT/plugin_dirs':                                     value => $plugin_dirs_real;
+    'DEFAULT/client_retry_limit':                              value => $client_retry_limit;
   }
 }

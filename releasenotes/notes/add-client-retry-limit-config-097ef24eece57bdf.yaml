@@ -1,0 +1,4 @@
+---
+features:
+  - Add new parameter 'client_retry_limit' to increase
+    the number of retries in case of transient errors.

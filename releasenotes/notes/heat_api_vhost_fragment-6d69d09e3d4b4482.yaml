@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    vhost_custom_fragment was added to heat::wsgi::apache_api so one can
+    configure custom fragments for the Heat API vhost.

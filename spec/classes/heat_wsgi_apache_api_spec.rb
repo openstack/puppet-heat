@@ -19,6 +19,7 @@ describe 'heat::wsgi::apache_api' do
         :ssl_crl_path                => nil,
         :ssl_certs_dir               => nil,
         :wsgi_process_display_name   => nil,
+        :vhost_custom_fragment       => nil,
         :threads                     => 1,
         :priority                    => 10,
         :custom_wsgi_process_options => {},

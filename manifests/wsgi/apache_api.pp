@@ -85,6 +85,10 @@
 #     (optional) Name of the WSGI process display-name.
 #     Defaults to undef
 #
+#   [*vhost_custom_fragment*]
+#     (optional) Additional vhost configuration, if applicable.
+#     Defaults to undef
+#
 # == Dependencies
 #
 #   requires Class['apache'] & Class['heat']
@@ -116,6 +120,7 @@ class heat::wsgi::apache_api (
   $error_log_file              = undef,
   $custom_wsgi_process_options = {},
   $wsgi_process_display_name   = undef,
+  $vhost_custom_fragment       = undef,
 ) {
   heat::wsgi::apache { 'api':
     port                        => $port,
@@ -138,5 +143,6 @@ class heat::wsgi::apache_api (
     access_log_format           => $access_log_format,
     error_log_file              => $error_log_file,
     wsgi_process_display_name   => $wsgi_process_display_name,
+    vhost_custom_fragment       => $vhost_custom_fragment,
   }
 }

@@ -58,7 +58,6 @@ documentation to assist you in understanding the available deployment options.
 class { 'heat':
   default_transport_url => 'rabbit://heat:an_even_bigger_secret@127.0.0.1:5672/heat',
   database_connection   => 'mysql+pymysql://heat:a_big_secret@127.0.0.1/heat?charset=utf8',
-  identity_uri          => 'http://127.0.0.1:5000/',
   keystone_password     => 'a_big_secret',
 }
 

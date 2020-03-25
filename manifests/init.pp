@@ -209,10 +209,6 @@
 #   (optional) Interval between retries of opening a database connection.
 #   Defaults to undef.
 #
-# [*database_min_pool_size*]
-#   (optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
 # [*database_max_pool_size*]
 #   (optional) Maximum number of SQL connections to keep open in a pool.
 #   Defaults to undef.
@@ -281,6 +277,12 @@
 #     take for evaluation.
 #   Defaults to $::os_service_default.
 #
+# DEPRECATED PARAMETERS
+#
+# [*database_min_pool_size*]
+#   (optional) Minimum number of SQL connections to keep open in a pool.
+#   Defaults to undef.
+#
 class heat(
   $package_ensure                     = 'present',
   $keystone_ec2_uri                   = $::os_service_default,
@@ -321,7 +323,6 @@ class heat(
   $database_max_retries               = undef,
   $database_idle_timeout              = undef,
   $database_retry_interval            = undef,
-  $database_min_pool_size             = undef,
   $database_max_pool_size             = undef,
   $database_max_overflow              = undef,
   $flavor                             = $::os_service_default,
@@ -342,6 +343,8 @@ class heat(
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $database_min_pool_size             = undef,
 ) {
 
   include heat::db

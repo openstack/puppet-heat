@@ -20,6 +20,7 @@ describe 'heat::engine' do
       :template_dir                        => '<SERVICE DEFAULT>',
       :max_nested_stack_depth              => '<SERVICE DEFAULT>',
       :plugin_dirs                         => '<SERVICE DEFAULT>',
+      :server_keystone_endpoint_type       => '<SERVICE DEFAULT>',
     }
   end
 
@@ -49,6 +50,7 @@ describe 'heat::engine' do
         :reauthentication_auth_method        => 'trusts',
         :environment_dir                     => '/etc/heat/environment.d',
         :template_dir                        => '/etc/heat/templates',
+        :server_keystone_endpoint_type       => 'public',
       }
     ].each do |new_params|
       describe 'when #{param_set == {} ? "using default" : "specifying"} parameters'
@@ -95,6 +97,7 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/environment_dir').with_value( expected_params[:environment_dir] ) }
       it { is_expected.to contain_heat_config('DEFAULT/template_dir').with_value( expected_params[:template_dir] ) }
       it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('DEFAULT/server_keystone_endpoint_type').with_value( expected_params[:server_keystone_endpoint_type] ) }
     end
 
     context 'with disabled service managing' do

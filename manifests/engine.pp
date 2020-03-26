@@ -78,7 +78,7 @@
 #   associated SoftwareDeployment resources.
 #   Allowed values: HEAT_CFNTOOLS, RAW, SOFTWARE_CONFIG
 #   Defaults to $::os_service_default.
-
+#
 # [*trusts_delegated_roles*]
 #   (optional) Array of trustor roles to be delegated to heat.
 #   This value is also used by heat::keystone::auth if it is set to
@@ -129,12 +129,17 @@
 #   (Optional) Number of times to retry when client encounters a transient error.
 #   Defaults to $::os_service_default
 #
+# [*server_keystone_endpoint_type*]
+#   (Optional) If set, is used to control which authentication endpoint is used
+#   by user-controlled servers to make calls back to Heat.
+#   Defaults to $::os_service_default
+#
 # DEPRECATED PARAMETERS
 #
 # [*heat_watch_server_url*]
 #   (optional) URL of the Heat cloudwatch server
 #   Defaults to undef.
-
+#
 class heat::engine (
   $auth_encryption_key,
   $package_ensure                                  = 'present',
@@ -160,6 +165,7 @@ class heat::engine (
   $max_nested_stack_depth                          = $::os_service_default,
   $plugin_dirs                                     = $::os_service_default,
   $client_retry_limit                              = $::os_service_default,
+  $server_keystone_endpoint_type                   = $::os_service_default,
   # DEPRECATED PARAMETERS
   $heat_watch_server_url                           = undef,
 ) {
@@ -239,5 +245,6 @@ class heat::engine (
     'DEFAULT/max_nested_stack_depth':                          value => $max_nested_stack_depth;
     'DEFAULT/plugin_dirs':                                     value => $plugin_dirs_real;
     'DEFAULT/client_retry_limit':                              value => $client_retry_limit;
+    'DEFAULT/server_keystone_endpoint_type':                   value => $server_keystone_endpoint_type;
   }
 }

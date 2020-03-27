@@ -1,0 +1,12 @@
+---
+features:
+  - |
+    The following parameters are added in ``heat::cache`` to configure chaching
+    in specific module.
+
+    - ``constraint_validation_caching``
+    - ``constraint_validation_expiration_time``
+    - ``service_extension_caching``
+    - ``service_extension_expiration_time``
+    - ``resource_finder_caching``
+    - ``resource_finder_expiration_time``

@@ -24,25 +24,37 @@ describe 'heat::cache' do
         is_expected.to contain_heat_config('cache/memcache_pool_unused_timeout').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_heat_config('cache/memcache_pool_connection_get_timeout').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_oslo__cache('heat_config').with_manage_backend_package(true)
+        is_expected.to contain_heat_config('constraint_validation_cache/caching').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_heat_config('constraint_validation_cache/expiration_time').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_heat_config('service_extension_cache/caching').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_heat_config('service_extension_cache/expiration_time').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_heat_config('resource_finder_cache/caching').with_value('<SERVICE DEFAULT>')
+        is_expected.to contain_heat_config('resource_finder_cache/expiration_time').with_value('<SERVICE DEFAULT>')
       end
     end
 
     context 'with overridden parameters' do
       let :params do
         {
-          :config_prefix                        => 'prefix',
-          :expiration_time                      => '3600',
-          :backend                              => 'oslo_cache.memcache_pool',
-          :proxies                              => ['proxy01:8888', 'proxy02:8888'],
-          :enabled                              => true,
-          :debug_cache_backend                  => false,
-          :memcache_servers                     => ['memcached01:11211', 'memcached02:11211'],
-          :memcache_dead_retry                  => '60',
-          :memcache_socket_timeout              => '300.0',
-          :memcache_pool_maxsize                => '10',
-          :memcache_pool_unused_timeout         => '120',
-          :memcache_pool_connection_get_timeout => '360',
-          :manage_backend_package               => false,
+          :config_prefix                         => 'prefix',
+          :expiration_time                       => '3600',
+          :backend                               => 'oslo_cache.memcache_pool',
+          :proxies                               => ['proxy01:8888', 'proxy02:8888'],
+          :enabled                               => true,
+          :debug_cache_backend                   => false,
+          :memcache_servers                      => ['memcached01:11211', 'memcached02:11211'],
+          :memcache_dead_retry                   => '60',
+          :memcache_socket_timeout               => '300.0',
+          :memcache_pool_maxsize                 => '10',
+          :memcache_pool_unused_timeout          => '120',
+          :memcache_pool_connection_get_timeout  => '360',
+          :manage_backend_package                => false,
+          :constraint_validation_caching         => true,
+          :constraint_validation_expiration_time => '3600',
+          :service_extension_caching             => true,
+          :service_extension_expiration_time     => '3600',
+          :resource_finder_caching               => true,
+          :resource_finder_expiration_time       => '3600',
         }
       end
 
@@ -61,6 +73,12 @@ describe 'heat::cache' do
         is_expected.to contain_heat_config('cache/memcache_pool_unused_timeout').with_value('120')
         is_expected.to contain_heat_config('cache/memcache_pool_connection_get_timeout').with_value('360')
         is_expected.to contain_oslo__cache('heat_config').with_manage_backend_package(false)
+        is_expected.to contain_heat_config('constraint_validation_cache/caching').with_value('true')
+        is_expected.to contain_heat_config('constraint_validation_cache/expiration_time').with_value('3600')
+        is_expected.to contain_heat_config('service_extension_cache/caching').with_value('true')
+        is_expected.to contain_heat_config('service_extension_cache/expiration_time').with_value('3600')
+        is_expected.to contain_heat_config('resource_finder_cache/caching').with_value('true')
+        is_expected.to contain_heat_config('resource_finder_cache/expiration_time').with_value('3600')
       end
     end
   end

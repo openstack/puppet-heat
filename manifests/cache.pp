@@ -82,24 +82,57 @@
 #   Defaults to $::os_service_default
 #
 # [*manage_backend_package*]
-#   (Optional) (Optional) Whether to install the backend package for the cache.
+#   (Optional) Whether to install the backend package for the cache.
 #   Defaults to true
 #
+# [*constraint_validation_caching*]
+#   (Optional) Enable caching in constraint validation. Global caching should
+#   be also enabled to enable this.
+#   Defaults to $::os_service_default
+#
+# [*constraint_validation_expiration_time*]
+#   (Optional) TTL, in seconds, for caching in constraint validation.
+#   Defaults to $::os_service_default
+#
+# [*service_extension_caching*]
+#   (Optional) Enable caching in service extension. Global caching should
+#   be also enabled to enable this.
+#   Defaults to $::os_service_default
+#
+# [*service_extension_expiration_time*]
+#   (Optional) TTL, in seconds, for caching in service extention.
+#   Defaults to $::os_service_default
+#
+# [*resource_finder_caching*]
+#   (Optional) Enable caching in resource finder. Global caching should
+#   be also enabled to enable this.
+#   Defaults to $::os_service_default
+#
+# [*resource_finder_expiration_time*]
+#   (Optional) TTL, in seconds, for caching in resource finder.
+#   Defaults to $::os_service_default
+#
 class heat::cache (
-  $config_prefix                        = $::os_service_default,
-  $expiration_time                      = $::os_service_default,
-  $backend                              = $::os_service_default,
-  $backend_argument                     = $::os_service_default,
-  $proxies                              = $::os_service_default,
-  $enabled                              = $::os_service_default,
-  $debug_cache_backend                  = $::os_service_default,
-  $memcache_servers                     = $::os_service_default,
-  $memcache_dead_retry                  = $::os_service_default,
-  $memcache_socket_timeout              = $::os_service_default,
-  $memcache_pool_maxsize                = $::os_service_default,
-  $memcache_pool_unused_timeout         = $::os_service_default,
-  $memcache_pool_connection_get_timeout = $::os_service_default,
-  $manage_backend_package               = true,
+  $config_prefix                         = $::os_service_default,
+  $expiration_time                       = $::os_service_default,
+  $backend                               = $::os_service_default,
+  $backend_argument                      = $::os_service_default,
+  $proxies                               = $::os_service_default,
+  $enabled                               = $::os_service_default,
+  $debug_cache_backend                   = $::os_service_default,
+  $memcache_servers                      = $::os_service_default,
+  $memcache_dead_retry                   = $::os_service_default,
+  $memcache_socket_timeout               = $::os_service_default,
+  $memcache_pool_maxsize                 = $::os_service_default,
+  $memcache_pool_unused_timeout          = $::os_service_default,
+  $memcache_pool_connection_get_timeout  = $::os_service_default,
+  $manage_backend_package                = true,
+  $constraint_validation_caching         = $::os_service_default,
+  $constraint_validation_expiration_time = $::os_service_default,
+  $service_extension_caching             = $::os_service_default,
+  $service_extension_expiration_time     = $::os_service_default,
+  $resource_finder_caching               = $::os_service_default,
+  $resource_finder_expiration_time       = $::os_service_default,
 ) {
 
   include heat::deps
@@ -119,5 +152,14 @@ class heat::cache (
     memcache_pool_unused_timeout         => $memcache_pool_unused_timeout,
     memcache_pool_connection_get_timeout => $memcache_pool_connection_get_timeout,
     manage_backend_package               => $manage_backend_package,
+  }
+
+  heat_config {
+    'constraint_validation_cache/caching':         value => $constraint_validation_caching;
+    'constraint_validation_cache/expiration_time': value => $constraint_validation_expiration_time;
+    'service_extension_cache/caching':             value => $service_extension_caching;
+    'service_extension_cache/expiration_time':     value => $service_extension_expiration_time;
+    'resource_finder_cache/caching':               value => $resource_finder_caching;
+    'resource_finder_cache/expiration_time':       value => $resource_finder_expiration_time;
   }
 }

@@ -42,7 +42,15 @@ describe 'heat::client' do
         when 'Debian'
           { :client_package_name => 'python3-heatclient' }
         when 'RedHat'
-          { :client_package_name => 'python-heatclient' }
+          if facts[:operatingsystem] == 'Fedora'
+            { :client_package_name => 'python3-heatclient' }
+          else
+            if facts[:operatingsystemmajrelease] > '7'
+              { :client_package_name => 'python3-heatclient' }
+            else
+              { :client_package_name => 'python-heatclient' }
+            end
+          end
         end
       end
 

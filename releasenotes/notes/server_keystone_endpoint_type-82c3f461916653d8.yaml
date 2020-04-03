@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    Added server_keystone_endpoint_type parameter to heat::engine.

@@ -40,11 +40,6 @@
 #   used for stack locking
 #   Defaults to $::os_service_default.
 #
-# [*deferred_auth_method*]
-#   (optional) Select deferred auth method.
-#   Can be "password" or "trusts".
-#   Defaults to $::os_service_default.
-#
 # [*default_software_config_transport*]
 #   (optional) Template default for how the server should receive the metadata
 #   required for software configuration. POLL_SERVER_CFN will allow calls to the
@@ -134,6 +129,13 @@
 #   by user-controlled servers to make calls back to Heat.
 #   Defaults to $::os_service_default
 #
+# DEPRECATED PARAMETERS
+#
+# [*deferred_auth_method*]
+#   (optional) Select deferred auth method.
+#   Can be "password" or "trusts".
+#   Defaults to undef
+#
 class heat::engine (
   $auth_encryption_key,
   $package_ensure                                  = 'present',
@@ -143,7 +145,6 @@ class heat::engine (
   $heat_metadata_server_url                        = $::os_service_default,
   $heat_waitcondition_server_url                   = $::os_service_default,
   $engine_life_check_timeout                       = $::os_service_default,
-  $deferred_auth_method                            = $::os_service_default,
   $default_software_config_transport               = $::os_service_default,
   $default_deployment_signal_transport             = $::os_service_default,
   $default_user_data_format                        = $::os_service_default,
@@ -160,6 +161,8 @@ class heat::engine (
   $plugin_dirs                                     = $::os_service_default,
   $client_retry_limit                              = $::os_service_default,
   $server_keystone_endpoint_type                   = $::os_service_default,
+  # DEPRECATED PARAMETERS
+  $deferred_auth_method                            = undef,
 ) {
 
   include heat::deps
@@ -221,7 +224,6 @@ class heat::engine (
     'DEFAULT/default_deployment_signal_transport':             value => $default_deployment_signal_transport;
     'DEFAULT/default_user_data_format':                        value => $default_user_data_format;
     'DEFAULT/trusts_delegated_roles':                          value => $trusts_delegated_roles;
-    'DEFAULT/deferred_auth_method':                            value => $deferred_auth_method;
     'DEFAULT/max_resources_per_stack':                         value => $max_resources_per_stack;
     'DEFAULT/instance_connection_https_validate_certificates': value => $instance_connection_https_validate_certificates;
     'DEFAULT/instance_connection_is_secure':                   value => $instance_connection_is_secure;
@@ -234,5 +236,12 @@ class heat::engine (
     'DEFAULT/plugin_dirs':                                     value => $plugin_dirs_real;
     'DEFAULT/client_retry_limit':                              value => $client_retry_limit;
     'DEFAULT/server_keystone_endpoint_type':                   value => $server_keystone_endpoint_type;
+  }
+
+  if $deferred_auth_method != undef {
+    warning('deferred_auth_method is deprecated and will be removed in a future release')
+    heat_config {
+      'DEFAULT/deferred_auth_method': value => $deferred_auth_method;
+    }
   }
 }

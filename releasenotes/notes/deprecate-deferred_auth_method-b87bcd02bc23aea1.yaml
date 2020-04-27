@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``heat::engine::deferred_auth_method`` parameters has been deprecated
+    and will be removed in a future release.

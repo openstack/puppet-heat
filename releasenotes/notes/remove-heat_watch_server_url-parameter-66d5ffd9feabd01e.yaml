@@ -1,0 +1,4 @@
+---
+deprecations:
+  - |
+    The heat::engine::heat_watch_server_url parameter has been removed.

@@ -134,12 +134,6 @@
 #   by user-controlled servers to make calls back to Heat.
 #   Defaults to $::os_service_default
 #
-# DEPRECATED PARAMETERS
-#
-# [*heat_watch_server_url*]
-#   (optional) URL of the Heat cloudwatch server
-#   Defaults to undef.
-#
 class heat::engine (
   $auth_encryption_key,
   $package_ensure                                  = 'present',
@@ -166,15 +160,9 @@ class heat::engine (
   $plugin_dirs                                     = $::os_service_default,
   $client_retry_limit                              = $::os_service_default,
   $server_keystone_endpoint_type                   = $::os_service_default,
-  # DEPRECATED PARAMETERS
-  $heat_watch_server_url                           = undef,
 ) {
 
   include heat::deps
-
-  if $heat_watch_server_url {
-    warning('heat_watch_server_url has no effect and will be removed in a future release.')
-  }
 
   # Validate Heat Engine AES key
   # must be either 16, 24, or 32 bytes long

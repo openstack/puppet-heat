@@ -54,12 +54,12 @@ describe 'Puppet::Type.type(:heat_config)' do
  
   it 'should autorequire the package that install the file' do
     catalog = Puppet::Resource::Catalog.new
-    package = Puppet::Type.type(:package).new(:name => 'heat-common')
-    catalog.add_resource package, @heat_config
+    anchor = Puppet::Type.type(:anchor).new(:name => 'heat::install::end')
+    catalog.add_resource anchor, @heat_config
     dependency = @heat_config.autorequire
     expect(dependency.size).to eq(1)
     expect(dependency[0].target).to eq(@heat_config)
-    expect(dependency[0].source).to eq(package)
+    expect(dependency[0].source).to eq(anchor)
   end
 
 end

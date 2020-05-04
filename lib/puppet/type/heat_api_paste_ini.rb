@@ -45,8 +45,8 @@ Puppet::Type.newtype(:heat_api_paste_ini) do
     defaultto('<SERVICE DEFAULT>')
   end
 
-  autorequire(:package) do
-    'heat-common'
+  autorequire(:anchor) do
+    ['heat::install::end']
   end
 
 end

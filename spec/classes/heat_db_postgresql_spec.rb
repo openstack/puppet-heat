@@ -1,17 +1,14 @@
 require 'spec_helper'
 
 describe 'heat::db::postgresql' do
+
   shared_examples_for 'heat::db::postgresql' do
     let :req_params do
-      { :password => 'pw' }
+      { :password => 'heatpass' }
     end
 
     let :pre_condition do
-      "include postgresql::server
-       class { 'heat::keystone::authtoken':
-         password => 'password',
-       }
-       include heat"
+      'include postgresql::server'
     end
 
     context 'with only required parameters' do
@@ -19,9 +16,12 @@ describe 'heat::db::postgresql' do
         req_params
       end
 
-      it { is_expected.to contain_postgresql__server__db('heat').with(
-        :user     => 'heat',
-        :password => 'md5fd5c4fca491370aab732f903e2fb7c99'
+      it { is_expected.to contain_openstacklib__db__postgresql('heat').with(
+        :user       => 'heat',
+        :password   => 'heatpass',
+        :dbname     => 'heat',
+        :encoding   => nil,
+        :privileges => 'ALL',
       )}
     end
 
@@ -33,6 +33,7 @@ describe 'heat::db::postgresql' do
     context "on #{os}" do
       let (:facts) do
         facts.merge(OSDefaults.get_facts({
+          :os_workers => 8,
           :concat_basedir => '/var/lib/puppet/concat'
         }))
       end

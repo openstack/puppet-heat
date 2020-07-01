@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    It is now possible to configure the max_stacks_per_tenant of heat, which
+    by default, is set to 100 in heat. Since 100 stacks per tenant can be a
+    way too small in some setups, it is convenient to be able to configure
+    this value with puppet.

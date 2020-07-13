@@ -20,6 +20,6 @@ class heat::client (
     tag    => 'openstack',
   }
 
-  include '::openstacklib::openstackclient'
+  include openstacklib::openstackclient
 
 }

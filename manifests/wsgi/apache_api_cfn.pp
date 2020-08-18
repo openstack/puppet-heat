@@ -85,6 +85,11 @@
 #     (optional) Name of the WSGI process display-name.
 #     Defaults to undef
 #
+#   [*vhost_custom_fragment*]
+#     (optional) Passes a string of custom configuration
+#     directives to be placed at the end of the vhost configuration.
+#     Default: 'RequestHeader set Content-Type "application/json"'
+#
 # == Dependencies
 #
 #   requires Class['apache'] & Class['heat']
@@ -116,6 +121,8 @@ class heat::wsgi::apache_api_cfn (
   $error_log_file              = undef,
   $custom_wsgi_process_options = {},
   $wsgi_process_display_name   = undef,
+  # Enforce content-type, see https://bugs.launchpad.net/tripleo/+bug/1641589
+  $vhost_custom_fragment       = 'RequestHeader set Content-Type "application/json"',
 ) {
 
   # See custom fragment below
@@ -149,8 +156,7 @@ class heat::wsgi::apache_api_cfn (
     ssl_certs_dir               => $ssl_certs_dir,
     threads                     => $threads,
     priority                    => $priority,
-    # Enforce content-type, see https://bugs.launchpad.net/tripleo/+bug/1641589
-    vhost_custom_fragment       => 'RequestHeader set Content-Type "application/json"',
+    vhost_custom_fragment       => $vhost_custom_fragment,
     custom_wsgi_process_options => $custom_wsgi_process_options,
     access_log_file             => $access_log_file,
     access_log_format           => $access_log_format,

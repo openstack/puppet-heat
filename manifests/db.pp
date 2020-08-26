@@ -38,6 +38,11 @@
 #   before error is raised. Set to -1 to specify an infinite retry count.
 #   Defaults to $::os_service_default
 #
+# [*mysql_enable_ndb*]
+#   (Optional) If True, transparently enables support for handling MySQL
+#   Cluster (NDB).
+#   Defaults to $::os_service_default
+#
 # [*sync_db*]
 #   (Optional) Run db sync on nodes after connection setting has been set.
 #   Defaults to true
@@ -56,6 +61,7 @@ class heat::db (
   $database_retry_interval          = $::os_service_default,
   $database_max_overflow            = $::os_service_default,
   $database_pool_timeout            = $::os_service_default,
+  $mysql_enable_ndb                 = $::os_service_default,
   $database_db_max_retries          = $::os_service_default,
   $sync_db                          = true,
   # DEPRECATED PARAMETERS
@@ -89,6 +95,7 @@ class heat::db (
     retry_interval          => $database_retry_interval_real,
     max_overflow            => $database_max_overflow_real,
     pool_timeout            => $database_pool_timeout,
+    mysql_enable_ndb        => $mysql_enable_ndb,
     db_max_retries          => $database_db_max_retries,
   }
 

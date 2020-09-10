@@ -3,6 +3,6 @@
       - puppet-openstack-check-jobs
       - puppet-openstack-module-unit-jobs
       - puppet-openstack-integration-jobs-scenario003
-      - puppet-openstack-beaker-jobs
+      - puppet-openstack-litmus-jobs
       - tripleo-puppet-undercloud
       - release-notes-jobs-python3

@@ -13,6 +13,7 @@ describe 'heat::db::mysql' do
   end
 
   shared_examples_for 'heat mysql database' do
+    it { is_expected.to contain_class('heat::deps') }
 
     context 'when omiting the required parameter password' do
       before { params.delete(:password) }

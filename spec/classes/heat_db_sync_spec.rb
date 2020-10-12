@@ -4,6 +4,8 @@ describe 'heat::db::sync' do
 
   shared_examples_for 'heat-dbsync' do
 
+    it { is_expected.to contain_class('heat::deps') }
+
     it 'runs heat-manage db_sync' do
       is_expected.to contain_exec('heat-dbsync').with(
         :command     => 'heat-manage --config-file /etc/heat/heat.conf db_sync',

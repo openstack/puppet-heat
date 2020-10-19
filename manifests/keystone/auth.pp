@@ -97,7 +97,7 @@
 #  }
 #
 class heat::keystone::auth (
-  $password                    = false,
+  $password,
   $email                       = 'heat@localhost',
   $auth_name                   = 'heat',
   $service_name                = 'heat',

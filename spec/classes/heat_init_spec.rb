@@ -10,8 +10,6 @@ describe 'heat' do
   let :params do
     {
       :package_ensure        => 'present',
-      :database_connection   => 'mysql+pymysql://user@host/database',
-      :database_idle_timeout => 3600,
       :flavor                => 'keystone',
       :heat_clients_url      => '<SERVICE DEFAULT>',
       :purge_config          => false,

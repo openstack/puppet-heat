@@ -1,0 +1,12 @@
+---
+deprecations:
+  - |
+    The following options have been deprecated, as those options have been
+    moved to heat::db class.
+
+    - ``heat::database_connection``
+    - ``heat::database_idle_timeout``
+    - ``heat::database_max_overflow``
+    - ``heat::database_max_pool_size``
+    - ``heat::database_max_retries``
+    - ``heat::database_retry_interval``

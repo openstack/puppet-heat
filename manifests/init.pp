@@ -193,30 +193,6 @@
 #   (optional) Authentication Endpoint URI for ec2 service.
 #   Defaults to ::os_service_default
 #
-# [*database_connection*]
-#   (optional) Connection url for the heat database.
-#   Defaults to undef.
-#
-# [*database_max_retries*]
-#   (optional) Maximum database connection retries during startup.
-#   Defaults to undef.
-#
-# [*database_idle_timeout*]
-#   (optional) Timeout before idle database connections are reaped.
-#   Defaults to undef.
-#
-# [*database_retry_interval*]
-#   (optional) Interval between retries of opening a database connection.
-#   Defaults to undef.
-#
-# [*database_max_pool_size*]
-#   (optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
-# [*database_max_overflow*]
-#   (optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to: undef.
-
 # [*flavor*]
 #   (optional) Specifies the Authentication method.
 #   Set to 'standalone' to get Heat to work with a remote OpenStack
@@ -288,6 +264,30 @@
 #   (optional) Minimum number of SQL connections to keep open in a pool.
 #   Defaults to undef.
 #
+# [*database_connection*]
+#   (optional) Connection url for the heat database.
+#   Defaults to undef.
+#
+# [*database_max_retries*]
+#   (optional) Maximum database connection retries during startup.
+#   Defaults to undef.
+#
+# [*database_idle_timeout*]
+#   (optional) Timeout before idle database connections are reaped.
+#   Defaults to undef.
+#
+# [*database_retry_interval*]
+#   (optional) Interval between retries of opening a database connection.
+#   Defaults to undef.
+#
+# [*database_max_pool_size*]
+#   (optional) Maximum number of SQL connections to keep open in a pool.
+#   Defaults to undef.
+#
+# [*database_max_overflow*]
+#   (optional) If set, use this value for max_overflow with sqlalchemy.
+#   Defaults to: undef.
+
 class heat(
   $package_ensure                     = 'present',
   $keystone_ec2_uri                   = $::os_service_default,
@@ -324,12 +324,6 @@ class heat(
   $amqp_username                      = $::os_service_default,
   $amqp_password                      = $::os_service_default,
   $host                               = $::os_service_default,
-  $database_connection                = undef,
-  $database_max_retries               = undef,
-  $database_idle_timeout              = undef,
-  $database_retry_interval            = undef,
-  $database_max_pool_size             = undef,
-  $database_max_overflow              = undef,
   $flavor                             = $::os_service_default,
   $region_name                        = $::os_service_default,
   $enable_stack_adopt                 = $::os_service_default,
@@ -351,11 +345,48 @@ class heat(
   $max_stacks_per_tenant              = $::os_service_default,
   # DEPRECATED PARAMETERS
   $database_min_pool_size             = undef,
+  $database_connection                = undef,
+  $database_max_retries               = undef,
+  $database_idle_timeout              = undef,
+  $database_retry_interval            = undef,
+  $database_max_pool_size             = undef,
+  $database_max_overflow              = undef,
 ) {
 
   include heat::db
   include heat::deps
   include heat::params
+
+  if $database_connection != undef {
+    warning('The database_connection parameter is deprecated and will be \
+removed in a future realse. Use heat::db::database_connection instead')
+  }
+
+  if $database_max_retries!= undef {
+    warning('The database_max_retries parameter is deprecated and will be \
+removed in a future realse. Use heat::db::database_max_retries instead')
+  }
+
+  if $database_retry_interval != undef {
+    warning('The database_retry_interval parameter is deprecated and will be \
+removed in a future realse. Use heat::db::database_retry_interval instead')
+  }
+
+  if $database_idle_timeout != undef {
+    warning('The database_idle_timeout parameter is deprecated and will be \
+removed in a future realse. Use heat::db::database_connection_recycle_time \
+instead')
+  }
+
+  if $database_max_pool_size != undef {
+    warning('The database_max_pool_size parameter is deprecated and will be \
+removed in a future realse. Use heat::db::database_max_pool_size instead')
+  }
+
+  if $database_max_overflow != undef {
+    warning('The database_max_overflow parameter is deprecated and will be \
+removed in a future realse. Use heat::db::database_max_overflow instead')
+  }
 
   if $auth_strategy == 'keystone' {
     include heat::keystone::authtoken

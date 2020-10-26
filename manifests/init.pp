@@ -328,7 +328,6 @@ class heat(
   $region_name                        = $::os_service_default,
   $enable_stack_adopt                 = $::os_service_default,
   $enable_stack_abandon               = $::os_service_default,
-  $sync_db                            = undef,
   $max_template_size                  = $::os_service_default,
   $max_json_body_size                 = $::os_service_default,
   $notification_transport_url         = $::os_service_default,
@@ -351,6 +350,7 @@ class heat(
   $database_retry_interval            = undef,
   $database_max_pool_size             = undef,
   $database_max_overflow              = undef,
+  $sync_db                            = undef,
 ) {
 
   include heat::db
@@ -386,6 +386,11 @@ removed in a future realse. Use heat::db::database_max_pool_size instead')
   if $database_max_overflow != undef {
     warning('The database_max_overflow parameter is deprecated and will be \
 removed in a future realse. Use heat::db::database_max_overflow instead')
+  }
+
+  if $sync_db != undef {
+    warning('The sync_db prameter is deprecated and will be removed \
+in a future release. Use heat::db::sync_db instead')
   }
 
   if $auth_strategy == 'keystone' {

@@ -10,3 +10,4 @@ deprecations:
     - ``heat::database_max_pool_size``
     - ``heat::database_max_retries``
     - ``heat::database_retry_interval``
+    - ``heat::sync_db``

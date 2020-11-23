@@ -14,6 +14,7 @@ describe 'heat::db::sync' do
         :refreshonly => 'true',
         :try_sleep   => 5,
         :tries       => 10,
+        :timeout     => 300,
         :logoutput   => 'on_failure',
         :subscribe   => ['Anchor[heat::install::end]',
                          'Anchor[heat::config::end]',
@@ -23,10 +24,11 @@ describe 'heat::db::sync' do
       )
     end
 
-    describe 'overriding extra_params' do
+    describe 'overriding params' do
       let :params do
         {
-          :extra_params => '--config-file /etc/heat/heat01.conf',
+          :extra_params    => '--config-file /etc/heat/heat01.conf',
+          :db_sync_timeout => 750,
         }
       end
 
@@ -38,6 +40,7 @@ describe 'heat::db::sync' do
           :refreshonly => 'true',
           :try_sleep   => 5,
           :tries       => 10,
+          :timeout     => 750,
           :logoutput   => 'on_failure',
           :subscribe   => ['Anchor[heat::install::end]',
                            'Anchor[heat::config::end]',

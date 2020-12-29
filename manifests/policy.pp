@@ -20,12 +20,12 @@
 #   Defaults to empty hash.
 #
 # [*policy_path*]
-#   (Optional) Path to the heat policy.json file
-#   Defaults to /etc/heat/policy.json
+#   (Optional) Path to the heat policy.yaml file
+#   Defaults to /etc/heat/policy.yaml
 #
 class heat::policy (
   $policies    = {},
-  $policy_path = '/etc/heat/policy.json',
+  $policy_path = '/etc/heat/policy.yaml',
 ) {
 
   include heat::deps
@@ -34,9 +34,10 @@ class heat::policy (
   validate_legacy(Hash, 'validate_hash', $policies)
 
   Openstacklib::Policy::Base {
-    file_path  => $policy_path,
-    file_user  => 'root',
-    file_group => $::heat::params::group,
+    file_path   => $policy_path,
+    file_user   => 'root',
+    file_group  => $::heat::params::group,
+    file_format => 'yaml',
   }
 
   create_resources('openstacklib::policy::base', $policies)

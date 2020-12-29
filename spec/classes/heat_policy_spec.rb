@@ -5,7 +5,7 @@ describe 'heat::policy' do
   shared_examples_for 'heat policies' do
     let :params do
       {
-        :policy_path => '/etc/heat/policy.json',
+        :policy_path => '/etc/heat/policy.yaml',
         :policies    => {
           'context_is_admin' => {
             'key'   => 'context_is_admin',
@@ -17,13 +17,14 @@ describe 'heat::policy' do
 
     it 'set up the policies' do
       is_expected.to contain_openstacklib__policy__base('context_is_admin').with({
-        :key        => 'context_is_admin',
-        :value      => 'foo:bar',
-        :file_user  => 'root',
-        :file_group => 'heat',
+        :key         => 'context_is_admin',
+        :value       => 'foo:bar',
+        :file_user   => 'root',
+        :file_group  => 'heat',
+        :file_format => 'yaml',
       })
       is_expected.to contain_oslo__policy('heat_config').with(
-        :policy_file => '/etc/heat/policy.json',
+        :policy_file => '/etc/heat/policy.yaml',
       )
     end
   end

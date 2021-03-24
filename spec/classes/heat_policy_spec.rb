@@ -4,9 +4,10 @@ describe 'heat::policy' do
   shared_examples 'heat::policy' do
     let :params do
       {
-        :enforce_scope => false,
-        :policy_path   => '/etc/heat/policy.yaml',
-        :policies      => {
+        :enforce_scope        => false,
+        :enforce_new_defaults => false,
+        :policy_path          => '/etc/heat/policy.yaml',
+        :policies             => {
           'context_is_admin' => {
             'key'   => 'context_is_admin',
             'value' => 'foo:bar'
@@ -24,8 +25,9 @@ describe 'heat::policy' do
         :file_format => 'yaml',
       })
       is_expected.to contain_oslo__policy('heat_config').with(
-        :enforce_scope => false,
-        :policy_file   => '/etc/heat/policy.yaml',
+        :enforce_scope        => false,
+        :enforce_new_defaults => false,
+        :policy_file          => '/etc/heat/policy.yaml',
       )
     end
   end

@@ -7,6 +7,7 @@ describe 'heat::policy' do
         :enforce_scope        => false,
         :enforce_new_defaults => false,
         :policy_path          => '/etc/heat/policy.yaml',
+        :policy_dirs          => '/etc/heat/policy.d',
         :policies             => {
           'context_is_admin' => {
             'key'   => 'context_is_admin',
@@ -28,6 +29,7 @@ describe 'heat::policy' do
         :enforce_scope        => false,
         :enforce_new_defaults => false,
         :policy_file          => '/etc/heat/policy.yaml',
+        :policy_dirs          => '/etc/heat/policy.d',
       )
     end
   end

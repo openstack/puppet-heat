@@ -28,6 +28,16 @@ class heat::deps {
   # before service startup
   Oslo::Cache<||> -> Anchor['heat::service::begin']
 
+  # On any uwsgi config change, we must restart Heat API.
+  Anchor['heat::config::begin']
+  -> Heat_api_uwsgi_config<||>
+  ~> Anchor['heat::config::end']
+
+  # On any uwsgi config change, we must restart Heat API CFN.
+  Anchor['heat::config::begin']
+  -> Heat_api_uwsgi_config<||>
+  ~> Anchor['heat::config::end']
+
   # all db settings should be applied and all packages should be installed
   # before dbsync starts
   Oslo::Db<||> -> Anchor['heat::dbsync::begin']

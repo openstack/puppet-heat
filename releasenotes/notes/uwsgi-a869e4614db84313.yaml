@@ -1,0 +1,9 @@
+---
+features:
+  - |
+    Two new classes heat::wsgi::uwsgi_api and heat::wsgi::uwsgi_api_cfn
+    exist to allow configuring uwsgi in operating systems that support
+    this (ie: currently Debian). This helps configuring the number of
+    processes, threads and listen socket. Also, two new
+    heat_api_uwsgi_config and heat_api_cfn_uwsgi_config providers now
+    exist.

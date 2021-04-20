@@ -1,4 +1,4 @@
-# == Define: heat::healthcheck
+# == Class: heat::healthcheck
 #
 # Configure oslo_middleware options in healthcheck section
 #

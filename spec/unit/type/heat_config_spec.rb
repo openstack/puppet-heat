@@ -6,7 +6,7 @@ describe 'Puppet::Type.type(:heat_config)' do
     @heat_config = Puppet::Type.type(:heat_config).new(:name => 'DEFAULT/foo', :value => 'bar')
   end
 
-  it 'should require a name' do 
+  it 'should require a name' do
     expect {
       Puppet::Type.type(:heat_config).new({})
     }.to raise_error(Puppet::Error, 'Title or name must be provided')
@@ -30,12 +30,12 @@ describe 'Puppet::Type.type(:heat_config)' do
 
   it 'should accept a valid value' do
     @heat_config[:value] = 'bar'
-    expect(@heat_config[:value]).to eq('bar')
+    expect(@heat_config[:value]).to eq(['bar'])
   end
 
   it 'should not accept a value with whitespace' do
     @heat_config[:value] = 'b ar'
-    expect(@heat_config[:value]).to eq('b ar')
+    expect(@heat_config[:value]).to eq(['b ar'])
   end
 
   it 'should accept valid ensure values' do
@@ -51,7 +51,6 @@ describe 'Puppet::Type.type(:heat_config)' do
     }.to raise_error(Puppet::Error, /Invalid value/)
   end
 
- 
   it 'should autorequire the package that install the file' do
     catalog = Puppet::Resource::Catalog.new
     anchor = Puppet::Type.type(:anchor).new(:name => 'heat::install::end')

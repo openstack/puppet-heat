@@ -87,10 +87,6 @@ describe 'heat' do
       is_expected.to contain_heat_config('DEFAULT/max_template_size').with_value('<SERVICE DEFAULT>')
     end
 
-    it 'configures max_stacks_per_tenant' do
-      is_expected.to contain_heat_config('DEFAULT/max_stacks_per_tenant').with_value('<SERVICE DEFAULT>')
-    end
-
     it 'configures max_json_body_size' do
       is_expected.to contain_heat_config('DEFAULT/max_json_body_size').with_value('<SERVICE DEFAULT>')
     end

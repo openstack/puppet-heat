@@ -249,11 +249,6 @@
 #     take for evaluation.
 #   Defaults to $::os_service_default.
 #
-# [*max_stacks_per_tenant*]
-#   (optional) Maximum number of stacks any one tenant may have active at one
-#     time.
-#   Defaults to $::os_service_default.
-#
 # DEPRECATED PARAMETERS
 #
 # [*database_min_pool_size*]
@@ -287,6 +282,11 @@
 # [*amqp_allow_insecure_clients*]
 #   (Optional) Accept clients using either SSL or plain TCP
 #   Defaults to undef.
+#
+# [*max_stacks_per_tenant*]
+#   (optional) Maximum number of stacks any one tenant may have active at one
+#   time.
+#   Defaults to undef
 #
 class heat(
   $package_ensure                     = 'present',
@@ -340,7 +340,6 @@ class heat(
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
-  $max_stacks_per_tenant              = $::os_service_default,
   # DEPRECATED PARAMETERS
   $database_min_pool_size             = undef,
   $database_connection                = undef,
@@ -351,6 +350,7 @@ class heat(
   $database_max_overflow              = undef,
   $sync_db                            = undef,
   $amqp_allow_insecure_clients        = undef,
+  $max_stacks_per_tenant              = undef,
 ) {
 
   include heat::db
@@ -396,6 +396,12 @@ removed in a future realse. Use heat::db::database_max_overflow instead')
   if $sync_db != undef {
     warning('The sync_db prameter is deprecated and will be removed \
 in a future release. Use heat::db::sync_db instead')
+  }
+
+  if $max_stacks_per_tenant != undef {
+    warning('The max_stacks_per_tenant parameter is deprecated. \
+Use heat::engine::max_stacks_per_tenant instead.')
+    include heat::engine
   }
 
   if $auth_strategy == 'keystone' {
@@ -479,7 +485,6 @@ in a future release. Use heat::db::sync_db instead')
     'DEFAULT/region_name_for_services':     value => $region_name;
     'DEFAULT/enable_stack_abandon':         value => $enable_stack_abandon;
     'DEFAULT/enable_stack_adopt':           value => $enable_stack_adopt;
-    'DEFAULT/max_stacks_per_tenant':        value => $max_stacks_per_tenant;
     'ec2authtoken/auth_uri':                value => $keystone_ec2_uri;
     'paste_deploy/flavor':                  value => $flavor;
     'yaql/limit_iterators':                 value => $yaql_limit_iterators;

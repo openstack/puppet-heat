@@ -91,6 +91,7 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/default_user_data_format').with_value( expected_params[:default_user_data_format] ) }
       it { is_expected.to contain_heat_config('DEFAULT/instance_connection_is_secure').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/instance_connection_https_validate_certificates').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('DEFAULT/max_stacks_per_tenant').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/max_resources_per_stack').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/num_engine_workers').with_value( expected_params[:num_engine_workers] ) }
       it { is_expected.to contain_heat_config('DEFAULT/convergence_engine').with_value( expected_params[:convergence_engine] ) }
@@ -100,6 +101,17 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/client_retry_limit').with_value( expected_params[:client_retry_limit] ) }
       it { is_expected.to contain_heat_config('DEFAULT/server_keystone_endpoint_type').with_value( expected_params[:server_keystone_endpoint_type] ) }
+    end
+
+    context 'with max limits are defined' do
+      before do
+        params.merge!({
+          :max_stacks_per_tenant   => 512,
+          :max_resources_per_stack => 1000,
+        })
+      end
+      it { is_expected.to contain_heat_config('DEFAULT/max_stacks_per_tenant').with_value(512) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_resources_per_stack').with_value(1000) }
     end
 
     context 'with disabled service managing' do

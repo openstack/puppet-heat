@@ -88,6 +88,11 @@
 #   (Optional) Instance connection to CFN/CW API validate certs if SSL is used.
 #   Defaults to $::os_service_default
 #
+# [*max_stacks_per_tenant*]
+#   (optional) Maximum number of stacks any one tenant may have active at one
+#   time.
+#   Defaults to $::os_service_default.
+#
 # [*max_resources_per_stack*]
 #   (Optional) Maximum resources allowed per top-level stack.
 #   Defaults to $::os_service_default
@@ -151,6 +156,7 @@ class heat::engine (
   $trusts_delegated_roles                          = $::os_service_default,
   $instance_connection_is_secure                   = $::os_service_default,
   $instance_connection_https_validate_certificates = $::os_service_default,
+  $max_stacks_per_tenant                           = $::os_service_default,
   $max_resources_per_stack                         = $::os_service_default,
   $num_engine_workers                              = $::os_workers_heat_engine,
   $convergence_engine                              = $::os_service_default,
@@ -214,6 +220,8 @@ class heat::engine (
     tag        => 'heat-service',
   }
 
+  $max_stacks_per_tenant_real = pick($::heat::max_stacks_per_tenant, $max_stacks_per_tenant)
+
   heat_config {
     'DEFAULT/auth_encryption_key':                             value => $auth_encryption_key, secret => true;
     'DEFAULT/heat_stack_user_role':                            value => $heat_stack_user_role;
@@ -224,6 +232,7 @@ class heat::engine (
     'DEFAULT/default_deployment_signal_transport':             value => $default_deployment_signal_transport;
     'DEFAULT/default_user_data_format':                        value => $default_user_data_format;
     'DEFAULT/trusts_delegated_roles':                          value => $trusts_delegated_roles;
+    'DEFAULT/max_stacks_per_tenant':                           value => $max_stacks_per_tenant_real;
     'DEFAULT/max_resources_per_stack':                         value => $max_resources_per_stack;
     'DEFAULT/instance_connection_https_validate_certificates': value => $instance_connection_https_validate_certificates;
     'DEFAULT/instance_connection_is_secure':                   value => $instance_connection_is_secure;

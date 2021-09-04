@@ -36,12 +36,18 @@
 #   (Optional) Path to the heat policy folder
 #   Defaults to $::os_service_default
 #
+# [*purge_config*]
+#   (optional) Whether to set only the specified policy rules in the policy
+#    file.
+#    Defaults to false.
+#
 class heat::policy (
   $enforce_scope        = $::os_service_default,
   $enforce_new_defaults = $::os_service_default,
   $policies             = {},
   $policy_path          = '/etc/heat/policy.yaml',
   $policy_dirs          = $::os_service_default,
+  $purge_config         = false,
 ) {
 
   include heat::deps
@@ -49,14 +55,16 @@ class heat::policy (
 
   validate_legacy(Hash, 'validate_hash', $policies)
 
-  Openstacklib::Policy::Base {
-    file_path   => $policy_path,
-    file_user   => 'root',
-    file_group  => $::heat::params::group,
-    file_format => 'yaml',
+  $policy_parameters = {
+    policies     => $policies,
+    policy_path  => $policy_path,
+    file_user    => 'root',
+    file_group   => $::heat::params::group,
+    file_format  => 'yaml',
+    purge_config => $purge_config,
   }
 
-  create_resources('openstacklib::policy::base', $policies)
+  create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
 
   oslo::policy { 'heat_config':
     enforce_scope        => $enforce_scope,

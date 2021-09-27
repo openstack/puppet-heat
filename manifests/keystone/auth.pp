@@ -40,7 +40,7 @@
 #
 # [*service_description*]
 #   (Optional) Description for keystone service.
-#   Defaults to 'Openstack Orchestration Service'.
+#   Defaults to 'OpenStack Orchestration Service'.
 #
 # [*region*]
 #   (Optional) Region for endpoint.
@@ -102,7 +102,7 @@ class heat::keystone::auth (
   $auth_name                   = 'heat',
   $service_name                = 'heat',
   $service_type                = 'orchestration',
-  $service_description         = 'Openstack Orchestration Service',
+  $service_description         = 'OpenStack Orchestration Service',
   $region                      = 'RegionOne',
   $tenant                      = 'services',
   $configure_endpoint          = true,

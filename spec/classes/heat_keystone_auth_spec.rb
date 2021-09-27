@@ -1,172 +1,100 @@
+#
+# Unit tests for heat::keystone::auth
+#
+
 require 'spec_helper'
 
 describe 'heat::keystone::auth' do
+  shared_examples_for 'heat::keystone::auth' do
+    context 'with default class parameters' do
+      let :params do
+        { :password => 'heat_password' }
+      end
 
-  let :params do
-    {:password => 'heat-passw0rd'}
-  end
+      it { is_expected.to contain_keystone__resource__service_identity('heat').with(
+        :configure_user      => true,
+        :configure_user_role => true,
+        :configure_endpoint  => true,
+        :service_name        => 'heat',
+        :service_type        => 'orchestration',
+        :service_description => 'Openstack Orchestration Service',
+        :region              => 'RegionOne',
+        :auth_name           => 'heat',
+        :password            => 'heat_password',
+        :email               => 'heat@localhost',
+        :tenant              => 'services',
+        :public_url          => 'http://127.0.0.1:8004/v1/%(tenant_id)s',
+        :internal_url        => 'http://127.0.0.1:8004/v1/%(tenant_id)s',
+        :admin_url           => 'http://127.0.0.1:8004/v1/%(tenant_id)s',
+      ) }
 
-  shared_examples_for 'heat keystone auth' do
-
-    context 'without the required password parameter' do
-      before { params.delete(:password) }
-      it { expect { is_expected.to raise_error(Puppet::Error) } }
+      it { is_expected.to contain_keystone_role('heat_stack_user').with_ensure('present') }
+      it { is_expected.to_not contain_keystone_role('heat_stack_owner').with_ensure('present') }
     end
 
-    context 'with service disabled' do
-      before do
-        params.merge!({:configure_service => false})
-      end
-      it { is_expected.to_not contain_keystone_service('heat::orchestration') }
-    end
-
-    context 'with overridden parameters' do
-      before do
-        params.merge!({
-          :password                  => 'heat-passw0rd',
-          :email                     => 'heat@localhost',
-          :auth_name                 => 'heat',
-          :configure_endpoint        => true,
-          :service_type              => 'orchestration',
-          :region                    => 'RegionOne',
-          :tenant                    => 'services',
-          :configure_user_role       => true,
-          :public_url                => 'http://127.0.0.1:8004/v1/%(tenant_id)s',
-          :admin_url                 => 'http://127.0.0.1:8004/v1/%(tenant_id)s',
-          :internal_url              => 'http://127.0.0.1:8004/v1/%(tenant_id)s',
-          :configure_delegated_roles => false,
-          :heat_stack_user_role      => 'HeatUser::foobaz@::foobaz',
-        })
-      end
-
-      it 'configures heat user' do
-        is_expected.to contain_keystone_user( params[:auth_name] ).with(
-          :ensure   => 'present',
-          :password => params[:password],
-          :email    => params[:email],
-        )
-      end
-
-      it 'configures heat user roles' do
-        is_expected.to contain_keystone_user_role("#{params[:auth_name]}@#{params[:tenant]}").with(
-          :ensure  => 'present',
-          :roles   => ['admin']
-        )
-      end
-
-      it 'configures heat stack_user role' do
-        is_expected.to contain_keystone_role("HeatUser::foobaz@::foobaz").with(
-          :ensure  => 'present'
-        )
-      end
-
-      it 'configures heat service' do
-        is_expected.to contain_keystone_service("#{params[:auth_name]}::#{params[:service_type]}").with(
-          :ensure      => 'present',
-          :description => 'Openstack Orchestration Service'
-        )
-      end
-
-      it 'configure heat endpoints' do
-        is_expected.to contain_keystone_endpoint("#{params[:region]}/#{params[:auth_name]}::#{params[:service_type]}").with(
-          :ensure       => 'present',
-          :public_url   => params[:public_url],
-          :admin_url    => params[:admin_url],
-          :internal_url => params[:internal_url]
-        )
-      end
-    end
-
-    context 'when overriding auth and service name' do
-      before do
-        params.merge!({
-          :auth_name => 'heaty',
-          :service_name => 'heaty'
-        })
-      end
-      it 'configures correct user name' do
-        is_expected.to contain_keystone_user('heaty')
-      end
-      it 'configures correct user role' do
-        is_expected.to contain_keystone_user_role('heaty@services')
-      end
-      it 'configures correct service name' do
-        is_expected.to contain_keystone_service('heaty::orchestration')
-      end
-      it 'configures correct endpoint name' do
-        is_expected.to contain_keystone_endpoint('RegionOne/heaty::orchestration')
-      end
-    end
-
-    context 'when disabling user configuration' do
-      before do
-        params.merge!( :configure_user => false )
-      end
-
-      it { is_expected.to_not contain_keystone_user('heat') }
-      it { is_expected.to contain_keystone_user_role('heat@services') }
-
-      it { is_expected.to contain_keystone_service('heat::orchestration').with(
-        :ensure       => 'present',
-        :description  => 'Openstack Orchestration Service'
-      )}
-    end
-
-    context 'when disabling user and role configuration' do
-      before do
-        params.merge!(
-          :configure_user       => false,
-          :configure_user_role  => false
-        )
-      end
-
-      it { is_expected.to_not contain_keystone_user('heat') }
-      it { is_expected.to_not contain_keystone_user_role('heat@services') }
-
-      it { is_expected.to contain_keystone_service('heat::orchestration').with(
-        :ensure       => 'present',
-        :description  => 'Openstack Orchestration Service'
-      )}
-    end
-
-    context 'when configuring delegated roles' do
-      before do
-        params.merge!({
+    context 'when overriding parameters' do
+      let :params do
+        { :password                  => 'heat_password',
+          :auth_name                 => 'alt_heat',
+          :email                     => 'alt_heat@alt_localhost',
+          :tenant                    => 'alt_service',
+          :configure_endpoint        => false,
+          :configure_user            => false,
+          :configure_user_role       => false,
+          :service_description       => 'Alternative Openstack Orchestration Service',
+          :service_name              => 'alt_service',
+          :service_type              => 'alt_orchestration',
+          :region                    => 'RegionTwo',
+          :public_url                => 'https://10.10.10.10:80',
+          :internal_url              => 'http://10.10.10.11:81',
+          :admin_url                 => 'http://10.10.10.12:81',
+          :heat_stack_user_role      => 'alt_heat_stack_user',
           :configure_delegated_roles => true,
-        })
+          :trusts_delegated_roles    => ['alt_heat_stack_owner'] }
       end
-      it 'configures delegated roles' do
-        is_expected.to contain_keystone_role("heat_stack_owner").with(
-          :ensure  => 'present'
-        )
-      end
+
+      it { is_expected.to contain_keystone__resource__service_identity('heat').with(
+        :configure_user      => false,
+        :configure_user_role => false,
+        :configure_endpoint  => false,
+        :service_name        => 'alt_service',
+        :service_type        => 'alt_orchestration',
+        :service_description => 'Alternative Openstack Orchestration Service',
+        :region              => 'RegionTwo',
+        :auth_name           => 'alt_heat',
+        :password            => 'heat_password',
+        :email               => 'alt_heat@alt_localhost',
+        :tenant              => 'alt_service',
+        :public_url          => 'https://10.10.10.10:80',
+        :internal_url        => 'http://10.10.10.11:81',
+        :admin_url           => 'http://10.10.10.12:81',
+      ) }
+
+      it { is_expected.to contain_keystone_role('alt_heat_stack_user').with_ensure('present') }
+      it { is_expected.to contain_keystone_role('alt_heat_stack_owner').with_ensure('present') }
     end
 
-    context 'when not managing heat_stack_user_role' do
-      before do
-        params.merge!({
-          :heat_stack_user_role        => 'HeatUser::foobaz@::foobaz',
-          :manage_heat_stack_user_role => false
-        })
+    context 'when role management parameters overridden' do
+      let :params do
+        { :password                    => 'heat_password',
+          :configure_delegated_roles   => true,
+          :manage_heat_stack_user_role => false }
       end
 
-      it 'doesnt manage the heat_stack_user_role' do
-        is_expected.to_not contain_keystone_user_role(params[:heat_stack_user_role])
-      end
+      it { is_expected.to_not contain_keystone_role('heat_stack_user').with_ensure('present') }
+      it { is_expected.to contain_keystone_role('heat_stack_owner').with_ensure('present') }
     end
-
   end
 
   on_supported_os({
-    :supported_os   => OSDefaults.get_supported_os
+    :supported_os => OSDefaults.get_supported_os
   }).each do |os,facts|
     context "on #{os}" do
       let (:facts) do
         facts.merge!(OSDefaults.get_facts())
       end
 
-      it_behaves_like 'heat keystone auth'
+      it_behaves_like 'heat::keystone::auth'
     end
   end
-
 end

@@ -452,22 +452,18 @@ Use heat::engine::max_stacks_per_tenant instead.')
     password              => $amqp_password,
   }
 
-  $www_authenticate_uri = $::heat::keystone::authtoken::www_authenticate_uri
-  $auth_url = $::heat::keystone::authtoken::auth_url
-  $keystone_username = $::heat::keystone::authtoken::username
-  $keystone_password = $::heat::keystone::authtoken::password
-  $keystone_project_domain_name = $::heat::keystone::authtoken::project_domain_name
-  $keystone_user_domain_name = $::heat::keystone::authtoken::user_domain_name
+  if !defined(Class[heat::trustee]) {
+    warning('The heat:trustee class will be required to set trustee opiton in a future release')
+    include heat::trustee
+  }
+  # TODO(tkajinam): Remove this when we remove the above logic
+  heat_config {
+    'trustee/project_domain_name': ensure => absent;
+  }
 
   heat_config {
-    'trustee/auth_type':           value => 'password';
-    'trustee/auth_url':            value => $auth_url;
-    'trustee/username':            value => $keystone_username;
-    'trustee/password':            value => $keystone_password, secret => true;
-    'trustee/project_domain_name': value => $keystone_project_domain_name;
-    'trustee/user_domain_name':    value => $keystone_user_domain_name;
-    'clients_heat/url':            value => $heat_clients_url;
-    'clients/endpoint_type':       value => $heat_clients_endpoint_type;
+    'clients_heat/url':      value => $heat_clients_url;
+    'clients/endpoint_type': value => $heat_clients_endpoint_type;
   }
 
   if (!is_service_default($enable_stack_adopt)) {

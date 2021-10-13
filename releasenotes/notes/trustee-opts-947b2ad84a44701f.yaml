@@ -1,0 +1,12 @@
+---
+features:
+  - |
+    The new ``heat::trustee`` class has been added. This class supports
+    parameters define in the ``trustee`` section.
+
+deprecations:
+  - |
+    The ``heat::trustee`` class should be included to manage ``trustee``
+    option. This class is included by the ``heat`` class and the parameters are
+    defined automatically based on the ``heat::keystone::authtoken`` class to
+    keep compatibility but this behavior will be removed in a future release.

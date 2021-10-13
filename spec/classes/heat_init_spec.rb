@@ -91,10 +91,6 @@ describe 'heat' do
       is_expected.to contain_heat_config('DEFAULT/max_json_body_size').with_value('<SERVICE DEFAULT>')
     end
 
-    it 'configures project_domain_*' do
-      is_expected.to contain_heat_config('trustee/project_domain_name').with_value( 'Default' )
-    end
-
     it 'configures user_domain_*' do
       is_expected.to contain_heat_config('trustee/user_domain_name').with_value( 'Default' )
     end
@@ -317,12 +313,10 @@ describe 'heat' do
   shared_examples_for "with custom keystone project_domain_* and user_domain_*" do
     before do
       params.merge!({
-        :keystone_project_domain_name => 'domain1',
-        :keystone_user_domain_name    => 'domain1',
+        :keystone_user_domain_name => 'domain1',
       })
     end
     it 'configures project_domain_* and user_domain_*' do
-      is_expected.to contain_heat_config('trustee/project_domain_name').with_value("domain1");
       is_expected.to contain_heat_config('trustee/user_domain_name').with_value("domain1");
     end
   end

@@ -105,7 +105,7 @@ class heat::wsgi::apache_api_cfn (
   $servername                  = $::fqdn,
   $bind_host                   = undef,
   $path                        = '/',
-  $ssl                         = true,
+  $ssl                         = undef,
   $workers                     = $::os_workers,
   $ssl_cert                    = undef,
   $ssl_key                     = undef,
@@ -124,6 +124,11 @@ class heat::wsgi::apache_api_cfn (
   # Enforce content-type, see https://bugs.launchpad.net/tripleo/+bug/1641589
   $vhost_custom_fragment       = 'RequestHeader set Content-Type "application/json"',
 ) {
+
+  if $ssl == undef {
+    warning('Default of the ssl parameter will be changed in a future release')
+  }
+  $ssl_real = pick($ssl, true)
 
   # See custom fragment below
   include apache
@@ -145,7 +150,7 @@ class heat::wsgi::apache_api_cfn (
     servername                  => $servername,
     bind_host                   => $bind_host,
     path                        => $path,
-    ssl                         => $ssl,
+    ssl                         => $ssl_real,
     workers                     => $workers,
     ssl_cert                    => $ssl_cert,
     ssl_key                     => $ssl_key,

@@ -104,7 +104,7 @@ class heat::wsgi::apache_api (
   $servername                  = $::fqdn,
   $bind_host                   = undef,
   $path                        = '/',
-  $ssl                         = true,
+  $ssl                         = undef,
   $workers                     = $::os_workers,
   $ssl_cert                    = undef,
   $ssl_key                     = undef,
@@ -122,12 +122,18 @@ class heat::wsgi::apache_api (
   $wsgi_process_display_name   = undef,
   $vhost_custom_fragment       = undef,
 ) {
+
+  if $ssl == undef {
+    warning('Default of the ssl parameter will be changed in a future release')
+  }
+  $ssl_real = pick($ssl, true)
+
   heat::wsgi::apache { 'api':
     port                        => $port,
     servername                  => $servername,
     bind_host                   => $bind_host,
     path                        => $path,
-    ssl                         => $ssl,
+    ssl                         => $ssl_real,
     workers                     => $workers,
     ssl_cert                    => $ssl_cert,
     ssl_key                     => $ssl_key,

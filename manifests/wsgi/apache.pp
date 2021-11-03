@@ -108,7 +108,7 @@ define heat::wsgi::apache (
   $servername                  = $::fqdn,
   $bind_host                   = undef,
   $path                        = '/',
-  $ssl                         = true,
+  $ssl                         = undef,
   $workers                     = $::os_workers,
   $ssl_cert                    = undef,
   $ssl_key                     = undef,
@@ -129,11 +129,17 @@ define heat::wsgi::apache (
   if $title !~ /^api(|_cfn)$/ {
     fail('The valid options are api, api_cfn')
   }
+
+  if $ssl == undef {
+    warning('Default of the ssl parameter will be changed in a future release')
+  }
+  $ssl_real = pick($ssl, true)
+
   include heat::deps
   include heat::params
   include apache
   include apache::mod::wsgi
-  if $ssl {
+  if $ssl_real {
     include apache::mod::ssl
   }
 
@@ -144,7 +150,7 @@ define heat::wsgi::apache (
     path                        => $path,
     priority                    => $priority,
     servername                  => $servername,
-    ssl                         => $ssl,
+    ssl                         => $ssl_real,
     ssl_ca                      => $ssl_ca,
     ssl_cert                    => $ssl_cert,
     ssl_certs_dir               => $ssl_certs_dir,

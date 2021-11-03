@@ -1,0 +1,10 @@
+---
+upgrade:
+  - |
+    Default value of the following three parameters will be changed from
+    ``true`` to ``false`` in a future release. Make sure the parameter is set
+    to the desired value.
+
+    - ``heat::wsgi::apache::ssl``
+    - ``heat::wsgi::apache_api::ssl``
+    - ``heat::wsgi::apache_api_cfn::ssl``

@@ -81,17 +81,8 @@ describe 'heat::api_cfn' do
           :enabled        => false })
       end
 
-      it 'configures heat-api-cfn service' do
-
-        is_expected.to contain_service('heat-api-cfn').with(
-          :ensure     => nil,
-          :name       => platform_params[:api_cfn_service_name],
-          :enable     => false,
-          :hasstatus  => true,
-          :hasrestart => true,
-          :tag        => 'heat-service',
-        )
-        is_expected.to contain_service('heat-api-cfn').that_subscribes_to(nil)
+      it 'does not configure heat-api-cfn service' do
+        is_expected.to_not contain_service('heat-api-cfn')
       end
     end
 

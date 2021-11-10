@@ -94,32 +94,32 @@ class heat::api (
     } else {
       $service_ensure = 'stopped'
     }
-  }
 
-  if $service_name == $::heat::params::api_service_name {
-    service { 'heat-api':
-      ensure     => $service_ensure,
-      name       => $::heat::params::api_service_name,
-      enable     => $enabled,
-      hasstatus  => true,
-      hasrestart => true,
-      tag        => 'heat-service',
-    }
-  } elsif $service_name == 'httpd' {
-    include apache::params
-    service { 'heat-api':
-      ensure => 'stopped',
-      name   => $::heat::params::api_service_name,
-      enable => false,
-      tag    => ['heat-service'],
-    }
-    Service <| title == 'httpd' |> { tag +> 'heat-service' }
+    if $service_name == $::heat::params::api_service_name {
+      service { 'heat-api':
+        ensure     => $service_ensure,
+        name       => $::heat::params::api_service_name,
+        enable     => $enabled,
+        hasstatus  => true,
+        hasrestart => true,
+        tag        => 'heat-service',
+      }
+    } elsif $service_name == 'httpd' {
+      include apache::params
+      service { 'heat-api':
+        ensure => 'stopped',
+        name   => $::heat::params::api_service_name,
+        enable => false,
+        tag    => ['heat-service'],
+      }
+      Service <| title == 'httpd' |> { tag +> 'heat-service' }
 
-    # we need to make sure heat-api/eventlet is stopped before trying to start apache
-    Service['heat-api'] -> Service[$service_name]
-  } else {
-    fail("Invalid service_name. Either heat-api/openstack-heat-api for \
+      # we need to make sure heat-api/eventlet is stopped before trying to start apache
+      Service['heat-api'] -> Service[$service_name]
+    } else {
+      fail("Invalid service_name. Either heat-api/openstack-heat-api for \
 running as a standalone service, or httpd for being run by a httpd server")
+    }
   }
 
   heat_config {

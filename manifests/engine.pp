@@ -209,15 +209,15 @@ class heat::engine (
     } else {
       $service_ensure = 'stopped'
     }
-  }
 
-  service { 'heat-engine':
-    ensure     => $service_ensure,
-    name       => $::heat::params::engine_service_name,
-    enable     => $enabled,
-    hasstatus  => true,
-    hasrestart => true,
-    tag        => 'heat-service',
+    service { 'heat-engine':
+      ensure     => $service_ensure,
+      name       => $::heat::params::engine_service_name,
+      enable     => $enabled,
+      hasstatus  => true,
+      hasrestart => true,
+      tag        => 'heat-service',
+    }
   }
 
   $max_stacks_per_tenant_real = pick($::heat::max_stacks_per_tenant, $max_stacks_per_tenant)

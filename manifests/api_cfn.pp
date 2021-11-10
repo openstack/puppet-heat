@@ -97,32 +97,32 @@ class heat::api_cfn (
     } else {
       $service_ensure = 'stopped'
     }
-  }
 
-  if $service_name == $::heat::params::api_cfn_service_name {
-    service { 'heat-api-cfn':
-      ensure     => $service_ensure,
-      name       => $::heat::params::api_cfn_service_name,
-      enable     => $enabled,
-      hasstatus  => true,
-      hasrestart => true,
-      tag        => 'heat-service',
-    }
-  } elsif $service_name == 'httpd' {
-    include apache::params
-    service { 'heat-api-cfn':
-      ensure => 'stopped',
-      name   => $::heat::params::api_cfn_service_name,
-      enable => false,
-      tag    => ['heat-service'],
-    }
-    Service <| title == 'httpd' |> { tag +> 'heat-service' }
+    if $service_name == $::heat::params::api_cfn_service_name {
+      service { 'heat-api-cfn':
+        ensure     => $service_ensure,
+        name       => $::heat::params::api_cfn_service_name,
+        enable     => $enabled,
+        hasstatus  => true,
+        hasrestart => true,
+        tag        => 'heat-service',
+      }
+    } elsif $service_name == 'httpd' {
+      include apache::params
+      service { 'heat-api-cfn':
+        ensure => 'stopped',
+        name   => $::heat::params::api_cfn_service_name,
+        enable => false,
+        tag    => ['heat-service'],
+      }
+      Service <| title == 'httpd' |> { tag +> 'heat-service' }
 
-    # we need to make sure heat-api-cfn/eventlet is stopped before trying to start apache
-    Service['heat-api-cfn'] -> Service[$service_name]
-  } else {
-    fail("Invalid service_name. Either heat-api-cfn/openstack-heat-api-cfn for \
+      # we need to make sure heat-api-cfn/eventlet is stopped before trying to start apache
+      Service['heat-api-cfn'] -> Service[$service_name]
+    } else {
+      fail("Invalid service_name. Either heat-api-cfn/openstack-heat-api-cfn for \
 running as a standalone service, or httpd for being run by a httpd server")
+    }
   }
 
   heat_config {

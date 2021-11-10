@@ -121,14 +121,7 @@ describe 'heat::engine' do
           :enabled        => false })
       end
 
-      it { is_expected.to contain_service('heat-engine').with(
-        :ensure     => nil,
-        :name       => platform_params[:service_name],
-        :enable     => false,
-        :hasstatus  => 'true',
-        :hasrestart => 'true',
-        :tag        => 'heat-service',
-      ) }
+      it { is_expected.to_not contain_service('heat-engine') }
     end
 
     context 'with plugin_dirs value set' do

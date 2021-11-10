@@ -81,17 +81,8 @@ describe 'heat::api' do
           :enabled        => false })
       end
 
-      it 'configures heat-api service' do
-
-        is_expected.to contain_service('heat-api').with(
-          :ensure     => nil,
-          :name       => platform_params[:api_service_name],
-          :enable     => false,
-          :hasstatus  => true,
-          :hasrestart => true,
-          :tag        => 'heat-service',
-        )
-        is_expected.to contain_service('heat-api').that_subscribes_to(nil)
+      it 'does not configure heat-api service' do
+        is_expected.to_not contain_service('heat-api')
       end
     end
 

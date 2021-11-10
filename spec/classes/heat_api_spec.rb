@@ -27,6 +27,8 @@ describe 'heat::api' do
       it { is_expected.to contain_heat_config('heat_api/bind_port').with_value( params[:bind_port] ) }
       it { is_expected.to contain_heat_config('heat_api/workers').with_value( params[:workers] ) }
 
+      it { is_expected.to contain_heat_config('heat_api/cert_file').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('heat_api/key_file').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'with SSL socket options set' do

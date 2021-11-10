@@ -27,6 +27,8 @@ describe 'heat::api_cfn' do
       it { is_expected.to contain_heat_config('heat_api_cfn/bind_port').with_value( params[:bind_port] ) }
       it { is_expected.to contain_heat_config('heat_api_cfn/workers').with_value( params[:workers] ) }
 
+      it { is_expected.to contain_heat_config('heat_api_cfn/cert_file').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('heat_api_cfn/key_file').with_value('<SERVICE DEFAULT>') }
     end
 
     context 'with SSL socket options set' do

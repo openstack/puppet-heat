@@ -133,5 +133,10 @@ running as a standalone service, or httpd for being run by a httpd server")
       'heat_api/cert_file': value => $cert_file;
       'heat_api/key_file':  value => $key_file;
     }
+  } else {
+    heat_config {
+      'heat_api/cert_file': value => $::os_service_default;
+      'heat_api/key_file':  value => $::os_service_default;
+    }
   }
 }

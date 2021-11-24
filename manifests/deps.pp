@@ -35,7 +35,7 @@ class heat::deps {
 
   # On any uwsgi config change, we must restart Heat API CFN.
   Anchor['heat::config::begin']
-  -> Heat_api_uwsgi_config<||>
+  -> Heat_api_cfn_uwsgi_config<||>
   ~> Anchor['heat::config::end']
 
   # all db settings should be applied and all packages should be installed

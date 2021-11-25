@@ -50,6 +50,18 @@
 #   (Optional) Tenant for heat user.
 #   Defaults to 'services'.
 #
+# [*roles*]
+#   (Optional) List of roles assigned to heat user.
+#   Defaults to ['admin']
+#
+# [*system_scope*]
+#   (Optional) Scope for system operations.
+#   Defaults to 'all'
+#
+# [*system_roles*]
+#   (Optional) List of system roles assigned to heat user.
+#   Defaults to []
+#
 # [*trusts_delegated_roles*]
 #    (Optional) Array of trustor roles to be delegated to heat.
 #    Defaults to ['heat_stack_owner']
@@ -105,6 +117,9 @@ class heat::keystone::auth (
   $service_description         = 'OpenStack Orchestration Service',
   $region                      = 'RegionOne',
   $tenant                      = 'services',
+  $roles                       = ['admin'],
+  $system_scope                = 'all',
+  $system_roles                = [],
   $configure_endpoint          = true,
   $configure_service           = true,
   $configure_user              = true,
@@ -122,6 +137,13 @@ class heat::keystone::auth (
 
   validate_legacy(String, 'validate_string', $password)
 
+  Keystone_user_role<| name == "${auth_name}@${tenant}" |> -> Anchor['heat::service::end']
+  Keystone_user_role<| name == "${auth_name}@::::${system_scope}" |> -> Anchor['heat::service::end']
+
+  if $configure_endpoint {
+    Keystone_endpoint["${region}/${service_name}::${service_type}"] -> Anchor['heat::service::end']
+  }
+
   keystone::resource::service_identity { 'heat':
     configure_user      => $configure_user,
     configure_user_role => $configure_user_role,
@@ -135,13 +157,12 @@ class heat::keystone::auth (
     password            => $password,
     email               => $email,
     tenant              => $tenant,
+    roles               => $roles,
+    system_scope        => $system_scope,
+    system_roles        => $system_roles,
     public_url          => $public_url,
     admin_url           => $admin_url,
     internal_url        => $internal_url,
-  }
-
-  if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] ~> Anchor['heat::service::end']
   }
 
   if $manage_heat_stack_user_role {

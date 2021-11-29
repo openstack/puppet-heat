@@ -28,6 +28,11 @@ class heat::deps {
   # before service startup
   Oslo::Cache<||> -> Anchor['heat::service::begin']
 
+  # policy config should occur in the config block also.
+  Anchor['heat::config::begin']
+  -> Openstacklib::Policy<||>
+  ~> Anchor['heat::config::end']
+
   # On any uwsgi config change, we must restart Heat API.
   Anchor['heat::config::begin']
   -> Heat_api_uwsgi_config<||>

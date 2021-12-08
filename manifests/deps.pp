@@ -24,6 +24,11 @@ class heat::deps {
   ~> Service<| tag == 'heat-service' |>
   ~> anchor { 'heat::service::end': }
 
+  # paste-api.ini config should occur in the config block also.
+  Anchor['heat::config::begin']
+  -> Heat_api_paste_ini<||>
+  ~> Anchor['heat::config::end']
+
   # all cache settings should be applied and all packages should be installed
   # before service startup
   Oslo::Cache<||> -> Anchor['heat::service::begin']

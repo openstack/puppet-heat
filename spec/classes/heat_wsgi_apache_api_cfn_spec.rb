@@ -24,7 +24,8 @@ describe 'heat::wsgi::apache_api_cfn' do
         :custom_wsgi_process_options => {},
         :access_log_file             => false,
         :access_log_format           => false,
-        :vhost_custom_fragment       => 'RequestHeader set Content-Type "application/json"',)
+        :vhost_custom_fragment       => nil,
+        :request_headers             => ['set Content-Type "application/json"'],)
       }
     end
   end

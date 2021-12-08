@@ -89,6 +89,10 @@
 #     (optional) Additional vhost configuration, if applicable.
 #     Defaults to undef
 #
+#   [*request_headers*]
+#     (optional) Modifies collected request headers in various ways.
+#     Defaults to undef
+#
 # == Dependencies
 #
 #   requires Class['apache'] & Class['heat']
@@ -121,6 +125,7 @@ class heat::wsgi::apache_api (
   $custom_wsgi_process_options = {},
   $wsgi_process_display_name   = undef,
   $vhost_custom_fragment       = undef,
+  $request_headers             = undef,
 ) {
 
   if $ssl == undef {
@@ -150,5 +155,6 @@ class heat::wsgi::apache_api (
     error_log_file              => $error_log_file,
     wsgi_process_display_name   => $wsgi_process_display_name,
     vhost_custom_fragment       => $vhost_custom_fragment,
+    request_headers             => $request_headers,
   }
 }

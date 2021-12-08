@@ -93,6 +93,10 @@
 #     (optional) Name of the WSGI process display-name.
 #     Defaults to undef
 #
+#   [*request_headers*]
+#     (optional) Modifies collected request headers in various ways.
+#     Defaults to undef
+#
 # == Dependencies
 #
 #   requires Class['apache'] & Class['heat']
@@ -125,6 +129,7 @@ define heat::wsgi::apache (
   $error_log_file              = undef,
   $custom_wsgi_process_options = {},
   $wsgi_process_display_name   = undef,
+  $request_headers             = undef,
 ) {
   if $title !~ /^api(|_cfn)$/ {
     fail('The valid options are api, api_cfn')
@@ -174,5 +179,6 @@ define heat::wsgi::apache (
     access_log_file             => $access_log_file,
     access_log_format           => $access_log_format,
     error_log_file              => $error_log_file,
+    request_headers             => $request_headers,
   }
 }

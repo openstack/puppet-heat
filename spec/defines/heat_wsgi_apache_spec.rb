@@ -30,6 +30,7 @@ describe 'heat::wsgi::apache' do
           'wsgi_script_dir'             => platform_params[:wsgi_script_dir],
           'wsgi_script_file'            => "heat_#{title}",
           'allow_encoded_slashes'       => 'on',
+          'request_headers'             => nil,
         )}
         it { is_expected.to contain_concat("#{platform_params[:httpd_ports_file]}") }
       end

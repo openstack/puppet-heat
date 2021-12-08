@@ -1,0 +1,13 @@
+---
+features:
+  - |
+    Now puppet-heat supports overiding ``RequestHeader`` statements in apache
+    vhost configuration. Use the new ``request_headers`` parameter to define
+    the configuration value.
+
+upgrade:
+  - |
+    Default value of ``heat::wsgi::apache_api_cfn::vhost_custom_fragment`` has
+    been updated to ``undef`` and now the new ``request_headers`` parameter
+    is used to define the default ``RequestHeader`` statement. Please update
+    these parameters accordingly.

@@ -108,7 +108,6 @@ class heat::api_cfn (
         tag        => 'heat-service',
       }
     } elsif $service_name == 'httpd' {
-      include apache::params
       service { 'heat-api-cfn':
         ensure => 'stopped',
         name   => $::heat::params::api_cfn_service_name,

@@ -105,7 +105,6 @@ class heat::api (
         tag        => 'heat-service',
       }
     } elsif $service_name == 'httpd' {
-      include apache::params
       service { 'heat-api':
         ensure => 'stopped',
         name   => $::heat::params::api_service_name,

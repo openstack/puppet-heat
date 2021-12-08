@@ -14,9 +14,6 @@ describe 'heat::wsgi::apache' do
       let (:title) { 'api' }
       it { is_expected.to contain_class('heat::deps') }
       it { is_expected.to contain_class('heat::params') }
-      it { is_expected.to contain_class('apache') }
-      it { is_expected.to contain_class('apache::mod::wsgi') }
-      it { is_expected.to contain_class('apache::mod::ssl') }
 
       context 'with default parameters' do
         it { is_expected.to contain_openstacklib__wsgi__apache("heat_#{title}_wsgi").with(
@@ -32,7 +29,6 @@ describe 'heat::wsgi::apache' do
           'allow_encoded_slashes'       => 'on',
           'request_headers'             => nil,
         )}
-        it { is_expected.to contain_concat("#{platform_params[:httpd_ports_file]}") }
       end
 
       context 'with bind host' do
@@ -86,18 +82,14 @@ describe 'heat::wsgi::apache' do
       let(:platform_params) do
         case facts[:osfamily]
         when 'Debian'
-          { :httpd_service_name       => 'apache2',
-            :httpd_ports_file         => '/etc/apache2/ports.conf',
-            :wsgi_script_dir          => '/usr/lib/cgi-bin/heat',
-            :script_source_api        => '/usr/bin/heat-wsgi-api',
-            :script_source_cfn        => '/usr/bin/heat-wsgi-api-cfn',
+          { :wsgi_script_dir   => '/usr/lib/cgi-bin/heat',
+            :script_source_api => '/usr/bin/heat-wsgi-api',
+            :script_source_cfn => '/usr/bin/heat-wsgi-api-cfn',
           }
         when 'RedHat'
-          { :httpd_service_name       => 'httpd',
-            :httpd_ports_file         => '/etc/httpd/conf/ports.conf',
-            :wsgi_script_dir          => '/var/www/cgi-bin/heat',
-            :script_source_api        => '/usr/bin/heat-wsgi-api',
-            :script_source_cfn        => '/usr/bin/heat-wsgi-api-cfn',
+          { :wsgi_script_dir   => '/var/www/cgi-bin/heat',
+            :script_source_api => '/usr/bin/heat-wsgi-api',
+            :script_source_cfn => '/usr/bin/heat-wsgi-api-cfn',
           }
         end
       end

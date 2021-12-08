@@ -142,11 +142,6 @@ define heat::wsgi::apache (
 
   include heat::deps
   include heat::params
-  include apache
-  include apache::mod::wsgi
-  if $ssl_real {
-    include apache::mod::ssl
-  }
 
   ::openstacklib::wsgi::apache { "heat_${title}_wsgi":
     bind_host                   => $bind_host,

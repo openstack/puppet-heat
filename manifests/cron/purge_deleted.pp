@@ -79,8 +79,7 @@ class heat::cron::purge_deleted (
     hour        => $hour,
     monthday    => $monthday,
     month       => $month,
-    weekday     => $weekday
+    weekday     => $weekday,
+    require     => Anchor['heat::dbsync::end']
   }
-
-  Package<| tag == 'heat-package' |> -> Cron['heat-manage purge_deleted']
 }

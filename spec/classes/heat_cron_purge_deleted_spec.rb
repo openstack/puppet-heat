@@ -35,9 +35,9 @@ describe 'heat::cron::purge_deleted' do
           :hour        => params[:hour],
           :monthday    => params[:monthday],
           :month       => params[:month],
-          :weekday     => params[:weekday]
+          :weekday     => params[:weekday],
+          :require     => 'Anchor[heat::dbsync::end]'
         )
-        is_expected.to contain_package('heat-common').that_comes_before('Cron[heat-manage purge_deleted]')
       end
     end
 
@@ -58,9 +58,9 @@ describe 'heat::cron::purge_deleted' do
           :hour        => params[:hour],
           :monthday    => params[:monthday],
           :month       => params[:month],
-          :weekday     => params[:weekday]
+          :weekday     => params[:weekday],
+          :require     => 'Anchor[heat::dbsync::end]'
         )
-        is_expected.to contain_package('heat-common').that_comes_before('Cron[heat-manage purge_deleted]')
       end
     end
 
@@ -71,7 +71,7 @@ describe 'heat::cron::purge_deleted' do
         )
       end
 
-      it 'configures a cron with delay' do
+      it 'disables the cron job' do
         is_expected.to contain_cron('heat-manage purge_deleted').with(
           :ensure      => params[:ensure],
           :command     => "heat-manage purge_deleted -g days 1 >>#{params[:destination]} 2>&1",
@@ -81,9 +81,9 @@ describe 'heat::cron::purge_deleted' do
           :hour        => params[:hour],
           :monthday    => params[:monthday],
           :month       => params[:month],
-          :weekday     => params[:weekday]
+          :weekday     => params[:weekday],
+          :require     => 'Anchor[heat::dbsync::end]'
         )
-        is_expected.to contain_package('heat-common').that_comes_before('Cron[heat-manage purge_deleted]')
       end
     end
 

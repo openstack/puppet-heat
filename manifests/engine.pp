@@ -231,7 +231,7 @@ class heat::engine (
     'DEFAULT/default_software_config_transport':               value => $default_software_config_transport;
     'DEFAULT/default_deployment_signal_transport':             value => $default_deployment_signal_transport;
     'DEFAULT/default_user_data_format':                        value => $default_user_data_format;
-    'DEFAULT/trusts_delegated_roles':                          value => $trusts_delegated_roles;
+    'DEFAULT/trusts_delegated_roles':                          value => join(any2array($trusts_delegated_roles), ',');
     'DEFAULT/max_stacks_per_tenant':                           value => $max_stacks_per_tenant_real;
     'DEFAULT/max_resources_per_stack':                         value => $max_resources_per_stack;
     'DEFAULT/instance_connection_https_validate_certificates': value => $instance_connection_https_validate_certificates;

@@ -35,11 +35,6 @@
 #   (optional) URL of the Heat waitcondition server
 #   Defaults to $::os_service_default.
 #
-# [*engine_life_check_timeout*]
-#   (optional) RPC timeout (in seconds) for the engine liveness check that is
-#   used for stack locking
-#   Defaults to $::os_service_default.
-#
 # [*default_software_config_transport*]
 #   (optional) Template default for how the server should receive the metadata
 #   required for software configuration. POLL_SERVER_CFN will allow calls to the
@@ -88,6 +83,48 @@
 #   configure the keystone roles.
 #   Defaults to $::os_service_default.
 #
+# [*action_retry_limit*]
+#   (Optional) Number of times to retry to bring a resource to a non-error
+#   state.
+#   Defaults to $::os_service_default.
+#
+# [*client_retry_limit*]
+#   (Optional) Number of times to retry when a client encounters an expected
+#   intermittent error.
+#   Defaults to $::os_service_default.
+#
+# [*max_server_name_length*]
+#   (Optional) Maximum length of a server name to be used in nova.
+#   Defaults to $::os_service_default.
+#
+# [*max_interface_check_attempts*]
+#   (Optional) Number of times to check whether an interface has been attached
+#   or detached.
+#   Defaults to $::os_service_default.
+#
+# [*event_purge_batch_size*]
+#   (Optional) Controls how many events will be pruned whenever a stack's
+#   events are purged.
+#   Defaults to $::os_service_default.
+#
+# [*max_events_per_stack*]
+#   (Optional) Rough number of maximum events that will be available per stack.
+#   Defaults to $::os_service_default.
+#
+# [*stack_action_timeout*]
+#   (Optional) Timeout in seconds for stack action.
+#   Defaults to $::os_service_default.
+#
+# [*error_wait_time*]
+#   (Optional) The amount of time in seconds after an error has occurred that
+#   tasks may continue to run before being cancelled.
+#   Defaults to $::os_service_default.
+#
+# [*engine_life_check_timeout*]
+#   (optional) RPC timeout (in seconds) for the engine liveness check that is
+#   used for stack locking
+#   Defaults to $::os_service_default.
+#
 # [*instance_connection_is_secure*]
 #   (Optional) Instance connection to CFN/CW API via https.
 #   Defaults to $::os_service_default
@@ -129,10 +166,6 @@
 #   (Optional) List of directories to search for plug-ins.
 #   Defaults to $::os_service_default
 #
-# [*client_retry_limit*]
-#   (Optional) Number of times to retry when client encounters a transient error.
-#   Defaults to $::os_service_default
-#
 # [*server_keystone_endpoint_type*]
 #   (Optional) If set, is used to control which authentication endpoint is used
 #   by user-controlled servers to make calls back to Heat.
@@ -153,7 +186,6 @@ class heat::engine (
   $heat_stack_user_role                            = $::os_service_default,
   $heat_metadata_server_url                        = $::os_service_default,
   $heat_waitcondition_server_url                   = $::os_service_default,
-  $engine_life_check_timeout                       = $::os_service_default,
   $default_software_config_transport               = $::os_service_default,
   $default_deployment_signal_transport             = $::os_service_default,
   $default_user_data_format                        = $::os_service_default,
@@ -164,13 +196,21 @@ class heat::engine (
   $instance_connection_https_validate_certificates = $::os_service_default,
   $max_stacks_per_tenant                           = $::os_service_default,
   $max_resources_per_stack                         = $::os_service_default,
+  $action_retry_limit                              = $::os_service_default,
+  $client_retry_limit                              = $::os_service_default,
+  $max_server_name_length                          = $::os_service_default,
+  $max_interface_check_attempts                    = $::os_service_default,
+  $event_purge_batch_size                          = $::os_service_default,
+  $max_events_per_stack                            = $::os_service_default,
+  $stack_action_timeout                            = $::os_service_default,
+  $error_wait_time                                 = $::os_service_default,
+  $engine_life_check_timeout                       = $::os_service_default,
   $num_engine_workers                              = $::os_workers_heat_engine,
   $convergence_engine                              = $::os_service_default,
   $environment_dir                                 = $::os_service_default,
   $template_dir                                    = $::os_service_default,
   $max_nested_stack_depth                          = $::os_service_default,
   $plugin_dirs                                     = $::os_service_default,
-  $client_retry_limit                              = $::os_service_default,
   $server_keystone_endpoint_type                   = $::os_service_default,
   # DEPRECATED PARAMETERS
   $deferred_auth_method                            = undef,
@@ -232,7 +272,6 @@ class heat::engine (
     'DEFAULT/heat_stack_user_role':                            value => $heat_stack_user_role;
     'DEFAULT/heat_metadata_server_url':                        value => $heat_metadata_server_url;
     'DEFAULT/heat_waitcondition_server_url':                   value => $heat_waitcondition_server_url;
-    'DEFAULT/engine_life_check_timeout':                       value => $engine_life_check_timeout;
     'DEFAULT/default_software_config_transport':               value => $default_software_config_transport;
     'DEFAULT/default_deployment_signal_transport':             value => $default_deployment_signal_transport;
     'DEFAULT/default_user_data_format':                        value => $default_user_data_format;
@@ -241,6 +280,15 @@ class heat::engine (
     'DEFAULT/trusts_delegated_roles':                          value => join(any2array($trusts_delegated_roles), ',');
     'DEFAULT/max_stacks_per_tenant':                           value => $max_stacks_per_tenant_real;
     'DEFAULT/max_resources_per_stack':                         value => $max_resources_per_stack;
+    'DEFAULT/action_retry_limit':                              value => $action_retry_limit;
+    'DEFAULT/client_retry_limit':                              value => $client_retry_limit;
+    'DEFAULT/max_server_name_length':                          value => $max_server_name_length;
+    'DEFAULT/max_interface_check_attempts':                    value => $max_interface_check_attempts;
+    'DEFAULT/event_purge_batch_size':                          value => $event_purge_batch_size;
+    'DEFAULT/max_events_per_stack':                            value => $max_events_per_stack;
+    'DEFAULT/stack_action_timeout':                            value => $stack_action_timeout;
+    'DEFAULT/error_wait_time':                                 value => $error_wait_time;
+    'DEFAULT/engine_life_check_timeout':                       value => $engine_life_check_timeout;
     'DEFAULT/instance_connection_https_validate_certificates': value => $instance_connection_https_validate_certificates;
     'DEFAULT/instance_connection_is_secure':                   value => $instance_connection_is_secure;
     'DEFAULT/num_engine_workers':                              value => $num_engine_workers;
@@ -249,7 +297,6 @@ class heat::engine (
     'DEFAULT/template_dir':                                    value => $template_dir;
     'DEFAULT/max_nested_stack_depth':                          value => $max_nested_stack_depth;
     'DEFAULT/plugin_dirs':                                     value => $plugin_dirs_real;
-    'DEFAULT/client_retry_limit':                              value => $client_retry_limit;
     'DEFAULT/server_keystone_endpoint_type':                   value => $server_keystone_endpoint_type;
   }
 

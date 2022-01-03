@@ -8,19 +8,26 @@ describe 'heat::engine' do
       :heat_stack_user_role                => '<SERVICE DEFAULT>',
       :heat_metadata_server_url            => 'http://127.0.0.1:8000',
       :heat_waitcondition_server_url       => 'http://127.0.0.1:8000/v1/waitcondition',
-      :engine_life_check_timeout           => '<SERVICE DEFAULT>',
       :default_software_config_transport   => '<SERVICE DEFAULT>',
       :default_deployment_signal_transport => '<SERVICE DEFAULT>',
       :default_user_data_format            => '<SERVICE DEFAULT>',
       :reauthentication_auth_method        => '<SERVICE DEFAULT>',
       :allow_trusts_redelegation           => '<SERVICE DEFAULT>',
       :trusts_delegated_roles              => '<SERVICE DEFAULT>',
+      :action_retry_limit                  => '<SERVICE DEFAULT>',
+      :client_retry_limit                  => '<SERVICE DEFAULT>',
+      :max_server_name_length              => '<SERVICE DEFAULT>',
+      :max_interface_check_attempts        => '<SERVICE DEFAULT>',
+      :event_purge_batch_size              => '<SERVICE DEFAULT>',
+      :max_events_per_stack                => '<SERVICE DEFAULT>',
+      :stack_action_timeout                => '<SERVICE DEFAULT>',
+      :error_wait_time                     => '<SERVICE DEFAULT>',
+      :engine_life_check_timeout           => '<SERVICE DEFAULT>',
       :convergence_engine                  => '<SERVICE DEFAULT>',
       :environment_dir                     => '<SERVICE DEFAULT>',
       :template_dir                        => '<SERVICE DEFAULT>',
       :max_nested_stack_depth              => '<SERVICE DEFAULT>',
       :plugin_dirs                         => '<SERVICE DEFAULT>',
-      :client_retry_limit                  => '<SERVICE DEFAULT>',
       :server_keystone_endpoint_type       => '<SERVICE DEFAULT>',
     }
   end
@@ -40,7 +47,6 @@ describe 'heat::engine' do
         :heat_stack_user_role                => 'heat_stack_user',
         :heat_metadata_server_url            => 'http://127.0.0.1:8000',
         :heat_waitcondition_server_url       => 'http://127.0.0.1:8000/v1/waitcondition',
-        :engine_life_check_timeout           => '2',
         :deferred_auth_method                => 'trusts',
         :default_software_config_transport   => 'POLL_SERVER_CFN',
         :default_deployment_signal_transport => 'CFN_SIGNAL',
@@ -48,6 +54,15 @@ describe 'heat::engine' do
         :reauthentication_auth_method        => 'trusts',
         :allow_trusts_redelegation           => false,
         :trusts_delegated_roles              => ['role1', 'role2'],
+        :action_retry_limit                  => 5,
+        :client_retry_limit                  => 2,
+        :max_server_name_length              => 53,
+        :max_interface_check_attempts        => 10,
+        :event_purge_batch_size              => 200,
+        :max_events_per_stack                => 1000,
+        :stack_action_timeout                => 3600,
+        :error_wait_time                     => 240,
+        :engine_life_check_timeout           => 2,
         :num_engine_workers                  => '4',
         :convergence_engine                  => false,
         :environment_dir                     => '/etc/heat/environment.d',
@@ -85,7 +100,6 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/heat_stack_user_role').with_value( expected_params[:heat_stack_user_role] ) }
       it { is_expected.to contain_heat_config('DEFAULT/heat_metadata_server_url').with_value( expected_params[:heat_metadata_server_url] ) }
       it { is_expected.to contain_heat_config('DEFAULT/heat_waitcondition_server_url').with_value( expected_params[:heat_waitcondition_server_url] ) }
-      it { is_expected.to contain_heat_config('DEFAULT/engine_life_check_timeout').with_value( expected_params[:engine_life_check_timeout] ) }
       it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
       it { is_expected.to contain_heat_config('DEFAULT/default_software_config_transport').with_value( expected_params[:default_software_config_transport] ) }
       it { is_expected.to contain_heat_config('DEFAULT/default_deployment_signal_transport').with_value( expected_params[:default_deployment_signal_transport] ) }
@@ -97,6 +111,15 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/instance_connection_https_validate_certificates').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/max_stacks_per_tenant').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/max_resources_per_stack').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('DEFAULT/action_retry_limit').with_value( expected_params[:action_retry_limit] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/client_retry_limit').with_value( expected_params[:client_retry_limit] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_server_name_length').with_value( expected_params[:max_server_name_length] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_interface_check_attempts').with_value( expected_params[:max_interface_check_attempts] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/event_purge_batch_size').with_value( expected_params[:event_purge_batch_size] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_events_per_stack').with_value( expected_params[:max_events_per_stack] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/stack_action_timeout').with_value( expected_params[:stack_action_timeout] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/error_wait_time').with_value( expected_params[:error_wait_time] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/engine_life_check_timeout').with_value( expected_params[:engine_life_check_timeout] ) }
       it { is_expected.to contain_heat_config('DEFAULT/num_engine_workers').with_value( expected_params[:num_engine_workers] ) }
       it { is_expected.to contain_heat_config('DEFAULT/convergence_engine').with_value( expected_params[:convergence_engine] ) }
       it { is_expected.to contain_heat_config('DEFAULT/environment_dir').with_value( expected_params[:environment_dir] ) }

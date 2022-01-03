@@ -1,0 +1,12 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``heat::engine`` class.
+
+    - ``action_retry_limit``
+    - ``max_server_name_length``
+    - ``max_interface_check_attempts``
+    - ``event_purge_batch_size``
+    - ``max_events_per_stack``
+    - ``stack_action_timeout``
+    - ``error_wait_time``

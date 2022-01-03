@@ -9,12 +9,13 @@ describe 'heat::engine' do
       :heat_metadata_server_url            => 'http://127.0.0.1:8000',
       :heat_waitcondition_server_url       => 'http://127.0.0.1:8000/v1/waitcondition',
       :engine_life_check_timeout           => '<SERVICE DEFAULT>',
-      :trusts_delegated_roles              => '<SERVICE DEFAULT>',
       :default_software_config_transport   => '<SERVICE DEFAULT>',
       :default_deployment_signal_transport => '<SERVICE DEFAULT>',
       :default_user_data_format            => '<SERVICE DEFAULT>',
-      :convergence_engine                  => '<SERVICE DEFAULT>',
       :reauthentication_auth_method        => '<SERVICE DEFAULT>',
+      :allow_trusts_redelegation           => '<SERVICE DEFAULT>',
+      :trusts_delegated_roles              => '<SERVICE DEFAULT>',
+      :convergence_engine                  => '<SERVICE DEFAULT>',
       :environment_dir                     => '<SERVICE DEFAULT>',
       :template_dir                        => '<SERVICE DEFAULT>',
       :max_nested_stack_depth              => '<SERVICE DEFAULT>',
@@ -40,14 +41,15 @@ describe 'heat::engine' do
         :heat_metadata_server_url            => 'http://127.0.0.1:8000',
         :heat_waitcondition_server_url       => 'http://127.0.0.1:8000/v1/waitcondition',
         :engine_life_check_timeout           => '2',
-        :trusts_delegated_roles              => ['role1', 'role2'],
         :deferred_auth_method                => 'trusts',
         :default_software_config_transport   => 'POLL_SERVER_CFN',
         :default_deployment_signal_transport => 'CFN_SIGNAL',
         :default_user_data_format            => 'HEAT_CFNTOOLS',
+        :reauthentication_auth_method        => 'trusts',
+        :allow_trusts_redelegation           => false,
+        :trusts_delegated_roles              => ['role1', 'role2'],
         :num_engine_workers                  => '4',
         :convergence_engine                  => false,
-        :reauthentication_auth_method        => 'trusts',
         :environment_dir                     => '/etc/heat/environment.d',
         :template_dir                        => '/etc/heat/templates',
         :client_retry_limit                  => 2,
@@ -84,18 +86,19 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/heat_metadata_server_url').with_value( expected_params[:heat_metadata_server_url] ) }
       it { is_expected.to contain_heat_config('DEFAULT/heat_waitcondition_server_url').with_value( expected_params[:heat_waitcondition_server_url] ) }
       it { is_expected.to contain_heat_config('DEFAULT/engine_life_check_timeout').with_value( expected_params[:engine_life_check_timeout] ) }
-      it { is_expected.to contain_heat_config('DEFAULT/trusts_delegated_roles').with_value( [expected_params[:trusts_delegated_roles]].join(',') ) }
       it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
       it { is_expected.to contain_heat_config('DEFAULT/default_software_config_transport').with_value( expected_params[:default_software_config_transport] ) }
       it { is_expected.to contain_heat_config('DEFAULT/default_deployment_signal_transport').with_value( expected_params[:default_deployment_signal_transport] ) }
       it { is_expected.to contain_heat_config('DEFAULT/default_user_data_format').with_value( expected_params[:default_user_data_format] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/reauthentication_auth_method').with_value( expected_params[:reauthentication_auth_method] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/allow_trusts_redelegation').with_value( expected_params[:allow_trusts_redelegation] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/trusts_delegated_roles').with_value( [expected_params[:trusts_delegated_roles]].join(',') ) }
       it { is_expected.to contain_heat_config('DEFAULT/instance_connection_is_secure').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/instance_connection_https_validate_certificates').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/max_stacks_per_tenant').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/max_resources_per_stack').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/num_engine_workers').with_value( expected_params[:num_engine_workers] ) }
       it { is_expected.to contain_heat_config('DEFAULT/convergence_engine').with_value( expected_params[:convergence_engine] ) }
-      it { is_expected.to contain_heat_config('DEFAULT/reauthentication_auth_method').with_value( expected_params[:reauthentication_auth_method] ) }
       it { is_expected.to contain_heat_config('DEFAULT/environment_dir').with_value( expected_params[:environment_dir] ) }
       it { is_expected.to contain_heat_config('DEFAULT/template_dir').with_value( expected_params[:template_dir] ) }
       it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value('<SERVICE DEFAULT>') }

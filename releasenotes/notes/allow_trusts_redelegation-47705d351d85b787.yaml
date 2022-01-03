@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``heat::engine`` class now supports the ``allow_trusts_redelegation``
+    parameter.

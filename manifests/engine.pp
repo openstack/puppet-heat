@@ -74,6 +74,14 @@
 #   Allowed values: HEAT_CFNTOOLS, RAW, SOFTWARE_CONFIG
 #   Defaults to $::os_service_default.
 #
+# [*reauthentication_auth_method*]
+#   (Optional) Re-authentication method on token expiry.
+#   Defaults to $::os_service_default.
+#
+# [*allow_trusts_redelegation*]
+#   (Optional) Create trusts with redelegation enabled.
+#   Defaults to $::os_service_default.
+#
 # [*trusts_delegated_roles*]
 #   (optional) Array of trustor roles to be delegated to heat.
 #   This value is also used by heat::keystone::auth if it is set to
@@ -103,10 +111,6 @@
 #
 # [*convergence_engine*]
 #   (Optional) Enables engine with convergence architecture.
-#   Defaults to $::os_service_default.
-#
-# [*reauthentication_auth_method*]
-#   (Optional) Re-authentication method on token expiry.
 #   Defaults to $::os_service_default.
 #
 # [*environment_dir*]
@@ -153,6 +157,8 @@ class heat::engine (
   $default_software_config_transport               = $::os_service_default,
   $default_deployment_signal_transport             = $::os_service_default,
   $default_user_data_format                        = $::os_service_default,
+  $reauthentication_auth_method                    = $::os_service_default,
+  $allow_trusts_redelegation                       = $::os_service_default,
   $trusts_delegated_roles                          = $::os_service_default,
   $instance_connection_is_secure                   = $::os_service_default,
   $instance_connection_https_validate_certificates = $::os_service_default,
@@ -160,7 +166,6 @@ class heat::engine (
   $max_resources_per_stack                         = $::os_service_default,
   $num_engine_workers                              = $::os_workers_heat_engine,
   $convergence_engine                              = $::os_service_default,
-  $reauthentication_auth_method                    = $::os_service_default,
   $environment_dir                                 = $::os_service_default,
   $template_dir                                    = $::os_service_default,
   $max_nested_stack_depth                          = $::os_service_default,
@@ -231,6 +236,8 @@ class heat::engine (
     'DEFAULT/default_software_config_transport':               value => $default_software_config_transport;
     'DEFAULT/default_deployment_signal_transport':             value => $default_deployment_signal_transport;
     'DEFAULT/default_user_data_format':                        value => $default_user_data_format;
+    'DEFAULT/reauthentication_auth_method':                    value => $reauthentication_auth_method;
+    'DEFAULT/allow_trusts_redelegation':                       value => $allow_trusts_redelegation;
     'DEFAULT/trusts_delegated_roles':                          value => join(any2array($trusts_delegated_roles), ',');
     'DEFAULT/max_stacks_per_tenant':                           value => $max_stacks_per_tenant_real;
     'DEFAULT/max_resources_per_stack':                         value => $max_resources_per_stack;
@@ -238,7 +245,6 @@ class heat::engine (
     'DEFAULT/instance_connection_is_secure':                   value => $instance_connection_is_secure;
     'DEFAULT/num_engine_workers':                              value => $num_engine_workers;
     'DEFAULT/convergence_engine':                              value => $convergence_engine;
-    'DEFAULT/reauthentication_auth_method':                    value => $reauthentication_auth_method;
     'DEFAULT/environment_dir':                                 value => $environment_dir;
     'DEFAULT/template_dir':                                    value => $template_dir;
     'DEFAULT/max_nested_stack_depth':                          value => $max_nested_stack_depth;

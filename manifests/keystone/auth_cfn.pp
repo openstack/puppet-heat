@@ -50,6 +50,18 @@
 #   (Optional) Tenant for heat-cfn user.
 #   Defaults to 'services'.
 #
+# [*roles*]
+#   (Optional) List of roles assigned to heat user.
+#   Defaults to ['admin']
+#
+# [*system_scope*]
+#   (Optional) Scope for system operations.
+#   Defaults to 'all'
+#
+# [*system_roles*]
+#   (Optional) List of system roles assigned to heat user.
+#   Defaults to []
+#
 # [*public_url*]
 #   (optional) The endpoint's public url. (Defaults to 'http://127.0.0.1:8000/v1')
 #   This url should *not* contain any trailing '/'.
@@ -79,6 +91,9 @@ class heat::keystone::auth_cfn (
   $service_type         = 'cloudformation',
   $region               = 'RegionOne',
   $tenant               = 'services',
+  $roles                = ['admin'],
+  $system_scope         = 'all',
+  $system_roles         = [],
   $configure_endpoint   = true,
   $configure_service    = true,
   $configure_user       = true,
@@ -91,6 +106,13 @@ class heat::keystone::auth_cfn (
   include heat::deps
 
   validate_legacy(String, 'validate_string', $password)
+
+  Keystone_user_role<| name == "${auth_name}@${tenant}" |> -> Anchor['heat::service::end']
+  Keystone_user_role<| name == "${auth_name}@::::${system_scope}" |> -> Anchor['heat::service::end']
+
+  if $configure_endpoint {
+    Keystone_endpoint["${region}/${service_name}::${service_type}"] -> Anchor['heat::service::end']
+  }
 
   keystone::resource::service_identity { 'heat-cfn':
     configure_user      => $configure_user,
@@ -105,13 +127,12 @@ class heat::keystone::auth_cfn (
     password            => $password,
     email               => $email,
     tenant              => $tenant,
+    roles               => $roles,
+    system_scope        => $system_scope,
+    system_roles        => $system_roles,
     public_url          => $public_url,
     admin_url           => $admin_url,
     internal_url        => $internal_url,
-  }
-
-  if $configure_user_role {
-    Keystone_user_role["${auth_name}@${tenant}"] ~> Anchor['heat::service::end']
   }
 
 }

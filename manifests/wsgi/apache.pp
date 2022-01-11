@@ -143,6 +143,8 @@ define heat::wsgi::apache (
   include heat::deps
   include heat::params
 
+  Anchor['heat::install::end'] -> Class['apache']
+
   ::openstacklib::wsgi::apache { "heat_${title}_wsgi":
     bind_host                   => $bind_host,
     bind_port                   => $port,
@@ -169,7 +171,6 @@ define heat::wsgi::apache (
     wsgi_script_source          => getvar("::heat::params::heat_${title}_wsgi_script_source"),
     custom_wsgi_process_options => $custom_wsgi_process_options,
     allow_encoded_slashes       => 'on',
-    require                     => Anchor['heat::install::end'],
     vhost_custom_fragment       => $vhost_custom_fragment,
     access_log_file             => $access_log_file,
     access_log_format           => $access_log_format,

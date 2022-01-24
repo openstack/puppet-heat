@@ -17,7 +17,7 @@ describe 'heat::keystone::auth_cfn' do
         :configure_endpoint  => true,
         :service_name        => 'heat-cfn',
         :service_type        => 'cloudformation',
-        :service_description => 'Openstack Cloudformation Service',
+        :service_description => 'OpenStack Cloudformation Service',
         :region              => 'RegionOne',
         :auth_name           => 'heat-cfn',
         :password            => 'heat_password',

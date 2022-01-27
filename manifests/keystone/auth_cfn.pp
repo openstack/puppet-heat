@@ -32,7 +32,7 @@
 #
 # [*service_description*]
 #   (Optional) Description of the service.
-#   Default to 'Openstack Cloudformation Service'
+#   Default to 'OpenStack Cloudformation Service'
 #
 # [*service_name*]
 #   (Optional) Name of the service.
@@ -87,7 +87,7 @@ class heat::keystone::auth_cfn (
   $email                = 'heat-cfn@localhost',
   $auth_name            = 'heat-cfn',
   $service_name         = 'heat-cfn',
-  $service_description  = 'Openstack Cloudformation Service',
+  $service_description  = 'OpenStack Cloudformation Service',
   $service_type         = 'cloudformation',
   $region               = 'RegionOne',
   $tenant               = 'services',

@@ -107,12 +107,7 @@ class heat::keystone::auth_cfn (
 
   validate_legacy(String, 'validate_string', $password)
 
-  Keystone_user_role<| name == "${auth_name}@${tenant}" |> -> Anchor['heat::service::end']
-  Keystone_user_role<| name == "${auth_name}@::::${system_scope}" |> -> Anchor['heat::service::end']
-
-  if $configure_endpoint {
-    Keystone_endpoint["${region}/${service_name}::${service_type}"] -> Anchor['heat::service::end']
-  }
+  Keystone::Resource::Service_identity['heat-cfn'] -> Anchor['heat::service::end']
 
   keystone::resource::service_identity { 'heat-cfn':
     configure_user      => $configure_user,

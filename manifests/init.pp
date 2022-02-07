@@ -249,36 +249,6 @@
 #     take for evaluation.
 #   Defaults to $::os_service_default.
 #
-# DEPRECATED PARAMETERS
-#
-# [*database_min_pool_size*]
-#   (optional) Minimum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
-# [*database_connection*]
-#   (optional) Connection url for the heat database.
-#   Defaults to undef.
-#
-# [*database_max_retries*]
-#   (optional) Maximum database connection retries during startup.
-#   Defaults to undef.
-#
-# [*database_idle_timeout*]
-#   (optional) Timeout before idle database connections are reaped.
-#   Defaults to undef.
-#
-# [*database_retry_interval*]
-#   (optional) Interval between retries of opening a database connection.
-#   Defaults to undef.
-#
-# [*database_max_pool_size*]
-#   (optional) Maximum number of SQL connections to keep open in a pool.
-#   Defaults to undef.
-#
-# [*database_max_overflow*]
-#   (optional) If set, use this value for max_overflow with sqlalchemy.
-#   Defaults to: undef.
-#
 # [*amqp_allow_insecure_clients*]
 #   (Optional) Accept clients using either SSL or plain TCP
 #   Defaults to undef.
@@ -341,13 +311,6 @@ class heat(
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $database_min_pool_size             = undef,
-  $database_connection                = undef,
-  $database_max_retries               = undef,
-  $database_idle_timeout              = undef,
-  $database_retry_interval            = undef,
-  $database_max_pool_size             = undef,
-  $database_max_overflow              = undef,
   $sync_db                            = undef,
   $amqp_allow_insecure_clients        = undef,
   $max_stacks_per_tenant              = undef,
@@ -360,42 +323,6 @@ class heat(
   if $amqp_allow_insecure_clients != undef {
     warning('The amqp_allow_insecure_clients parameter is deprecated and \
 will be removed in a future release.')
-  }
-
-  if $database_connection != undef {
-    warning('The database_connection parameter is deprecated and will be \
-removed in a future realse. Use heat::db::database_connection instead')
-  }
-
-  if $database_max_retries!= undef {
-    warning('The database_max_retries parameter is deprecated and will be \
-removed in a future realse. Use heat::db::database_max_retries instead')
-  }
-
-  if $database_retry_interval != undef {
-    warning('The database_retry_interval parameter is deprecated and will be \
-removed in a future realse. Use heat::db::database_retry_interval instead')
-  }
-
-  if $database_idle_timeout != undef {
-    warning('The database_idle_timeout parameter is deprecated and will be \
-removed in a future realse. Use heat::db::database_connection_recycle_time \
-instead')
-  }
-
-  if $database_max_pool_size != undef {
-    warning('The database_max_pool_size parameter is deprecated and will be \
-removed in a future realse. Use heat::db::database_max_pool_size instead')
-  }
-
-  if $database_max_overflow != undef {
-    warning('The database_max_overflow parameter is deprecated and will be \
-removed in a future realse. Use heat::db::database_max_overflow instead')
-  }
-
-  if $sync_db != undef {
-    warning('The sync_db prameter is deprecated and will be removed \
-in a future release. Use heat::db::sync_db instead')
   }
 
   if $max_stacks_per_tenant != undef {

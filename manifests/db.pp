@@ -70,33 +70,19 @@ class heat::db (
 
   include heat::deps
 
-  if $::heat::database_min_pool_size or $database_min_pool_size {
-    warning('The database_min_pool_size parameter is deprecated, and will be removed in a future release.')
-  }
-
-  # NOTE(spredzy): In order to keep backward compatibility we rely on the pick function
-  # to use heat::<myparam> if heat::db::<myparam> isn't specified.
-  $database_connection_real = pick($::heat::database_connection, $database_connection)
-  $database_connection_recycle_time_real = pick($::heat::database_idle_timeout, $database_connection_recycle_time)
-  $database_max_pool_size_real = pick($::heat::database_max_pool_size, $database_max_pool_size)
-  $database_max_retries_real = pick($::heat::database_max_retries, $database_max_retries)
-  $database_retry_interval_real = pick($::heat::database_retry_interval, $database_retry_interval)
-  $database_max_overflow_real = pick($::heat::database_max_overflow, $database_max_overflow)
-  $sync_db_real = pick($::heat::sync_db, $sync_db)
-
   oslo::db { 'heat_config':
-    connection              => $database_connection_real,
-    connection_recycle_time => $database_connection_recycle_time_real,
-    max_pool_size           => $database_max_pool_size_real,
-    max_retries             => $database_max_retries_real,
-    retry_interval          => $database_retry_interval_real,
-    max_overflow            => $database_max_overflow_real,
+    connection              => $database_connection,
+    connection_recycle_time => $database_connection_recycle_time,
+    max_pool_size           => $database_max_pool_size,
+    max_retries             => $database_max_retries,
+    retry_interval          => $database_retry_interval,
+    max_overflow            => $database_max_overflow,
     pool_timeout            => $database_pool_timeout,
     mysql_enable_ndb        => $mysql_enable_ndb,
     db_max_retries          => $database_db_max_retries,
   }
 
-  if $sync_db_real {
+  if $sync_db {
     include heat::db::sync
   }
 

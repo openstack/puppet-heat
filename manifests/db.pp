@@ -47,12 +47,6 @@
 #   (Optional) Run db sync on nodes after connection setting has been set.
 #   Defaults to true
 #
-# DEPRECATED PARAMETERS
-#
-# [*database_min_pool_size*]
-#   Minimum number of SQL connections to keep open in a pool.
-#   (Optional) Defaults to undef
-#
 class heat::db (
   $database_connection              = 'sqlite:////var/lib/heat/heat.sqlite',
   $database_connection_recycle_time = $::os_service_default,
@@ -64,8 +58,6 @@ class heat::db (
   $mysql_enable_ndb                 = $::os_service_default,
   $database_db_max_retries          = $::os_service_default,
   $sync_db                          = true,
-  # DEPRECATED PARAMETERS
-  $database_min_pool_size           = undef,
 ) {
 
   include heat::deps

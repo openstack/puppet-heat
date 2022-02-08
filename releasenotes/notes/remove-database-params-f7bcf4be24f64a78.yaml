@@ -10,6 +10,7 @@ upgrade:
     - ``database_max_pool_size``
     - ``database_max_retries``
     - ``database_retry_interval``
+    - ``sync_db``
 
   - |
     The ``database_min_pool_size`` parameter of the ``heat::db`` class has been

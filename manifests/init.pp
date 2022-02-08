@@ -208,10 +208,6 @@
 #   (Optional) Enable the stack-abandon feature.
 #   Defaults to $::os_service_default.
 #
-# [*sync_db*]
-#   (Optional) Run db sync on nodes after connection setting has been set.
-#   Defaults to undef
-#
 # [*enable_proxy_headers_parsing*]
 #   (Optional) Enable paste middleware to handle SSL requests through
 #   HTTPProxyToWSGI middleware.
@@ -311,7 +307,6 @@ class heat(
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $sync_db                            = undef,
   $amqp_allow_insecure_clients        = undef,
   $max_stacks_per_tenant              = undef,
 ) {

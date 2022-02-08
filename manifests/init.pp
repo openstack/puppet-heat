@@ -245,9 +245,7 @@
 #     take for evaluation.
 #   Defaults to $::os_service_default.
 #
-# [*amqp_allow_insecure_clients*]
-#   (Optional) Accept clients using either SSL or plain TCP
-#   Defaults to undef.
+# DEPRECATED PARAMETERS
 #
 # [*max_stacks_per_tenant*]
 #   (optional) Maximum number of stacks any one tenant may have active at one
@@ -307,18 +305,12 @@ class heat(
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $amqp_allow_insecure_clients        = undef,
   $max_stacks_per_tenant              = undef,
 ) {
 
   include heat::db
   include heat::deps
   include heat::params
-
-  if $amqp_allow_insecure_clients != undef {
-    warning('The amqp_allow_insecure_clients parameter is deprecated and \
-will be removed in a future release.')
-  }
 
   if $max_stacks_per_tenant != undef {
     warning('The max_stacks_per_tenant parameter is deprecated. \

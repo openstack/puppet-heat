@@ -167,6 +167,21 @@
 #   be available.
 #   Default to $::os_service_default
 #
+# [*enable_retry_client*]
+#   (Optional) Enable retry client mechanisms to handle failure.
+#   Those mechanisms can be used to wrap all kind of pymemcache
+#   clients. The wrapper allows you to define how many attempts
+#   to make and how long to wait between attemots.
+#   Default to $::os_service_default
+#
+# [*retry_attempts*]
+#   (Optional) Number of times to attempt an action before failing.
+#   Default to $::os_service_default
+#
+# [*retry_delay*]
+#   (Optional) Number of seconds to sleep between each attempt.
+#   Default to $::os_service_default
+#
 class heat::cache (
   $config_prefix                         = $::os_service_default,
   $expiration_time                       = $::os_service_default,
@@ -197,6 +212,9 @@ class heat::cache (
   $tls_certfile                          = $::os_service_default,
   $tls_keyfile                           = $::os_service_default,
   $tls_allowed_ciphers                   = $::os_service_default,
+  $enable_retry_client                   = $::os_service_default,
+  $retry_attempts                        = $::os_service_default,
+  $retry_delay                           = $::os_service_default,
 ) {
 
   include heat::deps
@@ -225,6 +243,9 @@ class heat::cache (
     tls_certfile                         => $tls_certfile,
     tls_keyfile                          => $tls_keyfile,
     tls_allowed_ciphers                  => $tls_allowed_ciphers,
+    enable_retry_client                  => $enable_retry_client,
+    retry_attempts                       => $retry_attempts,
+    retry_delay                          => $retry_delay,
   }
 
   heat_config {

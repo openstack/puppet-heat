@@ -148,7 +148,7 @@ define heat::wsgi::apache (
   ::openstacklib::wsgi::apache { "heat_${title}_wsgi":
     bind_host                   => $bind_host,
     bind_port                   => $port,
-    group                       => 'heat',
+    group                       => $::heat::params::group,
     path                        => $path,
     priority                    => $priority,
     servername                  => $servername,
@@ -161,7 +161,7 @@ define heat::wsgi::apache (
     ssl_crl_path                => $ssl_crl_path,
     ssl_key                     => $ssl_key,
     threads                     => $threads,
-    user                        => 'heat',
+    user                        => $::heat::params::user,
     workers                     => $workers,
     wsgi_daemon_process         => "heat_${title}",
     wsgi_process_display_name   => $wsgi_process_display_name,

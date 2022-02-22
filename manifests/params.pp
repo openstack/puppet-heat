@@ -6,6 +6,7 @@ class heat::params {
   include openstacklib::defaults
 
   $client_package_name = 'python3-heatclient'
+  $user                = 'heat'
   $group               = 'heat'
 
   case $::osfamily {

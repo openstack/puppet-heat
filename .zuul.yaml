@@ -4,5 +4,25 @@
       - puppet-openstack-module-unit-jobs
       - puppet-openstack-integration-jobs-scenario003
       - puppet-openstack-litmus-jobs
-      - tripleo-puppet-undercloud
       - release-notes-jobs-python3
+    check:
+      jobs:
+        - puppet-heat-tripleo-standalone
+    gate:
+      jobs:
+        - puppet-heat-tripleo-standalone
+
+- job:
+    name: puppet-heat-tripleo-standalone
+    parent: tripleo-puppet-ci-centos-8-standalone
+    description: |
+      TripleO standalone Job running Heat specific Tempest tests.
+    vars:
+      build_container_images: true
+      featureset_override:
+        run_tempest: false
+        # NOTE(tkajinam): This should be fixed once any heat tempest test is
+        #                 enabled in TripleO repo.
+        tempest_test_whitelist:
+          - 'tempest.scenario.test_server_basic_ops'
+        use_os_tempest: true

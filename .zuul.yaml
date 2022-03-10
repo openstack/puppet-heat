@@ -8,6 +8,7 @@
     check:
       jobs:
         - puppet-heat-tripleo-standalone
+        - puppet-heat-tripleo-centos-9-standalone
     gate:
       jobs:
         - puppet-heat-tripleo-standalone
@@ -17,7 +18,7 @@
     parent: tripleo-puppet-ci-centos-8-standalone
     description: |
       TripleO standalone Job running Heat specific Tempest tests.
-    vars:
+    vars: &standalone_vars
       build_container_images: true
       featureset_override:
         run_tempest: false
@@ -26,3 +27,11 @@
         tempest_test_whitelist:
           - 'tempest.scenario.test_server_basic_ops'
         use_os_tempest: true
+
+- job:
+    name: puppet-heat-tripleo-centos-9-standalone
+    parent: tripleo-puppet-ci-centos-9-standalone
+    description: |
+      TripleO standalone Job running Heat specific Tempest tests.
+    voting: false
+    vars: *standalone_vars

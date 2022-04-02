@@ -1,0 +1,20 @@
+---
+features:
+  - |
+    The new ``heat::clients`` class has been added. Use this class to manage
+    ``[clients]`` parameters.
+
+  - |
+    The new ``heat::clients::base`` defined type has been added. This defined
+    type provides the basic implementation to manage ``[clients_<service>]``
+    parameters.
+
+  - |
+    The ``heat::clients::<service>`` classes, to manage ``[clients_<service>]``
+    parameters, have been added.
+
+deprecations:
+  - |
+    The ``heat_clients_endpoint_type`` parameter and the ``heat_clients_url``
+    parameter has been deprecated, in favor of the ``heat::clients`` class and
+    the ``heat::clients::heat`` class.

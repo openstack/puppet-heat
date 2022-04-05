@@ -9,12 +9,11 @@ describe 'heat' do
 
   let :params do
     {
-      :package_ensure        => 'present',
-      :flavor                => 'keystone',
-      :heat_clients_url      => '<SERVICE DEFAULT>',
-      :purge_config          => false,
-      :yaql_limit_iterators  => 400,
-      :yaql_memory_quota     => 20000,
+      :package_ensure       => 'present',
+      :flavor               => 'keystone',
+      :purge_config         => false,
+      :yaql_limit_iterators => 400,
+      :yaql_memory_quota    => 20000,
     }
   end
 

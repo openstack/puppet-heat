@@ -217,15 +217,6 @@
 #   (Optional) Set max request body size
 #   Defaults to $::os_service_default.
 #
-# [*heat_clients_url*]
-#   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
-#   Defaults to $::os_service_default.
-#
-# [*heat_clients_endpoint_type*]
-#   (optional) Type of endpoint in Identity service catalog to use for
-#   communication with the OpenStack service.
-#   Defaults to $::os_service_default.
-#
 # [*purge_config*]
 #   (optional) Whether to set only the specified config options
 #   in the heat config.
@@ -250,6 +241,15 @@
 # [*max_stacks_per_tenant*]
 #   (optional) Maximum number of stacks any one tenant may have active at one
 #   time.
+#   Defaults to undef
+#
+# [*heat_clients_url*]
+#   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
+#   Defaults to undef
+#
+# [*heat_clients_endpoint_type*]
+#   (optional) Type of endpoint in Identity service catalog to use for
+#   communication with the OpenStack service.
 #   Defaults to undef
 #
 class heat(
@@ -298,14 +298,14 @@ class heat(
   $notification_topics                = $::os_service_default,
   $enable_proxy_headers_parsing       = $::os_service_default,
   $max_request_body_size              = $::os_service_default,
-  $heat_clients_url                   = $::os_service_default,
-  $heat_clients_endpoint_type         = $::os_service_default,
   $purge_config                       = false,
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
   # DEPRECATED PARAMETERS
   $max_stacks_per_tenant              = undef,
+  $heat_clients_url                   = undef,
+  $heat_clients_endpoint_type         = undef,
 ) {
 
   include heat::db
@@ -375,10 +375,15 @@ Use heat::engine::max_stacks_per_tenant instead.')
     'trustee/project_domain_name': ensure => absent;
   }
 
-  heat_config {
-    'clients_heat/url':      value => $heat_clients_url;
-    'clients/endpoint_type': value => $heat_clients_endpoint_type;
+  if $heat_clients_url != undef {
+    warning('The heat_clients_url parameter is deprecated. Use the heat::clients::heat class.')
   }
+  include heat::clients::heat
+
+  if $heat_clients_endpoint_type!= undef {
+    warning('The heat_clients_endpoint_type parameter is deprecated. Use the heat::clients class.')
+  }
+  include heat::clients
 
   if (!is_service_default($enable_stack_adopt)) {
     validate_legacy(Boolean, 'validate_bool', $enable_stack_adopt)

@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``heat::cron::purge_deleted`` class now supports customizing batch size
+    of the purge operation.

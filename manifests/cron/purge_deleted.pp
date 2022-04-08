@@ -46,6 +46,10 @@
 #    (optional) Path to file to which rows should be archived
 #    Defaults to '/var/log/heat/heat-purge_deleted.log'.
 #
+#  [*batch_size*]
+#    (optional) Number of stacks to delete at a time (per transaction).
+#    Defaults to undef.
+#
 class heat::cron::purge_deleted (
   $ensure      = present,
   $minute      = 1,
@@ -57,7 +61,8 @@ class heat::cron::purge_deleted (
   $user        = $::heat::params::user,
   $age         = 1,
   $age_type    = 'days',
-  $destination = '/var/log/heat/heat-purge_deleted.log'
+  $destination = '/var/log/heat/heat-purge_deleted.log',
+  $batch_size  = undef,
 ) inherits heat::params {
 
   if ! member(['days', 'hours', 'minutes', 'seconds'], $age_type) {
@@ -70,9 +75,15 @@ class heat::cron::purge_deleted (
     $sleep = "sleep `expr \${RANDOM} \\% ${maxdelay}`; "
   }
 
+  if $batch_size != undef {
+    $batch_size_opt = "-b ${batch_size} "
+  } else {
+    $batch_size_opt = ''
+  }
+
   cron { 'heat-manage purge_deleted':
     ensure      => $ensure,
-    command     => "${sleep}heat-manage purge_deleted -g ${age_type} ${age} >>${destination} 2>&1",
+    command     => "${sleep}heat-manage purge_deleted -g ${age_type} ${age} ${batch_size_opt}>>${destination} 2>&1",
     environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
     user        => $user,
     minute      => $minute,

@@ -64,6 +64,29 @@ describe 'heat::cron::purge_deleted' do
       end
     end
 
+    describe 'when batch_size is set' do
+      before :each do
+        params.merge!(
+          :batch_size => 100
+        )
+      end
+
+      it 'disables the cron job' do
+        is_expected.to contain_cron('heat-manage purge_deleted').with(
+          :ensure      => params[:ensure],
+          :command     => "heat-manage purge_deleted -g days 1 -b #{params[:batch_size]} >>#{params[:destination]} 2>&1",
+          :environment => 'PATH=/bin:/usr/bin:/usr/sbin SHELL=/bin/sh',
+          :user        => 'heat',
+          :minute      => params[:minute],
+          :hour        => params[:hour],
+          :monthday    => params[:monthday],
+          :month       => params[:month],
+          :weekday     => params[:weekday],
+          :require     => 'Anchor[heat::dbsync::end]'
+        )
+      end
+    end
+
     describe 'when disabling cron job' do
       before :each do
         params.merge!(

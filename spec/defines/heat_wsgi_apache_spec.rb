@@ -21,7 +21,7 @@ describe 'heat::wsgi::apache' do
           'bind_port'                   => '8000',
           'group'                       => 'heat',
           'user'                        => 'heat',
-          'ssl'                         => 'true',
+          'ssl'                         => false,
           'wsgi_daemon_process'         => "heat_#{title}",
           'wsgi_process_group'          => "heat_#{title}",
           'wsgi_script_dir'             => platform_params[:wsgi_script_dir],

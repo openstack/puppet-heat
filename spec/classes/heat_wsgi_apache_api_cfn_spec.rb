@@ -10,7 +10,7 @@ describe 'heat::wsgi::apache_api_cfn' do
         :servername                  => facts[:fqdn],
         :bind_host                   => nil,
         :path                        => '/',
-        :ssl                         => true,
+        :ssl                         => false,
         :workers                     => facts[:os_workers],
         :ssl_cert                    => nil,
         :ssl_key                     => nil,

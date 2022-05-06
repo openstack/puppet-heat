@@ -37,7 +37,7 @@
 #
 #   [*ssl*]
 #     Use ssl ? (boolean)
-#     Optional. Defaults to true
+#     Optional. Defaults to false
 #
 #   [*workers*]
 #     Number of WSGI workers to spawn.
@@ -109,7 +109,7 @@ class heat::wsgi::apache_api_cfn (
   $servername                  = $::fqdn,
   $bind_host                   = undef,
   $path                        = '/',
-  $ssl                         = undef,
+  $ssl                         = false,
   $workers                     = $::os_workers,
   $ssl_cert                    = undef,
   $ssl_key                     = undef,
@@ -130,11 +130,6 @@ class heat::wsgi::apache_api_cfn (
   $request_headers             = ['set Content-Type "application/json"'],
 ) {
 
-  if $ssl == undef {
-    warning('Default of the ssl parameter will be changed in a future release')
-  }
-  $ssl_real = pick($ssl, true)
-
   validate_legacy(Integer, 'validate_integer', $port)
 
   # Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1396553
@@ -151,7 +146,7 @@ class heat::wsgi::apache_api_cfn (
     servername                  => $servername,
     bind_host                   => $bind_host,
     path                        => $path,
-    ssl                         => $ssl_real,
+    ssl                         => $ssl,
     workers                     => $workers,
     ssl_cert                    => $ssl_cert,
     ssl_key                     => $ssl_key,

@@ -265,8 +265,6 @@ class heat::engine (
     }
   }
 
-  $max_stacks_per_tenant_real = pick($::heat::max_stacks_per_tenant, $max_stacks_per_tenant)
-
   heat_config {
     'DEFAULT/auth_encryption_key':                             value => $auth_encryption_key, secret => true;
     'DEFAULT/heat_stack_user_role':                            value => $heat_stack_user_role;
@@ -278,7 +276,7 @@ class heat::engine (
     'DEFAULT/reauthentication_auth_method':                    value => $reauthentication_auth_method;
     'DEFAULT/allow_trusts_redelegation':                       value => $allow_trusts_redelegation;
     'DEFAULT/trusts_delegated_roles':                          value => join(any2array($trusts_delegated_roles), ',');
-    'DEFAULT/max_stacks_per_tenant':                           value => $max_stacks_per_tenant_real;
+    'DEFAULT/max_stacks_per_tenant':                           value => $max_stacks_per_tenant;
     'DEFAULT/max_resources_per_stack':                         value => $max_resources_per_stack;
     'DEFAULT/action_retry_limit':                              value => $action_retry_limit;
     'DEFAULT/client_retry_limit':                              value => $client_retry_limit;

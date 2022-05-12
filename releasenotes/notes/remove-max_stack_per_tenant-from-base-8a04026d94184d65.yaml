@@ -1,0 +1,5 @@
+---
+upgrade:
+  - |
+    The ``heat::max_stacks_per_tenant`` parameter has been removed. Use
+    the ``heat::engine::max_stacks_per_tenant`` parameter instead.

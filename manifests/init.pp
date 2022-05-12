@@ -238,11 +238,6 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*max_stacks_per_tenant*]
-#   (optional) Maximum number of stacks any one tenant may have active at one
-#   time.
-#   Defaults to undef
-#
 # [*heat_clients_url*]
 #   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
 #   Defaults to undef
@@ -303,7 +298,6 @@ class heat(
   $yaql_memory_quota                  = $::os_service_default,
   $yaql_limit_iterators               = $::os_service_default,
   # DEPRECATED PARAMETERS
-  $max_stacks_per_tenant              = undef,
   $heat_clients_url                   = undef,
   $heat_clients_endpoint_type         = undef,
 ) {
@@ -311,12 +305,6 @@ class heat(
   include heat::db
   include heat::deps
   include heat::params
-
-  if $max_stacks_per_tenant != undef {
-    warning('The max_stacks_per_tenant parameter is deprecated. \
-Use heat::engine::max_stacks_per_tenant instead.')
-    include heat::engine
-  }
 
   if $auth_strategy == 'keystone' {
     include heat::keystone::authtoken

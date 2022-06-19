@@ -15,7 +15,7 @@ describe 'heat::db::mysql' do
   shared_examples_for 'heat mysql database' do
     it { is_expected.to contain_class('heat::deps') }
 
-    context 'when omiting the required parameter password' do
+    context 'when omitting the required parameter password' do
       before { params.delete(:password) }
       it { expect { is_expected.to raise_error(Puppet::Error) } }
     end

@@ -300,8 +300,8 @@ class heat::engine (
 
   if $deferred_auth_method != undef {
     warning('deferred_auth_method is deprecated and will be removed in a future release')
-    heat_config {
-      'DEFAULT/deferred_auth_method': value => $deferred_auth_method;
-    }
+  }
+  heat_config {
+    'DEFAULT/deferred_auth_method': value => pick($deferred_auth_method, $::os_service_default);
   }
 }

@@ -29,6 +29,7 @@ describe 'heat::engine' do
       :max_nested_stack_depth              => '<SERVICE DEFAULT>',
       :plugin_dirs                         => '<SERVICE DEFAULT>',
       :server_keystone_endpoint_type       => '<SERVICE DEFAULT>',
+      :deferred_auth_method                => '<SERVICE DEFAULT>',
     }
   end
 
@@ -47,7 +48,6 @@ describe 'heat::engine' do
         :heat_stack_user_role                => 'heat_stack_user',
         :heat_metadata_server_url            => 'http://127.0.0.1:8000',
         :heat_waitcondition_server_url       => 'http://127.0.0.1:8000/v1/waitcondition',
-        :deferred_auth_method                => 'trusts',
         :default_software_config_transport   => 'POLL_SERVER_CFN',
         :default_deployment_signal_transport => 'CFN_SIGNAL',
         :default_user_data_format            => 'HEAT_CFNTOOLS',
@@ -69,6 +69,7 @@ describe 'heat::engine' do
         :template_dir                        => '/etc/heat/templates',
         :client_retry_limit                  => 2,
         :server_keystone_endpoint_type       => 'public',
+        :deferred_auth_method                => 'trusts',
       }
     ].each do |new_params|
       describe 'when #{param_set == {} ? "using default" : "specifying"} parameters'
@@ -100,7 +101,6 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/heat_stack_user_role').with_value( expected_params[:heat_stack_user_role] ) }
       it { is_expected.to contain_heat_config('DEFAULT/heat_metadata_server_url').with_value( expected_params[:heat_metadata_server_url] ) }
       it { is_expected.to contain_heat_config('DEFAULT/heat_waitcondition_server_url').with_value( expected_params[:heat_waitcondition_server_url] ) }
-      it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
       it { is_expected.to contain_heat_config('DEFAULT/default_software_config_transport').with_value( expected_params[:default_software_config_transport] ) }
       it { is_expected.to contain_heat_config('DEFAULT/default_deployment_signal_transport').with_value( expected_params[:default_deployment_signal_transport] ) }
       it { is_expected.to contain_heat_config('DEFAULT/default_user_data_format').with_value( expected_params[:default_user_data_format] ) }
@@ -127,6 +127,7 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/client_retry_limit').with_value( expected_params[:client_retry_limit] ) }
       it { is_expected.to contain_heat_config('DEFAULT/server_keystone_endpoint_type').with_value( expected_params[:server_keystone_endpoint_type] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
     end
 
     context 'with max limits are defined' do

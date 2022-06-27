@@ -122,7 +122,7 @@
 #   Defaults to $::os_service_default
 #
 # [*service_extension_expiration_time*]
-#   (Optional) TTL, in seconds, for caching in service extention.
+#   (Optional) TTL, in seconds, for caching in service extension.
 #   Defaults to $::os_service_default
 #
 # [*resource_finder_caching*]
@@ -135,7 +135,7 @@
 #   Defaults to $::os_service_default
 #
 # [*tls_enabled*]
-#   (Optional) Global toggle for TLS usage when comunicating with
+#   (Optional) Global toggle for TLS usage when communicating with
 #   the caching servers.
 #   Default to $::os_service_default
 #
@@ -155,7 +155,7 @@
 #
 # [*tls_keyfile*]
 #   (Optional) Path to a single file containing the client's private
-#   key in. Otherwhise the private key will be taken from the file
+#   key in. Otherwise the private key will be taken from the file
 #   specified in tls_certfile. If tls_enabled is False, this option
 #   is ignored.
 #   Default to $::os_service_default
@@ -171,7 +171,7 @@
 #   (Optional) Enable retry client mechanisms to handle failure.
 #   Those mechanisms can be used to wrap all kind of pymemcache
 #   clients. The wrapper allows you to define how many attempts
-#   to make and how long to wait between attemots.
+#   to make and how long to wait between attempts.
 #   Default to $::os_service_default
 #
 # [*retry_attempts*]

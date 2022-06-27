@@ -24,7 +24,7 @@ Overview
 --------
 
 The heat module is part of [OpenStack](https://opendev.org/openstack), an effort by the
-OpenStack infrastructure team to provice continuous integration testing and code review for
+OpenStack infrastructure team to provide continuous integration testing and code review for
 OpenStack and OpenStack community projects as part of the core software. The module itself
 is used to flexibly configure and manage the orchestration service for OpenStack.
 

@@ -88,7 +88,7 @@
 #
 # [*kombu_compression*]
 #   (optional) Possible values are: gzip, bz2. If not set compression will not
-#   be used. This option may notbe available in future versions. EXPERIMENTAL.
+#   be used. This option may not be available in future versions. EXPERIMENTAL.
 #   (string value)
 #   Defaults to $::os_service_default
 #
@@ -355,7 +355,7 @@ class heat(
   }
 
   if !defined(Class[heat::trustee]) {
-    warning('The heat:trustee class will be required to set trustee opiton in a future release')
+    warning('The heat:trustee class will be required to set trustee option in a future release')
     include heat::trustee
   }
   # TODO(tkajinam): Remove this when we remove the above logic

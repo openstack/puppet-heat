@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The ``heat::wsgi::apache_api`` class and the ``heat::wsgi::apache_api_cfn``
+    class now support customizing response headers added by apache.

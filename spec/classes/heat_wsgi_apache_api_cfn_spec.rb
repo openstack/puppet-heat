@@ -19,14 +19,15 @@ describe 'heat::wsgi::apache_api_cfn' do
         :ssl_crl_path                => nil,
         :ssl_certs_dir               => nil,
         :wsgi_process_display_name   => nil,
+        :vhost_custom_fragment       => nil,
         :threads                     => 1,
         :priority                    => 10,
+        :headers                     => nil,
+        :request_headers             => ['set Content-Type "application/json"'],
         :custom_wsgi_process_options => {},
         :access_log_file             => false,
         :access_log_format           => false,
-        :vhost_custom_fragment       => nil,
-        :request_headers             => ['set Content-Type "application/json"'],)
-      }
+      )}
     end
   end
 

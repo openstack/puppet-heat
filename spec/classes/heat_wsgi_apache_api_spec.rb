@@ -22,10 +22,12 @@ describe 'heat::wsgi::apache_api' do
         :vhost_custom_fragment       => nil,
         :threads                     => 1,
         :priority                    => 10,
+        :headers                     => nil,
+        :request_headers             => nil,
         :custom_wsgi_process_options => {},
         :access_log_file             => false,
-        :access_log_format           => false,)
-      }
+        :access_log_format           => false,
+      )}
     end
   end
 

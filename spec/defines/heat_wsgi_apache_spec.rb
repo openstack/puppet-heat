@@ -27,6 +27,7 @@ describe 'heat::wsgi::apache' do
           'wsgi_script_dir'             => platform_params[:wsgi_script_dir],
           'wsgi_script_file'            => "heat_#{title}",
           'allow_encoded_slashes'       => 'on',
+          'headers'                     => nil,
           'request_headers'             => nil,
         )}
       end

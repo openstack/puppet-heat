@@ -66,9 +66,6 @@
 #     apache::vhost ssl parameters.
 #     Optional. Default to apache::vhost 'ssl_*' defaults.
 #
-#   [*vhost_custom_fragment*]
-#     (optional) Additional vhost configuration, if applicable.
-#
 #   [*access_log_file*]
 #     The log file name for the virtualhost.
 #     Optional. Defaults to false.
@@ -93,9 +90,16 @@
 #     (optional) Name of the WSGI process display-name.
 #     Defaults to undef
 #
+#   [*headers*]
+#     (optional) Headers for the vhost.
+#     Defaults to undef
+#
 #   [*request_headers*]
 #     (optional) Modifies collected request headers in various ways.
 #     Defaults to undef
+#
+#   [*vhost_custom_fragment*]
+#     (optional) Additional vhost configuration, if applicable.
 #
 # == Dependencies
 #
@@ -123,13 +127,14 @@ define heat::wsgi::apache (
   $ssl_certs_dir               = undef,
   $threads                     = 1,
   $priority                    = '10',
-  $vhost_custom_fragment       = undef,
   $access_log_file             = false,
   $access_log_format           = false,
   $error_log_file              = undef,
   $custom_wsgi_process_options = {},
   $wsgi_process_display_name   = undef,
+  $headers                     = undef,
   $request_headers             = undef,
+  $vhost_custom_fragment       = undef,
 ) {
   if $title !~ /^api(|_cfn)$/ {
     fail('The valid options are api, api_cfn')
@@ -157,6 +162,7 @@ define heat::wsgi::apache (
     ssl_key                     => $ssl_key,
     threads                     => $threads,
     user                        => $::heat::params::user,
+    vhost_custom_fragment       => $vhost_custom_fragment,
     workers                     => $workers,
     wsgi_daemon_process         => "heat_${title}",
     wsgi_process_display_name   => $wsgi_process_display_name,
@@ -164,12 +170,12 @@ define heat::wsgi::apache (
     wsgi_script_dir             => $::heat::params::heat_wsgi_script_path,
     wsgi_script_file            => "heat_${title}",
     wsgi_script_source          => getvar("::heat::params::heat_${title}_wsgi_script_source"),
+    headers                     => $headers,
+    request_headers             => $request_headers,
     custom_wsgi_process_options => $custom_wsgi_process_options,
     allow_encoded_slashes       => 'on',
-    vhost_custom_fragment       => $vhost_custom_fragment,
     access_log_file             => $access_log_file,
     access_log_format           => $access_log_format,
     error_log_file              => $error_log_file,
-    request_headers             => $request_headers,
   }
 }

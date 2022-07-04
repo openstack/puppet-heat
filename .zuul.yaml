@@ -2,6 +2,7 @@
     templates:
       - puppet-openstack-check-jobs
       - puppet-openstack-module-unit-jobs
+      - puppet-openstack-integration-jobs-scenario001
       - puppet-openstack-integration-jobs-scenario003
       - puppet-openstack-litmus-jobs
       - release-notes-jobs-python3

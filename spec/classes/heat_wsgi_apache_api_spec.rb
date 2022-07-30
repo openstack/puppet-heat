@@ -25,8 +25,8 @@ describe 'heat::wsgi::apache_api' do
         :headers                     => nil,
         :request_headers             => nil,
         :custom_wsgi_process_options => {},
-        :access_log_file             => false,
-        :access_log_format           => false,
+        :access_log_file             => nil,
+        :access_log_format           => nil,
       )}
     end
   end

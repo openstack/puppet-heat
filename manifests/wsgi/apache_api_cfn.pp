@@ -85,14 +85,18 @@
 #     (optional) Name of the WSGI process display-name.
 #     Defaults to undef
 #
-#   [*vhost_custom_fragment*]
-#     (optional) Passes a string of custom configuration
-#     directives to be placed at the end of the vhost configuration.
+#   [*headers*]
+#     (optional) Headers for the vhost.
 #     Defaults to undef
 #
 #   [*request_headers*]
 #     (optional) Modifies collected request headers in various ways.
 #     Defaults to ['set Content-Type "application/json"']
+#
+#   [*vhost_custom_fragment*]
+#     (optional) Passes a string of custom configuration
+#     directives to be placed at the end of the vhost configuration.
+#     Defaults to undef
 #
 # == Dependencies
 #
@@ -125,9 +129,10 @@ class heat::wsgi::apache_api_cfn (
   $error_log_file              = undef,
   $custom_wsgi_process_options = {},
   $wsgi_process_display_name   = undef,
-  $vhost_custom_fragment       = undef,
+  $headers                     = undef,
   # Enforce content-type, see https://bugs.launchpad.net/tripleo/+bug/1641589
   $request_headers             = ['set Content-Type "application/json"'],
+  $vhost_custom_fragment       = undef,
 ) {
 
   validate_legacy(Integer, 'validate_integer', $port)
@@ -157,12 +162,13 @@ class heat::wsgi::apache_api_cfn (
     ssl_certs_dir               => $ssl_certs_dir,
     threads                     => $threads,
     priority                    => $priority,
-    vhost_custom_fragment       => $vhost_custom_fragment,
-    custom_wsgi_process_options => $custom_wsgi_process_options,
     access_log_file             => $access_log_file,
     access_log_format           => $access_log_format,
     error_log_file              => $error_log_file,
+    custom_wsgi_process_options => $custom_wsgi_process_options,
     wsgi_process_display_name   => $wsgi_process_display_name,
+    headers                     => $headers,
     request_headers             => $request_headers,
+    vhost_custom_fragment       => $vhost_custom_fragment,
   }
 }

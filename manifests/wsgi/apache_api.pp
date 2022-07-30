@@ -85,12 +85,16 @@
 #     (optional) Name of the WSGI process display-name.
 #     Defaults to undef
 #
-#   [*vhost_custom_fragment*]
-#     (optional) Additional vhost configuration, if applicable.
+#   [*headers*]
+#     (optional) Headers for the vhost.
 #     Defaults to undef
 #
 #   [*request_headers*]
 #     (optional) Modifies collected request headers in various ways.
+#     Defaults to undef
+#
+#   [*vhost_custom_fragment*]
+#     (optional) Additional vhost configuration, if applicable.
 #     Defaults to undef
 #
 # == Dependencies
@@ -124,8 +128,9 @@ class heat::wsgi::apache_api (
   $error_log_file              = undef,
   $custom_wsgi_process_options = {},
   $wsgi_process_display_name   = undef,
-  $vhost_custom_fragment       = undef,
+  $headers                     = undef,
   $request_headers             = undef,
+  $vhost_custom_fragment       = undef,
 ) {
 
   heat::wsgi::apache { 'api':
@@ -143,13 +148,14 @@ class heat::wsgi::apache_api (
     ssl_crl                     => $ssl_crl,
     ssl_certs_dir               => $ssl_certs_dir,
     threads                     => $threads,
-    custom_wsgi_process_options => $custom_wsgi_process_options,
     priority                    => $priority,
     access_log_file             => $access_log_file,
     access_log_format           => $access_log_format,
     error_log_file              => $error_log_file,
+    custom_wsgi_process_options => $custom_wsgi_process_options,
     wsgi_process_display_name   => $wsgi_process_display_name,
-    vhost_custom_fragment       => $vhost_custom_fragment,
+    headers                     => $headers,
     request_headers             => $request_headers,
+    vhost_custom_fragment       => $vhost_custom_fragment,
   }
 }

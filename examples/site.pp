@@ -14,9 +14,12 @@ node default {
   class { 'heat::keystone::authtoken':
     password => 'password',
   }
+  class { 'heat::db':
+    database_connection => 'mysql+pymysql://heat:heat@localhost/heat'
+  }
+
   # Common class
   class { 'heat':
-    sql_connection    => 'mysql+pymysql://heat:heat@localhost/heat'
   }
 
   # Install heat-engine

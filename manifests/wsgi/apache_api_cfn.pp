@@ -160,15 +160,6 @@ class heat::wsgi::apache_api_cfn (
 
   validate_legacy(Integer, 'validate_integer', $port)
 
-  # Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=1396553
-  if $::osfamily == 'RedHat' and $port == 8000 and $::selinux {
-    exec { "semanage port -m -t http_port_t -p tcp ${port}":
-      unless => "semanage port -l | grep -q \"http_port_t.*${port}\"",
-      path   => ['/usr/bin', '/usr/sbin'],
-      notify => Heat::Wsgi::Apache['api_cfn'],
-    }
-  }
-
   heat::wsgi::apache { 'api_cfn':
     port                        => $port,
     servername                  => $servername,

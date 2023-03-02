@@ -177,7 +177,7 @@ describe 'heat::engine' do
       end
 
       let :platform_params do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :package_name => 'heat-engine',
             :service_name => 'heat-engine'

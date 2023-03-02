@@ -25,15 +25,15 @@
 #   this to a different value you should also set
 #   heat::keystone::auth::heat_stack_user_role if you want the
 #   correct role created.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*heat_metadata_server_url*]
 #   (optional) URL of the Heat metadata server
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*heat_waitcondition_server_url*]
 #   (optional) URL of the Heat waitcondition server
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*default_software_config_transport*]
 #   (optional) Template default for how the server should receive the metadata
@@ -45,7 +45,7 @@
 #   will create and populate a Swift TempURL with metadata for polling (requires
 #   object-store endpoint which supports TempURL). (string value)
 #   Allowed values: POLL_SERVER_CFN, POLL_SERVER_HEAT, POLL_TEMP_URL
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*default_deployment_signal_transport*]
 #   (optional) Template default for how the server should signal to heat with
@@ -55,7 +55,7 @@
 #   TempURL). HEAT_SIGNAL will allow calls to the Heat API resource-signal using
 #   endpoint which supports the provided keystone credentials (string value)
 #   Allowed values: CFN_SIGNAL, TEMP_URL_SIGNAL, HEAT_SIGNAL
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*default_user_data_format*]
 #   (optional) Template default for how the user_data should be
@@ -67,109 +67,109 @@
 #   software config data, and metadata is derived from any
 #   associated SoftwareDeployment resources.
 #   Allowed values: HEAT_CFNTOOLS, RAW, SOFTWARE_CONFIG
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*reauthentication_auth_method*]
 #   (Optional) Re-authentication method on token expiry.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*allow_trusts_redelegation*]
 #   (Optional) Create trusts with redelegation enabled.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*trusts_delegated_roles*]
 #   (optional) Array of trustor roles to be delegated to heat.
 #   This value is also used by heat::keystone::auth if it is set to
 #   configure the keystone roles.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*action_retry_limit*]
 #   (Optional) Number of times to retry to bring a resource to a non-error
 #   state.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*client_retry_limit*]
 #   (Optional) Number of times to retry when a client encounters an expected
 #   intermittent error.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*max_server_name_length*]
 #   (Optional) Maximum length of a server name to be used in nova.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*max_interface_check_attempts*]
 #   (Optional) Number of times to check whether an interface has been attached
 #   or detached.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*event_purge_batch_size*]
 #   (Optional) Controls how many events will be pruned whenever a stack's
 #   events are purged.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*max_events_per_stack*]
 #   (Optional) Rough number of maximum events that will be available per stack.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*stack_action_timeout*]
 #   (Optional) Timeout in seconds for stack action.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*error_wait_time*]
 #   (Optional) The amount of time in seconds after an error has occurred that
 #   tasks may continue to run before being cancelled.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*engine_life_check_timeout*]
 #   (optional) RPC timeout (in seconds) for the engine liveness check that is
 #   used for stack locking
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*instance_connection_is_secure*]
 #   (Optional) Instance connection to CFN/CW API via https.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*instance_connection_https_validate_certificates*]
 #   (Optional) Instance connection to CFN/CW API validate certs if SSL is used.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*max_stacks_per_tenant*]
 #   (optional) Maximum number of stacks any one tenant may have active at one
 #   time.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*max_resources_per_stack*]
 #   (Optional) Maximum resources allowed per top-level stack.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*num_engine_workers*]
 #   (Optional) The number of workers to spawn.
-#   Defaults to $::os_workers_heat_engine
+#   Defaults to $facts['os_workers_heat_engine']
 #
 # [*convergence_engine*]
 #   (Optional) Enables engine with convergence architecture.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*environment_dir*]
 #   (Optional) The directory to search for environment files.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*template_dir*]
 #   (Optional) The directory to search for template files.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*max_nested_stack_depth*]
 #   (Optional) Maximum depth allowed when using nested stacks.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*plugin_dirs*]
 #   (Optional) List of directories to search for plug-ins.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*server_keystone_endpoint_type*]
 #   (Optional) If set, is used to control which authentication endpoint is used
 #   by user-controlled servers to make calls back to Heat.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # DEPRECATED PARAMETERS
 #
@@ -183,35 +183,35 @@ class heat::engine (
   $package_ensure                                  = 'present',
   $manage_service                                  = true,
   $enabled                                         = true,
-  $heat_stack_user_role                            = $::os_service_default,
-  $heat_metadata_server_url                        = $::os_service_default,
-  $heat_waitcondition_server_url                   = $::os_service_default,
-  $default_software_config_transport               = $::os_service_default,
-  $default_deployment_signal_transport             = $::os_service_default,
-  $default_user_data_format                        = $::os_service_default,
-  $reauthentication_auth_method                    = $::os_service_default,
-  $allow_trusts_redelegation                       = $::os_service_default,
-  $trusts_delegated_roles                          = $::os_service_default,
-  $instance_connection_is_secure                   = $::os_service_default,
-  $instance_connection_https_validate_certificates = $::os_service_default,
-  $max_stacks_per_tenant                           = $::os_service_default,
-  $max_resources_per_stack                         = $::os_service_default,
-  $action_retry_limit                              = $::os_service_default,
-  $client_retry_limit                              = $::os_service_default,
-  $max_server_name_length                          = $::os_service_default,
-  $max_interface_check_attempts                    = $::os_service_default,
-  $event_purge_batch_size                          = $::os_service_default,
-  $max_events_per_stack                            = $::os_service_default,
-  $stack_action_timeout                            = $::os_service_default,
-  $error_wait_time                                 = $::os_service_default,
-  $engine_life_check_timeout                       = $::os_service_default,
-  $num_engine_workers                              = $::os_workers_heat_engine,
-  $convergence_engine                              = $::os_service_default,
-  $environment_dir                                 = $::os_service_default,
-  $template_dir                                    = $::os_service_default,
-  $max_nested_stack_depth                          = $::os_service_default,
-  $plugin_dirs                                     = $::os_service_default,
-  $server_keystone_endpoint_type                   = $::os_service_default,
+  $heat_stack_user_role                            = $facts['os_service_default'],
+  $heat_metadata_server_url                        = $facts['os_service_default'],
+  $heat_waitcondition_server_url                   = $facts['os_service_default'],
+  $default_software_config_transport               = $facts['os_service_default'],
+  $default_deployment_signal_transport             = $facts['os_service_default'],
+  $default_user_data_format                        = $facts['os_service_default'],
+  $reauthentication_auth_method                    = $facts['os_service_default'],
+  $allow_trusts_redelegation                       = $facts['os_service_default'],
+  $trusts_delegated_roles                          = $facts['os_service_default'],
+  $instance_connection_is_secure                   = $facts['os_service_default'],
+  $instance_connection_https_validate_certificates = $facts['os_service_default'],
+  $max_stacks_per_tenant                           = $facts['os_service_default'],
+  $max_resources_per_stack                         = $facts['os_service_default'],
+  $action_retry_limit                              = $facts['os_service_default'],
+  $client_retry_limit                              = $facts['os_service_default'],
+  $max_server_name_length                          = $facts['os_service_default'],
+  $max_interface_check_attempts                    = $facts['os_service_default'],
+  $event_purge_batch_size                          = $facts['os_service_default'],
+  $max_events_per_stack                            = $facts['os_service_default'],
+  $stack_action_timeout                            = $facts['os_service_default'],
+  $error_wait_time                                 = $facts['os_service_default'],
+  $engine_life_check_timeout                       = $facts['os_service_default'],
+  $num_engine_workers                              = $facts['os_workers_heat_engine'],
+  $convergence_engine                              = $facts['os_service_default'],
+  $environment_dir                                 = $facts['os_service_default'],
+  $template_dir                                    = $facts['os_service_default'],
+  $max_nested_stack_depth                          = $facts['os_service_default'],
+  $plugin_dirs                                     = $facts['os_service_default'],
+  $server_keystone_endpoint_type                   = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $deferred_auth_method                            = undef,
 ) {
@@ -231,7 +231,7 @@ class heat::engine (
   include heat::params
 
   # plugin_dirs value follows these rules:
-  # - default is $::os_service_default so Puppet won't try to configure it.
+  # - default is $facts['os_service_default'] so Puppet won't try to configure it.
   # - if set, array validation will be done for not empty and then configure the parameter.
   # - Otherwise, fallback to default.
   if !is_service_default($plugin_dirs) and !empty($plugin_dirs) {
@@ -239,7 +239,7 @@ class heat::engine (
 
     $plugin_dirs_real = join($plugin_dirs, ',')
   } else {
-    $plugin_dirs_real = $::os_service_default
+    $plugin_dirs_real = $facts['os_service_default']
   }
 
   package { 'heat-engine':
@@ -302,6 +302,6 @@ class heat::engine (
     warning('deferred_auth_method is deprecated and will be removed in a future release')
   }
   heat_config {
-    'DEFAULT/deferred_auth_method': value => pick($deferred_auth_method, $::os_service_default);
+    'DEFAULT/deferred_auth_method': value => pick($deferred_auth_method, $facts['os_service_default']);
   }
 }

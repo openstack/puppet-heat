@@ -99,7 +99,7 @@ describe 'heat::api_cfn' do
       end
 
       let :platform_params do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :api_cfn_service_name => 'heat-api-cfn' }
         when 'RedHat'

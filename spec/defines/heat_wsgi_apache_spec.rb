@@ -81,7 +81,7 @@ describe 'heat::wsgi::apache' do
       end
 
       let(:platform_params) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :wsgi_script_dir   => '/usr/lib/cgi-bin/heat',
             :script_source_api => '/usr/bin/heat-wsgi-api',

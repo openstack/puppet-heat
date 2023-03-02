@@ -98,7 +98,7 @@ describe 'heat::api' do
       end
 
       let :platform_params do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :api_service_name => 'heat-api' }
         when 'RedHat'

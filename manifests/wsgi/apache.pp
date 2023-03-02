@@ -30,7 +30,7 @@
 #
 # [*servername*]
 #   (Optional) The servername for the virtualhost.
-#   Defaults to $::fqdn
+#   Defaults to $facts['networking']['fqdn']
 #
 # [*bind_host*]
 #   (Optional) The host/ip address Apache will listen on.
@@ -46,7 +46,7 @@
 #
 # [*workers*]
 #   (Optional) Number of WSGI workers to spawn.
-#   Defaults to $::os_workers
+#   Defaults to $facts['os_workers']
 #
 # [*priority*]
 #   (Optional) The priority for the vhost.
@@ -131,11 +131,11 @@
 #
 define heat::wsgi::apache (
   $port,
-  $servername                  = $::fqdn,
+  $servername                  = $facts['networking']['fqdn'],
   $bind_host                   = undef,
   $path                        = '/',
   $ssl                         = false,
-  $workers                     = $::os_workers,
+  $workers                     = $facts['os_workers'],
   $ssl_cert                    = undef,
   $ssl_key                     = undef,
   $ssl_chain                   = undef,

@@ -21,15 +21,15 @@
 # [*bind_host*]
 #   (Optional) Address to bind the server. Useful when
 #   selecting a particular network interface.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*bind_port*]
 #   (Optional) The port on which the server will listen.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*workers*]
 #   (Optional) The number of workers to spawn.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*use_ssl*]
 #   (Optional) Whether to use ssl or not.
@@ -38,12 +38,12 @@
 # [*cert_file*]
 #   (Optional) Location of the SSL certificate file to use for SSL mode.
 #   Required when $use_ssl is set to 'true'.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*key_file*]
 #   (Optional) Location of the SSL key file to use for enabling SSL mode.
 #   Required when $use_ssl is set to 'true'.
-#   Defaults to $::os_service_default.
+#   Defaults to $facts['os_service_default'].
 #
 # [*service_name*]
 #   (optional) Name of the service that will be providing the
@@ -62,12 +62,12 @@ class heat::api_cfn (
   $package_ensure    = 'present',
   $manage_service    = true,
   $enabled           = true,
-  $bind_host         = $::os_service_default,
-  $bind_port         = $::os_service_default,
-  $workers           = $::os_service_default,
+  $bind_host         = $facts['os_service_default'],
+  $bind_port         = $facts['os_service_default'],
+  $workers           = $facts['os_service_default'],
   $use_ssl           = false,
-  $cert_file         = $::os_service_default,
-  $key_file          = $::os_service_default,
+  $cert_file         = $facts['os_service_default'],
+  $key_file          = $facts['os_service_default'],
   $service_name      = $::heat::params::api_cfn_service_name,
 ) inherits heat::params {
 
@@ -137,8 +137,8 @@ running as a standalone service, or httpd for being run by a httpd server")
     }
   } else {
     heat_config {
-      'heat_api_cfn/cert_file': value => $::os_service_default;
-      'heat_api_cfn/key_file':  value => $::os_service_default;
+      'heat_api_cfn/cert_file': value => $facts['os_service_default'];
+      'heat_api_cfn/key_file':  value => $facts['os_service_default'];
     }
   }
 

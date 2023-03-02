@@ -7,7 +7,7 @@ describe 'heat::wsgi::apache_api_cfn' do
       it { is_expected.to contain_class('heat::wsgi::apache_api_cfn') }
       it { is_expected.to contain_heat__wsgi__apache('api_cfn').with(
         :port                        => 8000,
-        :servername                  => facts[:fqdn],
+        :servername                  => 'foo.example.com',
         :bind_host                   => nil,
         :path                        => '/',
         :ssl                         => false,

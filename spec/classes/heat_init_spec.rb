@@ -420,7 +420,7 @@ describe 'heat' do
       end
 
       let :platform_params do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Debian'
           { :common_package_name => 'heat-common' }
         when 'RedHat'

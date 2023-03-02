@@ -7,7 +7,7 @@
 # [*password*]
 #   (optional) Password for connecting to Cinder services in
 #   admin context through the OpenStack Identity service.
-#   Defaults to $::os_service_default
+#   Defaults to $facts['os_service_default']
 #
 # [*auth_type*]
 #   (optional) Name of the auth type to load (string value)
@@ -49,7 +49,7 @@ class heat::trustee (
     $username_real         = pick($username, $::heat::keystone::authtoken::username)
     $user_domain_name_real = pick($user_domain_name, $::heat::keystone::authtoken::user_domain_name)
   } else {
-    $password_real         = pick($password, $::os_service_default)
+    $password_real         = pick($password, $facts['os_service_default'])
     $auth_type_real        = pick($auth_type, 'password')
     $auth_url_real         = pick($auth_url, 'http://127.0.0.1:5000/')
     $username_real         = pick($username, 'heat')

@@ -9,7 +9,7 @@ class heat::params {
   $user                = 'heat'
   $group               = 'heat'
 
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat': {
       # package names
       $api_package_name            = 'openstack-heat-api'
@@ -40,7 +40,7 @@ class heat::params {
       $heat_api_wsgi_script_source            = '/usr/bin/heat-wsgi-api'
       $heat_api_cfn_wsgi_script_source        = '/usr/bin/heat-wsgi-api-cfn'
       # Operating system specific
-      case $::operatingsystem {
+      case $facts['os']['name'] {
         'Ubuntu': {
           $libvirt_group = 'libvirtd'
         }
@@ -50,9 +50,7 @@ class heat::params {
       }
     }
     default: {
-      fail("Unsupported osfamily: ${::osfamily} operatingsystem: \
-${::operatingsystem}, module ${module_name} only support osfamily \
-RedHat and Debian")
+      fail("Unsupported osfamily: ${facts['os']['family']}")
     }
   }
 }

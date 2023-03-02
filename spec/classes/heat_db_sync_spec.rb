@@ -58,9 +58,7 @@ describe 'heat::db::sync' do
   }).each do |os,facts|
     context "on #{os}" do
       let (:facts) do
-        facts.merge(OSDefaults.get_facts({
-          :concat_basedir => '/var/lib/puppet/concat'
-        }))
+        facts.merge(OSDefaults.get_facts())
       end
 
       it_behaves_like 'heat-dbsync'

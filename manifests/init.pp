@@ -24,6 +24,10 @@
 #   (Optional) Configure the timeout (in seconds) for rpc responses
 #   Defaults to $::os_service_default.
 #
+# [*executor_thread_pool_size*]
+#   (Optional) Size of executor thread pool when executor is threading or eventlet.
+#   Defaults to $::os_service_default.
+#
 # [*rabbit_ha_queues*]
 #   (optional) Use HA queues in RabbitMQ (x-ha-policy: all).
 #   Defaults to $::os_service_default.
@@ -253,6 +257,7 @@ class heat(
   $default_transport_url              = $::os_service_default,
   $rpc_response_timeout               = $::os_service_default,
   $control_exchange                   = $::os_service_default,
+  $executor_thread_pool_size          = $::os_service_default,
   $rabbit_ha_queues                   = $::os_service_default,
   $rabbit_heartbeat_timeout_threshold = $::os_service_default,
   $rabbit_heartbeat_rate              = $::os_service_default,
@@ -401,9 +406,10 @@ class heat(
   }
 
   oslo::messaging::default { 'heat_config':
-    transport_url        => $default_transport_url,
-    rpc_response_timeout => $rpc_response_timeout,
-    control_exchange     => $control_exchange,
+    transport_url             => $default_transport_url,
+    rpc_response_timeout      => $rpc_response_timeout,
+    control_exchange          => $control_exchange,
+    executor_thread_pool_size => $executor_thread_pool_size,
   }
 
   oslo::middleware { 'heat_config':

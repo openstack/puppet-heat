@@ -42,7 +42,7 @@ describe 'heat' do
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
     it_configures 'with enable_stack_adopt and enable_stack_abandon set'
-    it_configures 'with overridden transport_url parameter'
+    it_configures 'with overridden messaging default parameters'
     it_configures 'with notification_driver set to a string'
 
     context 'with amqp messaging' do
@@ -76,10 +76,13 @@ describe 'heat' do
       is_expected.to contain_heat_config('DEFAULT/host').with_value('<SERVICE DEFAULT>')
     end
 
-    it 'configures default transport_url' do
-      is_expected.to contain_heat_config('DEFAULT/transport_url').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('DEFAULT/rpc_response_timeout').with_value('<SERVICE DEFAULT>')
-      is_expected.to contain_heat_config('DEFAULT/control_exchange').with_value('<SERVICE DEFAULT>')
+    it 'configures default messaging default parameters' do
+      is_expected.to contain_oslo__messaging__default('heat_config').with(
+        :transport_url             => '<SERVICE DEFAULT>',
+        :rpc_response_timeout      => '<SERVICE DEFAULT>',
+        :control_exchange          => '<SERVICE DEFAULT>',
+        :executor_thread_pool_size => '<SERVICE DEFAULT>',
+      )
     end
 
     it 'configures max_template_size' do
@@ -324,20 +327,22 @@ describe 'heat' do
     end
   end
 
-  shared_examples_for 'with overridden transport_url parameter' do
+  shared_examples_for 'with overridden messaging default parameters' do
     before do
       params.merge!(
-        :default_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
-        :rpc_response_timeout  => '120',
-        :control_exchange      => 'heat',
+        :default_transport_url     => 'rabbit://rabbit_user:password@localhost:5673',
+        :rpc_response_timeout      => 120,
+        :control_exchange          => 'heat',
+        :executor_thread_pool_size => 64,
       )
     end
 
-    it 'configures transport_url' do
+    it 'configures messaging default parameters' do
       is_expected.to contain_oslo__messaging__default('heat_config').with(
-        :transport_url        => 'rabbit://rabbit_user:password@localhost:5673',
-        :rpc_response_timeout => '120',
-        :control_exchange     => 'heat'
+        :transport_url             => 'rabbit://rabbit_user:password@localhost:5673',
+        :rpc_response_timeout      => 120,
+        :control_exchange          => 'heat',
+        :executor_thread_pool_size => 64,
       )
     end
   end

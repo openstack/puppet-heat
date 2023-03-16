@@ -218,6 +218,9 @@ class heat::engine (
 
   include heat::deps
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+
   # Validate Heat Engine AES key
   # must be either 16, 24, or 32 bytes long
   # https://bugs.launchpad.net/heat/+bug/1415887

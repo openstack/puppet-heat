@@ -73,6 +73,10 @@ class heat::api (
   include heat::params
   include heat::policy
 
+  validate_legacy(Boolean, 'validate_bool', $manage_service)
+  validate_legacy(Boolean, 'validate_bool', $enabled)
+  validate_legacy(Boolean, 'validate_bool', $use_ssl)
+
   if $use_ssl {
     if is_service_default($cert_file) {
       fail('The cert_file parameter is required when use_ssl is set to true')

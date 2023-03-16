@@ -61,6 +61,7 @@ class heat::db (
 ) {
 
   include heat::deps
+  validate_legacy(Boolean, 'validate_bool', $sync_db)
 
   oslo::db { 'heat_config':
     connection              => $database_connection,

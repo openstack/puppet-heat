@@ -30,37 +30,20 @@
 #   Defaults to 'Default'
 #
 class heat::trustee (
-  $password         = undef,
-  $auth_type        = undef,
-  $auth_url         = undef,
-  $username         = undef,
-  $user_domain_name = undef,
+  $password         = $facts['os_service_default'],
+  $auth_type        = 'password',
+  $auth_url         = 'http://127.0.0.1:5000/',
+  $username         = 'heat',
+  $user_domain_name = 'Default',
 ) {
 
   include heat::deps
 
-  if defined(Class[heat::keystone::authtoken]) {
-    # TODO(tkajinam): The following logic was added to keep compatibility with
-    # the old version which determines the trustee parameters based on
-    # authtoken parameters. This should be removed after Y release.
-    $password_real         = pick($password, $::heat::keystone::authtoken::password)
-    $auth_type_real        = pick($auth_type, $::heat::keystone::authtoken::auth_type)
-    $auth_url_real         = pick($auth_url, $::heat::keystone::authtoken::auth_url)
-    $username_real         = pick($username, $::heat::keystone::authtoken::username)
-    $user_domain_name_real = pick($user_domain_name, $::heat::keystone::authtoken::user_domain_name)
-  } else {
-    $password_real         = pick($password, $facts['os_service_default'])
-    $auth_type_real        = pick($auth_type, 'password')
-    $auth_url_real         = pick($auth_url, 'http://127.0.0.1:5000/')
-    $username_real         = pick($username, 'heat')
-    $user_domain_name_real = pick($user_domain_name, 'Default')
-  }
-
   heat_config {
-    'trustee/password':         value => $password_real, secret => true;
-    'trustee/auth_type':        value => $auth_type_real;
-    'trustee/auth_url':         value => $auth_url_real;
-    'trustee/username':         value => $username_real;
-    'trustee/user_domain_name': value => $user_domain_name_real;
+    'trustee/password':         value => $password, secret => true;
+    'trustee/auth_type':        value => $auth_type;
+    'trustee/auth_url':         value => $auth_url;
+    'trustee/username':         value => $username;
+    'trustee/user_domain_name': value => $user_domain_name;
   }
 }

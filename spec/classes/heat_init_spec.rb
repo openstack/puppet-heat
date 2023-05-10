@@ -92,26 +92,6 @@ describe 'heat' do
       is_expected.to contain_heat_config('DEFAULT/max_json_body_size').with_value('<SERVICE DEFAULT>')
     end
 
-    it 'configures user_domain_*' do
-      is_expected.to contain_heat_config('trustee/user_domain_name').with_value( 'Default' )
-    end
-
-    it 'configures auth_type' do
-      is_expected.to contain_heat_config('trustee/auth_type').with_value( 'password' )
-    end
-
-    it 'configures auth_url' do
-      is_expected.to contain_heat_config('trustee/auth_url').with_value( 'http://127.0.0.1:5000/' )
-    end
-
-    it 'configures username' do
-      is_expected.to contain_heat_config('trustee/username').with_value( 'heat' )
-    end
-
-    it 'configures ' do
-      is_expected.to contain_heat_config('trustee/password').with_secret( true )
-    end
-
     it 'configures endpoint_type for clients' do
       is_expected.to contain_heat_config('clients/endpoint_type').with_value( '<SERVICE DEFAULT>' )
     end
@@ -299,17 +279,6 @@ describe 'heat' do
   shared_examples_for 'without region_name set' do
     it 'doesnt have region_name set by default' do
       is_expected.to contain_heat_config('DEFAULT/region_name_for_services').with_value('<SERVICE DEFAULT>')
-    end
-  end
-
-  shared_examples_for "with custom keystone project_domain_* and user_domain_*" do
-    before do
-      params.merge!({
-        :keystone_user_domain_name => 'domain1',
-      })
-    end
-    it 'configures project_domain_* and user_domain_*' do
-      is_expected.to contain_heat_config('trustee/user_domain_name').with_value("domain1");
     end
   end
 

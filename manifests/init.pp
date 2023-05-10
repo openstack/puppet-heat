@@ -359,15 +359,6 @@ class heat(
     password              => $amqp_password,
   }
 
-  if !defined(Class[heat::trustee]) {
-    warning('The heat:trustee class will be required to set trustee option in a future release')
-    include heat::trustee
-  }
-  # TODO(tkajinam): Remove this when we remove the above logic
-  heat_config {
-    'trustee/project_domain_name': ensure => absent;
-  }
-
   if $heat_clients_url != undef {
     warning('The heat_clients_url parameter is deprecated. Use the heat::clients::heat class.')
   }

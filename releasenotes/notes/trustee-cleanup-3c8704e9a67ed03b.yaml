@@ -1,0 +1,6 @@
+---
+upgrade:
+  - |
+    The ``heat`` class no longer includes the ``heat:trustee`` class
+    automatically. Add the ``heat::trustee`` class to your manifests to
+    configure the ``[trustee]`` options.

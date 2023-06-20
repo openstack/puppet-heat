@@ -24,14 +24,11 @@
 #   or Puppet catalog compilation will fail with duplicate resources.
 #
 class heat::config (
-  $heat_config        = {},
-  $heat_api_paste_ini = {},
+  Hash $heat_config        = {},
+  Hash $heat_api_paste_ini = {},
 ) {
 
   include heat::deps
-
-  validate_legacy(Hash, 'validate_hash', $heat_config)
-  validate_legacy(Hash, 'validate_hash', $heat_api_paste_ini)
 
   create_resources('heat_config', $heat_config)
   create_resources('heat_api_paste_ini', $heat_api_paste_ini)

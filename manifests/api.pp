@@ -56,26 +56,22 @@
 # No Deprecated Parameters.
 #
 class heat::api (
-  $package_ensure    = 'present',
-  $manage_service    = true,
-  $enabled           = true,
-  $bind_host         = $facts['os_service_default'],
-  $bind_port         = $facts['os_service_default'],
-  $workers           = $facts['os_service_default'],
-  $use_ssl           = false,
-  $cert_file         = $facts['os_service_default'],
-  $key_file          = $facts['os_service_default'],
-  $service_name      = $::heat::params::api_service_name,
+  $package_ensure         = 'present',
+  Boolean $manage_service = true,
+  Boolean $enabled        = true,
+  $bind_host              = $facts['os_service_default'],
+  $bind_port              = $facts['os_service_default'],
+  $workers                = $facts['os_service_default'],
+  Boolean $use_ssl        = false,
+  $cert_file              = $facts['os_service_default'],
+  $key_file               = $facts['os_service_default'],
+  $service_name           = $::heat::params::api_service_name,
 ) inherits heat::params {
 
   include heat
   include heat::deps
   include heat::params
   include heat::policy
-
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-  validate_legacy(Boolean, 'validate_bool', $use_ssl)
 
   if $use_ssl {
     if is_service_default($cert_file) {

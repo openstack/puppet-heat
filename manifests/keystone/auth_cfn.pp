@@ -83,7 +83,7 @@
 #  }
 #
 class heat::keystone::auth_cfn (
-  $password             = false,
+  String[1] $password,
   $email                = 'heat-cfn@localhost',
   $auth_name            = 'heat-cfn',
   $service_name         = 'heat-cfn',
@@ -104,8 +104,6 @@ class heat::keystone::auth_cfn (
 ) {
 
   include heat::deps
-
-  validate_legacy(String, 'validate_string', $password)
 
   Keystone::Resource::Service_identity['heat-cfn'] -> Anchor['heat::service::end']
 

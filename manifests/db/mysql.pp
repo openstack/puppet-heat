@@ -34,7 +34,7 @@
 #   Defaults to 'utf8_general_ci'
 #
 class heat::db::mysql(
-  $password,
+  String[1] $password,
   $dbname        = 'heat',
   $user          = 'heat',
   $host          = '127.0.0.1',
@@ -44,8 +44,6 @@ class heat::db::mysql(
 ) {
 
   include heat::deps
-
-  validate_legacy(String, 'validate_string', $password)
 
   ::openstacklib::db::mysql { 'heat':
     user          => $user,

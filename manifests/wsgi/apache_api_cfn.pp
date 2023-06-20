@@ -158,8 +158,6 @@ class heat::wsgi::apache_api_cfn (
   $vhost_custom_fragment       = undef,
 ) {
 
-  validate_legacy(Integer, 'validate_integer', $port)
-
   heat::wsgi::apache { 'api_cfn':
     port                        => $port,
     servername                  => $servername,

@@ -109,7 +109,7 @@
 #  }
 #
 class heat::keystone::auth (
-  $password,
+  String[1] $password,
   $email                       = 'heat@localhost',
   $auth_name                   = 'heat',
   $service_name                = 'heat',
@@ -134,8 +134,6 @@ class heat::keystone::auth (
 ) {
 
   include heat::deps
-
-  validate_legacy(String, 'validate_string', $password)
 
   Keystone::Resource::Service_identity['heat'] -> Anchor['heat::service::end']
 

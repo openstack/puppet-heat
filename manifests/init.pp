@@ -289,8 +289,10 @@ class heat(
   $host                               = $facts['os_service_default'],
   $flavor                             = $facts['os_service_default'],
   $region_name                        = $facts['os_service_default'],
-  $enable_stack_adopt                 = $facts['os_service_default'],
-  $enable_stack_abandon               = $facts['os_service_default'],
+  Variant[Openstacklib::ServiceDefault, Boolean] $enable_stack_adopt
+                                      = $facts['os_service_default'],
+  Variant[Openstacklib::ServiceDefault, Boolean] $enable_stack_abandon
+                                      = $facts['os_service_default'],
   $max_template_size                  = $facts['os_service_default'],
   $max_json_body_size                 = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],
@@ -368,14 +370,6 @@ class heat(
     warning('The heat_clients_endpoint_type parameter is deprecated. Use the heat::clients class.')
   }
   include heat::clients
-
-  if (!is_service_default($enable_stack_adopt)) {
-    validate_legacy(Boolean, 'validate_bool', $enable_stack_adopt)
-  }
-
-  if (!is_service_default($enable_stack_abandon)) {
-    validate_legacy(Boolean, 'validate_bool', $enable_stack_abandon)
-  }
 
   heat_config {
     'DEFAULT/host':                         value => $host;

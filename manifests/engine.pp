@@ -179,10 +179,10 @@
 #   Defaults to undef
 #
 class heat::engine (
-  $auth_encryption_key,
+  String $auth_encryption_key,
   $package_ensure                                  = 'present',
-  $manage_service                                  = true,
-  $enabled                                         = true,
+  Boolean $manage_service                          = true,
+  Boolean $enabled                                 = true,
   $heat_stack_user_role                            = $facts['os_service_default'],
   $heat_metadata_server_url                        = $facts['os_service_default'],
   $heat_waitcondition_server_url                   = $facts['os_service_default'],
@@ -218,9 +218,6 @@ class heat::engine (
 
   include heat::deps
 
-  validate_legacy(Boolean, 'validate_bool', $manage_service)
-  validate_legacy(Boolean, 'validate_bool', $enabled)
-
   # Validate Heat Engine AES key
   # must be either 16, 24, or 32 bytes long
   # https://bugs.launchpad.net/heat/+bug/1415887
@@ -233,16 +230,12 @@ class heat::engine (
   include heat
   include heat::params
 
-  # plugin_dirs value follows these rules:
-  # - default is $facts['os_service_default'] so Puppet won't try to configure it.
-  # - if set, array validation will be done for not empty and then configure the parameter.
-  # - Otherwise, fallback to default.
-  if !is_service_default($plugin_dirs) and !empty($plugin_dirs) {
-    validate_legacy(Array, 'validate_array', $plugin_dirs)
-
-    $plugin_dirs_real = join($plugin_dirs, ',')
-  } else {
+  if is_service_default($plugin_dirs) {
     $plugin_dirs_real = $facts['os_service_default']
+  } elsif empty($plugin_dirs) {
+    $plugin_dirs_real = $facts['os_service_default']
+  } else {
+    $plugin_dirs_real = join(any2array($plugin_dirs), ',')
   }
 
   package { 'heat-engine':

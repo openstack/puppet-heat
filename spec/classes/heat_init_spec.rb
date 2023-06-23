@@ -92,10 +92,6 @@ describe 'heat' do
       is_expected.to contain_heat_config('DEFAULT/max_json_body_size').with_value('<SERVICE DEFAULT>')
     end
 
-    it 'configures endpoint_type for clients' do
-      is_expected.to contain_heat_config('clients/endpoint_type').with_value( '<SERVICE DEFAULT>' )
-    end
-
     it 'configures keystone_ec2_uri' do
       is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value( '<SERVICE DEFAULT>' )
     end
@@ -124,11 +120,6 @@ describe 'heat' do
         :max_request_body_size        => '<SERVICE DEFAULT>',
       )
     end
-
-    it 'sets clients_heat url' do
-      is_expected.to contain_heat_config('clients_heat/url').with_value('<SERVICE DEFAULT>')
-    end
-
   end
 
   shared_examples_for 'configures default rabbitmq parameters' do
@@ -238,18 +229,6 @@ describe 'heat' do
     it { is_expected.to contain_oslo__messaging__rabbit('heat_config').with(
       :rabbit_use_ssl     => false,
     )}
-  end
-
-  shared_examples_for 'with heat_clients_endpoint_type set' do
-    before do
-      params.merge!(
-        :heat_clients_endpoint_type => 'internal',
-      )
-    end
-
-    it do
-      is_expected.to contain_heat_config('clients/endpoint_type').with_value('internal')
-    end
   end
 
   shared_examples_for 'with ec2authtoken auth uri set' do

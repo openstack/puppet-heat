@@ -1,0 +1,7 @@
+---
+upgrade:
+  - |
+    The following parameters have been removed.
+
+    - ``heat::heat_clients_url``
+    - ``heat::heat_clients_endpoint_type``

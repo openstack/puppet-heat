@@ -240,17 +240,6 @@
 #     take for evaluation.
 #   Defaults to $facts['os_service_default'].
 #
-# DEPRECATED PARAMETERS
-#
-# [*heat_clients_url*]
-#   (optional) Heat url in format like http://0.0.0.0:8004/v1/%(tenant_id)s.
-#   Defaults to undef
-#
-# [*heat_clients_endpoint_type*]
-#   (optional) Type of endpoint in Identity service catalog to use for
-#   communication with the OpenStack service.
-#   Defaults to undef
-#
 class heat(
   $package_ensure                     = 'present',
   $keystone_ec2_uri                   = $facts['os_service_default'],
@@ -304,9 +293,6 @@ class heat(
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $facts['os_service_default'],
   $yaql_limit_iterators               = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  $heat_clients_url                   = undef,
-  $heat_clients_endpoint_type         = undef,
 ) {
 
   include heat::db
@@ -360,16 +346,6 @@ class heat(
     username              => $amqp_username,
     password              => $amqp_password,
   }
-
-  if $heat_clients_url != undef {
-    warning('The heat_clients_url parameter is deprecated. Use the heat::clients::heat class.')
-  }
-  include heat::clients::heat
-
-  if $heat_clients_endpoint_type!= undef {
-    warning('The heat_clients_endpoint_type parameter is deprecated. Use the heat::clients class.')
-  }
-  include heat::clients
 
   heat_config {
     'DEFAULT/host':                         value => $host;

@@ -40,8 +40,6 @@ class heat::clients::heat (
 
   include heat::deps
 
-  $url_real = pick($::heat::heat_clients_url, $url)
-
   heat::clients::base { 'clients_heat':
     endpoint_type => $endpoint_type,
     ca_file       => $ca_file,
@@ -51,6 +49,6 @@ class heat::clients::heat (
   }
 
   heat_config {
-    'clients_heat/url': value => $url_real;
+    'clients_heat/url': value => $url;
   }
 }

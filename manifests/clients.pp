@@ -35,10 +35,8 @@ class heat::clients (
 
   include heat::deps
 
-  $endpoint_type_real = pick($::heat::heat_clients_endpoint_type, $endpoint_type)
-
   heat::clients::base { 'clients':
-    endpoint_type => $endpoint_type_real,
+    endpoint_type => $endpoint_type,
     ca_file       => $ca_file,
     cert_file     => $cert_file,
     key_file      => $key_file,

@@ -35,7 +35,7 @@ class heat::deps {
 
   # policy config should occur in the config block also.
   Anchor['heat::config::begin']
-  -> Openstacklib::Policy<||>
+  -> Openstacklib::Policy<| tag == 'heat' |>
   ~> Anchor['heat::config::end']
 
   # On any uwsgi config change, we must restart Heat API.

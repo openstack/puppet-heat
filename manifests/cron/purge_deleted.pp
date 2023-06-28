@@ -51,23 +51,19 @@
 #    Defaults to undef.
 #
 class heat::cron::purge_deleted (
-  $ensure      = present,
-  $minute      = 1,
-  $hour        = 0,
-  $monthday    = '*',
-  $month       = '*',
-  $weekday     = '*',
-  $maxdelay    = 0,
-  $user        = $::heat::params::user,
-  $age         = 1,
-  $age_type    = 'days',
-  $destination = '/var/log/heat/heat-purge_deleted.log',
-  $batch_size  = undef,
+  Enum['present', 'absent'] $ensure                     = present,
+  $minute                                               = 1,
+  $hour                                                 = 0,
+  $monthday                                             = '*',
+  $month                                                = '*',
+  $weekday                                              = '*',
+  $maxdelay                                             = 0,
+  $user                                                 = $::heat::params::user,
+  $age                                                  = 1,
+  Enum['days', 'hours', 'minutes', 'seconds'] $age_type = 'days',
+  $destination                                          = '/var/log/heat/heat-purge_deleted.log',
+  $batch_size                                           = undef,
 ) inherits heat::params {
-
-  if ! member(['days', 'hours', 'minutes', 'seconds'], $age_type) {
-    fail('age_type possible values are only days, hours, minutes, or seconds.')
-  }
 
   if $maxdelay == 0 {
     $sleep = ''

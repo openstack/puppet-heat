@@ -109,16 +109,6 @@ describe 'heat::cron::purge_deleted' do
         )
       end
     end
-
-    describe 'when setting a wrong age_type' do
-      before :each do
-        params.merge!(
-          :age_type => 'foobar'
-        )
-      end
-
-      it_raises 'a Puppet::Error', /age_type possible values are only days, hours, minutes, or seconds./
-    end
   end
 
   on_supported_os({

@@ -289,7 +289,7 @@ class heat(
   $notification_topics                = $facts['os_service_default'],
   $enable_proxy_headers_parsing       = $facts['os_service_default'],
   $max_request_body_size              = $facts['os_service_default'],
-  $purge_config                       = false,
+  Boolean $purge_config               = false,
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $facts['os_service_default'],
   $yaql_limit_iterators               = $facts['os_service_default'],

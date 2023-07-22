@@ -278,10 +278,8 @@ class heat(
   $host                               = $facts['os_service_default'],
   $flavor                             = $facts['os_service_default'],
   $region_name                        = $facts['os_service_default'],
-  Variant[Openstacklib::ServiceDefault, Boolean] $enable_stack_adopt
-                                      = $facts['os_service_default'],
-  Variant[Openstacklib::ServiceDefault, Boolean] $enable_stack_abandon
-                                      = $facts['os_service_default'],
+  $enable_stack_adopt                 = $facts['os_service_default'],
+  $enable_stack_abandon               = $facts['os_service_default'],
   $max_template_size                  = $facts['os_service_default'],
   $max_json_body_size                 = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],

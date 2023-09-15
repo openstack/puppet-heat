@@ -125,19 +125,23 @@ describe 'heat' do
   shared_examples_for 'configures default rabbitmq parameters' do
     it 'configures rabbit' do
       is_expected.to contain_oslo__messaging__rabbit('heat_config').with(
-        :kombu_ssl_version           => '<SERVICE DEFAULT>',
-        :kombu_ssl_keyfile           => '<SERVICE DEFAULT>',
-        :kombu_ssl_certfile          => '<SERVICE DEFAULT>',
-        :kombu_ssl_ca_certs          => '<SERVICE DEFAULT>',
-        :kombu_reconnect_delay       => '<SERVICE DEFAULT>',
-        :kombu_failover_strategy     => '<SERVICE DEFAULT>',
-        :kombu_compression           => '<SERVICE DEFAULT>',
-        :heartbeat_timeout_threshold => '<SERVICE DEFAULT>',
-        :heartbeat_rate              => '<SERVICE DEFAULT>',
-        :heartbeat_in_pthread        => '<SERVICE DEFAULT>',
-        :rabbit_use_ssl              => '<SERVICE DEFAULT>',
-        :amqp_durable_queues         => '<SERVICE DEFAULT>',
-        :rabbit_ha_queues            => '<SERVICE DEFAULT>',
+        :kombu_ssl_version               => '<SERVICE DEFAULT>',
+        :kombu_ssl_keyfile               => '<SERVICE DEFAULT>',
+        :kombu_ssl_certfile              => '<SERVICE DEFAULT>',
+        :kombu_ssl_ca_certs              => '<SERVICE DEFAULT>',
+        :kombu_reconnect_delay           => '<SERVICE DEFAULT>',
+        :kombu_failover_strategy         => '<SERVICE DEFAULT>',
+        :kombu_compression               => '<SERVICE DEFAULT>',
+        :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
+        :heartbeat_rate                  => '<SERVICE DEFAULT>',
+        :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
+        :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
+        :amqp_durable_queues             => '<SERVICE DEFAULT>',
+        :rabbit_ha_queues                => '<SERVICE DEFAULT>',
+        :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
+        :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
       )
     end
   end
@@ -150,19 +154,23 @@ describe 'heat' do
 
     it 'configures rabbit' do
       is_expected.to contain_oslo__messaging__rabbit('heat_config').with(
-        :kombu_ssl_version           => '<SERVICE DEFAULT>',
-        :kombu_ssl_keyfile           => '<SERVICE DEFAULT>',
-        :kombu_ssl_certfile          => '<SERVICE DEFAULT>',
-        :kombu_ssl_ca_certs          => '<SERVICE DEFAULT>',
-        :kombu_reconnect_delay       => '<SERVICE DEFAULT>',
-        :kombu_failover_strategy     => '<SERVICE DEFAULT>',
-        :kombu_compression           => '<SERVICE DEFAULT>',
-        :heartbeat_timeout_threshold => '<SERVICE DEFAULT>',
-        :heartbeat_rate              => '<SERVICE DEFAULT>',
-        :heartbeat_in_pthread        => '<SERVICE DEFAULT>',
-        :rabbit_use_ssl              => '<SERVICE DEFAULT>',
-        :amqp_durable_queues         => true,
-        :rabbit_ha_queues            => true,
+        :kombu_ssl_version               => '<SERVICE DEFAULT>',
+        :kombu_ssl_keyfile               => '<SERVICE DEFAULT>',
+        :kombu_ssl_certfile              => '<SERVICE DEFAULT>',
+        :kombu_ssl_ca_certs              => '<SERVICE DEFAULT>',
+        :kombu_reconnect_delay           => '<SERVICE DEFAULT>',
+        :kombu_failover_strategy         => '<SERVICE DEFAULT>',
+        :kombu_compression               => '<SERVICE DEFAULT>',
+        :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
+        :heartbeat_rate                  => '<SERVICE DEFAULT>',
+        :heartbeat_in_pthread            => '<SERVICE DEFAULT>',
+        :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
+        :amqp_durable_queues             => true,
+        :rabbit_ha_queues                => true,
+        :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
+        :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
+        :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
       )
     end
   end

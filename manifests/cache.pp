@@ -103,6 +103,11 @@
 #   client connection. (integer value)
 #   Defaults to $facts['os_service_default']
 #
+# [*memcache_pool_flush_on_reconnect*]
+#   (Optional) Global toggle if memcache will be flushed on reconnect.
+#   (oslo_cache.memcache_pool backend only)
+#   Defaults to $facts['os_service_default']
+#
 # [*manage_backend_package*]
 #   (Optional) Whether to install the backend package for the cache.
 #   Defaults to true
@@ -216,6 +221,7 @@ class heat::cache (
   $memcache_pool_maxsize                 = $facts['os_service_default'],
   $memcache_pool_unused_timeout          = $facts['os_service_default'],
   $memcache_pool_connection_get_timeout  = $facts['os_service_default'],
+  $memcache_pool_flush_on_reconnect      = $facts['os_service_default'],
   $manage_backend_package                = true,
   $constraint_validation_caching         = $facts['os_service_default'],
   $constraint_validation_expiration_time = $facts['os_service_default'],
@@ -256,6 +262,7 @@ class heat::cache (
     memcache_pool_maxsize                => $memcache_pool_maxsize,
     memcache_pool_unused_timeout         => $memcache_pool_unused_timeout,
     memcache_pool_connection_get_timeout => $memcache_pool_connection_get_timeout,
+    memcache_pool_flush_on_reconnect     => $memcache_pool_flush_on_reconnect,
     manage_backend_package               => $manage_backend_package,
     tls_enabled                          => $tls_enabled,
     tls_cafile                           => $tls_cafile,

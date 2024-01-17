@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``heat::healthcheck::allowed_source_ranges`` parameter has been
+    added.

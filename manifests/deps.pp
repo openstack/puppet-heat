@@ -24,33 +24,17 @@ class heat::deps {
   ~> Service<| tag == 'heat-service' |>
   ~> anchor { 'heat::service::end': }
 
-  # paste-api.ini config should occur in the config block also.
   Anchor['heat::config::begin']
   -> Heat_api_paste_ini<||>
-  ~> Anchor['heat::config::end']
-
-  # all cache settings should be applied and all packages should be installed
-  # before service startup
-  Oslo::Cache<||> -> Anchor['heat::service::begin']
-
-  # policy config should occur in the config block also.
-  Anchor['heat::config::begin']
-  -> Openstacklib::Policy<| tag == 'heat' |>
   -> Anchor['heat::config::end']
 
-  # On any uwsgi config change, we must restart Heat API.
   Anchor['heat::config::begin']
   -> Heat_api_uwsgi_config<||>
-  ~> Anchor['heat::config::end']
+  -> Anchor['heat::config::end']
 
-  # On any uwsgi config change, we must restart Heat API CFN.
   Anchor['heat::config::begin']
   -> Heat_api_cfn_uwsgi_config<||>
-  ~> Anchor['heat::config::end']
-
-  # all db settings should be applied and all packages should be installed
-  # before dbsync starts
-  Oslo::Db<||> -> Anchor['heat::dbsync::begin']
+  -> Anchor['heat::config::end']
 
   # Installation or config changes will always restart services.
   Anchor['heat::install::end'] ~> Anchor['heat::service::begin']

@@ -104,6 +104,12 @@ class heat::api (
         hasrestart => true,
         tag        => 'heat-service',
       }
+
+      # On any paste-api.ini config change, we must restart Heat API.
+      Heat_api_paste_ini<||> ~> Service['heat-api']
+      # On any uwsgi config change, we must restart Heat API.
+      Heat_api_uwsgi_config<||> ~> Service['heat-api']
+
     } elsif $service_name == 'httpd' {
       service { 'heat-api':
         ensure => 'stopped',
@@ -115,6 +121,10 @@ class heat::api (
 
       # we need to make sure heat-api/eventlet is stopped before trying to start apache
       Service['heat-api'] -> Service[$service_name]
+
+      # On any paste-api.ini config change, we must restart Heat API.
+      Heat_api_paste_ini<||> ~> Service[$service_name]
+
     } else {
       fail("Invalid service_name. Either heat-api/openstack-heat-api for \
 running as a standalone service, or httpd for being run by a httpd server")

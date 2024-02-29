@@ -33,7 +33,6 @@ describe 'heat::policy' do
           :file_group   => 'heat',
           :file_format  => 'yaml',
           :purge_config => false,
-          :tag          => 'heat',
         )
         is_expected.to contain_oslo__policy('heat_config').with(
           :enforce_scope        => false,
@@ -64,7 +63,6 @@ describe 'heat::policy' do
           :file_group   => 'heat',
           :file_format  => 'yaml',
           :purge_config => true,
-          :tag          => 'heat',
         )
         is_expected.to contain_oslo__policy('heat_config').with(
           :enforce_scope        => false,

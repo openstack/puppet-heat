@@ -277,6 +277,10 @@ class heat::cache (
     dead_timeout                         => $dead_timeout,
   }
 
+  # all cache settings should be applied and all packages should be installed
+  # before service startup
+  Oslo::Cache['heat_config'] -> Anchor['heat::service::begin']
+
   heat_config {
     'constraint_validation_cache/caching':         value => $constraint_validation_caching;
     'constraint_validation_cache/expiration_time': value => $constraint_validation_expiration_time;

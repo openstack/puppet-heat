@@ -78,4 +78,7 @@ class heat::db (
     include heat::db::sync
   }
 
+  # all db settings should be applied and all packages should be installed
+  # before dbsync starts
+  Oslo::Db['heat_config'] -> Anchor['heat::dbsync::begin']
 }

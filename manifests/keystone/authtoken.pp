@@ -279,4 +279,6 @@ class heat::keystone::authtoken(
       service_type                   => $service_type,
       interface                      => $interface;
   }
+
+  Keystone::Resource::Authtoken['heat_config'] -> Anchor['heat::config::end']
 }

@@ -65,10 +65,14 @@ class heat::policy (
     file_group   => $::heat::params::group,
     file_format  => 'yaml',
     purge_config => $purge_config,
-    tag          => 'heat',
   }
 
   create_resources('openstacklib::policy', { $policy_path => $policy_parameters })
+
+  # policy config should occur in the config block also.
+  Anchor['heat::config::begin']
+  -> Openstacklib::Policy[$policy_path]
+  -> Anchor['heat::config::end']
 
   oslo::policy { 'heat_config':
     enforce_scope        => $enforce_scope,
@@ -77,5 +81,4 @@ class heat::policy (
     policy_default_rule  => $policy_default_rule,
     policy_dirs          => $policy_dirs,
   }
-
 }

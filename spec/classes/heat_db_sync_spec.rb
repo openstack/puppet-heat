@@ -8,7 +8,7 @@ describe 'heat::db::sync' do
 
     it 'runs heat-manage db_sync' do
       is_expected.to contain_exec('heat-dbsync').with(
-        :command     => 'heat-manage --config-file /etc/heat/heat.conf db_sync',
+        :command     => 'heat-manage  db_sync',
         :path        => '/usr/bin',
         :user        => 'heat',
         :refreshonly => 'true',

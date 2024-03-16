@@ -111,6 +111,9 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/instance_connection_https_validate_certificates').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/max_stacks_per_tenant').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/max_resources_per_stack').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('DEFAULT/max_software_configs_per_tenant').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('DEFAULT/max_software_deployments_per_tenant').with_value('<SERVICE DEFAULT>') }
+      it { is_expected.to contain_heat_config('DEFAULT/max_snapshots_per_stack').with_value('<SERVICE DEFAULT>') }
       it { is_expected.to contain_heat_config('DEFAULT/action_retry_limit').with_value( expected_params[:action_retry_limit] ) }
       it { is_expected.to contain_heat_config('DEFAULT/client_retry_limit').with_value( expected_params[:client_retry_limit] ) }
       it { is_expected.to contain_heat_config('DEFAULT/max_server_name_length').with_value( expected_params[:max_server_name_length] ) }
@@ -133,12 +136,18 @@ describe 'heat::engine' do
     context 'with max limits are defined' do
       before do
         params.merge!({
-          :max_stacks_per_tenant   => 512,
-          :max_resources_per_stack => 1000,
+          :max_stacks_per_tenant               => 512,
+          :max_resources_per_stack             => 1000,
+          :max_software_configs_per_tenant     => 4096,
+          :max_software_deployments_per_tenant => 4096,
+          :max_snapshots_per_stack             => 32,
         })
       end
       it { is_expected.to contain_heat_config('DEFAULT/max_stacks_per_tenant').with_value(512) }
       it { is_expected.to contain_heat_config('DEFAULT/max_resources_per_stack').with_value(1000) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_software_configs_per_tenant').with_value(4096) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_software_deployments_per_tenant').with_value(4096) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_snapshots_per_stack').with_value(32) }
     end
 
     context 'with disabled service managing' do

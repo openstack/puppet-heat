@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``heat::engine`` class.
+
+    - ``max_software_configs_per_tenant``
+    - ``max_software_deployments_per_tenant``
+    - ``max_snapshots_per_stack``

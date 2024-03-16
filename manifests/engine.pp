@@ -142,6 +142,21 @@
 #   (Optional) Maximum resources allowed per top-level stack.
 #   Defaults to $facts['os_service_default']
 #
+# [*max_software_configs_per_tenant*]
+#   (Optional) Maximum number of software configs any one tenant may have
+#   active at one time.
+#   Defaults to $facts['os_service_default'].
+#
+# [*max_software_deployments_per_tenant*]
+#   (Optional) Maximum number of software deployments any one tenant may have
+#   active at one time.
+#   Defaults to $facts['os_service_default'].
+#
+# [*max_snapshots_per_stack*]
+#   (Optional) Maximum number of snapshot any one stack may have active at one
+#   time.
+#   Defaults to $facts['os_service_default'].
+#
 # [*num_engine_workers*]
 #   (Optional) The number of workers to spawn.
 #   Defaults to $facts['os_workers_heat_engine']
@@ -196,6 +211,9 @@ class heat::engine (
   $instance_connection_https_validate_certificates = $facts['os_service_default'],
   $max_stacks_per_tenant                           = $facts['os_service_default'],
   $max_resources_per_stack                         = $facts['os_service_default'],
+  $max_software_configs_per_tenant                 = $facts['os_service_default'],
+  $max_software_deployments_per_tenant             = $facts['os_service_default'],
+  $max_snapshots_per_stack                         = $facts['os_service_default'],
   $action_retry_limit                              = $facts['os_service_default'],
   $client_retry_limit                              = $facts['os_service_default'],
   $max_server_name_length                          = $facts['os_service_default'],
@@ -274,6 +292,9 @@ class heat::engine (
     'DEFAULT/trusts_delegated_roles':                          value => join(any2array($trusts_delegated_roles), ',');
     'DEFAULT/max_stacks_per_tenant':                           value => $max_stacks_per_tenant;
     'DEFAULT/max_resources_per_stack':                         value => $max_resources_per_stack;
+    'DEFAULT/max_software_configs_per_tenant':                 value => $max_software_configs_per_tenant;
+    'DEFAULT/max_software_deployments_per_tenant':             value => $max_software_deployments_per_tenant;
+    'DEFAULT/max_snapshots_per_stack':                         value => $max_snapshots_per_stack;
     'DEFAULT/action_retry_limit':                              value => $action_retry_limit;
     'DEFAULT/client_retry_limit':                              value => $client_retry_limit;
     'DEFAULT/max_server_name_length':                          value => $max_server_name_length;

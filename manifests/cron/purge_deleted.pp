@@ -57,7 +57,7 @@ class heat::cron::purge_deleted (
   $monthday                                             = '*',
   $month                                                = '*',
   $weekday                                              = '*',
-  $maxdelay                                             = 0,
+  Integer[0] $maxdelay                                  = 0,
   $user                                                 = $::heat::params::user,
   $age                                                  = 1,
   Enum['days', 'hours', 'minutes', 'seconds'] $age_type = 'days',

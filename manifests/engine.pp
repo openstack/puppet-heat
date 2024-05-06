@@ -3,6 +3,7 @@
 #  Installs & configure the heat engine service
 #
 # === Parameters
+#
 # [*auth_encryption_key*]
 #   (required) Encryption key used for authentication info in database
 #   Must be either 16, 24, or 32 bytes long.
@@ -194,7 +195,7 @@
 #   Defaults to undef
 #
 class heat::engine (
-  String $auth_encryption_key,
+  Heat::AuthEncryptionKey $auth_encryption_key,
   $package_ensure                                  = 'present',
   Boolean $manage_service                          = true,
   Boolean $enabled                                 = true,
@@ -235,15 +236,6 @@ class heat::engine (
 ) {
 
   include heat::deps
-
-  # Validate Heat Engine AES key
-  # must be either 16, 24, or 32 bytes long
-  # https://bugs.launchpad.net/heat/+bug/1415887
-  $allowed_sizes = ['16','24','32']
-  $param_size = size($auth_encryption_key)
-  if ! (member($allowed_sizes, "${param_size}")) { # lint:ignore:only_variable_string
-    fail("${param_size} is not a correct size for auth_encryption_key parameter, it must be either 16, 24, 32 bytes long.")
-  }
 
   include heat
   include heat::params

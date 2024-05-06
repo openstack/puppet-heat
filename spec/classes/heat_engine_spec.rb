@@ -33,7 +33,7 @@ describe 'heat::engine' do
     }
   end
 
-  shared_examples_for 'heat-engine' do
+  shared_examples_for 'heat::engine' do
     let :pre_condition do
       "class { 'heat::keystone::authtoken':
          password => 'password',
@@ -41,13 +41,12 @@ describe 'heat::engine' do
     end
 
     [
-      {},
       { :auth_encryption_key                 => '1234567890AZERTYUIOPMLKJHGFDSQ12' },
       { :auth_encryption_key                 => '0234567890AZERTYUIOPMLKJHGFDSQ24',
         :enabled                             => false,
         :heat_stack_user_role                => 'heat_stack_user',
-        :heat_metadata_server_url            => 'http://127.0.0.1:8000',
-        :heat_waitcondition_server_url       => 'http://127.0.0.1:8000/v1/waitcondition',
+        :heat_metadata_server_url            => 'https://127.0.0.1:8000',
+        :heat_waitcondition_server_url       => 'https://127.0.0.1:8000/v1/waitcondition',
         :default_software_config_transport   => 'POLL_SERVER_CFN',
         :default_deployment_signal_transport => 'CFN_SIGNAL',
         :default_user_data_format            => 'HEAT_CFNTOOLS',
@@ -167,14 +166,6 @@ describe 'heat::engine' do
       end
       it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value(['/usr/lib/heat,/usr/local/lib/heat']) }
     end
-
-    context 'with wrong auth_encryption_key parameter size' do
-      before do
-        params.merge!({
-          :auth_encryption_key => 'hello' })
-      end
-      it_raises 'a Puppet::Error', /5 is not a correct size for auth_encryption_key parameter, it must be either 16, 24, 32 bytes long./
-    end
   end
 
   on_supported_os({
@@ -198,7 +189,7 @@ describe 'heat::engine' do
         end
       end
 
-      it_behaves_like 'heat-engine'
+      it_behaves_like 'heat::engine'
     end
   end
 

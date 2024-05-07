@@ -61,5 +61,5 @@
     ],
     "source": "https://opendev.org/openstack/puppet-heat.git",
     "summary": "Puppet module for OpenStack Heat",
-    "version": "21.0.0"
+    "version": "21.1.0"
 }

@@ -43,10 +43,6 @@ describe 'heat' do
     it_configures 'with enable_stack_adopt and enable_stack_abandon set'
     it_configures 'with overridden messaging default parameters'
     it_configures 'with notification_driver set to a string'
-
-    context 'with amqp messaging' do
-      it_configures 'amqp support'
-    end
   end
 
   shared_examples_for 'a heat base installation' do
@@ -319,58 +315,6 @@ describe 'heat' do
         :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
         :topics        => 'notifications'
       )
-    end
-  end
-
-  shared_examples_for 'amqp support' do
-    context 'with default parameters' do
-      it { is_expected.to contain_oslo__messaging__amqp('heat_config').with(
-        :server_request_prefix => '<SERVICE DEFAULT>',
-        :broadcast_prefix      => '<SERVICE DEFAULT>',
-        :group_request_prefix  => '<SERVICE DEFAULT>',
-        :container_name        => '<SERVICE DEFAULT>',
-        :idle_timeout          => '<SERVICE DEFAULT>',
-        :trace                 => '<SERVICE DEFAULT>',
-        :ssl_ca_file           => '<SERVICE DEFAULT>',
-        :ssl_cert_file         => '<SERVICE DEFAULT>',
-        :ssl_key_file          => '<SERVICE DEFAULT>',
-        :ssl_key_password      => '<SERVICE DEFAULT>',
-        :sasl_mechanisms       => '<SERVICE DEFAULT>',
-        :sasl_config_dir       => '<SERVICE DEFAULT>',
-        :sasl_config_name      => '<SERVICE DEFAULT>',
-        :username              => '<SERVICE DEFAULT>',
-        :password              => '<SERVICE DEFAULT>',
-      ) }
-    end
-
-    context 'with overridden amqp parameters' do
-      before { params.merge!(
-        :amqp_idle_timeout  => '60',
-        :amqp_trace         => true,
-        :amqp_ssl_ca_file   => '/path/to/ca.cert',
-        :amqp_ssl_cert_file => '/path/to/certfile',
-        :amqp_ssl_key_file  => '/path/to/key',
-        :amqp_username      => 'amqp_user',
-        :amqp_password      => 'password',
-      ) }
-
-      it { is_expected.to contain_oslo__messaging__amqp('heat_config').with(
-        :server_request_prefix => '<SERVICE DEFAULT>',
-        :broadcast_prefix      => '<SERVICE DEFAULT>',
-        :group_request_prefix  => '<SERVICE DEFAULT>',
-        :container_name        => '<SERVICE DEFAULT>',
-        :idle_timeout          => '60',
-        :trace                 => true,
-        :ssl_ca_file           => '/path/to/ca.cert',
-        :ssl_cert_file         => '/path/to/certfile',
-        :ssl_key_file          => '/path/to/key',
-        :ssl_key_password      => '<SERVICE DEFAULT>',
-        :sasl_mechanisms       => '<SERVICE DEFAULT>',
-        :sasl_config_dir       => '<SERVICE DEFAULT>',
-        :sasl_config_name      => '<SERVICE DEFAULT>',
-        :username              => 'amqp_user',
-        :password              => 'password',
-      ) }
     end
   end
 

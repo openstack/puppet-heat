@@ -40,6 +40,8 @@ describe 'heat' do
     it_configures 'with SSL enabled with kombu'
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
+    it_configures 'with region_name set'
+    it_configures 'without region_name set'
     it_configures 'with enable_stack_adopt and enable_stack_abandon set'
     it_configures 'with overridden messaging default parameters'
     it_configures 'with notification_driver set to a string'

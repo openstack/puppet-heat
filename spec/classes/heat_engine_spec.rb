@@ -66,7 +66,7 @@ describe 'heat::engine' do
         :convergence_engine                  => false,
         :environment_dir                     => '/etc/heat/environment.d',
         :template_dir                        => '/etc/heat/templates',
-        :client_retry_limit                  => 2,
+        :max_nested_stack_depth              => 3,
         :server_keystone_endpoint_type       => 'public',
         :deferred_auth_method                => 'trusts',
       }
@@ -126,8 +126,8 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/convergence_engine').with_value( expected_params[:convergence_engine] ) }
       it { is_expected.to contain_heat_config('DEFAULT/environment_dir').with_value( expected_params[:environment_dir] ) }
       it { is_expected.to contain_heat_config('DEFAULT/template_dir').with_value( expected_params[:template_dir] ) }
-      it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value('<SERVICE DEFAULT>') }
-      it { is_expected.to contain_heat_config('DEFAULT/client_retry_limit').with_value( expected_params[:client_retry_limit] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_nested_stack_depth').with_value( expected_params[:max_nested_stack_depth] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value( expected_params[:plugin_dirs] ) }
       it { is_expected.to contain_heat_config('DEFAULT/server_keystone_endpoint_type').with_value( expected_params[:server_keystone_endpoint_type] ) }
       it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
     end
@@ -159,7 +159,7 @@ describe 'heat::engine' do
       it { is_expected.to_not contain_service('heat-engine') }
     end
 
-    context 'with plugin_dirs value set' do
+    context 'with plugin_dirs set' do
       before do
         params.merge!({
           :plugin_dirs => ['/usr/lib/heat', '/usr/local/lib/heat'] })

@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``heat::clients::sahara`` class has been deprecated and will be removed
+    in a future release.

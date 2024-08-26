@@ -1,5 +1,6 @@
 # Class heat::clients::sahara
 #
+#  DEPRECATED !!
 #  sahara client configuration
 #
 # == Parameters
@@ -34,6 +35,8 @@ class heat::clients::sahara (
 ) {
 
   include heat::deps
+
+  warning('The heat::clients::sahara class is deprecated.')
 
   heat::clients::base { 'clients_sahara':
     endpoint_type => $endpoint_type,

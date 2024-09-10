@@ -136,6 +136,10 @@
 #   Should be larger than max_template_size.
 #   Defaults to $facts['os_service_default']
 #
+# [*template_fetch_timeout*]
+#   (Optional) Timeout in seconds for template download.
+#   Defaults to $facts['os_service_default']
+#
 # [*notification_transport_url*]
 #   (optional) A URL representing the messaging driver to use for notifications
 #   and its full configuration. Transport URLs take the form:
@@ -234,6 +238,7 @@ class heat(
   $enable_stack_abandon               = $facts['os_service_default'],
   $max_template_size                  = $facts['os_service_default'],
   $max_json_body_size                 = $facts['os_service_default'],
+  $template_fetch_timeout             = $facts['os_service_default'],
   $notification_transport_url         = $facts['os_service_default'],
   $notification_driver                = $facts['os_service_default'],
   $notification_topics                = $facts['os_service_default'],
@@ -288,6 +293,7 @@ class heat(
     'DEFAULT/host':                         value => $host;
     'DEFAULT/max_template_size':            value => $max_template_size;
     'DEFAULT/max_json_body_size':           value => $max_json_body_size;
+    'DEFAULT/template_fetch_timeout':       value => $template_fetch_timeout;
     'DEFAULT/region_name_for_services':     value => $region_name;
     'DEFAULT/enable_stack_abandon':         value => $enable_stack_abandon;
     'DEFAULT/enable_stack_adopt':           value => $enable_stack_adopt;

@@ -90,6 +90,10 @@ describe 'heat' do
       is_expected.to contain_heat_config('DEFAULT/max_json_body_size').with_value('<SERVICE DEFAULT>')
     end
 
+    it 'configures template_fetch_timeout' do
+      is_expected.to contain_heat_config('DEFAULT/template_fetch_timeout').with_value('<SERVICE DEFAULT>')
+    end
+
     it 'configures keystone_ec2_uri' do
       is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value( '<SERVICE DEFAULT>' )
     end

@@ -187,6 +187,10 @@
 #   by user-controlled servers to make calls back to Heat.
 #   Defaults to $facts['os_service_default']
 #
+# [*hidden_stack_tags*]
+#   (Optional) Stacks containing these tag names will be hidden.
+#   Defaults to $facts['os_service_default']
+#
 # DEPRECATED PARAMETERS
 #
 # [*deferred_auth_method*]
@@ -231,6 +235,7 @@ class heat::engine (
   $max_nested_stack_depth                          = $facts['os_service_default'],
   $plugin_dirs                                     = $facts['os_service_default'],
   $server_keystone_endpoint_type                   = $facts['os_service_default'],
+  $hidden_stack_tags                               = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $deferred_auth_method                            = undef,
 ) {
@@ -305,6 +310,7 @@ class heat::engine (
     'DEFAULT/max_nested_stack_depth':                          value => $max_nested_stack_depth;
     'DEFAULT/plugin_dirs':                                     value => $plugin_dirs_real;
     'DEFAULT/server_keystone_endpoint_type':                   value => $server_keystone_endpoint_type;
+    'DEFAULT/hidden_stack_tags':                               value => join(any2array($hidden_stack_tags), ',');
   }
 
   if $deferred_auth_method != undef {

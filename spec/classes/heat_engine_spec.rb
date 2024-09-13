@@ -29,6 +29,7 @@ describe 'heat::engine' do
       :max_nested_stack_depth              => '<SERVICE DEFAULT>',
       :plugin_dirs                         => '<SERVICE DEFAULT>',
       :server_keystone_endpoint_type       => '<SERVICE DEFAULT>',
+      :hidden_stack_tags                   => '<SERVICE DEFAULT>',
       :deferred_auth_method                => '<SERVICE DEFAULT>',
     }
   end
@@ -68,6 +69,7 @@ describe 'heat::engine' do
         :template_dir                        => '/etc/heat/templates',
         :max_nested_stack_depth              => 3,
         :server_keystone_endpoint_type       => 'public',
+        :hidden_stack_tags                   => 'hidden',
         :deferred_auth_method                => 'trusts',
       }
     ].each do |new_params|
@@ -129,6 +131,7 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/max_nested_stack_depth').with_value( expected_params[:max_nested_stack_depth] ) }
       it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value( expected_params[:plugin_dirs] ) }
       it { is_expected.to contain_heat_config('DEFAULT/server_keystone_endpoint_type').with_value( expected_params[:server_keystone_endpoint_type] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/hidden_stack_tags').with_value( expected_params[:hidden_stack_tags] ) }
       it { is_expected.to contain_heat_config('DEFAULT/deferred_auth_method').with_value( expected_params[:deferred_auth_method] ) }
     end
 
@@ -164,7 +167,16 @@ describe 'heat::engine' do
         params.merge!({
           :plugin_dirs => ['/usr/lib/heat', '/usr/local/lib/heat'] })
       end
-      it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value(['/usr/lib/heat,/usr/local/lib/heat']) }
+      it { is_expected.to contain_heat_config('DEFAULT/plugin_dirs').with_value('/usr/lib/heat,/usr/local/lib/heat') }
+    end
+
+    context 'with hidden_stack_tags list' do
+      before do
+        params.merge!({
+          :hidden_stack_tags => ['tag1', 'tag2'],
+        })
+      end
+      it { is_expected.to contain_heat_config('DEFAULT/hidden_stack_tags').with_value('tag1,tag2') }
     end
   end
 

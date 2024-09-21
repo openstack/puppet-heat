@@ -66,7 +66,6 @@ describe 'heat::logging' do
         :use_stderr     => '<SERVICE DEFAULT>',
         :log_dir        => '/var/log/heat',
         :log_file       => '<SERVICE DEFAULT>',
-        :watch_log_file => '<SERVICE DEFAULT>',
         :debug          => '<SERVICE DEFAULT>',
       )
     end

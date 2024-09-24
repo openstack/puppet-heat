@@ -18,6 +18,8 @@ describe 'heat::engine' do
       :client_retry_limit                  => '<SERVICE DEFAULT>',
       :max_server_name_length              => '<SERVICE DEFAULT>',
       :max_interface_check_attempts        => '<SERVICE DEFAULT>',
+      :max_nova_api_microversion           => '<SERVICE DEFAULT>',
+      :max_ironic_api_microversion         => '<SERVICE DEFAULT>',
       :event_purge_batch_size              => '<SERVICE DEFAULT>',
       :max_events_per_stack                => '<SERVICE DEFAULT>',
       :stack_action_timeout                => '<SERVICE DEFAULT>',
@@ -58,6 +60,8 @@ describe 'heat::engine' do
         :client_retry_limit                  => 2,
         :max_server_name_length              => 53,
         :max_interface_check_attempts        => 10,
+        :max_nova_api_microversion           => '2.30',
+        :max_ironic_api_microversion         => '1.20',
         :event_purge_batch_size              => 200,
         :max_events_per_stack                => 1000,
         :stack_action_timeout                => 3600,
@@ -119,6 +123,8 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/client_retry_limit').with_value( expected_params[:client_retry_limit] ) }
       it { is_expected.to contain_heat_config('DEFAULT/max_server_name_length').with_value( expected_params[:max_server_name_length] ) }
       it { is_expected.to contain_heat_config('DEFAULT/max_interface_check_attempts').with_value( expected_params[:max_interface_check_attempts] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_nova_api_microversion').with_value( expected_params[:max_nova_api_microversion] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_ironic_api_microversion').with_value( expected_params[:max_ironic_api_microversion] ) }
       it { is_expected.to contain_heat_config('DEFAULT/event_purge_batch_size').with_value( expected_params[:event_purge_batch_size] ) }
       it { is_expected.to contain_heat_config('DEFAULT/max_events_per_stack').with_value( expected_params[:max_events_per_stack] ) }
       it { is_expected.to contain_heat_config('DEFAULT/stack_action_timeout').with_value( expected_params[:stack_action_timeout] ) }

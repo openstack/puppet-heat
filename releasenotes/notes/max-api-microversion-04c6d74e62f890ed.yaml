@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The ``heat::engine`` class now supports the following new parameters.
+
+    - ``max_nova_api_microversion``
+    - ``max_ironic_api_microversion``

@@ -44,7 +44,7 @@ describe 'heat' do
     it_configures 'without region_name set'
     it_configures 'with enable_stack_adopt and enable_stack_abandon set'
     it_configures 'with overridden messaging default parameters'
-    it_configures 'with notification_driver set to a string'
+    it_configures 'with notification parameters'
   end
 
   shared_examples_for 'a heat base installation' do
@@ -112,7 +112,8 @@ describe 'heat' do
       is_expected.to contain_oslo__messaging__notifications('heat_config').with(
         :driver        => '<SERVICE DEFAULT>',
         :transport_url => '<SERVICE DEFAULT>',
-        :topics        => '<SERVICE DEFAULT>'
+        :topics        => '<SERVICE DEFAULT>',
+        :retry         => '<SERVICE DEFAULT>',
       )
     end
 
@@ -311,12 +312,13 @@ describe 'heat' do
     end
   end
 
-  shared_examples_for 'with notification_driver set to a string' do
+  shared_examples_for 'with notification parameters' do
     before do
       params.merge!(
         :notification_transport_url => 'rabbit://rabbit_user:password@localhost:5673',
         :notification_driver        => 'messagingv2',
         :notification_topics        => 'notifications',
+        :notification_retry         => 10,
       )
     end
 
@@ -324,7 +326,8 @@ describe 'heat' do
       is_expected.to contain_oslo__messaging__notifications('heat_config').with(
         :driver        => 'messagingv2',
         :transport_url => 'rabbit://rabbit_user:password@localhost:5673',
-        :topics        => 'notifications'
+        :topics        => 'notifications',
+        :retry         => 10,
       )
     end
   end

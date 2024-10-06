@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    The new ``heat::engine::max_cinder_api_microversion`` parameter has been
+    added.

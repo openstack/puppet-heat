@@ -19,6 +19,7 @@ describe 'heat::engine' do
       :max_server_name_length              => '<SERVICE DEFAULT>',
       :max_interface_check_attempts        => '<SERVICE DEFAULT>',
       :max_nova_api_microversion           => '<SERVICE DEFAULT>',
+      :max_cinder_api_microversion         => '<SERVICE DEFAULT>',
       :max_ironic_api_microversion         => '<SERVICE DEFAULT>',
       :event_purge_batch_size              => '<SERVICE DEFAULT>',
       :max_events_per_stack                => '<SERVICE DEFAULT>',
@@ -61,6 +62,7 @@ describe 'heat::engine' do
         :max_server_name_length              => 53,
         :max_interface_check_attempts        => 10,
         :max_nova_api_microversion           => '2.30',
+        :max_cinder_api_microversion         => '3.10',
         :max_ironic_api_microversion         => '1.20',
         :event_purge_batch_size              => 200,
         :max_events_per_stack                => 1000,
@@ -124,6 +126,7 @@ describe 'heat::engine' do
       it { is_expected.to contain_heat_config('DEFAULT/max_server_name_length').with_value( expected_params[:max_server_name_length] ) }
       it { is_expected.to contain_heat_config('DEFAULT/max_interface_check_attempts').with_value( expected_params[:max_interface_check_attempts] ) }
       it { is_expected.to contain_heat_config('DEFAULT/max_nova_api_microversion').with_value( expected_params[:max_nova_api_microversion] ) }
+      it { is_expected.to contain_heat_config('DEFAULT/max_cinder_api_microversion').with_value( expected_params[:max_cinder_api_microversion] ) }
       it { is_expected.to contain_heat_config('DEFAULT/max_ironic_api_microversion').with_value( expected_params[:max_ironic_api_microversion] ) }
       it { is_expected.to contain_heat_config('DEFAULT/event_purge_batch_size').with_value( expected_params[:event_purge_batch_size] ) }
       it { is_expected.to contain_heat_config('DEFAULT/max_events_per_stack').with_value( expected_params[:max_events_per_stack] ) }

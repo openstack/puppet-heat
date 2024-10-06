@@ -107,6 +107,10 @@
 #   (Optional) Maximum nova API version for client plugin.
 #   Defaults to $facts['os_service_default'].
 #
+# [*max_cinder_api_microversion*]
+#   (Optional) Maximum cinder API version for client plugin.
+#   Defaults to $facts['os_service_default'].
+#
 # [*max_ironic_api_microversion*]
 #   (Optional) Maximum ironic API version for client plugin.
 #   Defaults to $facts['os_service_default'].
@@ -232,6 +236,7 @@ class heat::engine (
   $max_server_name_length                          = $facts['os_service_default'],
   $max_interface_check_attempts                    = $facts['os_service_default'],
   $max_nova_api_microversion                       = $facts['os_service_default'],
+  $max_cinder_api_microversion                     = $facts['os_service_default'],
   $max_ironic_api_microversion                     = $facts['os_service_default'],
   $event_purge_batch_size                          = $facts['os_service_default'],
   $max_events_per_stack                            = $facts['os_service_default'],
@@ -307,6 +312,7 @@ class heat::engine (
     'DEFAULT/max_server_name_length':                          value => $max_server_name_length;
     'DEFAULT/max_interface_check_attempts':                    value => $max_interface_check_attempts;
     'DEFAULT/max_nova_api_microversion':                       value => $max_nova_api_microversion;
+    'DEFAULT/max_cinder_api_microversion':                     value => $max_cinder_api_microversion;
     'DEFAULT/max_ironic_api_microversion':                     value => $max_ironic_api_microversion;
     'DEFAULT/event_purge_batch_size':                          value => $event_purge_batch_size;
     'DEFAULT/max_events_per_stack':                            value => $max_events_per_stack;

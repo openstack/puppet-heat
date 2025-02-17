@@ -167,7 +167,7 @@ define heat::wsgi::apache (
 
   Anchor['heat::install::end'] -> Class['apache']
 
-  ::openstacklib::wsgi::apache { "heat_${title}_wsgi":
+  openstacklib::wsgi::apache { "heat_${title}_wsgi":
     bind_host                   => $bind_host,
     bind_port                   => $port,
     group                       => $::heat::params::group,

@@ -45,7 +45,7 @@ class heat::db::mysql(
 
   include heat::deps
 
-  ::openstacklib::db::mysql { 'heat':
+  openstacklib::db::mysql { 'heat':
     user          => $user,
     password      => $password,
     dbname        => $dbname,

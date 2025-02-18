@@ -47,16 +47,6 @@
 #   every 30 seconds.
 #   Defaults to $facts['os_service_default'].
 #
-# [*rabbit_heartbeat_in_pthread*]
-#   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
-#   through a native python thread. By default if this
-#   option isn't provided the  health check heartbeat will
-#   inherit the execution model from the parent process. By
-#   example if the parent process have monkey patched the
-#   stdlib by using eventlet/greenlet then the heartbeat
-#   will be run through a green thread.
-#   Defaults to $facts['os_service_default']
-#
 # [*rabbit_qos_prefetch_count*]
 #   (Optional) Specifies the number of messages to prefetch.
 #   Defaults to $facts['os_service_default']
@@ -220,6 +210,18 @@
 #     take for evaluation.
 #   Defaults to $facts['os_service_default'].
 #
+# DEPRECATED PARAMETERS
+#
+# [*rabbit_heartbeat_in_pthread*]
+#   (Optional) EXPERIMENTAL: Run the health check heartbeat thread
+#   through a native python thread. By default if this
+#   option isn't provided the  health check heartbeat will
+#   inherit the execution model from the parent process. By
+#   example if the parent process have monkey patched the
+#   stdlib by using eventlet/greenlet then the heartbeat
+#   will be run through a green thread.
+#   Defaults to undef
+#
 class heat(
   $package_ensure                     = 'present',
   $keystone_ec2_uri                   = $facts['os_service_default'],
@@ -230,7 +232,6 @@ class heat(
   $rabbit_ha_queues                   = $facts['os_service_default'],
   $rabbit_heartbeat_timeout_threshold = $facts['os_service_default'],
   $rabbit_heartbeat_rate              = $facts['os_service_default'],
-  $rabbit_heartbeat_in_pthread        = $facts['os_service_default'],
   $rabbit_qos_prefetch_count          = $facts['os_service_default'],
   $rabbit_quorum_queue                = $facts['os_service_default'],
   $rabbit_transient_quorum_queue      = $facts['os_service_default'],
@@ -265,6 +266,8 @@ class heat(
   $auth_strategy                      = 'keystone',
   $yaql_memory_quota                  = $facts['os_service_default'],
   $yaql_limit_iterators               = $facts['os_service_default'],
+  # DEPRECATED PARAMETERS
+  $rabbit_heartbeat_in_pthread        = undef,
 ) {
 
   include heat::db

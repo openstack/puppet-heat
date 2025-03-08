@@ -239,7 +239,7 @@ class heat::keystone::authtoken(
 
   keystone::resource::authtoken {
     'heat_config':
-      *                              => $params;
+      * => $params;
     default:
       username                       => $username,
       password                       => $password,

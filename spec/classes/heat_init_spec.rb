@@ -144,9 +144,11 @@ describe 'heat' do
         :rabbit_qos_prefetch_count       => '<SERVICE DEFAULT>',
         :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
         :amqp_durable_queues             => '<SERVICE DEFAULT>',
+        :amqp_auto_delete                => '<SERVICE DEFAULT>',
         :rabbit_ha_queues                => '<SERVICE DEFAULT>',
         :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
         :rabbit_transient_quorum_queue   => '<SERVICE DEFAULT>',
+        :rabbit_transient_queues_ttl     => '<SERVICE DEFAULT>',
         :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
         :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
         :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
@@ -158,7 +160,8 @@ describe 'heat' do
   shared_examples_for 'configures rabbit with HA and durable' do
     before do
       params.merge!( :rabbit_ha_queues    => true,
-                     :amqp_durable_queues => true )
+                     :amqp_durable_queues => true,
+                     :amqp_auto_delete    => true )
     end
 
     it 'configures rabbit' do
@@ -176,9 +179,11 @@ describe 'heat' do
         :rabbit_qos_prefetch_count       => '<SERVICE DEFAULT>',
         :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
         :amqp_durable_queues             => true,
+        :amqp_auto_delete                => true,
         :rabbit_ha_queues                => true,
         :rabbit_quorum_queue             => '<SERVICE DEFAULT>',
         :rabbit_transient_quorum_queue   => '<SERVICE DEFAULT>',
+        :rabbit_transient_queues_ttl     => '<SERVICE DEFAULT>',
         :rabbit_quorum_delivery_limit    => '<SERVICE DEFAULT>',
         :rabbit_quorum_max_memory_length => '<SERVICE DEFAULT>',
         :rabbit_quorum_max_memory_bytes  => '<SERVICE DEFAULT>',
@@ -203,6 +208,7 @@ describe 'heat' do
         :rabbit_qos_prefetch_count   => '<SERVICE DEFAULT>',
         :rabbit_use_ssl              => '<SERVICE DEFAULT>',
         :amqp_durable_queues         => '<SERVICE DEFAULT>',
+        :amqp_auto_delete            => '<SERVICE DEFAULT>',
         :rabbit_ha_queues            => '<SERVICE DEFAULT>',
       )
     end

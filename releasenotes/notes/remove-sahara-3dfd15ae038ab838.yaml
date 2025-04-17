@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The ``heat::clients::sahara`` class has been removed.

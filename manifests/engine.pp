@@ -174,10 +174,6 @@
 #   (Optional) The number of workers to spawn.
 #   Defaults to $facts['os_workers_heat_engine']
 #
-# [*convergence_engine*]
-#   (Optional) Enables engine with convergence architecture.
-#   Defaults to $facts['os_service_default'].
-#
 # [*environment_dir*]
 #   (Optional) The directory to search for environment files.
 #   Defaults to $facts['os_service_default']
@@ -208,6 +204,10 @@
 # [*deferred_auth_method*]
 #   (optional) Select deferred auth method.
 #   Can be "password" or "trusts".
+#   Defaults to undef
+#
+# [*convergence_engine*]
+#   (Optional) Enables engine with convergence architecture.
 #   Defaults to undef
 #
 class heat::engine (
@@ -244,7 +244,6 @@ class heat::engine (
   $error_wait_time                                 = $facts['os_service_default'],
   $engine_life_check_timeout                       = $facts['os_service_default'],
   $num_engine_workers                              = $facts['os_workers_heat_engine'],
-  $convergence_engine                              = $facts['os_service_default'],
   $environment_dir                                 = $facts['os_service_default'],
   $template_dir                                    = $facts['os_service_default'],
   $max_nested_stack_depth                          = $facts['os_service_default'],
@@ -253,6 +252,7 @@ class heat::engine (
   $hidden_stack_tags                               = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $deferred_auth_method                            = undef,
+  $convergence_engine                              = undef,
 ) {
 
   include heat::deps
@@ -322,7 +322,6 @@ class heat::engine (
     'DEFAULT/instance_connection_https_validate_certificates': value => $instance_connection_https_validate_certificates;
     'DEFAULT/instance_connection_is_secure':                   value => $instance_connection_is_secure;
     'DEFAULT/num_engine_workers':                              value => $num_engine_workers;
-    'DEFAULT/convergence_engine':                              value => $convergence_engine;
     'DEFAULT/environment_dir':                                 value => $environment_dir;
     'DEFAULT/template_dir':                                    value => $template_dir;
     'DEFAULT/max_nested_stack_depth':                          value => $max_nested_stack_depth;
@@ -332,9 +331,26 @@ class heat::engine (
   }
 
   if $deferred_auth_method != undef {
-    warning('deferred_auth_method is deprecated and will be removed in a future release')
+    warning("The deferred_auth_method parameter is deprecated and will be \
+removed in a future release")
+    heat_config {
+      'DEFAULT/deferred_auth_method': value => $deferred_auth_method;
+    }
+  } else {
+    heat_config {
+      'DEFAULT/deferred_auth_method': value => $facts['os_service_default'];
+    }
   }
-  heat_config {
-    'DEFAULT/deferred_auth_method': value => pick($deferred_auth_method, $facts['os_service_default']);
+
+  if $convergence_engine != undef {
+    warning("The convergence_engine parameter is deprecated and will be \
+removed in a future release")
+    heat_config {
+      'DEFAULT/convergence_engine': value => $convergence_engine;
+    }
+  } else {
+    heat_config {
+      'DEFAULT/convergence_engine': value => $facts['os_service_default'];
+    }
   }
 }

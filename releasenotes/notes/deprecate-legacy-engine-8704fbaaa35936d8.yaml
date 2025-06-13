@@ -1,0 +1,9 @@
+---
+deprecations:
+  - |
+    The following paramters, related to legacy engine, have been deprecated and
+    will be removed in a future release.
+
+    - ``heat::enable_stack_abandon``
+    - ``heat::enable_stack_adopt``
+    - ``heat::engine::convergence_engine``

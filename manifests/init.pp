@@ -186,14 +186,6 @@
 #   default region name that heat talks to service endpoints on.
 #   Defaults to $facts['os_service_default'].
 #
-# [*enable_stack_adopt*]
-#   (Optional) Enable the stack-adopt feature.
-#   Defaults to $facts['os_service_default'].
-#
-# [*enable_stack_abandon*]
-#   (Optional) Enable the stack-abandon feature.
-#   Defaults to $facts['os_service_default'].
-#
 # [*enable_proxy_headers_parsing*]
 #   (Optional) Enable paste middleware to handle SSL requests through
 #   HTTPProxyToWSGI middleware.
@@ -234,6 +226,14 @@
 #   will be run through a green thread.
 #   Defaults to undef
 #
+# [*enable_stack_adopt*]
+#   (Optional) Enable the stack-adopt feature.
+#   Defaults to undef.
+#
+# [*enable_stack_abandon*]
+#   (Optional) Enable the stack-abandon feature.
+#   Defaults to undef.
+#
 class heat(
   $package_ensure                     = 'present',
   $keystone_ec2_uri                   = $facts['os_service_default'],
@@ -265,8 +265,6 @@ class heat(
   $host                               = $facts['os_service_default'],
   $flavor                             = $facts['os_service_default'],
   $region_name                        = $facts['os_service_default'],
-  $enable_stack_adopt                 = $facts['os_service_default'],
-  $enable_stack_abandon               = $facts['os_service_default'],
   $max_template_size                  = $facts['os_service_default'],
   $max_json_body_size                 = $facts['os_service_default'],
   $template_fetch_timeout             = $facts['os_service_default'],
@@ -282,6 +280,8 @@ class heat(
   $yaql_limit_iterators               = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
   $rabbit_heartbeat_in_pthread        = undef,
+  $enable_stack_adopt                 = undef,
+  $enable_stack_abandon               = undef,
 ) {
 
   include heat::db
@@ -328,17 +328,36 @@ class heat(
   }
 
   heat_config {
-    'DEFAULT/host':                         value => $host;
-    'DEFAULT/max_template_size':            value => $max_template_size;
-    'DEFAULT/max_json_body_size':           value => $max_json_body_size;
-    'DEFAULT/template_fetch_timeout':       value => $template_fetch_timeout;
-    'DEFAULT/region_name_for_services':     value => $region_name;
-    'DEFAULT/enable_stack_abandon':         value => $enable_stack_abandon;
-    'DEFAULT/enable_stack_adopt':           value => $enable_stack_adopt;
-    'ec2authtoken/auth_uri':                value => $keystone_ec2_uri;
-    'paste_deploy/flavor':                  value => $flavor;
-    'yaql/limit_iterators':                 value => $yaql_limit_iterators;
-    'yaql/memory_quota':                    value => $yaql_memory_quota;
+    'DEFAULT/host':                     value => $host;
+    'DEFAULT/max_template_size':        value => $max_template_size;
+    'DEFAULT/max_json_body_size':       value => $max_json_body_size;
+    'DEFAULT/template_fetch_timeout':   value => $template_fetch_timeout;
+    'DEFAULT/region_name_for_services': value => $region_name;
+    'ec2authtoken/auth_uri':            value => $keystone_ec2_uri;
+    'paste_deploy/flavor':              value => $flavor;
+    'yaql/limit_iterators':             value => $yaql_limit_iterators;
+    'yaql/memory_quota':                value => $yaql_memory_quota;
+  }
+
+  if $enable_stack_abandon != undef {
+    warning('The enable_stack_abandon parameter is deprecated')
+    heat_config {
+      'DEFAULT/enable_stack_abandon': value => $enable_stack_abandon;
+    }
+  } else {
+    heat_config {
+      'DEFAULT/enable_stack_abandon': value => $facts['os_service_default'];
+    }
+  }
+  if $enable_stack_adopt != undef {
+    warning('The enable_stack_adopt parameter is deprecated')
+    heat_config {
+      'DEFAULT/enable_stack_adopt': value => $enable_stack_adopt;
+    }
+  } else {
+    heat_config {
+      'DEFAULT/enable_stack_adopt': value => $facts['os_service_default'];
+    }
   }
 
   oslo::messaging::notifications { 'heat_config':

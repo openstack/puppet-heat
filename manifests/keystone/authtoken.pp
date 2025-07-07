@@ -13,7 +13,7 @@
 #
 # [*auth_url*]
 #   (Optional) The URL to use for authentication.
-#   Defaults to 'http://127.0.0.1:5000/'
+#   Defaults to 'http://127.0.0.1:5000'
 #
 # [*project_name*]
 #   (Optional) Service project name
@@ -197,7 +197,7 @@
 class heat::keystone::authtoken(
   String[1] $password,
   $username                       = 'heat',
-  $auth_url                       = 'http://127.0.0.1:5000/',
+  $auth_url                       = 'http://127.0.0.1:5000',
   $project_name                   = 'services',
   $user_domain_name               = 'Default',
   $project_domain_name            = 'Default',

@@ -17,7 +17,7 @@ describe 'heat::db::mysql' do
 
     context 'when omitting the required parameter password' do
       before { params.delete(:password) }
-      it { expect { is_expected.to raise_error(Puppet::Error) } }
+      it { is_expected.to raise_error(Puppet::Error) }
     end
 
     it 'creates a mysql database' do

@@ -1,0 +1,10 @@
+---
+deprecations:
+  - |
+    The following parameters of the ``heat::api`` class and
+    the ``heat::api_cfg`` class have been deprecated and has no effect now.
+
+    - ``workers``
+    - ``use_ssl``
+    - ``cert_file``
+    - ``key_file``

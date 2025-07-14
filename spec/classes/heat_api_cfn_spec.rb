@@ -6,8 +6,6 @@ describe 'heat::api_cfn' do
     {
       :enabled        => true,
       :manage_service => true,
-      :bind_host      => '127.0.0.1',
-      :bind_port      => '1234',
     }
   end
 
@@ -24,9 +22,8 @@ describe 'heat::api_cfn' do
       it { is_expected.to contain_class('heat::params') }
       it { is_expected.to contain_class('heat::policy') }
 
-      it { is_expected.to contain_heat_config('heat_api_cfn/bind_host').with_value( params[:bind_host] ) }
-      it { is_expected.to contain_heat_config('heat_api_cfn/bind_port').with_value( params[:bind_port] ) }
-
+      it { is_expected.to contain_heat_config('heat_api_cfn/bind_host').with_ensure('absent') }
+      it { is_expected.to contain_heat_config('heat_api_cfn/bind_port').with_ensure('absent') }
       it { is_expected.to contain_heat_config('heat_api_cfn/workers').with_ensure('absent') }
       it { is_expected.to contain_heat_config('heat_api_cfn/cert_file').with_ensure('absent') }
       it { is_expected.to contain_heat_config('heat_api_cfn/key_file').with_ensure('absent') }

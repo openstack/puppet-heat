@@ -68,7 +68,7 @@ describe 'heat::wsgi::apache' do
 
     context 'invalid title' do
       let (:title) { 'someothertitle' }
-      it { expect { is_expected.to raise_error(Puppet::Error) } }
+      it { is_expected.to raise_error(Puppet::Error) }
     end
   end
 

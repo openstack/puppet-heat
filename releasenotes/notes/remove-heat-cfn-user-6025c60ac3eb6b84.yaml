@@ -1,0 +1,19 @@
+---
+upgrade:
+  - |
+    The ``heat::keystone::auth_cfn`` class no longer supports management of
+    the dedicated keystone user for CFN API. Use the common heat user instead.
+
+deprecations:
+  - |
+    The following parameters of the ``heat::keystone::auth_cfn`` class have
+    been deprecated.
+
+    - ``configure_user``
+    - ``configure_user_role``
+    - ``auth_name``
+    - ``password``
+    - ``tenant``
+    - ``roles``
+    - ``system_scope``
+    - ``system_roles``

@@ -24,24 +24,6 @@
 #   (Optional) The port on which the server will listen.
 #   Defaults to $facts['os_service_default'].
 #
-# [*workers*]
-#   (Optional) The number of workers to spawn.
-#   Defaults to $facts['os_service_default'].
-#
-# [*use_ssl*]
-#   (Optional) Whether to use ssl or not.
-#   Defaults to 'false'.
-#
-# [*cert_file*]
-#   (Optional) Location of the SSL certificate file to use for SSL mode.
-#   Required when $use_ssl is set to 'true'.
-#   Defaults to $facts['os_service_default'].
-#
-# [*key_file*]
-#   (Optional) Location of the SSL key file to use for enabling SSL mode.
-#   Required when $use_ssl is set to 'true'.
-#   Defaults to $facts['os_service_default'].
-#
 # [*service_name*]
 #   (optional) Name of the service that will be providing the
 #   server functionality of heat-api.
@@ -51,9 +33,23 @@
 #   to make heat-api be a web app using apache mod_wsgi.
 #   Defaults to '$::heat::params::api_service_name'
 #
-# === Deprecated Parameters
+# == Deprecated Parameters
 #
-# No Deprecated Parameters.
+# [*workers*]
+#   (Optional) The number of workers to spawn.
+#   Defaults to undef.
+#
+# [*use_ssl*]
+#   (Optional) Whether to use ssl or not.
+#   Defaults to undef.
+#
+# [*cert_file*]
+#   (Optional) Location of the SSL certificate file to use for SSL mode.
+#   Defaults to undef
+#
+# [*key_file*]
+#   (Optional) Location of the SSL key file to use for enabling SSL mode.
+#   Defaults to undef
 #
 class heat::api (
   $package_ensure         = 'present',
@@ -61,11 +57,12 @@ class heat::api (
   Boolean $enabled        = true,
   $bind_host              = $facts['os_service_default'],
   $bind_port              = $facts['os_service_default'],
-  $workers                = $facts['os_service_default'],
-  Boolean $use_ssl        = false,
-  $cert_file              = $facts['os_service_default'],
-  $key_file               = $facts['os_service_default'],
   $service_name           = $::heat::params::api_service_name,
+  # DEPRECATED PARAMETERS
+  $workers                = undef,
+  $use_ssl                = undef,
+  $cert_file              = undef,
+  $key_file               = undef,
 ) inherits heat::params {
 
   include heat
@@ -73,12 +70,9 @@ class heat::api (
   include heat::params
   include heat::policy
 
-  if $use_ssl {
-    if is_service_default($cert_file) {
-      fail('The cert_file parameter is required when use_ssl is set to true')
-    }
-    if is_service_default($key_file) {
-      fail('The key_file parameter is required when use_ssl is set to true')
+  ['workers', 'use_ssl', 'cert_file', 'key_file'].each |String $opt| {
+    if getvar($opt) != undef {
+      warning("The ${opt} parameter is deprecated and has no effect.")
     }
   }
 
@@ -134,18 +128,11 @@ running as a standalone service, or httpd for being run by a httpd server")
   heat_config {
     'heat_api/bind_host': value => $bind_host;
     'heat_api/bind_port': value => $bind_port;
-    'heat_api/workers':   value => $workers;
   }
 
-  if $use_ssl {
-    heat_config {
-      'heat_api/cert_file': value => $cert_file;
-      'heat_api/key_file':  value => $key_file;
-    }
-  } else {
-    heat_config {
-      'heat_api/cert_file': value => $facts['os_service_default'];
-      'heat_api/key_file':  value => $facts['os_service_default'];
-    }
+  heat_config {
+    'heat_api/workers':   ensure => absent;
+    'heat_api/cert_file': ensure => absent;
+    'heat_api/key_file':  ensure => absent;
   }
 }

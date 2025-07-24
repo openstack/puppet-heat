@@ -4,6 +4,8 @@ deprecations:
     The following parameters of the ``heat::api`` class and
     the ``heat::api_cfg`` class have been deprecated and has no effect now.
 
+    - ``bind_host``
+    - ``bind_port``
     - ``workers``
     - ``use_ssl``
     - ``cert_file``

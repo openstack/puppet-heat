@@ -18,15 +18,6 @@
 #   (optional) Whether the service should be managed by Puppet.
 #   Defaults to 'true'.
 #
-# [*bind_host*]
-#   (Optional) Address to bind the server. Useful when
-#   selecting a particular network interface.
-#   Defaults to $facts['os_service_default'].
-#
-# [*bind_port*]
-#   (Optional) The port on which the server will listen.
-#   Defaults to $facts['os_service_default'].
-#
 # [*service_name*]
 #   (optional) Name of the service that will be providing the
 #   server functionality of heat-api-cfn.
@@ -37,6 +28,15 @@
 #   Defaults to '$::heat::params::api_cfn_service_name'
 #
 # == Deprecated Parameters
+#
+# [*bind_host*]
+#   (Optional) Address to bind the server. Useful when
+#   selecting a particular network interface.
+#   Defaults to undef.
+#
+# [*bind_port*]
+#   (Optional) The port on which the server will listen.
+#   Defaults to undef.
 #
 # [*workers*]
 #   (Optional) The number of workers to spawn.
@@ -58,10 +58,10 @@ class heat::api_cfn (
   $package_ensure         = 'present',
   Boolean $manage_service = true,
   Boolean $enabled        = true,
-  $bind_host              = $facts['os_service_default'],
-  $bind_port              = $facts['os_service_default'],
   $service_name           = $::heat::params::api_cfn_service_name,
   # DEPRECATED PARAMETERS
+  $bind_host              = undef,
+  $bind_port              = undef,
   $workers                = undef,
   $use_ssl                = undef,
   $cert_file              = undef,
@@ -73,7 +73,10 @@ class heat::api_cfn (
   include heat::params
   include heat::policy
 
-  ['workers', 'use_ssl', 'cert_file', 'key_file'].each |String $opt| {
+  [
+    'bind_host', 'bind_port', 'workers',
+    'use_ssl', 'cert_file', 'key_file'
+  ].each |String $opt| {
     if getvar($opt) != undef {
       warning("The ${opt} parameter is deprecated and has no effect.")
     }
@@ -129,11 +132,8 @@ running as a standalone service, or httpd for being run by a httpd server")
   }
 
   heat_config {
-    'heat_api_cfn/bind_host': value => $bind_host;
-    'heat_api_cfn/bind_port': value => $bind_port;
-  }
-
-  heat_config {
+    'heat_api_cfn/bind_host': ensure => absent;
+    'heat_api_cfn/bind_port': ensure => absent;
     'heat_api_cfn/workers':   ensure => absent;
     'heat_api_cfn/cert_file': ensure => absent;
     'heat_api_cfn/key_file':  ensure => absent;

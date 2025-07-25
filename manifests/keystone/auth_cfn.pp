@@ -3,9 +3,6 @@
 # Configures heat-api-cfn user, service and endpoint in Keystone.
 #
 # === Parameters
-# [*email*]
-#   (Optional) Email for heat-cfn user.
-#   Defaults to 'heat-cfn@localhost'.
 #
 # [*configure_endpoint*]
 #   (Optional) Should heat-cfn endpoint be configured?
@@ -26,7 +23,7 @@
 # [*service_type*]
 #   (Optional) Type of service.
 #   Defaults to 'cloudformation'.
-
+#
 # [*region*]
 #   (Optional) Region for endpoint.
 #   Defaults to 'RegionOne'.
@@ -45,20 +42,24 @@
 #
 # DEPRECATED PARAMETERS
 #
-# [*password*]
-#   (Optioal) Password for heat-cfn user.
-#   Defaults to undef
-#
-# [*auth_name*]
-#   (Optional) Username for heat-cfn service.
-#   Defaults to undef
-#
 # [*configure_user*]
 #   (Optional) Whether to create the service user.
 #   Defaults to undef
 #
 # [*configure_user_role*]
 #   (Optional) Whether to configure the admin role for the service user.
+#   Defaults to undef
+#
+# [*password*]
+#   (Optioal) Password for heat-cfn user.
+#   Defaults to undef
+#
+# [*email*]
+#   (Optional) Email for heat-cfn user.
+#   Defaults to undef
+#
+# [*auth_name*]
+#   (Optional) Username for heat-cfn service.
 #   Defaults to undef
 #
 # [*tenant*]

@@ -42,8 +42,8 @@ describe 'heat' do
     it_configures 'with SSL enabled with kombu'
     it_configures 'with SSL enabled without kombu'
     it_configures 'with SSL disabled'
-    it_configures 'with region_name set'
-    it_configures 'without region_name set'
+    it_configures 'with region options set'
+    it_configures 'without region options set'
     it_configures 'with enable_stack_adopt and enable_stack_abandon set'
     it_configures 'with overridden messaging default parameters'
     it_configures 'with notification parameters'
@@ -270,21 +270,27 @@ describe 'heat' do
     end
   end
 
-  shared_examples_for 'with region_name set' do
+  shared_examples_for 'with region options set' do
     before do
       params.merge!(
-        :region_name => "East",
+        :region_name                     => 'East',
+        :region_name_for_shared_services => 'West',
+        'shared_services_types'          => ['image', 'volumev3'],
       )
     end
 
-    it 'has region_name set when specified' do
+    it 'has region options set when specified' do
       is_expected.to contain_heat_config('DEFAULT/region_name_for_services').with_value('East')
+      is_expected.to contain_heat_config('DEFAULT/region_name_for_shared_services').with_value('West')
+      is_expected.to contain_heat_config('DEFAULT/shared_services_types').with_value('image,volumev3')
     end
   end
 
-  shared_examples_for 'without region_name set' do
-    it 'doesnt have region_name set by default' do
+  shared_examples_for 'without region options set' do
+    it 'does not have region options set by default' do
       is_expected.to contain_heat_config('DEFAULT/region_name_for_services').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('DEFAULT/region_name_for_shared_services').with_value('<SERVICE DEFAULT>')
+      is_expected.to contain_heat_config('DEFAULT/shared_services_types').with_value('<SERVICE DEFAULT>')
     end
   end
 

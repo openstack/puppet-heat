@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    The following parameters have been added to the ``heat`` class.
+
+    - ``region_name_for_shared_services``
+    - ``shared_services_types``

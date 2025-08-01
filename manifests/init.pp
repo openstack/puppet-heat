@@ -194,6 +194,14 @@
 #   default region name that heat talks to service endpoints on.
 #   Defaults to $facts['os_service_default'].
 #
+# [*region_name_for_shared_services*]
+#   (Optional) Region name for shared services endpoints.
+#   Defaults to $facts['os_service_default'].
+#
+# [*shared_services_types*]
+#   (Optional) The shared services located in the other region.
+#   Defaults to $facts['os_service_default'].
+#
 # [*enable_proxy_headers_parsing*]
 #   (Optional) Enable paste middleware to handle SSL requests through
 #   HTTPProxyToWSGI middleware.
@@ -265,6 +273,8 @@ class heat (
   $host                                   = $facts['os_service_default'],
   $flavor                                 = $facts['os_service_default'],
   $region_name                            = $facts['os_service_default'],
+  $region_name_for_shared_services        = $facts['os_service_default'],
+  $shared_services_types                  = $facts['os_service_default'],
   $max_template_size                      = $facts['os_service_default'],
   $max_json_body_size                     = $facts['os_service_default'],
   $template_fetch_timeout                 = $facts['os_service_default'],
@@ -327,15 +337,17 @@ class heat (
   }
 
   heat_config {
-    'DEFAULT/host':                     value => $host;
-    'DEFAULT/max_template_size':        value => $max_template_size;
-    'DEFAULT/max_json_body_size':       value => $max_json_body_size;
-    'DEFAULT/template_fetch_timeout':   value => $template_fetch_timeout;
-    'DEFAULT/region_name_for_services': value => $region_name;
-    'ec2authtoken/auth_uri':            value => $keystone_ec2_uri;
-    'paste_deploy/flavor':              value => $flavor;
-    'yaql/limit_iterators':             value => $yaql_limit_iterators;
-    'yaql/memory_quota':                value => $yaql_memory_quota;
+    'DEFAULT/host':                            value => $host;
+    'DEFAULT/max_template_size':               value => $max_template_size;
+    'DEFAULT/max_json_body_size':              value => $max_json_body_size;
+    'DEFAULT/template_fetch_timeout':          value => $template_fetch_timeout;
+    'DEFAULT/region_name_for_services':        value => $region_name;
+    'DEFAULT/region_name_for_shared_services': value => $region_name_for_shared_services;
+    'DEFAULT/shared_services_types':           value => join(any2array($shared_services_types), ',');
+    'ec2authtoken/auth_uri':                   value => $keystone_ec2_uri;
+    'paste_deploy/flavor':                     value => $flavor;
+    'yaql/limit_iterators':                    value => $yaql_limit_iterators;
+    'yaql/memory_quota':                       value => $yaql_memory_quota;
   }
 
   if $enable_stack_abandon != undef {

@@ -1,8 +1,4 @@
 node default {
-  Exec {
-    path => ['/usr/bin', '/bin', '/usr/sbin', '/sbin']
-  }
-
   # First, install a mysql server
   class { 'mysql::server': }
 
@@ -15,7 +11,7 @@ node default {
     password => 'password',
   }
   class { 'heat::db':
-    database_connection => 'mysql+pymysql://heat:heat@localhost/heat'
+    database_connection => 'mysql+pymysql://heat:heat@localhost/heat',
   }
 
   # Common class

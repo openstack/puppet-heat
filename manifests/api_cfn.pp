@@ -25,7 +25,7 @@
 #   service, and you must use another class to configure that
 #   web service. For example, use class { 'heat::wsgi::apache_api_cfn'...}
 #   to make heat-api-cfn be a web app using apache mod_wsgi.
-#   Defaults to '$::heat::params::api_cfn_service_name'
+#   Defaults to '$heat::params::api_cfn_service_name'
 #
 # == Deprecated Parameters
 #
@@ -58,7 +58,7 @@ class heat::api_cfn (
   $package_ensure         = 'present',
   Boolean $manage_service = true,
   Boolean $enabled        = true,
-  $service_name           = $::heat::params::api_cfn_service_name,
+  $service_name           = $heat::params::api_cfn_service_name,
   # DEPRECATED PARAMETERS
   $bind_host              = undef,
   $bind_port              = undef,
@@ -75,7 +75,7 @@ class heat::api_cfn (
 
   [
     'bind_host', 'bind_port', 'workers',
-    'use_ssl', 'cert_file', 'key_file'
+    'use_ssl', 'cert_file', 'key_file',
   ].each |String $opt| {
     if getvar($opt) != undef {
       warning("The ${opt} parameter is deprecated and has no effect.")
@@ -84,7 +84,7 @@ class heat::api_cfn (
 
   package { 'heat-api-cfn':
     ensure => $package_ensure,
-    name   => $::heat::params::api_cfn_package_name,
+    name   => $heat::params::api_cfn_package_name,
     tag    => ['openstack', 'heat-package'],
   }
 
@@ -95,10 +95,10 @@ class heat::api_cfn (
       $service_ensure = 'stopped'
     }
 
-    if $service_name == $::heat::params::api_cfn_service_name {
+    if $service_name == $heat::params::api_cfn_service_name {
       service { 'heat-api-cfn':
         ensure     => $service_ensure,
-        name       => $::heat::params::api_cfn_service_name,
+        name       => $heat::params::api_cfn_service_name,
         enable     => $enabled,
         hasstatus  => true,
         hasrestart => true,
@@ -113,7 +113,7 @@ class heat::api_cfn (
     } elsif $service_name == 'httpd' {
       service { 'heat-api-cfn':
         ensure => 'stopped',
-        name   => $::heat::params::api_cfn_service_name,
+        name   => $heat::params::api_cfn_service_name,
         enable => false,
         tag    => ['heat-service'],
       }

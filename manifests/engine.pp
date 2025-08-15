@@ -270,7 +270,7 @@ class heat::engine (
 
   package { 'heat-engine':
     ensure => $package_ensure,
-    name   => $::heat::params::engine_package_name,
+    name   => $heat::params::engine_package_name,
     tag    => ['openstack', 'heat-package'],
   }
 
@@ -283,7 +283,7 @@ class heat::engine (
 
     service { 'heat-engine':
       ensure     => $service_ensure,
-      name       => $::heat::params::engine_service_name,
+      name       => $heat::params::engine_service_name,
       enable     => $enabled,
       hasstatus  => true,
       hasrestart => true,

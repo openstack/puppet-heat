@@ -31,7 +31,7 @@
 #
 #  [*user*]
 #    (optional) User with access to heat files.
-#    Defaults to $::heat::params::user.
+#    Defaults to $heat::params::user.
 #
 #  [*age*]
 #    (optional) Age value for $age_type.
@@ -58,7 +58,7 @@ class heat::cron::purge_deleted (
   $month                                                = '*',
   $weekday                                              = '*',
   Integer[0] $maxdelay                                  = 0,
-  $user                                                 = $::heat::params::user,
+  $user                                                 = $heat::params::user,
   $age                                                  = 1,
   Enum['days', 'hours', 'minutes', 'seconds'] $age_type = 'days',
   $destination                                          = '/var/log/heat/heat-purge_deleted.log',
@@ -87,6 +87,6 @@ class heat::cron::purge_deleted (
     monthday    => $monthday,
     month       => $month,
     weekday     => $weekday,
-    require     => Anchor['heat::dbsync::end']
+    require     => Anchor['heat::dbsync::end'],
   }
 }

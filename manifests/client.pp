@@ -18,7 +18,7 @@ class heat::client (
   #                 by heat
   package { 'python-heatclient':
     ensure => $ensure,
-    name   => $::heat::params::client_package_name,
+    name   => $heat::params::client_package_name,
     tag    => ['openstack', 'openstackclient', 'heat-package'],
   }
 

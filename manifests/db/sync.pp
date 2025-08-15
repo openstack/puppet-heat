@@ -24,7 +24,7 @@ class heat::db::sync(
   exec { 'heat-dbsync':
     command     => "heat-manage ${extra_params} db_sync",
     path        => '/usr/bin',
-    user        => $::heat::params::user,
+    user        => $heat::params::user,
     refreshonly => true,
     try_sleep   => 5,
     tries       => 10,

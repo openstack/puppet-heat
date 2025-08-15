@@ -22,7 +22,7 @@
 #   service, and you must use another class to configure that
 #   web service. For example, use class { 'heat::wsgi::apache_api'...}
 #   to make heat-api be a web app using apache mod_wsgi.
-#   Defaults to '$::heat::params::api_service_name'
+#   Defaults to '$heat::params::api_service_name'
 #
 # == Deprecated Parameters
 #
@@ -55,7 +55,7 @@ class heat::api (
   $package_ensure         = 'present',
   Boolean $manage_service = true,
   Boolean $enabled        = true,
-  $service_name           = $::heat::params::api_service_name,
+  $service_name           = $heat::params::api_service_name,
   # DEPRECATED PARAMETERS
   $bind_host              = undef,
   $bind_port              = undef,
@@ -72,7 +72,7 @@ class heat::api (
 
   [
     'bind_host', 'bind_port', 'workers',
-    'use_ssl', 'cert_file', 'key_file'
+    'use_ssl', 'cert_file', 'key_file',
   ].each |String $opt| {
     if getvar($opt) != undef {
       warning("The ${opt} parameter is deprecated and has no effect.")
@@ -81,7 +81,7 @@ class heat::api (
 
   package { 'heat-api':
     ensure => $package_ensure,
-    name   => $::heat::params::api_package_name,
+    name   => $heat::params::api_package_name,
     tag    => ['openstack', 'heat-package'],
   }
 
@@ -92,10 +92,10 @@ class heat::api (
       $service_ensure = 'stopped'
     }
 
-    if $service_name == $::heat::params::api_service_name {
+    if $service_name == $heat::params::api_service_name {
       service { 'heat-api':
         ensure     => $service_ensure,
-        name       => $::heat::params::api_service_name,
+        name       => $heat::params::api_service_name,
         enable     => $enabled,
         hasstatus  => true,
         hasrestart => true,
@@ -110,7 +110,7 @@ class heat::api (
     } elsif $service_name == 'httpd' {
       service { 'heat-api':
         ensure => 'stopped',
-        name   => $::heat::params::api_service_name,
+        name   => $heat::params::api_service_name,
         enable => false,
         tag    => ['heat-service'],
       }

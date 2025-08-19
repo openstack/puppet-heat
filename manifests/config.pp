@@ -27,7 +27,6 @@ class heat::config (
   Hash $heat_config        = {},
   Hash $heat_api_paste_ini = {},
 ) {
-
   include heat::deps
 
   create_resources('heat_config', $heat_config)

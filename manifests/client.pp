@@ -10,7 +10,6 @@
 class heat::client (
   $ensure = 'present'
 ) {
-
   include heat::deps
   include heat::params
 
@@ -23,5 +22,4 @@ class heat::client (
   }
 
   include openstacklib::openstackclient
-
 }

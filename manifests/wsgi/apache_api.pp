@@ -155,7 +155,6 @@ class heat::wsgi::apache_api (
   $request_headers             = undef,
   $vhost_custom_fragment       = undef,
 ) {
-
   heat::wsgi::apache { 'api':
     port                        => $port,
     servername                  => $servername,

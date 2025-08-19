@@ -33,7 +33,7 @@
 #   Only used with mysql modules >= 2.2.
 #   Defaults to 'utf8_general_ci'
 #
-class heat::db::mysql(
+class heat::db::mysql (
   String[1] $password,
   $dbname        = 'heat',
   $user          = 'heat',
@@ -42,7 +42,6 @@ class heat::db::mysql(
   $charset       = 'utf8',
   $collate       = 'utf8_general_ci',
 ) {
-
   include heat::deps
 
   openstacklib::db::mysql { 'heat':

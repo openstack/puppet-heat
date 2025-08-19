@@ -194,7 +194,7 @@
 #  (Optional) Hash of additional parameters to pass through to the keystone
 #  authtoken class. Values set here override the individual parameters above.
 #
-class heat::keystone::authtoken(
+class heat::keystone::authtoken (
   String[1] $password,
   $username                       = 'heat',
   $auth_url                       = 'http://127.0.0.1:5000',
@@ -234,7 +234,6 @@ class heat::keystone::authtoken(
   $interface                      = $facts['os_service_default'],
   $params                         = {},
 ) {
-
   include heat::deps
 
   keystone::resource::authtoken {

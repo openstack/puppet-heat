@@ -44,7 +44,6 @@ class heat::keystone::domain (
   $manage_role        = true,
   $manage_config      = true,
 ) {
-
   include heat::deps
   include heat::params
 
@@ -54,6 +53,7 @@ class heat::keystone::domain (
       'enabled' => true,
     })
   }
+
   if $manage_user {
     ensure_resource('keystone_user', "${domain_admin}::${domain_name}", {
       'ensure'   => 'present',
@@ -62,6 +62,7 @@ class heat::keystone::domain (
       'password' => $domain_password,
     })
   }
+
   if $manage_role {
     ensure_resource('keystone_user_role', "${domain_admin}::${domain_name}@::${domain_name}", {
       'roles' => ['admin'],

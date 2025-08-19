@@ -157,7 +157,6 @@ class heat::wsgi::apache_api_cfn (
   $request_headers             = ['set Content-Type "application/json"'],
   $vhost_custom_fragment       = undef,
 ) {
-
   heat::wsgi::apache { 'api_cfn':
     port                        => $port,
     servername                  => $servername,

@@ -44,7 +44,6 @@ class heat::cors (
   $allow_methods     = $facts['os_service_default'],
   $allow_headers     = $facts['os_service_default'],
 ) {
-
   include heat::deps
 
   oslo::cors { 'heat_config':

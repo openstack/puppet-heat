@@ -37,7 +37,6 @@ class heat::clients::keystone (
   $insecure      = $facts['os_service_default'],
   $auth_uri      = $facts['os_service_default'],
 ) {
-
   include heat::deps
 
   heat::clients::base { 'clients_keystone':

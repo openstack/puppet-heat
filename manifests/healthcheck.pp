@@ -46,7 +46,6 @@ class heat::healthcheck (
   $disable_by_file_paths   = $facts['os_service_default'],
   $enable_by_file_paths    = $facts['os_service_default'],
 ) {
-
   include heat::deps
 
   oslo::healthcheck { 'heat_config':

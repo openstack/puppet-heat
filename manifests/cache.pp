@@ -292,7 +292,6 @@ class heat::cache (
   $dead_timeout                          = $facts['os_service_default'],
   Boolean $manage_backend_package        = true,
 ) {
-
   include heat::deps
 
   oslo::cache { 'heat_config':

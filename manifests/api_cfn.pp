@@ -67,7 +67,6 @@ class heat::api_cfn (
   $cert_file              = undef,
   $key_file               = undef,
 ) inherits heat::params {
-
   include heat
   include heat::deps
   include heat::params
@@ -109,7 +108,6 @@ class heat::api_cfn (
       Heat_api_paste_ini<||> ~> Service['heat-api-cfn']
       # On any uwsgi config change, we must restart Heat API.
       Heat_api_cfn_uwsgi_config<||> ~> Service['heat-api-cfn']
-
     } elsif $service_name == 'httpd' {
       service { 'heat-api-cfn':
         ensure => 'stopped',
@@ -124,7 +122,6 @@ class heat::api_cfn (
 
       # On any paste-api.ini config change, we must restart Heat API.
       Heat_api_paste_ini<||> ~> Service[$service_name]
-
     } else {
       fail("Invalid service_name. Either heat-api-cfn/openstack-heat-api-cfn for \
 running as a standalone service, or httpd for being run by a httpd server")

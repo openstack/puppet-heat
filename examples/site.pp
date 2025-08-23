@@ -25,5 +25,4 @@ node default {
 
   # Install the heat-api service
   class { 'heat::api': }
-
 }

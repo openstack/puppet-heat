@@ -254,10 +254,8 @@ class heat::engine (
   $deferred_auth_method                            = undef,
   $convergence_engine                              = undef,
 ) {
-
-  include heat::deps
-
   include heat
+  include heat::deps
   include heat::params
 
   if is_service_default($plugin_dirs) {

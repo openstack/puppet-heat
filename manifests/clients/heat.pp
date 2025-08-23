@@ -37,7 +37,6 @@ class heat::clients::heat (
   $insecure      = $facts['os_service_default'],
   $url           = $facts['os_service_default'],
 ) {
-
   include heat::deps
 
   heat::clients::base { 'clients_heat':

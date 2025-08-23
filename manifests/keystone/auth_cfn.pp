@@ -107,7 +107,6 @@ class heat::keystone::auth_cfn (
   $system_scope                           = undef,
   $system_roles                           = undef,
 ) {
-
   include heat::deps
 
   if $configure_user != undef {
@@ -139,5 +138,4 @@ class heat::keystone::auth_cfn (
     admin_url           => $admin_url,
     internal_url        => $internal_url,
   }
-
 }

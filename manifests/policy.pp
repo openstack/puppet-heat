@@ -54,7 +54,6 @@ class heat::policy (
   $policy_dirs          = $facts['os_service_default'],
   Boolean $purge_config = false,
 ) {
-
   include heat::deps
   include heat::params
 

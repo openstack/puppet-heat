@@ -132,7 +132,6 @@ class heat::keystone::auth (
   String[1] $heat_stack_user_role          = 'heat_stack_user',
   Boolean $manage_heat_stack_user_role     = true,
 ) {
-
   include heat::deps
 
   Keystone::Resource::Service_identity['heat'] -> Anchor['heat::service::end']

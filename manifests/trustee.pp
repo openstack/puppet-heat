@@ -36,7 +36,6 @@ class heat::trustee (
   $username         = 'heat',
   $user_domain_name = 'Default',
 ) {
-
   include heat::deps
 
   heat_config {

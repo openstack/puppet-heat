@@ -59,7 +59,6 @@ class heat::db (
   $database_db_max_retries          = $facts['os_service_default'],
   Boolean $sync_db                  = true,
 ) {
-
   include heat::deps
 
   oslo::db { 'heat_config':

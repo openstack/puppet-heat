@@ -37,7 +37,6 @@ class heat::clients::nova (
   $insecure       = $facts['os_service_default'],
   $http_log_debug = $facts['os_service_default'],
 ) {
-
   include heat::deps
 
   heat::clients::base { 'clients_nova':

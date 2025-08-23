@@ -64,7 +64,6 @@ class heat::cron::purge_deleted (
   $destination                                          = '/var/log/heat/heat-purge_deleted.log',
   $batch_size                                           = undef,
 ) inherits heat::params {
-
   if $maxdelay == 0 {
     $sleep = ''
   } else {

@@ -32,7 +32,6 @@ class heat::clients::vitrage (
   $key_file      = $facts['os_service_default'],
   $insecure      = $facts['os_service_default'],
 ) {
-
   include heat::deps
 
   heat::clients::base { 'clients_vitrage':

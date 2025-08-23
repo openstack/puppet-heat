@@ -24,14 +24,13 @@
 #    (Optional) Privileges given to the database user.
 #    Default to 'ALL'
 #
-class heat::db::postgresql(
+class heat::db::postgresql (
   $password,
   $dbname     = 'heat',
   $user       = 'heat',
   $encoding   = undef,
   $privileges = 'ALL',
 ) {
-
   include heat::deps
 
   openstacklib::db::postgresql { 'heat':

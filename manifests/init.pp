@@ -242,7 +242,7 @@
 #   (Optional) Enable the stack-abandon feature.
 #   Defaults to undef.
 #
-class heat(
+class heat (
   $package_ensure                     = 'present',
   $keystone_ec2_uri                   = $facts['os_service_default'],
   $default_transport_url              = $facts['os_service_default'],
@@ -293,7 +293,6 @@ class heat(
   $enable_stack_adopt                 = undef,
   $enable_stack_abandon               = undef,
 ) {
-
   include heat::db
   include heat::deps
   include heat::params
@@ -390,5 +389,4 @@ class heat(
     enable_proxy_headers_parsing => $enable_proxy_headers_parsing,
     max_request_body_size        => $max_request_body_size,
   }
-
 }

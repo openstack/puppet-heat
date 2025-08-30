@@ -33,7 +33,6 @@ describe 'heat' do
         params.merge!(
           :rabbit_heartbeat_timeout_threshold => '60',
           :rabbit_heartbeat_rate              => '10',
-          :rabbit_heartbeat_in_pthread        => true
         )
       end
       it_configures 'a heat base installation'
@@ -140,7 +139,6 @@ describe 'heat' do
         :kombu_compression               => '<SERVICE DEFAULT>',
         :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
         :heartbeat_rate                  => '<SERVICE DEFAULT>',
-        :heartbeat_in_pthread            => nil,
         :rabbit_qos_prefetch_count       => '<SERVICE DEFAULT>',
         :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
         :amqp_durable_queues             => '<SERVICE DEFAULT>',
@@ -177,7 +175,6 @@ describe 'heat' do
         :kombu_compression               => '<SERVICE DEFAULT>',
         :heartbeat_timeout_threshold     => '<SERVICE DEFAULT>',
         :heartbeat_rate                  => '<SERVICE DEFAULT>',
-        :heartbeat_in_pthread            => nil,
         :rabbit_qos_prefetch_count       => '<SERVICE DEFAULT>',
         :rabbit_use_ssl                  => '<SERVICE DEFAULT>',
         :amqp_durable_queues             => true,
@@ -208,7 +205,6 @@ describe 'heat' do
         :kombu_compression           => '<SERVICE DEFAULT>',
         :heartbeat_timeout_threshold => '60',
         :heartbeat_rate              => '10',
-        :heartbeat_in_pthread        => true,
         :rabbit_qos_prefetch_count   => '<SERVICE DEFAULT>',
         :rabbit_use_ssl              => '<SERVICE DEFAULT>',
         :amqp_durable_queues         => '<SERVICE DEFAULT>',

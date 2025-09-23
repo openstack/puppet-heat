@@ -55,17 +55,17 @@
 #   Defaults to undef
 #
 class heat::api_cfn (
-  $package_ensure         = 'present',
-  Boolean $manage_service = true,
-  Boolean $enabled        = true,
-  $service_name           = $heat::params::api_cfn_service_name,
+  Stdlib::Ensure::Package $package_ensure = 'present',
+  Boolean $manage_service                 = true,
+  Boolean $enabled                        = true,
+  $service_name                           = $heat::params::api_cfn_service_name,
   # DEPRECATED PARAMETERS
-  $bind_host              = undef,
-  $bind_port              = undef,
-  $workers                = undef,
-  $use_ssl                = undef,
-  $cert_file              = undef,
-  $key_file               = undef,
+  $bind_host                              = undef,
+  $bind_port                              = undef,
+  $workers                                = undef,
+  $use_ssl                                = undef,
+  $cert_file                              = undef,
+  $key_file                               = undef,
 ) inherits heat::params {
   include heat
   include heat::deps

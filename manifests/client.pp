@@ -6,9 +6,10 @@
 #
 # [*ensure*]
 #   (Optional) Ensure state for package.
+#   Defaults to 'present'.
 #
 class heat::client (
-  $ensure = 'present'
+  Stdlib::Ensure::Package $ensure = 'present'
 ) {
   include heat::deps
   include heat::params

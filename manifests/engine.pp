@@ -212,7 +212,7 @@
 #
 class heat::engine (
   Heat::AuthEncryptionKey $auth_encryption_key,
-  $package_ensure                                  = 'present',
+  Stdlib::Ensure::Package $package_ensure          = 'present',
   Boolean $manage_service                          = true,
   Boolean $enabled                                 = true,
   $heat_stack_user_role                            = $facts['os_service_default'],

@@ -58,7 +58,7 @@ class heat::api_cfn (
   Stdlib::Ensure::Package $package_ensure = 'present',
   Boolean $manage_service                 = true,
   Boolean $enabled                        = true,
-  $service_name                           = $heat::params::api_cfn_service_name,
+  String[1] $service_name                 = $heat::params::api_cfn_service_name,
   # DEPRECATED PARAMETERS
   $bind_host                              = undef,
   $bind_port                              = undef,
@@ -88,43 +88,42 @@ class heat::api_cfn (
   }
 
   if $manage_service {
-    if $enabled {
-      $service_ensure = 'running'
-    } else {
-      $service_ensure = 'stopped'
-    }
+    case $service_name {
+      'httpd': {
+        Service <| title == 'httpd' |> { tag +> 'heat-service' }
 
-    if $service_name == $heat::params::api_cfn_service_name {
-      service { 'heat-api-cfn':
-        ensure     => $service_ensure,
-        name       => $heat::params::api_cfn_service_name,
-        enable     => $enabled,
-        hasstatus  => true,
-        hasrestart => true,
-        tag        => 'heat-service',
+        service { 'heat-api-cfn':
+          ensure => 'stopped',
+          name   => $heat::params::api_cfn_service_name,
+          enable => false,
+          tag    => ['heat-service'],
+        }
+        # we need to make sure heat-api-cfn/eventlet is stopped before trying to start apache
+        Service['heat-api-cfn'] -> Service['httpd']
+
+        # On any paste-api.ini config change, we must restart Heat API.
+        Heat_api_paste_ini<||> ~> Service['httpd']
       }
+      default: {
+        $service_ensure = $enabled ? {
+          true    => 'running',
+          default => 'stopped',
+        }
 
-      # On any paste-api.ini config change, we must restart Heat API.
-      Heat_api_paste_ini<||> ~> Service['heat-api-cfn']
-      # On any uwsgi config change, we must restart Heat API.
-      Heat_api_cfn_uwsgi_config<||> ~> Service['heat-api-cfn']
-    } elsif $service_name == 'httpd' {
-      service { 'heat-api-cfn':
-        ensure => 'stopped',
-        name   => $heat::params::api_cfn_service_name,
-        enable => false,
-        tag    => ['heat-service'],
+        service { 'heat-api-cfn':
+          ensure     => $service_ensure,
+          name       => $service_name,
+          enable     => $enabled,
+          hasstatus  => true,
+          hasrestart => true,
+          tag        => 'heat-service',
+        }
+
+        # On any paste-api.ini config change, we must restart Heat API.
+        Heat_api_paste_ini<||> ~> Service['heat-api-cfn']
+        # On any uwsgi config change, we must restart Heat API.
+        Heat_api_cfn_uwsgi_config<||> ~> Service['heat-api-cfn']
       }
-      Service <| title == 'httpd' |> { tag +> 'heat-service' }
-
-      # we need to make sure heat-api-cfn/eventlet is stopped before trying to start apache
-      Service['heat-api-cfn'] -> Service[$service_name]
-
-      # On any paste-api.ini config change, we must restart Heat API.
-      Heat_api_paste_ini<||> ~> Service[$service_name]
-    } else {
-      fail("Invalid service_name. Either heat-api-cfn/openstack-heat-api-cfn for \
-running as a standalone service, or httpd for being run by a httpd server")
     }
   }
 

@@ -52,7 +52,7 @@
 #
 # [*roles*]
 #   (Optional) List of roles assigned to heat user.
-#   Defaults to ['admin']
+#   Defaults to ['admin', 'service']
 #
 # [*system_scope*]
 #   (Optional) Scope for system operations.
@@ -117,7 +117,7 @@ class heat::keystone::auth (
   String[1] $service_description           = 'OpenStack Orchestration Service',
   String[1] $region                        = 'RegionOne',
   String[1] $tenant                        = 'services',
-  Array[String[1]] $roles                  = ['admin'],
+  Array[String[1]] $roles                  = ['admin', 'service'],
   String[1] $system_scope                  = 'all',
   Array[String[1]] $system_roles           = [],
   Boolean $configure_endpoint              = true,

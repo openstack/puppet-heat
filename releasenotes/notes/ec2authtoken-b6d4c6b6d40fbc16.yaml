@@ -1,0 +1,4 @@
+---
+features:
+  - |
+    The new ``heat::ec2authtoken`` class has been added.

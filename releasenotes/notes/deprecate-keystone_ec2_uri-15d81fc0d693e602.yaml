@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``heat::keystone_ec2_uri`` parameter has been deprecated. Use
+    the ``heat::keystone::ec2authtoken`` class instead.

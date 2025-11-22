@@ -179,10 +179,6 @@
 #   message, which failed to be delivered due to a recoverable error.
 #   Defaults to $facts['os_service_default'].
 #
-# [*keystone_ec2_uri*]
-#   (optional) Authentication Endpoint URI for ec2 service.
-#   Defaults to facts['os_service_default']
-#
 # [*flavor*]
 #   (optional) Specifies the Authentication method.
 #   Set to 'standalone' to get Heat to work with a remote OpenStack
@@ -240,9 +236,12 @@
 #   (Optional) Enable the stack-abandon feature.
 #   Defaults to undef.
 #
+# [*keystone_ec2_uri*]
+#   (optional) Authentication Endpoint URI for ec2 service.
+#   Defaults to undef.
+#
 class heat (
   Stdlib::Ensure::Package $package_ensure = 'present',
-  $keystone_ec2_uri                       = $facts['os_service_default'],
   $default_transport_url                  = $facts['os_service_default'],
   $rpc_response_timeout                   = $facts['os_service_default'],
   $control_exchange                       = $facts['os_service_default'],
@@ -291,10 +290,15 @@ class heat (
   # DEPRECATED PARAMETERS
   $enable_stack_adopt                     = undef,
   $enable_stack_abandon                   = undef,
+  $keystone_ec2_uri                       = undef,
 ) {
   include heat::db
   include heat::deps
   include heat::params
+
+  if $keystone_ec2_uri != undef {
+    warning('The keystone_ec2_uri parameter is deprecated.')
+  }
 
   if $auth_strategy == 'keystone' {
     include heat::keystone::authtoken
@@ -344,7 +348,7 @@ class heat (
     'DEFAULT/region_name_for_services':        value => $region_name;
     'DEFAULT/region_name_for_shared_services': value => $region_name_for_shared_services;
     'DEFAULT/shared_services_types':           value => join(any2array($shared_services_types), ',');
-    'ec2authtoken/auth_uri':                   value => $keystone_ec2_uri;
+    'ec2authtoken/auth_uri':                   value => pick($keystone_ec2_uri, $facts['os_service_default']);
     'paste_deploy/flavor':                     value => $flavor;
     'yaql/limit_iterators':                    value => $yaql_limit_iterators;
     'yaql/memory_quota':                       value => $yaql_memory_quota;

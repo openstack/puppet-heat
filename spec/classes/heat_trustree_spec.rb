@@ -4,12 +4,15 @@ describe 'heat::trustee' do
 
   shared_examples_for 'heat::trustee' do
 
+    let :params do
+      {
+        :password => 'heat_password',
+      }
+    end
+
     context 'with defaults' do
-      let :params do
-        {}
-      end
       it 'configures trustee options' do
-        is_expected.to contain_heat_config('trustee/password').with_value('<SERVICE DEFAULT>').with_secret(true)
+        is_expected.to contain_heat_config('trustee/password').with_value('heat_password').with_secret(true)
         is_expected.to contain_heat_config('trustee/auth_url').with_value('http://127.0.0.1:5000/')
         is_expected.to contain_heat_config('trustee/auth_type').with_value('password')
         is_expected.to contain_heat_config('trustee/username').with_value('heat')
@@ -18,14 +21,13 @@ describe 'heat::trustee' do
     end
 
     context 'with parameters overridden' do
-      let :params do
-        {
-          :password         => 'heat_password',
+      before :each do
+        params.merge!({
           :auth_type        => 'v3password',
           :auth_url         => 'https://localhost:13000/',
           :username         => 'alt_heat',
           :user_domain_name => 'MyDomain',
-        }
+        })
       end
       it 'configures trustee options' do
         is_expected.to contain_heat_config('trustee/password').with_value('heat_password').with_secret(true)

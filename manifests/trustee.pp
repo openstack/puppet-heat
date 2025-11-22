@@ -5,9 +5,8 @@
 # == Parameters
 #
 # [*password*]
-#   (optional) Password for connecting to Keystone services in
+#   (Required) Password for connecting to Keystone services in
 #   admin context through the OpenStack Identity service.
-#   Defaults to $facts['os_service_default']
 #
 # [*auth_type*]
 #   (optional) Name of the auth type to load (string value)
@@ -28,7 +27,7 @@
 #   Defaults to 'Default'
 #
 class heat::trustee (
-  $password         = $facts['os_service_default'],
+  $password,
   $auth_type        = 'password',
   $auth_url         = 'http://127.0.0.1:5000/',
   $username         = 'heat',

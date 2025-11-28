@@ -48,9 +48,11 @@ describe 'heat::cache' do
           :retry_attempts                       => '<SERVICE DEFAULT>',
           :retry_delay                          => '<SERVICE DEFAULT>',
           :hashclient_retry_attempts            => '<SERVICE DEFAULT>',
-          :hashclient_retry_delay               => '<SERVICE DEFAULT>',
-          :dead_timeout                         => '<SERVICE DEFAULT>',
+          :hashclient_retry_timeout             => '<SERVICE DEFAULT>',
+          :hashclient_dead_timeout              => '<SERVICE DEFAULT>',
           :manage_backend_package               => true,
+          :hashclient_retry_delay               => nil,
+          :dead_timeout                         => nil,
         )
         is_expected.to contain_heat_config('constraint_validation_cache/caching').with_value('<SERVICE DEFAULT>')
         is_expected.to contain_heat_config('constraint_validation_cache/expiration_time').with_value('<SERVICE DEFAULT>')
@@ -96,8 +98,8 @@ describe 'heat::cache' do
           :retry_attempts                        => 2,
           :retry_delay                           => 0,
           :hashclient_retry_attempts             => 2,
-          :hashclient_retry_delay                => 1,
-          :dead_timeout                          => 60,
+          :hashclient_retry_timeout              => 1,
+          :hashclient_dead_timeout               => 60,
           :manage_backend_package                => false,
           :constraint_validation_caching         => true,
           :constraint_validation_expiration_time => '3600',
@@ -105,6 +107,8 @@ describe 'heat::cache' do
           :service_extension_expiration_time     => '3600',
           :resource_finder_caching               => true,
           :resource_finder_expiration_time       => '3600',
+          :hashclient_retry_delay                => 3,
+          :dead_timeout                          => 61,
         }
       end
 
@@ -147,9 +151,11 @@ describe 'heat::cache' do
           :retry_attempts                       => 2,
           :retry_delay                          => 0,
           :hashclient_retry_attempts            => 2,
-          :hashclient_retry_delay               => 1,
-          :dead_timeout                         => 60,
+          :hashclient_retry_timeout             => 1,
+          :hashclient_dead_timeout              => 60,
           :manage_backend_package               => false,
+          :hashclient_retry_delay               => 3,
+          :dead_timeout                         => 61,
         )
         is_expected.to contain_heat_config('constraint_validation_cache/caching').with_value('true')
         is_expected.to contain_heat_config('constraint_validation_cache/expiration_time').with_value('3600')

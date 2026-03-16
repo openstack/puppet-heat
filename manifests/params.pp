@@ -5,7 +5,7 @@
 class heat::params {
   include openstacklib::defaults
 
-  $pyver3 = $openstacklib::defaults::pyver3
+  $pybasedir = $openstacklib::defaults::pybasedir
 
   $client_package_name = 'python3-heatclient'
   $user                = 'heat'
@@ -24,8 +24,8 @@ class heat::params {
       $engine_service_name         = 'openstack-heat-engine'
       # WSGI scripts
       $heat_wsgi_script_path           = '/var/www/cgi-bin/heat'
-      $heat_api_wsgi_script_source     = "/usr/lib/python${pyver3}/site-packages/heat/wsgi/api.py"
-      $heat_api_cfn_wsgi_script_source = "/usr/lib/python${pyver3}/site-packages/heat/wsgi/cfn.py"
+      $heat_api_wsgi_script_source     = "${pybasedir}/heat/wsgi/api.py"
+      $heat_api_cfn_wsgi_script_source = "${pybasedir}/heat/wsgi/cfn.py"
     }
     'Debian': {
       # package names
@@ -39,8 +39,8 @@ class heat::params {
       $engine_service_name         = 'heat-engine'
       # WSGI scripts
       $heat_wsgi_script_path           = '/usr/lib/cgi-bin/heat'
-      $heat_api_wsgi_script_source     = '/usr/bin/heat-wsgi-api'
-      $heat_api_cfn_wsgi_script_source = '/usr/bin/heat-wsgi-api-cfn'
+      $heat_api_wsgi_script_source     = "${pybasedir}/heat/wsgi/api.py"
+      $heat_api_cfn_wsgi_script_source = "${pybasedir}/heat/wsgi/cfn.py"
     }
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")

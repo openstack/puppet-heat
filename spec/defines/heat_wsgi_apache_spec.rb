@@ -84,8 +84,8 @@ describe 'heat::wsgi::apache' do
         case facts[:os]['family']
         when 'Debian'
           { :wsgi_script_dir   => '/usr/lib/cgi-bin/heat',
-            :script_source_api => '/usr/bin/heat-wsgi-api',
-            :script_source_cfn => '/usr/bin/heat-wsgi-api-cfn',
+            :script_source_api => '/usr/lib/python3/dist-packages/heat/wsgi/api.py',
+            :script_source_cfn => '/usr/lib/python3/dist-packages/heat/wsgi/cfn.py',
           }
         when 'RedHat'
           { :wsgi_script_dir   => '/var/www/cgi-bin/heat',

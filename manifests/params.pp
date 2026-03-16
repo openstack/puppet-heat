@@ -41,15 +41,6 @@ class heat::params {
       $heat_wsgi_script_path           = '/usr/lib/cgi-bin/heat'
       $heat_api_wsgi_script_source     = '/usr/bin/heat-wsgi-api'
       $heat_api_cfn_wsgi_script_source = '/usr/bin/heat-wsgi-api-cfn'
-      # Operating system specific
-      case $facts['os']['name'] {
-        'Ubuntu': {
-          $libvirt_group = 'libvirtd'
-        }
-        default: {
-          $libvirt_group = 'libvirt'
-        }
-      }
     }
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")

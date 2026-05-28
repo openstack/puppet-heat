@@ -1,0 +1,14 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``heat::keystone::auth_cfn`` class have
+    been removed.
+
+    - ``configure_user``
+    - ``configure_user_role``
+    - ``auth_name``
+    - ``password``
+    - ``tenant``
+    - ``roles``
+    - ``system_scope``
+    - ``system_roles``

@@ -1,5 +1,6 @@
 # Class heat::clients::vitrage
 #
+#  DEPRECATED !!
 #  vitrage client configuration
 #
 # == Parameters
@@ -33,6 +34,8 @@ class heat::clients::vitrage (
   $insecure      = $facts['os_service_default'],
 ) {
   include heat::deps
+
+  warning('The heat::clients::vitrage class has been deprecated.')
 
   heat::clients::base { 'clients_vitrage':
     endpoint_type => $endpoint_type,

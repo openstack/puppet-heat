@@ -38,14 +38,16 @@
 #   before error is raised. Set to -1 to specify an infinite retry count.
 #   Defaults to $facts['os_service_default']
 #
-# [*mysql_enable_ndb*]
-#   (Optional) If True, transparently enables support for handling MySQL
-#   Cluster (NDB).
-#   Defaults to $facts['os_service_default']
-#
 # [*sync_db*]
 #   (Optional) Run db sync on nodes after connection setting has been set.
 #   Defaults to true
+#
+# DEPRECATED PARAMETERS
+#
+# [*mysql_enable_ndb*]
+#   (Optional) If True, transparently enables support for handling MySQL
+#   Cluster (NDB).
+#   Defaults to undef
 #
 class heat::db (
   $database_connection              = 'sqlite:////var/lib/heat/heat.sqlite',
@@ -55,9 +57,10 @@ class heat::db (
   $database_retry_interval          = $facts['os_service_default'],
   $database_max_overflow            = $facts['os_service_default'],
   $database_pool_timeout            = $facts['os_service_default'],
-  $mysql_enable_ndb                 = $facts['os_service_default'],
   $database_db_max_retries          = $facts['os_service_default'],
   Boolean $sync_db                  = true,
+  # DEPRECATED PARAMETERS
+  $mysql_enable_ndb                 = undef,
 ) {
   include heat::deps
 

@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    The deprecated ``heat::keystone_ec2_uri`` parameter has been removed.

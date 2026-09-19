@@ -234,12 +234,6 @@
 #     take for evaluation.
 #   Defaults to $facts['os_service_default'].
 #
-# DEPRECATED PARAMETERS
-#
-# [*keystone_ec2_uri*]
-#   (optional) Authentication Endpoint URI for ec2 service.
-#   Defaults to undef.
-#
 class heat (
   Stdlib::Ensure::Package $package_ensure = 'present',
   $default_transport_url                  = $facts['os_service_default'],
@@ -289,16 +283,10 @@ class heat (
   $enable_stack_adopt                     = $facts['os_service_default'],
   $yaql_memory_quota                      = $facts['os_service_default'],
   $yaql_limit_iterators                   = $facts['os_service_default'],
-  # DEPRECATED PARAMETERS
-  $keystone_ec2_uri                       = undef,
 ) {
   include heat::db
   include heat::deps
   include heat::params
-
-  if $keystone_ec2_uri != undef {
-    warning('The keystone_ec2_uri parameter is deprecated.')
-  }
 
   if $auth_strategy == 'keystone' {
     include heat::keystone::authtoken
@@ -350,7 +338,6 @@ class heat (
     'DEFAULT/shared_services_types':           value => join(any2array($shared_services_types), ',');
     'DEFAULT/enable_stack_abandon':            value => $enable_stack_abandon;
     'DEFAULT/enable_stack_adopt':              value => $enable_stack_adopt;
-    'ec2authtoken/auth_uri':                   value => pick($keystone_ec2_uri, $facts['os_service_default']);
     'paste_deploy/flavor':                     value => $flavor;
     'yaql/limit_iterators':                    value => $yaql_limit_iterators;
     'yaql/memory_quota':                       value => $yaql_memory_quota;

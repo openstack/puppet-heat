@@ -216,6 +216,14 @@
 #   (optional) Type of authentication to use
 #   Defaults to 'keystone'
 #
+# [*enable_stack_abandon*]
+#   (Optional) Enable the stack-abandon feature.
+#   Defaults to $facts['os_service_default'].
+#
+# [*enable_stack_adopt*]
+#   (Optional) Enable the stack-adopt feature.
+#   Defaults to $facts['os_service_default'].
+#
 # [*yaql_limit_iterators*]
 #   (optional) The maximum number of elements YAQL collection expressions can
 #     take for evaluation.
@@ -227,14 +235,6 @@
 #   Defaults to $facts['os_service_default'].
 #
 # DEPRECATED PARAMETERS
-#
-# [*enable_stack_adopt*]
-#   (Optional) Enable the stack-adopt feature.
-#   Defaults to undef.
-#
-# [*enable_stack_abandon*]
-#   (Optional) Enable the stack-abandon feature.
-#   Defaults to undef.
 #
 # [*keystone_ec2_uri*]
 #   (optional) Authentication Endpoint URI for ec2 service.
@@ -285,11 +285,11 @@ class heat (
   $max_request_body_size                  = $facts['os_service_default'],
   Boolean $purge_config                   = false,
   $auth_strategy                          = 'keystone',
+  $enable_stack_abandon                   = $facts['os_service_default'],
+  $enable_stack_adopt                     = $facts['os_service_default'],
   $yaql_memory_quota                      = $facts['os_service_default'],
   $yaql_limit_iterators                   = $facts['os_service_default'],
   # DEPRECATED PARAMETERS
-  $enable_stack_adopt                     = undef,
-  $enable_stack_abandon                   = undef,
   $keystone_ec2_uri                       = undef,
 ) {
   include heat::db
@@ -348,31 +348,12 @@ class heat (
     'DEFAULT/region_name_for_services':        value => $region_name;
     'DEFAULT/region_name_for_shared_services': value => $region_name_for_shared_services;
     'DEFAULT/shared_services_types':           value => join(any2array($shared_services_types), ',');
+    'DEFAULT/enable_stack_abandon':            value => $enable_stack_abandon;
+    'DEFAULT/enable_stack_adopt':              value => $enable_stack_adopt;
     'ec2authtoken/auth_uri':                   value => pick($keystone_ec2_uri, $facts['os_service_default']);
     'paste_deploy/flavor':                     value => $flavor;
     'yaql/limit_iterators':                    value => $yaql_limit_iterators;
     'yaql/memory_quota':                       value => $yaql_memory_quota;
-  }
-
-  if $enable_stack_abandon != undef {
-    warning('The enable_stack_abandon parameter is deprecated')
-    heat_config {
-      'DEFAULT/enable_stack_abandon': value => $enable_stack_abandon;
-    }
-  } else {
-    heat_config {
-      'DEFAULT/enable_stack_abandon': value => $facts['os_service_default'];
-    }
-  }
-  if $enable_stack_adopt != undef {
-    warning('The enable_stack_adopt parameter is deprecated')
-    heat_config {
-      'DEFAULT/enable_stack_adopt': value => $enable_stack_adopt;
-    }
-  } else {
-    heat_config {
-      'DEFAULT/enable_stack_adopt': value => $facts['os_service_default'];
-    }
   }
 
   oslo::messaging::notifications { 'heat_config':

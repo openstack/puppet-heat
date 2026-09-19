@@ -1,0 +1,12 @@
+---
+upgrade:
+  - |
+    The following parameters of the ``heat::api`` class and
+    the ``heat::api_cfg`` class have been removed.
+
+    - ``bind_host``
+    - ``bind_port``
+    - ``workers``
+    - ``use_ssl``
+    - ``cert_file``
+    - ``key_file``

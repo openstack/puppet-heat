@@ -1,0 +1,8 @@
+---
+deprecations:
+  - |
+    The following parameters are no longer deprecated, because these features
+    are no longer deprecated in heat.
+
+    - ``heat::enable_stack_abandon``
+    - ``heat::enable_stack_adopt``

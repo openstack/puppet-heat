@@ -96,10 +96,6 @@ describe 'heat' do
       is_expected.to contain_heat_config('DEFAULT/template_fetch_timeout').with_value('<SERVICE DEFAULT>')
     end
 
-    it 'configures keystone_ec2_uri' do
-      is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value( '<SERVICE DEFAULT>' )
-    end
-
     it 'configures yaql_limit_iterators' do
       is_expected.to contain_heat_config('yaql/limit_iterators').with_value( params[:yaql_limit_iterators] )
     end
@@ -256,18 +252,6 @@ describe 'heat' do
     it { is_expected.to contain_oslo__messaging__rabbit('heat_config').with(
       :rabbit_use_ssl     => false,
     )}
-  end
-
-  shared_examples_for 'with ec2authtoken auth uri set' do
-    before do
-      params.merge!(
-        :keystone_ec2_uri => 'http://1.2.3.4:5000/v3/ec2tokens'
-      )
-    end
-
-    it do
-      is_expected.to contain_heat_config('ec2authtoken/auth_uri').with_value('http://1.2.3.4:5000/v3/ec2tokens')
-    end
   end
 
   shared_examples_for 'with region options set' do

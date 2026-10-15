@@ -1,0 +1,5 @@
+---
+deprecations:
+  - |
+    The ``heat::clients::vitrage`` class has been deprecated and will be
+    removed in a future release.

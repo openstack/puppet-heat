@@ -27,59 +27,16 @@
 #   to make heat-api-cfn be a web app using apache mod_wsgi.
 #   Defaults to '$heat::params::api_cfn_service_name'
 #
-# == Deprecated Parameters
-#
-# [*bind_host*]
-#   (Optional) Address to bind the server. Useful when
-#   selecting a particular network interface.
-#   Defaults to undef.
-#
-# [*bind_port*]
-#   (Optional) The port on which the server will listen.
-#   Defaults to undef.
-#
-# [*workers*]
-#   (Optional) The number of workers to spawn.
-#   Defaults to undef.
-#
-# [*use_ssl*]
-#   (Optional) Whether to use ssl or not.
-#   Defaults to undef.
-#
-# [*cert_file*]
-#   (Optional) Location of the SSL certificate file to use for SSL mode.
-#   Defaults to undef
-#
-# [*key_file*]
-#   (Optional) Location of the SSL key file to use for enabling SSL mode.
-#   Defaults to undef
-#
 class heat::api_cfn (
   Stdlib::Ensure::Package $package_ensure = 'present',
   Boolean $manage_service                 = true,
   Boolean $enabled                        = true,
   String[1] $service_name                 = $heat::params::api_cfn_service_name,
-  # DEPRECATED PARAMETERS
-  $bind_host                              = undef,
-  $bind_port                              = undef,
-  $workers                                = undef,
-  $use_ssl                                = undef,
-  $cert_file                              = undef,
-  $key_file                               = undef,
 ) inherits heat::params {
   include heat
   include heat::deps
   include heat::params
   include heat::policy
-
-  [
-    'bind_host', 'bind_port', 'workers',
-    'use_ssl', 'cert_file', 'key_file',
-  ].each |String $opt| {
-    if getvar($opt) != undef {
-      warning("The ${opt} parameter is deprecated and has no effect.")
-    }
-  }
 
   package { 'heat-api-cfn':
     ensure => $package_ensure,
@@ -125,13 +82,5 @@ class heat::api_cfn (
         Heat_api_cfn_uwsgi_config<||> ~> Service['heat-api-cfn']
       }
     }
-  }
-
-  heat_config {
-    'heat_api_cfn/bind_host': ensure => absent;
-    'heat_api_cfn/bind_port': ensure => absent;
-    'heat_api_cfn/workers':   ensure => absent;
-    'heat_api_cfn/cert_file': ensure => absent;
-    'heat_api_cfn/key_file':  ensure => absent;
   }
 }

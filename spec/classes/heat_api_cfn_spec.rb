@@ -17,16 +17,9 @@ describe 'heat::api_cfn' do
     end
 
     context 'config params' do
-
       it { is_expected.to contain_class('heat') }
       it { is_expected.to contain_class('heat::params') }
       it { is_expected.to contain_class('heat::policy') }
-
-      it { is_expected.to contain_heat_config('heat_api_cfn/bind_host').with_ensure('absent') }
-      it { is_expected.to contain_heat_config('heat_api_cfn/bind_port').with_ensure('absent') }
-      it { is_expected.to contain_heat_config('heat_api_cfn/workers').with_ensure('absent') }
-      it { is_expected.to contain_heat_config('heat_api_cfn/cert_file').with_ensure('absent') }
-      it { is_expected.to contain_heat_config('heat_api_cfn/key_file').with_ensure('absent') }
     end
 
     [{:enabled => true}, {:enabled => false}].each do |param_hash|
